@@ -13,9 +13,6 @@ namespace Dot.Core.Entity.TimeLine.Game.Sound
 
         public override void Trigger()
         {
-#if !NOT_ETERNITY
-            WwiseUtil.PlaySound(MusicID,false,null);
-#endif
         }
     }
 }

@@ -6,10 +6,7 @@ namespace Dot.Core.Entity.TimeLine.Game
     public class PlaySpecialTypeSoundEvent : AEventItem
     {
         public int MusicID { get; set; }
-#if !NOT_ETERNITY
-        public WwiseMusicSpecialType SpecialType { get; set; }
-        public WwiseMusicPalce Place{get;set;}
-#endif
+
         public override void DoRevert()
         {
            
@@ -17,9 +14,7 @@ namespace Dot.Core.Entity.TimeLine.Game
 
         public override void Trigger()
         {
-#if !NOT_ETERNITY
-            WwiseUtil.PlaySound(MusicID,SpecialType,Place,false,null);
-#endif
+
         }
     }
 }
