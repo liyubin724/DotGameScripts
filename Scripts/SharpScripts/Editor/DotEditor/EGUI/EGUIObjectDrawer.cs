@@ -1,105 +1,100 @@
-﻿using Dot.Attributes;
+﻿using Dot.FieldDrawer.Attributes;
+using DotEditor.EGUI.FieldDrawer.Attributes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditorInternal;
+using UnityObject = UnityEngine.Object;
+using SystemObject = System.Object;
 
-namespace DotEditor.EGUI
+namespace DotEditor.EGUI.FieldDrawer
 {
-    public class EGUIObjectField
-    {
-        private object m_Data = null;
-        private FieldInfo m_Field = null;
-        private bool m_ShowDesc = false;
-
-        private bool m_IsFoldout = true;
-        private EGUIObjectDrawer objDrawer = null;
-        private ReorderableList listDrawer = null;
-
-        public EGUIObjectField(object data,FieldInfo field,bool showDesc)
-        {
-            m_Data = data;
-            m_Field = field;
-            m_ShowDesc = showDesc;
-        }
-
-        public Type FieldType { get => m_Field.FieldType; }
-
-
-
-        public void OnGUILayout()
-        {
-            var value = m_Field.GetValue(m_Data);
-
-            MemberDesc memberDesc = FieldType.GetCustomAttribute<MemberDesc>();
-            if (memberDesc != null && m_ShowDesc)
-            {
-                EditorGUILayout.HelpBox(memberDesc.Desc, MessageType.Info);
-            }
-
-            object newValue = null;
-            if(typeof(int) == FieldType)
-            {
-                newValue = EditorGUILayout.IntField(value == null ? 0 : (int)value);
-            }else if(typeof(float) == FieldType)
-            {
-                newValue = EditorGUILayout.FloatField(value == null?0.0f:(float)value);
-            }else if(typeof(string) == FieldType)
-            {
-                FieldMultilineText fmText = FieldType.GetCustomAttribute<FieldMultilineText>();
-                if(fmText == null)
-                {
-                    newValue = EditorGUILayout.TextField(value == null ? "" : (string)value);
-                }
-            }else if(FieldType.IsEnum)
-            {
-                Enum e = (Enum)value;
-                newValue = EditorGUILayout.EnumPopup(e);
-            }else if(FieldType.IsArray)
-            {
-
-            }else if(FieldType.IsClass)
-            {
-
-            }
-        }
-    }
-
-
     public class EGUIObjectDrawer
     {
         private object m_Data;
-        private List<EGUIObjectField> m_Fields = new List<EGUIObjectField>();
+        private bool m_IsShowDesc = false;
+        private List<AEGUIFieldDrawer> fieldDrawers = new List<AEGUIFieldDrawer>();
 
-        public bool ShowDesc { get; set; } = false;
+        public bool IsShowDesc
+        {
+            set
+            {
+                m_IsShowDesc = value;
+                foreach(var fieldDrawer in fieldDrawers)
+                {
+                    fieldDrawer.IsShowDesc = value;
+                }
+            }
+        }
+
+        private bool IsChanged { get; set; }
 
         public EGUIObjectDrawer(object obj)
         {
+            m_Data = true;
+
+            FindFields();
+        }
+
+        public EGUIObjectDrawer(object obj,bool isShowDesc)
+        {
             m_Data = obj;
+            m_IsShowDesc = isShowDesc;
+
+            FindFields();
         }
 
         private void FindFields()
         {
-            m_Fields.Clear();
+            fieldDrawers.Clear();
+
+            var fieldDrawerTypes = from type in typeof(AEGUIFieldDrawer).Assembly.GetTypes() where type.IsSubclassOf(typeof(AEGUIFieldDrawer)) select type;
+            Dictionary<Type, Type> fieldDrawerDic = new Dictionary<Type, Type>();
+            foreach(var fdType in fieldDrawerTypes)
+            {
+                var attr = fdType.GetCustomAttribute<FieldDrawerType>();
+                if(attr!=null)
+                {
+                    fieldDrawerDic.Add(attr.DrawerType, fdType);
+                }
+            }
 
             var fields = m_Data.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
             {
-                FieldHide fHideAttr = field.GetCustomAttribute<FieldHide>();
-                FieldShow fShowAttr = field.GetCustomAttribute<FieldShow>();
-                if ((field.IsPublic && fHideAttr == null) || (!field.IsPublic&&fShowAttr!=null))
+                Type fieldType = field.FieldType;
+                if(fieldType.IsEnum)
                 {
-                    m_Fields.Add(new EGUIObjectField(m_Data, field, ShowDesc));
+                    fieldType = typeof(Enum);
+                }else if(fieldType.IsValueType && !fieldType.IsPrimitive)
+                {
+                    fieldType = typeof(SystemObject);
+                }else if(fieldType.IsArray)
+                {
+                    fieldType = typeof(IList);
+                }
+                else if(fieldType.IsClass && fieldType != typeof(string))
+                {
+                    if(fieldType == typeof(UnityObject) || fieldType.IsSubclassOf(typeof(UnityObject)))
+                    {
+                        fieldType = typeof(UnityObject);
+                    }else
+                    {
+                        fieldType = typeof(SystemObject);
+                    }
+                }
+                if(fieldDrawerDic.TryGetValue(fieldType,out Type drawerType))
+                {
+                    var drawer = Activator.CreateInstance(drawerType, m_Data, field, m_IsShowDesc);
+                    fieldDrawers.Add((AEGUIFieldDrawer)drawer);
                 }
             }
-            m_Fields.Sort((item1, item2) =>
+            fieldDrawers.Sort((item1, item2) =>
             {
-                FieldOrder fOrder1 = item1.FieldType.GetCustomAttribute<FieldOrder>();
-                FieldOrder fOrder2 = item2.FieldType.GetCustomAttribute<FieldOrder>();
+                FieldOrder fOrder1 = item1.FieldInfo.GetCustomAttribute<FieldOrder>();
+                FieldOrder fOrder2 = item2.FieldInfo.GetCustomAttribute<FieldOrder>();
 
                 int order1 = fOrder1 == null ? 0 : fOrder1.Order;
                 int order2 = fOrder2 == null ? 0 : fOrder2.Order;
@@ -114,19 +109,40 @@ namespace DotEditor.EGUI
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
                 MemberDesc mDesc = dataType.GetCustomAttribute<MemberDesc>();
-                if(mDesc!=null && ShowDesc)
+                if (mDesc != null && m_IsShowDesc)
                 {
-                    EditorGUILayout.HelpBox(mDesc.Desc,MessageType.Info);
+                    EditorGUILayout.HelpBox(mDesc.Desc, MessageType.Info);
                 }
 
-                foreach(var field in m_Fields)
+                EditorGUI.BeginChangeCheck();
                 {
-                    field.OnGUILayout();
+                    foreach (var drawer in fieldDrawers)
+                    {
+                        FieldHide fHideAttr = drawer.FieldInfo.GetCustomAttribute<FieldHide>();
+                        FieldShow fShowAttr = drawer.FieldInfo.GetCustomAttribute<FieldShow>();
+
+                        if (drawer.FieldInfo.IsPublic)
+                        {
+                            if (fHideAttr == null)
+                            {
+                                drawer.OnGUILayout();
+                            }
+                        }
+                        else
+                        {
+                            if (fShowAttr != null)
+                            {
+                                drawer.OnGUILayout();
+                            }
+                        }
+                    }
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    IsChanged = true;
                 }
             }
             EditorGUILayout.EndVertical();
-
         }
-
     }
 }

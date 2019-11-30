@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.Attributes
+namespace Dot.FieldDrawer.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false,Inherited = true)]
     public class FieldReadonly : Attribute

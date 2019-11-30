@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.Attributes
+namespace Dot.FieldDrawer.Attributes
 {
     [AttributeUsage(AttributeTargets.Field|AttributeTargets.Property|AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class MemberDesc : Attribute

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.Attributes
+namespace Dot.FieldDrawer.Attributes
 {
     public enum MethodButtonSize
     {
