@@ -11,22 +11,23 @@ namespace Dot.Lua
         public const string UPDATE_FUNCTION_NAME = "DoUpdate";
         public const string DESTROY_FUNCTION_NAME = "DoDestroy";
 
-        public static string LuaAssetDirPath = "Assets/Scripts/DotLua/";
-        public static string LuaAssetExtension = ".txt";
+        public const string DEFAULT_ASSET_DIR = "Assets/Scripts/LuaScripts";
+        public const string DEFAULT_SCRIPT_EXTENSION = ".txt";
+        public const string DEFAULT_ASSET_PATH_FORMAT = DEFAULT_ASSET_DIR + "/{0}" + DEFAULT_SCRIPT_EXTENSION;
 
         public static string LuaDiskDirPath
         {
             get
             {
-                return Application.dataPath + LuaAssetDirPath.Substring("Assets".Length);
+                return Application.dataPath + DEFAULT_ASSET_DIR.Substring("Assets".Length);
             }
         }
 
-        public static string LuaPathFormat
+        public static string DefaultDiskPathFormat
         {
             get
             {
-                return $"{LuaDiskDirPath}{{0}}{LuaAssetExtension}";
+                return $"{LuaDiskDirPath}/{{0}}{DEFAULT_SCRIPT_EXTENSION}";
             }
         }
     }

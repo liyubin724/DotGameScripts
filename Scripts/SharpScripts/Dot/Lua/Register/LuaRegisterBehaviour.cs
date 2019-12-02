@@ -3,38 +3,8 @@ using System;
 using UnityEngine;
 using XLua;
 
-namespace Dot.Lua.Inject
+namespace Dot.Lua.Register
 {
-    [Serializable]
-    public class RegisterObjectData
-    {
-        public string name;
-        public GameObject obj;
-        public UnityEngine.Object regObj;
-        public string typeName;
-    }
-
-    [Serializable]
-    public class RegisterObjectArrayData
-    {
-        public string name;
-        public RegisterObjectData[] objects;
-    }
-
-    [Serializable]
-    public class RegisterBehaviourData
-    {
-        public string name;
-        public LuaRegisterBehaviour behaviour;
-    }
-
-    [Serializable]
-    public class RegisterBehaviourArrayData
-    {
-        public string name;
-        public LuaRegisterBehaviour[] behaviours;
-    }
-
     public partial class LuaRegisterBehaviour : MonoBehaviour
     {
         public LuaEnvType envType = LuaEnvType.Game;

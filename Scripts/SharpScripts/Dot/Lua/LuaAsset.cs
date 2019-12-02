@@ -10,59 +10,45 @@ namespace Dot.Lua
     public class LuaAsset
     {
         [SerializeField]
-        private string m_ScriptName = "";
-
+        private string scriptFileName = "";
         [SerializeField]
-        private string m_ScriptPath = "";
-
-        public string LuaScriptPath
-        {
-            set
-            {
-                m_ScriptPath = value;
-                if(!string.IsNullOrEmpty(m_ScriptPath))
-                {
-                    m_ScriptName = Path.GetFileNameWithoutExtension(m_ScriptPath);
-                }else
-                {
-                    m_ScriptName = null;
-                }
-            }
-        }
+        private string scriptFilePath = "";
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(m_ScriptName) && !string.IsNullOrEmpty(m_ScriptPath);
+            return !string.IsNullOrEmpty(scriptFileName) && !string.IsNullOrEmpty(scriptFilePath);
         }
 
         public bool DoRequire(LuaEnv luaEnv)
         {
-            if(string.IsNullOrEmpty(m_ScriptName) || string.IsNullOrEmpty(m_ScriptPath))
+            if(!IsValid())
             {
                 DebugLogger.LogError(string.Format("LuaAsset::DoRequire->ScriptName or ScriptPath is NULL!"));
                 return false;
             }
-            if(luaEnv.Global.ContainsKey<string>(m_ScriptName))
+            if(luaEnv.Global.ContainsKey<string>(scriptFileName))
             {
                 return true;
             }
-            luaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
+
+            luaEnv.DoString(string.Format("require (\"{0}\")", scriptFilePath));
+
             return true ;
         }
 
         public LuaTable DoRequireAndInstance(LuaEnv luaEnv)
         {
-            if (string.IsNullOrEmpty(m_ScriptName) || string.IsNullOrEmpty(m_ScriptPath))
+            if (!IsValid())
             {
-                DebugLogger.LogError(string.Format("LuaAsset::GetInstance->scriptName is NULL!"));
+                DebugLogger.LogError(string.Format("LuaAsset::GetInstance->ScriptFileName or ScriptFilePath is NULL!"));
                 return null;
             }
 
-            LuaTable classTable = luaEnv.Global.Get<LuaTable>(m_ScriptName);
+            LuaTable classTable = luaEnv.Global.Get<LuaTable>(scriptFileName);
             if (classTable == null)
             {
-                luaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
-                classTable = luaEnv.Global.Get<LuaTable>(m_ScriptName);
+                luaEnv.DoString(string.Format("require (\"{0}\")", scriptFilePath));
+                classTable = luaEnv.Global.Get<LuaTable>(scriptFileName);
             }
             if (classTable == null)
                 return null;
