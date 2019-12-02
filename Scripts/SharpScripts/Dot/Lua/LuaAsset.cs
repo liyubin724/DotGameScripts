@@ -1,6 +1,4 @@
-﻿using Dot.Core;
-using Dot.Core.Logger;
-using Sirenix.OdinInspector;
+﻿using Dot.Core.Logger;
 using System;
 using System.IO;
 using UnityEngine;
@@ -32,27 +30,27 @@ namespace Dot.Lua
             }
         }
 
-        public bool IsEmpty()
+        public bool IsValid()
         {
-            return string.IsNullOrEmpty(m_ScriptName) || string.IsNullOrEmpty(m_ScriptPath);
+            return !string.IsNullOrEmpty(m_ScriptName) && !string.IsNullOrEmpty(m_ScriptPath);
         }
 
-        public bool DoRequire()
+        public bool DoRequire(LuaEnv luaEnv)
         {
             if(string.IsNullOrEmpty(m_ScriptName) || string.IsNullOrEmpty(m_ScriptPath))
             {
                 DebugLogger.LogError(string.Format("LuaAsset::DoRequire->ScriptName or ScriptPath is NULL!"));
                 return false;
             }
-            if(GameApplication.GLuaEnv.Global.ContainsKey<string>(m_ScriptName))
+            if(luaEnv.Global.ContainsKey<string>(m_ScriptName))
             {
                 return true;
             }
-            GameApplication.GLuaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
+            luaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
             return true ;
         }
 
-        public LuaTable DoRequireAndInstance()
+        public LuaTable DoRequireAndInstance(LuaEnv luaEnv)
         {
             if (string.IsNullOrEmpty(m_ScriptName) || string.IsNullOrEmpty(m_ScriptPath))
             {
@@ -60,11 +58,11 @@ namespace Dot.Lua
                 return null;
             }
 
-            LuaTable classTable = GameApplication.GLuaEnv.Global.Get<LuaTable>(m_ScriptName);
+            LuaTable classTable = luaEnv.Global.Get<LuaTable>(m_ScriptName);
             if (classTable == null)
             {
-                GameApplication.GLuaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
-                classTable = GameApplication.GLuaEnv.Global.Get<LuaTable>(m_ScriptName);
+                luaEnv.DoString(string.Format("require (\"{0}\")", m_ScriptPath));
+                classTable = luaEnv.Global.Get<LuaTable>(m_ScriptName);
             }
             if (classTable == null)
                 return null;
@@ -78,13 +76,5 @@ namespace Dot.Lua
 
             return objTable;
         }
-
-        #region for odin
-        private void OnScriptPathChanged()
-        {
-            m_ScriptName = Path.GetFileNameWithoutExtension(m_ScriptPath);
-            m_ScriptPath = m_ScriptPath.Substring(0, m_ScriptPath.LastIndexOf("."));
-        }
-        #endregion
     }
 }
