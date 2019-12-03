@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using XLua;
 
-namespace DotEditor.Lua.GenConfig
+namespace DotEditor.Lua.Gen
 {
     public static class LuaGenConfig
     {
