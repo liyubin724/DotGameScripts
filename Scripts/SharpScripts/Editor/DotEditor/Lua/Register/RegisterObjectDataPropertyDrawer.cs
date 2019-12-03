@@ -10,7 +10,7 @@ namespace DotEditor.Lua.Register
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight * 4;
+            return EditorGUIUtility.singleLineHeight * 4+10;
         }
 
         public override bool CanCacheInspectorGUI(SerializedProperty property)
@@ -20,9 +20,9 @@ namespace DotEditor.Lua.Register
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.LabelField(position, "", EditorStyles.helpBox);
-
             Rect propertyRect = position;
+            EditorGUI.LabelField(propertyRect, "", EditorStyles.helpBox);
+
             propertyRect.height = EditorGUIUtility.singleLineHeight;
 
             SerializedProperty obj = property.FindPropertyRelative("obj");
