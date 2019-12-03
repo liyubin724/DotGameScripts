@@ -30,18 +30,30 @@ namespace Dot.Lua.Register
             isInited = true;
 
             luaEnv = LuaManager.GetInstance()[envType];
-
+            if(luaEnv == null)
+            {
+                DebugLogger.LogError($"LuaRegisterBehaviour::InitLua->LuaEnv is null. envType = {envType}");
+                return;
+            }
+            
             if (luaAsset != null && !luaAsset.IsValid())
             {
                 objTable = luaAsset.DoRequireAndInstance(luaEnv);
-                objTable.Set("gameObject", gameObject);
-                objTable.Set("transform", transform);
+                if(objTable!=null)
+                {
+                    objTable.Set("gameObject", gameObject);
+                    objTable.Set("transform", transform);
 
-                RegisterLuaObject();
-                RegisterLuaObjectArr();
+                    RegisterLuaObject();
+                    RegisterLuaObjectArr();
 
-                RegisterLuaBehaviour();
-                RegisterLuaBehaviourArr();
+                    RegisterLuaBehaviour();
+                    RegisterLuaBehaviourArr();
+                }else
+                {
+                    DebugLogger.LogError($"LuaRegisterBehaviour::InitLua->objTable is null.");
+                    return;
+                }
             }
         }
 
@@ -163,7 +175,7 @@ namespace Dot.Lua.Register
         {
             if (objTable != null)
             {
-                objTable.Get<Action<LuaTable>>("DoStart")?.Invoke(objTable);
+                objTable.Get<Action<LuaTable>>(LuaConfig.START_FUNCTION_NAME)?.Invoke(objTable);
             }
         }
 
@@ -171,7 +183,7 @@ namespace Dot.Lua.Register
         {
             if (objTable != null)
             {
-                objTable.Get<Action<LuaTable>>("DoEnable")?.Invoke(objTable);
+                objTable.Get<Action<LuaTable>>(LuaConfig.ENABLE_FUNCTION_NAME)?.Invoke(objTable);
             }
         }
 
@@ -179,7 +191,7 @@ namespace Dot.Lua.Register
         {
             if (objTable != null)
             {
-                objTable.Get<Action<LuaTable>>("DoDisable")?.Invoke(objTable);
+                objTable.Get<Action<LuaTable>>(LuaConfig.DISABLE_FUNCTION_NAME)?.Invoke(objTable);
             }
         }
 
@@ -189,9 +201,11 @@ namespace Dot.Lua.Register
             {
                 return;
             }
-            objTable.Get<Action<LuaTable>>("DoDestroy")?.Invoke(objTable);
+            objTable.Get<Action<LuaTable>>(LuaConfig.DESTROY_FUNCTION_NAME)?.Invoke(objTable);
+
             objTable.Dispose();
             objTable = null;
+            luaEnv = null;
         }
     }
 }
