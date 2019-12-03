@@ -1,14 +1,15 @@
 ﻿using Dot.Lua.Register;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.Lua.Register
 {
-    [CustomPropertyDrawer(typeof(RegisterBehaviourArrayData))]
+    [CustomPropertyDrawer(typeof(RegisterBehaviourArrayData),false)]
     public class RegisterBehaviourArrayDataPropertyDrawer : PropertyDrawer
     {
-        private ReorderableList behaviourList = null;
+        private Dictionary<string, ReorderableList> listDic = new Dictionary<string, ReorderableList>();
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             SerializedProperty behaviours = property.FindPropertyRelative("behaviours");
@@ -45,7 +46,8 @@ namespace DotEditor.Lua.Register
             propertyRect.x += 14;
             propertyRect.width -= 14;
 
-            if (behaviourList == null)
+            string pPath = behaviours.propertyPath;
+            if (!listDic.TryGetValue(pPath, out ReorderableList behaviourList))
             {
                 behaviourList = new ReorderableList(behaviours.serializedObject, behaviours, true, true, true, true);
                 behaviourList.drawHeaderCallback = (rect) =>
@@ -56,6 +58,13 @@ namespace DotEditor.Lua.Register
                 {
                     EditorGUI.PropertyField(rect, behaviours.GetArrayElementAtIndex(index));
                 };
+                behaviourList.onAddCallback = (list) =>
+                {
+                    int insertIndex = list.serializedProperty.arraySize;
+                    list.serializedProperty.InsertArrayElementAtIndex(insertIndex);
+                };
+
+                listDic.Add(pPath, behaviourList);
             }
             behaviourList.DoList(propertyRect);
         }

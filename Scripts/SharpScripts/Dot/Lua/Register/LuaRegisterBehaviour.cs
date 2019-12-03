@@ -11,10 +11,10 @@ namespace Dot.Lua.Register
 
         public LuaAsset luaAsset;
 
-        public RegisterObjectData[] regLuaObject;
-        public RegisterObjectArrayData[] regLuaObjectArr;
-        public RegisterBehaviourData[] regLuaBehaviour;
-        public RegisterBehaviourArrayData[] regLuaBehaviourArr;
+        public RegisterObjectData[] regLuaObject = new RegisterObjectData[0];
+        public RegisterObjectArrayData[] regLuaObjectArr = new RegisterObjectArrayData[0];
+        public RegisterBehaviourData[] regLuaBehaviour = new RegisterBehaviourData[0];
+        public RegisterBehaviourArrayData[] regLuaBehaviourArr = new RegisterBehaviourArrayData[0];
 
         private LuaEnv luaEnv;
         private LuaTable objTable = null;

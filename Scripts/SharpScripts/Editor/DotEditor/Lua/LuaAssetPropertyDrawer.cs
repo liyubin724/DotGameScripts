@@ -1,4 +1,5 @@
 ﻿using Dot.Lua;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace DotEditor.Lua
     [CustomPropertyDrawer(typeof(LuaAsset))]
     public class LuaAssetPropertyDrawer : PropertyDrawer
     {
-        private TextAsset textAsset = null;
+        private Dictionary<string, TextAsset> assetDic = new Dictionary<string, TextAsset>();
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUIUtility.singleLineHeight;
@@ -19,24 +20,33 @@ namespace DotEditor.Lua
             SerializedProperty scriptPathProperty = property.FindPropertyRelative("scriptFilePath");
             SerializedProperty scriptNameProperty = property.FindPropertyRelative("scriptFileName");
 
-            if (!string.IsNullOrEmpty(scriptPathProperty.stringValue) && textAsset == null)
+            string pPath = scriptPathProperty.propertyPath;
+            TextAsset textAsset = null;
+            if (!string.IsNullOrEmpty(scriptPathProperty.stringValue))
             {
                 string scriptAssetPath = string.Format(LuaConfig.DEFAULT_ASSET_PATH_FORMAT, scriptPathProperty.stringValue);
                 textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(scriptAssetPath);
             }
 
+            if(assetDic.ContainsKey(pPath))
+            {
+                assetDic[pPath] = textAsset;
+            }else
+            {
+                assetDic.Add(pPath, textAsset);
+            }
+
             TextAsset newAsset = (TextAsset)EditorGUI.ObjectField(position, "Lua Script", textAsset, typeof(TextAsset), false);
             if (newAsset != textAsset)
             {
-                textAsset = newAsset;
-                if (textAsset == null)
+                if (newAsset == null)
                 {
                     scriptNameProperty.stringValue = "";
                     scriptPathProperty.stringValue = "";
                 }
                 else
                 {
-                    string assetPath = AssetDatabase.GetAssetPath(textAsset);
+                    string assetPath = AssetDatabase.GetAssetPath(newAsset);
                     if (assetPath.StartsWith(LuaConfig.DEFAULT_ASSET_DIR) && assetPath.EndsWith(LuaConfig.DEFAULT_SCRIPT_EXTENSION))
                     {
                         assetPath = assetPath.Replace(LuaConfig.DEFAULT_ASSET_DIR+"/", "");
@@ -46,11 +56,13 @@ namespace DotEditor.Lua
                     }
                     else
                     {
-                        textAsset = null;
+                        newAsset = null;
                         scriptNameProperty.stringValue = "";
                         scriptPathProperty.stringValue = "";
                     }
                 }
+
+                assetDic[pPath] = newAsset;
             }
         }
     }

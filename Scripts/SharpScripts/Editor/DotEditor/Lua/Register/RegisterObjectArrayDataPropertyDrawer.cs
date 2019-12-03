@@ -1,4 +1,5 @@
 ﻿using Dot.Lua.Register;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace DotEditor.Lua.Register
     [CustomPropertyDrawer(typeof(RegisterObjectArrayData))]
     public class RegisterObjectArrayDataPropertyDrawer : PropertyDrawer
     {
-        private ReorderableList objectList = null;
+        private Dictionary<string, ReorderableList> listDic = new Dictionary<string, ReorderableList>();
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             SerializedProperty objects = property.FindPropertyRelative("objects");
@@ -38,14 +39,15 @@ namespace DotEditor.Lua.Register
             propertyRect.width -= 8;
             EditorGUI.PropertyField(propertyRect, name);
 
-            propertyRect.y+= EditorGUIUtility.singleLineHeight+4;
+            propertyRect.y += EditorGUIUtility.singleLineHeight + 4;
             propertyRect.height = position.height - EditorGUIUtility.singleLineHeight;
             propertyRect.x += 14;
             propertyRect.width -= 14;
 
-            if (objectList == null)
+            string pPath = objects.propertyPath;
+            if (!listDic.TryGetValue(pPath, out ReorderableList objectList))
             {
-                objectList = new ReorderableList(objects.serializedObject, objects,true,true,true,true);
+                objectList = new ReorderableList(objects.serializedObject, objects, true, true, true, true);
                 objectList.drawHeaderCallback = (rect) =>
                 {
                     EditorGUI.LabelField(rect, "Objects");
@@ -58,7 +60,10 @@ namespace DotEditor.Lua.Register
                 {
                     return EditorGUIUtility.singleLineHeight * 4;
                 };
+
+                listDic.Add(pPath, objectList);
             }
+
             objectList.DoList(propertyRect);
         }
     }
