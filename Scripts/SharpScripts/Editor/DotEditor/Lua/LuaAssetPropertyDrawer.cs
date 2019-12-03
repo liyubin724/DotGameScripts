@@ -15,6 +15,11 @@ namespace DotEditor.Lua
             return EditorGUIUtility.singleLineHeight;
         }
 
+        public override bool CanCacheInspectorGUI(SerializedProperty property)
+        {
+            return false;
+        }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             SerializedProperty scriptPathProperty = property.FindPropertyRelative("scriptFilePath");

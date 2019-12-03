@@ -25,6 +25,12 @@ namespace DotEditor.Lua.Register
 
             return height;
         }
+
+        public override bool CanCacheInspectorGUI(SerializedProperty property)
+        {
+            return false;
+        }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.LabelField(position, "", EditorStyles.helpBox);
