@@ -20,5 +20,7 @@ namespace ExtractInject
 
         bool TryGetObject<T>(out T obj) where T : IExtractInjectObject;
         bool TryGetObject(Type type, out IExtractInjectObject obj);
+
+        void Clear();
     }
 }

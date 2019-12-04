@@ -7,6 +7,5 @@ namespace DotEditor.Lua.Gen.Tabs
     {
         public abstract void DoGUI(Rect rect);
         public abstract void DoSearch(string searchText);
-        public abstract string[] GetSearchResult(string searchText);
     }
 }

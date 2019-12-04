@@ -129,5 +129,10 @@ namespace ExtractInject
                 m_ObjectDic.Remove(type);
             }
         }
+
+        public void Clear()
+        {
+            m_ObjectDic.Clear();
+        }
     }
 }
