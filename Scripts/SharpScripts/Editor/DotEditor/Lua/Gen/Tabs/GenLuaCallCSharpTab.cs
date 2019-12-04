@@ -3,7 +3,6 @@ using ExtractInject;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static DotEditor.Lua.Gen.GenConfig;
 
 namespace DotEditor.Lua.Gen.Tabs
 {
@@ -74,14 +73,14 @@ namespace DotEditor.Lua.Gen.Tabs
                 {
                     if(string.IsNullOrEmpty(searchText) || tData.typeFullName.ToLower().IndexOf(searchText)>=0)
                     {
-                        DrawTabTypeData(aData,tData);
+                        DrawTabTypeData(tData);
                     }
                 }
             }
             EditorGUIUtil.EndIndent();
         }
 
-        private void DrawTabTypeData(GenTabAssemblyData aData,GenTabTypeData tData)
+        private void DrawTabTypeData(GenTabTypeData tData)
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
             {
@@ -90,43 +89,26 @@ namespace DotEditor.Lua.Gen.Tabs
                 {
                     tData.isSelected = isSelected;
 
-                    UpdateGenConfig(aData, tData);
+                    UpdateGenConfig(tData);
                 }
             }
             EditorGUILayout.EndHorizontal();
         }
 
-        private void UpdateGenConfig(GenTabAssemblyData aData, GenTabTypeData tData)
+        private void UpdateGenConfig(GenTabTypeData tData)
         {
-            GenTypeData gtData = null;
-            foreach (var d in genConfig.callCSharpDatas)
-            {
-                if (d.assemblyName == aData.assemblyName)
-                {
-                    gtData = d;
-                    break;
-                }
-            }
-
             if (tData.isSelected)
             {
-                if (gtData == null)
+                if(genConfig.callCSharpTypeNames.IndexOf(tData.typeFullName)<0)
                 {
-                    gtData = new GenTypeData();
-                    gtData.assemblyName = aData.assemblyName;
-                    genConfig.callCSharpDatas.Add(gtData);
+                    genConfig.callCSharpTypeNames.Add(tData.typeFullName);
                 }
-                gtData.typeFullNames.Add(tData.typeFullName);
             }
             else
             {
-                if (gtData != null)
+                if (genConfig.callCSharpTypeNames.IndexOf(tData.typeFullName) >= 0)
                 {
-                    gtData.typeFullNames.Remove(tData.typeFullName);
-                    if (gtData.typeFullNames.Count == 0)
-                    {
-                        genConfig.callCSharpDatas.Remove(gtData);
-                    }
+                    genConfig.callCSharpTypeNames.Remove(tData.typeFullName);
                 }
             }
         }

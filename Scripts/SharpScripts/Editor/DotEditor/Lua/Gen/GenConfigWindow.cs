@@ -1,13 +1,10 @@
-﻿using DotEditor.Core.Util;
-using DotEditor.Lua.Gen.Tabs;
+﻿using DotEditor.Lua.Gen.Tabs;
 using ExtractInject;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using static DotEditor.Lua.Gen.GenConfig;
 
 namespace DotEditor.Lua.Gen
 {
@@ -90,15 +87,29 @@ namespace DotEditor.Lua.Gen
             int newIndex = GUILayout.Toolbar(toolbarSelectIndex, toolbarContents, GUILayout.Height(TOOLBAR_BTN_HEIGHT),GUILayout.ExpandWidth(true));
             if(toolbarSelectIndex !=newIndex)
             {
-                tabs[toolbarSelectIndex].Extract(context);
-                toolbarSelectIndex = newIndex;
-                tabs[toolbarSelectIndex].Inject(context);
-                tabs[toolbarSelectIndex].DoEnable();
-
-                searchText = "";
+                ChangeTab(newIndex);
             }
+
             int y = TOOLBAR_HEIGHT + TOOLBAR_BTN_HEIGHT + SPACE_HEIGHT;
             tabs[toolbarSelectIndex].DoGUI(new Rect(0, y, position.width, position.height - y));
+        }
+
+        private void ChangeTab(int newIndex)
+        {
+            if(!string.IsNullOrEmpty(searchText))
+            {
+                searchText = string.Empty;
+                tabs[toolbarSelectIndex].DoSearch(searchText);
+
+                if(GUIUtility.hotControl == searchField.searchFieldControlID)
+                {
+                    GUIUtility.hotControl = -1;
+                }
+            }
+            tabs[toolbarSelectIndex].Extract(context);
+            toolbarSelectIndex = newIndex;
+            tabs[toolbarSelectIndex].Inject(context);
+            tabs[toolbarSelectIndex].DoEnable();
         }
 
         private GenConfig genConfig;
@@ -126,7 +137,7 @@ namespace DotEditor.Lua.Gen
             SaveGenConfig();
         }
 
-        private void CreateAssemblies(GenTabAssemblies genAssemblies, List<GenTypeData> typeDatas)
+        private void CreateAssemblies(GenTabAssemblies genAssemblies, List<string> typeNames)
         {
             var assemlies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemlies)
@@ -141,18 +152,9 @@ namespace DotEditor.Lua.Gen
                     continue;
                 }
 
-                GenTypeData typeData = null;
-                foreach(var td in typeDatas)
-                {
-                    if(td.assemblyName == assemblyName)
-                    {
-                        typeData = td;
-                        break;
-                    }
-                }
-
                 GenTabAssemblyData tabAssemblyData = new GenTabAssemblyData();
                 tabAssemblyData.assemblyName = assemblyName;
+
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
@@ -167,7 +169,7 @@ namespace DotEditor.Lua.Gen
 
                     GenTabTypeData tabTypeData = new GenTabTypeData();
                     tabTypeData.typeFullName = type.FullName;
-                    tabTypeData.isSelected = typeData==null?false:typeData.typeFullNames.Any((data) => { return data == type.FullName; });
+                    tabTypeData.isSelected = typeNames.IndexOf(type.FullName) >= 0;
 
                     tabAssemblyData.typeDatas.Add(tabTypeData);
                 }
@@ -185,12 +187,12 @@ namespace DotEditor.Lua.Gen
             GenTabCallCSharpAssemblies callCSharpAssemblies = new GenTabCallCSharpAssemblies();
             context.AddObject<GenTabCallCSharpAssemblies>(callCSharpAssemblies);
 
-            CreateAssemblies(callCSharpAssemblies, genConfig.callCSharpDatas);
+            CreateAssemblies(callCSharpAssemblies, genConfig.callCSharpTypeNames);
 
             GenTabCallLuaAssemblies callLuaAssemblies = new GenTabCallLuaAssemblies();
             context.AddObject<GenTabCallLuaAssemblies>(callLuaAssemblies);
 
-            CreateAssemblies(callLuaAssemblies, genConfig.callLuaDatas);
+            CreateAssemblies(callLuaAssemblies, genConfig.callLuaTypeNames);
         }
     }
 }

@@ -51,21 +51,32 @@ namespace DotEditor.Lua.Gen
 
     }
 
-    public class GenTabOptimizeAssemblies : GenTabAssemblies,IExtractInjectObject
+    public class GenTabOptimize
     {
-
+        public List<GenTabOptimizeData> datas = new List<GenTabOptimizeData>();
     }
 
-    public class GenTabBlacks : IExtractInjectObject
+    public class GenTabOptimizeData
     {
-        public string assemblyName;
+        public string typeFullName;
+        public bool isSelected = false;
+    }
+
+    public class GenTabBlacks
+    {
         public List<GenTabBlackData> datas = new List<GenTabBlackData>();
     }
 
     public class GenTabBlackData
     {
-        public bool isSelected = false;
         public string typeFullName;
+        public bool isFoldout = false;
+        public List<GenTabMethodData> datas = new List<GenTabMethodData>();
+    }
+
+    public class GenTabMethodData
+    {
+        public bool isSelected = false;
         public string methodName;
         public List<string> paramList = new List<string>();
     }
