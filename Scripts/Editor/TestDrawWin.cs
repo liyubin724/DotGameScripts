@@ -4,6 +4,12 @@ using UnityEditor;
 
 public class TestDrawWin : EditorWindow
 {
+    [MenuItem("Test/build")]
+    public static void BuildBundle()
+    {
+        BuildPipeline.BuildAssetBundles("E:/output", BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
+    }
+
     [MenuItem("Test/TestWin")]
     public static void ShowWin()
     {

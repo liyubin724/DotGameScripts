@@ -54,6 +54,7 @@ namespace DotEditor.Lua.Gen
             if (searchField == null)
             {
                 searchField = new SearchField();
+                searchField.autoSetFocusOnFindCommand = true;
             }
 
             if (tabs==null)
@@ -77,7 +78,12 @@ namespace DotEditor.Lua.Gen
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar,GUILayout.Height(TOOLBAR_HEIGHT),GUILayout.ExpandWidth(true));
             {
                 GUILayout.FlexibleSpace();
-                searchText = searchField.OnToolbarGUI(searchText, GUILayout.Width(160));
+                string newSearchText = searchField.OnToolbarGUI(searchText, GUILayout.Width(160));
+                if(newSearchText != searchText)
+                {
+                    searchText = newSearchText;
+                    tabs[toolbarSelectIndex].DoSearch(searchText);
+                }
             }
             EditorGUILayout.EndHorizontal();
 
@@ -87,22 +93,12 @@ namespace DotEditor.Lua.Gen
                 tabs[toolbarSelectIndex].Extract(context);
                 toolbarSelectIndex = newIndex;
                 tabs[toolbarSelectIndex].Inject(context);
+                tabs[toolbarSelectIndex].DoEnable();
+
+                searchText = "";
             }
             int y = TOOLBAR_HEIGHT + TOOLBAR_BTN_HEIGHT + SPACE_HEIGHT;
             tabs[toolbarSelectIndex].DoGUI(new Rect(0, y, position.width, position.height - y));
-
-            var current = Event.current;
-            if (current.type == EventType.KeyUp && current.keyCode == KeyCode.Return 
-                && GUIUtility.hotControl == searchField.searchFieldControlID)
-            {
-                GUIUtility.hotControl = 0;
-                tabs[toolbarSelectIndex].DoSearch(searchText);
-            }
-            else if(current.type == EventType.KeyUp && current.keyCode == KeyCode.Return
-                && GUIUtility.hotControl != searchField.searchFieldControlID)
-            {
-                searchField.SetFocus();
-            }
         }
 
         private GenConfig genConfig;

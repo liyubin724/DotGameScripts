@@ -1,5 +1,6 @@
 ﻿using DotEditor.Core.EGUI;
 using ExtractInject;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static DotEditor.Lua.Gen.GenConfig;
@@ -28,56 +29,13 @@ namespace DotEditor.Lua.Gen.Tabs
                     {
                         foreach(var aData in tabAssemblies.datas)
                         {
-                            aData.isFoldout = EditorGUILayout.Foldout(aData.isFoldout, aData.assemblyName, true);
-                            if(aData.isFoldout)
+                            if(IsShowTabAssembly(aData))
                             {
-                                EditorGUIUtil.BeginIndent();
+                                aData.isFoldout = EditorGUILayout.Foldout(aData.isFoldout, aData.assemblyName, true);
+                                if(aData.isFoldout)
                                 {
-                                    foreach (var tData in aData.typeDatas)
-                                    {
-                                        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                                        {
-                                            bool isSelected = EditorGUILayout.ToggleLeft(tData.typeFullName, tData.isSelected);
-                                            if (isSelected != tData.isSelected)
-                                            {
-                                                tData.isSelected = isSelected;
-
-                                                GenTypeData gtData = null;
-                                                foreach (var d in genConfig.callCSharpDatas)
-                                                {
-                                                    if (d.assemblyName == aData.assemblyName)
-                                                    {
-                                                        gtData = d;
-                                                        break;
-                                                    }
-                                                }
-                                                if (tData.isSelected)
-                                                {
-                                                    if (gtData == null)
-                                                    {
-                                                        gtData = new GenTypeData();
-                                                        gtData.assemblyName = aData.assemblyName;
-                                                        genConfig.callCSharpDatas.Add(gtData);
-                                                    }
-                                                    gtData.typeFullNames.Add(tData.typeFullName);
-                                                }
-                                                else
-                                                {
-                                                    if (gtData != null)
-                                                    {
-                                                        gtData.typeFullNames.Remove(tData.typeFullName);
-                                                        if (gtData.typeFullNames.Count == 0)
-                                                        {
-                                                            genConfig.callCSharpDatas.Remove(gtData);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        EditorGUILayout.EndHorizontal();
-                                    }
+                                    DrawTabAssembly(aData);
                                 }
-                                EditorGUIUtil.EndIndent();
                             }
                         }
                     }
@@ -89,7 +47,88 @@ namespace DotEditor.Lua.Gen.Tabs
 
         public override void DoSearch(string searchText)
         {
-            Debug.Log(searchText);
+            this.searchText = searchText.ToLower();
+            foreach (var aData in tabAssemblies.datas)
+            {
+                aData.isFoldout = !string.IsNullOrEmpty(searchText);
+            }
+        }
+
+        private bool IsShowTabAssembly(GenTabAssemblyData data)
+        {
+            if(string.IsNullOrEmpty(searchText))
+            {
+                return true;
+            }
+            return data.typeDatas.Any((d) =>
+            {
+                return d.typeFullName.ToLower().IndexOf(searchText) >= 0;
+            });
+        }
+
+        private void DrawTabAssembly(GenTabAssemblyData aData)
+        {
+            EditorGUIUtil.BeginIndent();
+            {
+                foreach (var tData in aData.typeDatas)
+                {
+                    if(string.IsNullOrEmpty(searchText) || tData.typeFullName.ToLower().IndexOf(searchText)>=0)
+                    {
+                        DrawTabTypeData(aData,tData);
+                    }
+                }
+            }
+            EditorGUIUtil.EndIndent();
+        }
+
+        private void DrawTabTypeData(GenTabAssemblyData aData,GenTabTypeData tData)
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+            {
+                bool isSelected = EditorGUILayout.ToggleLeft(tData.typeFullName, tData.isSelected);
+                if (isSelected != tData.isSelected)
+                {
+                    tData.isSelected = isSelected;
+
+                    UpdateGenConfig(aData, tData);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void UpdateGenConfig(GenTabAssemblyData aData, GenTabTypeData tData)
+        {
+            GenTypeData gtData = null;
+            foreach (var d in genConfig.callCSharpDatas)
+            {
+                if (d.assemblyName == aData.assemblyName)
+                {
+                    gtData = d;
+                    break;
+                }
+            }
+
+            if (tData.isSelected)
+            {
+                if (gtData == null)
+                {
+                    gtData = new GenTypeData();
+                    gtData.assemblyName = aData.assemblyName;
+                    genConfig.callCSharpDatas.Add(gtData);
+                }
+                gtData.typeFullNames.Add(tData.typeFullName);
+            }
+            else
+            {
+                if (gtData != null)
+                {
+                    gtData.typeFullNames.Remove(tData.typeFullName);
+                    if (gtData.typeFullNames.Count == 0)
+                    {
+                        genConfig.callCSharpDatas.Remove(gtData);
+                    }
+                }
+            }
         }
     }
 }
