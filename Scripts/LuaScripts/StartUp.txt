@@ -1,0 +1,2 @@
+require("Dot/DotPreload")
+require("Game/GamePreload")

@@ -5,8 +5,8 @@
         "**/*.bak":true,
     },
     "files.associations": {
+        "*.txt":"lua",
         "*.lua.txt":"lua",
         "*.lua":"lua",
-        "*.txt":"lua",
     }
 }
