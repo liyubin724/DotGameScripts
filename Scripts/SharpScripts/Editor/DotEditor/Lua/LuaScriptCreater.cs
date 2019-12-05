@@ -27,8 +27,8 @@ namespace DotEditor.XLuaEx
 
     public static class LuaScriptCreater
     {
-        private static readonly string LuaScriptIconPath = "Assets/Tools/ScriptTemplates/lua_icon64.png";
-        private static readonly string LuaScriptTemplatePath = "Assets/Tools/ScriptTemplates/82-Lua-NewLuaScript.txt";
+        private static readonly string LuaScriptIconPath = "Assets/Tools/XLua/lua_icon64.png";
+        private static readonly string LuaScriptTemplatePath = "Assets/Tools/XLua/82-Lua-NewLuaScript.txt";
 
         [MenuItem("Assets/Create/Lua Script", false, 82)]
         private static void CreateLuaScript()
@@ -47,7 +47,5 @@ namespace DotEditor.XLuaEx
                     scriptDirPath + "/NewLuaScript.txt", icon,
                     LuaScriptTemplatePath);
         }
-
-        
     }
 }

@@ -60,7 +60,7 @@ namespace Dot.Lua.Register
         private void Awake()
         {
             InitLua();
-            objTable.Get<Action<LuaTable>>("DoAwake")?.Invoke(objTable);
+            objTable.Get<Action<LuaTable>>(LuaConfig.AWAKE_FUNCTION_NAME)?.Invoke(objTable);
         }
 
         void RegisterLuaBehaviour()
