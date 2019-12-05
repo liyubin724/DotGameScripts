@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+        "**/*.meta": true,
+        "**/*.tmp":true,
+        "**/*.bak":true,
+    },
+    "files.associations": {
+        "*.lua.txt":"lua",
+        "*.lua":"lua",
+        "*.txt":"lua",
+    }
+}
