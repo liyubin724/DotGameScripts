@@ -31,6 +31,7 @@ namespace DotEditor.Lua.Gen
         };
 
         private ExtractInjectContext context = new ExtractInjectContext();
+        private GenConfig genConfig;
 
         private GUIContent[] toolbarContents = new GUIContent[]
         {
@@ -45,7 +46,9 @@ namespace DotEditor.Lua.Gen
         private string searchText = string.Empty;
         private void OnEnable()
         {
-            LoadGenConfig();
+            genConfig = GenConfigUtil.LoadGenConfig();
+            context.AddObject<GenConfig>(genConfig);
+
             CreateTabData();
 
             if (searchField == null)
@@ -65,8 +68,7 @@ namespace DotEditor.Lua.Gen
                 };
             }
 
-            toolbarSelectIndex = 0;
-            tabs[toolbarSelectIndex].Inject(context);
+            ChangeTab(0);
         }
 
         private int toolbarSelectIndex = -1;
@@ -106,24 +108,13 @@ namespace DotEditor.Lua.Gen
                     GUIUtility.hotControl = -1;
                 }
             }
-            tabs[toolbarSelectIndex].Extract(context);
+            if(toolbarSelectIndex>=0)
+            {
+                tabs[toolbarSelectIndex].Extract(context);
+            }
             toolbarSelectIndex = newIndex;
             tabs[toolbarSelectIndex].Inject(context);
             tabs[toolbarSelectIndex].DoEnable();
-        }
-
-        private GenConfig genConfig;
-
-        private void LoadGenConfig()
-        {
-            genConfig = AssetDatabase.LoadAssetAtPath<GenConfig>(GEN_CONFIG_ASSET_PATH);
-            if(genConfig == null)
-            {
-                genConfig = ScriptableObject.CreateInstance<GenConfig>();
-                AssetDatabase.CreateAsset(genConfig, GEN_CONFIG_ASSET_PATH);
-                AssetDatabase.ImportAsset(GEN_CONFIG_ASSET_PATH);
-            }
-            context.AddObject<GenConfig>(genConfig);
         }
 
         private void SaveGenConfig()
@@ -158,7 +149,7 @@ namespace DotEditor.Lua.Gen
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
-                    if(type.IsGenericType || type.IsNotPublic || type.IsInterface || type.IsAbstract)
+                    if(type.IsNotPublic || type.IsInterface || type.IsAbstract)
                     {
                         continue;
                     }

@@ -14,6 +14,14 @@ namespace DotEditor.Lua.Gen.Tabs
         [ExtractInjectField(ExtractInjectUsage.In)]
         public GenTabCallCSharpAssemblies tabAssemblies;
 
+        private GenGenericDrawer genericDrawer;
+
+        public override void DoEnable()
+        {
+            base.DoEnable();
+            genericDrawer = new GenGenericDrawer(genConfig.callCSharpGenericTypeNames);
+        }
+
         private Vector2 scrollPos = Vector2.zero;
         public override void DoGUI(Rect rect)
         {
@@ -37,6 +45,11 @@ namespace DotEditor.Lua.Gen.Tabs
                                 }
                             }
                         }
+
+                        EditorGUILayout.Space();
+                        EditorGUILayout.LabelField("Generic Type List", EditorGUIStyle.BoldLabelStyle);
+                        EditorGUILayout.LabelField("Example:List<int> == System.Collections.Generic.List`1@System.Int32");
+                        genericDrawer.DoGUILayout();
                     }
                     EditorGUILayout.EndScrollView();
                 }
@@ -90,6 +103,10 @@ namespace DotEditor.Lua.Gen.Tabs
                     tData.isSelected = isSelected;
 
                     UpdateGenConfig(tData);
+                }
+                if (GUILayout.Button("Copy Type Name",GUILayout.Width(160)))
+                {
+                    GUIUtility.systemCopyBuffer = tData.typeFullName;
                 }
             }
             EditorGUILayout.EndHorizontal();

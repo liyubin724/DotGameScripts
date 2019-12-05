@@ -10,6 +10,9 @@ namespace DotEditor.Lua.Gen
         public List<string> callLuaTypeNames = new List<string>();
         public List<string> optimizeTypeNames = new List<string>();
 
+        public List<string> callCSharpGenericTypeNames = new List<string>();
+        public List<string> callLuaGenericTypeNames = new List<string>();
+
         public List<string> blackDatas = new List<string>();
     }
 }
