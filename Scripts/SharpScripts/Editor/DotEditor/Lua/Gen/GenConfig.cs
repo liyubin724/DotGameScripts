@@ -1,5 +1,4 @@
 ﻿using ExtractInject;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,14 +10,6 @@ namespace DotEditor.Lua.Gen
         public List<string> callLuaTypeNames = new List<string>();
         public List<string> optimizeTypeNames = new List<string>();
 
-        public List<GenBlackData> blackDatas = new List<GenBlackData>();
-
-        [Serializable]
-        public class GenBlackData
-        {
-            public string typeFullName;
-            public string methodName;
-            public List<string> paramList = new List<string>();
-        }
+        public List<string> blackDatas = new List<string>();
     }
 }

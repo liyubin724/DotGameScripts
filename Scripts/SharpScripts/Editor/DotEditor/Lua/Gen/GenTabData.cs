@@ -71,13 +71,22 @@ namespace DotEditor.Lua.Gen
     {
         public string typeFullName;
         public bool isFoldout = false;
-        public List<GenTabMethodData> datas = new List<GenTabMethodData>();
+        public List<GenTabMemberData> datas = new List<GenTabMemberData>();
     }
 
-    public class GenTabMethodData
+    public enum GenTabMemberType
+    {
+        None = 0,
+        Field = 1,
+        Property = 2,
+        Method = 3,
+    }
+
+    public class GenTabMemberData
     {
         public bool isSelected = false;
-        public string methodName;
+        public string memberName;
+        public GenTabMemberType memberType = GenTabMemberType.None;
         public List<string> paramList = new List<string>();
     }
 }
