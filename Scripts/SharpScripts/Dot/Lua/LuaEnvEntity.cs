@@ -1,18 +1,42 @@
 ﻿using Dot.Core.Logger;
+using Dot.Core.Timer;
 using Dot.Lua.Loader;
 using System;
 using XLua;
+using SystemObject = System.Object;
 
 namespace Dot.Lua
 {
     public class LuaEnvEntity
     {
+        private static float DEFAULT_ENV_TICK = 60;
+
         private LuaEnv luaEnv = null;
 
         private LuaTable mgrInLua = null;
         private Action<LuaTable,float> updateAction = null;
 
         public LuaEnv LuaEnv { get => luaEnv; }
+
+        private TimerTaskInfo timerInfo = null;
+        private float tickInterval = 0;
+        public float TickInterval
+        {
+            set {
+                tickInterval = value;
+
+                if(timerInfo!=null)
+                {
+                    TimerManager.GetInstance().RemoveTimer(timerInfo);
+                    timerInfo = null;
+                }
+
+                if(tickInterval>0)
+                {
+                    TimerManager.GetInstance().AddIntervalTimer(tickInterval, OnTimerTick);
+                }
+            }
+        }
         
         public LuaEnvEntity(string[] scriptPathFormats)
         {
@@ -22,6 +46,16 @@ namespace Dot.Lua
 #endif
 
             LuaScriptFileLoader.ScriptLoadFromFile(luaEnv, scriptPathFormats);
+
+            TickInterval = DEFAULT_ENV_TICK;
+        }
+
+        private void OnTimerTick(SystemObject sysObj)
+        {
+            if(luaEnv!=null)
+            {
+                luaEnv.Tick();
+            }
         }
 
         public void DoStart(LuaAsset[] assets, string mgrNameInLua)
