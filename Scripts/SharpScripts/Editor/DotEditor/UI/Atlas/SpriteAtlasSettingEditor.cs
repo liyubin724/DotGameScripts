@@ -1,6 +1,5 @@
 ﻿using DotEditor.Core.EGUI;
 using DotEditor.Core.UI.Atlas;
-using System;
 using UnityEditor;
 
 namespace DotEditor.UI.Atlas
@@ -34,7 +33,7 @@ namespace DotEditor.UI.Atlas
         private int[] winAtlasFormats = new int[]
         {
             (int)TextureImporterFormat.RGBA32,
-            (int)TextureImporterFormat.RGBA16,
+            (int)TextureImporterFormat.ARGB16,
             (int)TextureImporterFormat.DXT5,
             (int)TextureImporterFormat.DXT5Crunched,
         };
@@ -116,15 +115,10 @@ namespace DotEditor.UI.Atlas
                 EditorGUILayout.PropertyField(filterMode);
                 EditorGUILayout.Space();
 
-                int maxSizeIndex = Array.IndexOf(atlasMaxSizes, maxSize.intValue);
-                maxSizeIndex = EditorGUILayout.Popup("Max Size", maxSizeIndex, atlasMaxSizeContents);
-                if(maxSize.intValue != atlasMaxSizes[maxSizeIndex])
-                {
-                    maxSize.intValue = atlasMaxSizes[maxSizeIndex];
-                }
-                winTextureFormat.intValue = EditorGUILayout.Popup("Win Format", winTextureFormat.intValue, winAtlasFormatContents);
-                androidTextureFormat.intValue = EditorGUILayout.Popup("Android Format", androidTextureFormat.intValue, androidAtlasFormatContents);
-                iosTextureFormat.intValue = EditorGUILayout.Popup("iOS Format", iosTextureFormat.intValue, iosAtlasFormatContents);
+                maxSize.intValue = EditorGUILayoutUtil.DrawPopup<int>("Max Size", atlasMaxSizeContents, atlasMaxSizes, maxSize.intValue);
+                winTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("Win Format", winAtlasFormatContents, winAtlasFormats, winTextureFormat.intValue);
+                androidTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("Android Format", androidAtlasFormatContents, androidAtlasFormats, androidTextureFormat.intValue);
+                iosTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("iOS Format", iosAtlasFormatContents, iosAtlasFormats, iosTextureFormat.intValue);
             }
             EditorGUILayout.EndVertical();
 

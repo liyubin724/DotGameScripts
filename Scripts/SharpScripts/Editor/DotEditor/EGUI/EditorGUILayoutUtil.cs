@@ -48,6 +48,15 @@ namespace DotEditor.Core.EGUI
             }
         }
 
+        public static T DrawPopup<T>(string label,string[] contents,T[] values,T selectedValue)
+        {
+            int index = Array.IndexOf(values, selectedValue);
+            if (index < 0) index = 0;
+            int newIndex = EditorGUILayout.Popup(label, index, contents);
+
+            return values[newIndex];
+        }
+
         public static void DrawAssetFolderSelection(SerializedProperty property, bool isReadonly = true)
         {
             EditorGUILayout.BeginHorizontal();

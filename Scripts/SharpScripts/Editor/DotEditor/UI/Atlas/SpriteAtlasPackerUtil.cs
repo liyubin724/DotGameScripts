@@ -9,16 +9,17 @@ namespace DotEditor.Core.UI.Atlas
 {
     public static class SpriteAtlasPackerUtil
     {
-        private static string ATLAS_SETTING_PATH = "Assets/Tools/UI/spriteatlas_setting.asset";
+        private static string DEFAULT_ATLAS_SETTING_NAME = "atlas_setting.asset";
+        private static string DEFAULT_ATLAS_SETTING_PATH = $"Assets/Tools/UI/{DEFAULT_ATLAS_SETTING_NAME}";
 
         public static SpriteAtlasSetting LoadSetting(bool createIfNotExist = true)
         {
-            SpriteAtlasSetting setting = AssetDatabase.LoadAssetAtPath<SpriteAtlasSetting>(ATLAS_SETTING_PATH);
+            SpriteAtlasSetting setting = AssetDatabase.LoadAssetAtPath<SpriteAtlasSetting>(DEFAULT_ATLAS_SETTING_PATH);
             if(setting == null && createIfNotExist)
             {
                 setting = ScriptableObject.CreateInstance<SpriteAtlasSetting>();
-                AssetDatabase.CreateAsset(setting, ATLAS_SETTING_PATH);
-                AssetDatabase.ImportAsset(ATLAS_SETTING_PATH);
+                AssetDatabase.CreateAsset(setting, DEFAULT_ATLAS_SETTING_PATH);
+                AssetDatabase.ImportAsset(DEFAULT_ATLAS_SETTING_PATH);
             }
             return setting;
         }
@@ -41,7 +42,29 @@ namespace DotEditor.Core.UI.Atlas
             }
         }
 
-        [MenuItem("Game/UI/Atlas/Sprite Atlas Auto Pack &p")]
+        [MenuItem("Game/UI/Atlas/Create Sprite Atlas Setting")]
+        public static void CreateSpriteAtlasSetting()
+        {
+            string[] selectedDirs = SelectionUtil.GetSelectionDirs();
+            if (selectedDirs == null || selectedDirs.Length == 0)
+            {
+                EditorUtility.DisplayDialog("Warning", "Please selected a directory", "OK");
+                return;
+            }
+            foreach(var dir in selectedDirs)
+            {
+                string assetPath = $"{dir}/{DEFAULT_ATLAS_SETTING_NAME}";
+                SpriteAtlasSetting setting = AssetDatabase.LoadAssetAtPath<SpriteAtlasSetting>(assetPath);
+                if(setting == null)
+                {
+                    setting = ScriptableObject.CreateInstance<SpriteAtlasSetting>();
+                    AssetDatabase.CreateAsset(setting, assetPath);
+                    AssetDatabase.ImportAsset(assetPath);
+                }
+            }
+        }
+
+        [MenuItem("Game/UI/Atlas/Pack Sprite Atlas")]
         public static void AutoPackSelectedAtlas()
         {
             string[] selectedDirs = SelectionUtil.GetSelectionDirs();

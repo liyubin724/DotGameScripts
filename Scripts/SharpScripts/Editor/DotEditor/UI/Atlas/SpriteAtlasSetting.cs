@@ -4,7 +4,7 @@ namespace DotEditor.Core.UI.Atlas
 {
     public class SpriteAtlasSetting : ScriptableObject
     {
-        public string atlasDirPath = "Assets/Resources/UI/Atlas";
+        public string atlasDirPath = "Assets/ArtRes/UI/Atlas";
 
         public int pixelsPerUnit = 100;
 
@@ -18,9 +18,9 @@ namespace DotEditor.Core.UI.Atlas
         public FilterMode filterMode = FilterMode.Bilinear;
 
         public int maxSize = 2048;
-        public int winTextureFormat = 0;
-        public int androidTextureFormat = 0;
-        public int iosTextureFormat = 0;
+        public int winTextureFormat = 4;
+        public int androidTextureFormat = 4;
+        public int iosTextureFormat = 4;
 
         public void CopyFrom(SpriteAtlasSetting setting)
         {
