@@ -2,7 +2,6 @@
 
 namespace DotEditor.Core.UI.Atlas
 {
-    [CreateAssetMenu( fileName ="spriteatlas_setting", menuName = "UI/Sprite Atlas Setting")]
     public class SpriteAtlasSetting : ScriptableObject
     {
         public string atlasDirPath = "Assets/Resources/UI/Atlas";
