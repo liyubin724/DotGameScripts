@@ -18,10 +18,9 @@ namespace DotEditor.Lua.Gen
             win.Show();
         }
 
-        private static int TOOLBAR_HEIGHT = 18;
-        private static int SPACE_HEIGHT = 10;
-        private static int TOOLBAR_BTN_HEIGHT = 40;
-        private static string GEN_CONFIG_ASSET_PATH = "Assets/Tools/XLua/gen_config.asset";
+        private static readonly int TOOLBAR_HEIGHT = 18;
+        private static readonly int SPACE_HEIGHT = 10;
+        private static readonly int TOOLBAR_BTN_HEIGHT = 40;
 
         private string[] excludeAssemblyNames = new string[]
         {
