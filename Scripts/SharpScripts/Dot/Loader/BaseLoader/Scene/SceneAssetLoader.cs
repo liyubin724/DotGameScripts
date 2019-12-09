@@ -140,10 +140,6 @@ namespace Dot.Core.Loader
             {
                 return loadData.IsOperationDone() && loadData.IsAssetLoaderDone();
             }
-            else if (loaderMode == AssetLoaderMode.Resources)
-            {
-
-            }
             Debug.LogError($"SceneAssetLoader::IsSceneLoadComplete->Unvalid AssetLoaderMode.loaderMode = {loaderMode}");
             return false;
         }
@@ -159,10 +155,6 @@ namespace Dot.Core.Loader
             else if (loaderMode == AssetLoaderMode.AssetBundle)
             {
                 loadData.loaderHandle = assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { loadData.pathOrAddress }, false, AssetLoaderPriority.High, null, null, null, null, null);
-            }
-            else if (loaderMode == AssetLoaderMode.Resources)
-            {
-
             }
         }
 

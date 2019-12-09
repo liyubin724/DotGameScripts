@@ -18,10 +18,7 @@ namespace Dot.Core.Loader
             string assetRootDir, 
             Action<bool> initCallback)
         {
-            if(loaderMode == AssetLoaderMode.Resources)
-            {
-                assetLoader = new ResourceLoader();
-            }else if(loaderMode == AssetLoaderMode.AssetBundle)
+            if (loaderMode == AssetLoaderMode.AssetBundle)
             {
                 assetLoader = new AssetBundleLoader();
             }

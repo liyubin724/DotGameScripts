@@ -19,7 +19,6 @@ namespace Dot.Core.Loader
     public enum AssetLoaderMode
     {
         AssetDatabase,
-        Resources,
         AssetBundle,
     }
 
