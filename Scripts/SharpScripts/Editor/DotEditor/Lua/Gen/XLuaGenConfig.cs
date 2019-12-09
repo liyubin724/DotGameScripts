@@ -1,4 +1,5 @@
-﻿using DotEditor.Util;
+﻿using CSObjectWrapEditor;
+using DotEditor.Util;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,15 @@ namespace DotEditor.Lua.Gen
 {
     public static class XLuaGenConfig
     {
+        [GenPath]
+        public static string GetGenPath
+        {
+            get
+            {
+                return "Assets/Scripts/SharpScripts/XLuaGen";
+            }
+        }
+
         [LuaCallCSharp]
         public static List<Type> GetLuaCallCSharpTypeList
         {
