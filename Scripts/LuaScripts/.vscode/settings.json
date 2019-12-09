@@ -8,5 +8,6 @@
         "*.txt":"lua",
         "*.lua.txt":"lua",
         "*.lua":"lua",
-    }
+    },
+    "editor.fontSize": 18
 }

@@ -3,10 +3,8 @@ LuaManager = {}
 LuaManager.__index = LuaManager;
 
 function LuaManager:DoStart()
-    LuaDebugLogger.Info("LuaManager::DoStart->Start")
-    self:GetConfigMgr():SetRootPath("Game/Config/")
-    local data = self:GetConfigMgr():GetConfig("Sheet1")
-    print(data[1].luaValue())
+    
+    Logger.Info("LuaManager::DoStart->Start")
 end
 
 function LuaManager:DoUpdate(deltaTime)

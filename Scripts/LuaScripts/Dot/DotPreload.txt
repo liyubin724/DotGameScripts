@@ -1,5 +1,7 @@
-require("Dot/Class")
+require("Dot/Core/Class")
 require("Dot/Utils/table")
+require("Dot/Core/LuaManager")
+require("Dot/Debug/Logger")
 
 if IsDebug then
     EasyJson = require("Dot/Tools/EasyJson/easyjson")
