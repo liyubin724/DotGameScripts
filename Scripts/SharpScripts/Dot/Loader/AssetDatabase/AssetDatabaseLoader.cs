@@ -11,10 +11,8 @@ namespace Dot.Core.Loader
         protected override void InnerInitialize(string assetRootDir)
         {
 #if UNITY_EDITOR
-            if(pathMode == AssetPathMode.Address)
-            {
-                assetAddressConfig = UnityEditor.AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(AssetAddressConfig.CONFIG_PATH);
-            }
+            assetAddressConfig = UnityEditor.AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(AssetAddressConfig.CONFIG_PATH);
+
 #else
             Debug.LogError("");
 #endif
@@ -23,7 +21,7 @@ namespace Dot.Core.Loader
         protected override bool UpdateInitialize(out bool isSuccess)
         {
             isSuccess = true;
-            if(pathMode == AssetPathMode.Address && assetAddressConfig == null)
+            if(assetAddressConfig == null)
             {
                 isSuccess = false;
             }

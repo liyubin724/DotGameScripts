@@ -85,14 +85,14 @@ namespace Dot.Core.Loader
             brigeDataPool.Release(bridgeData);
         }
         
-        public void LoadAssetAsync(string pathOrAddress,OnAssetLoadComplete complete,SystemObject userData = null)
+        public void LoadAssetAsync(string address,OnAssetLoadComplete complete,SystemObject userData = null)
         {
-            LoadBatchAssetAsync(new string[] { pathOrAddress }, complete, null,userData);
+            LoadBatchAssetAsync(new string[] { address }, complete, null,userData);
         }
 
-        public void InstanceAssetAsync(string pathOrAddress, OnAssetLoadComplete complete, SystemObject userData = null)
+        public void InstanceAssetAsync(string address, OnAssetLoadComplete complete, SystemObject userData = null)
         {
-            InstanceBatchAssetAsync(new string[] { pathOrAddress }, complete, null, userData);
+            InstanceBatchAssetAsync(new string[] { address }, complete, null, userData);
         }
 
         public void CancelLoadAsset(OnAssetLoadComplete complete)
@@ -131,14 +131,14 @@ namespace Dot.Core.Loader
             }
         }
 
-        public void LoadBatchAssetAsync(string[] pathOrAddresses,OnAssetLoadComplete complete,OnBatchAssetLoadComplete batchComplete, SystemObject userData = null)
+        public void LoadBatchAssetAsync(string[] addresses,OnAssetLoadComplete complete,OnBatchAssetLoadComplete batchComplete, SystemObject userData = null)
         {
             BridgeData brigeData = brigeDataPool.Get();
             brigeData.complete = complete;
             brigeData.batchComplete = batchComplete;
             brigeData.userData = userData;
 
-            AssetLoaderHandle handle = AssetManager.GetInstance().LoadBatchAssetAsync(pathOrAddresses, AssetLoadComplete, BatchAssetLoadComplete,
+            AssetLoaderHandle handle = AssetManager.GetInstance().LoadBatchAssetAsync(addresses, AssetLoadComplete, BatchAssetLoadComplete,
                 loaderPriority, null,null, brigeData);
 
             brigeData.handle = handle;
@@ -146,14 +146,14 @@ namespace Dot.Core.Loader
             bridgeDatas.Add(brigeData);
         }
         
-        public void InstanceBatchAssetAsync(string[] pathOrAddresses, OnAssetLoadComplete complete, OnBatchAssetLoadComplete batchComplete, SystemObject userData = null)
+        public void InstanceBatchAssetAsync(string[] addresses, OnAssetLoadComplete complete, OnBatchAssetLoadComplete batchComplete, SystemObject userData = null)
         {
             BridgeData brigeData = brigeDataPool.Get();
             brigeData.complete = complete;
             brigeData.batchComplete = batchComplete;
             brigeData.userData = userData;
 
-            AssetLoaderHandle handle = AssetManager.GetInstance().InstanceBatchAssetAsync(pathOrAddresses, AssetLoadComplete, BatchAssetLoadComplete,
+            AssetLoaderHandle handle = AssetManager.GetInstance().InstanceBatchAssetAsync(addresses, AssetLoadComplete, BatchAssetLoadComplete,
                 loaderPriority, null, null, brigeData);
 
             brigeData.handle = handle;
@@ -161,16 +161,16 @@ namespace Dot.Core.Loader
             bridgeDatas.Add(brigeData);
         }
 
-        private void AssetLoadComplete(string pathOrAddress, UnityObject uObj, SystemObject userData)
+        private void AssetLoadComplete(string address, UnityObject uObj, SystemObject userData)
         {
             BridgeData brigeData = userData as BridgeData;
-            brigeData.complete?.Invoke(pathOrAddress, uObj, brigeData.userData);
+            brigeData.complete?.Invoke(address, uObj, brigeData.userData);
         }
 
-        private void BatchAssetLoadComplete(string[] pathOrAddresses, UnityObject[] uObjs, SystemObject userData)
+        private void BatchAssetLoadComplete(string[] addresses, UnityObject[] uObjs, SystemObject userData)
         {
             BridgeData bridgeData = userData as BridgeData;
-            bridgeData.batchComplete?.Invoke(pathOrAddresses, uObjs, bridgeData.userData);
+            bridgeData.batchComplete?.Invoke(addresses, uObjs, bridgeData.userData);
 
             bridgeDatas.Remove(bridgeData);
             brigeDataPool.Release(bridgeData);

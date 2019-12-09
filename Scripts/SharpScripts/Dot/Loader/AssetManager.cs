@@ -13,7 +13,6 @@ namespace Dot.Core.Loader
         private SceneAssetLoader sceneLoader = null;
         private bool isInit = false;
         public void InitLoader(AssetLoaderMode loaderMode, 
-            AssetPathMode pathMode, 
             int maxLoadingCount, 
             string assetRootDir, 
             Action<bool> initCallback)
@@ -39,11 +38,11 @@ namespace Dot.Core.Loader
                 }
 
                 initCallback?.Invoke(isSuccess);
-            },pathMode,maxLoadingCount,assetRootDir);
+            },maxLoadingCount,assetRootDir);
         }
 
         public AssetLoaderHandle LoadAssetAsync(
-            string pathOrAddress,
+            string address,
             OnAssetLoadComplete complete, 
             AssetLoaderPriority priority = AssetLoaderPriority.Default,  
             OnAssetLoadProgress progress = null,
@@ -51,7 +50,7 @@ namespace Dot.Core.Loader
         {
             if(isInit)
             {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { pathOrAddress }, false, priority, complete, progress, null, null, userData);
+                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { address }, false, priority, complete, progress, null, null, userData);
             }else
             {
                 Debug.LogError("AssetManager::LoadAssetAsync->init is failed");
@@ -60,7 +59,7 @@ namespace Dot.Core.Loader
         }
 
         public AssetLoaderHandle LoadBatchAssetAsync(
-            string[] pathOrAddresses,
+            string[] address,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
             AssetLoaderPriority priority = AssetLoaderPriority.Default,
@@ -70,7 +69,7 @@ namespace Dot.Core.Loader
         {
             if (isInit)
             {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(pathOrAddresses, false, priority, complete, progress, batchComplete, batchProgress, userData);
+                return assetLoader.LoadOrInstanceBatchAssetAsync(address, false, priority, complete, progress, batchComplete, batchProgress, userData);
             }
             else
             {
@@ -80,7 +79,7 @@ namespace Dot.Core.Loader
         }
 
         public AssetLoaderHandle InstanceAssetAsync(
-            string pathOrAddress,
+            string address,
             OnAssetLoadComplete complete,
             AssetLoaderPriority priority = AssetLoaderPriority.Default,
             OnAssetLoadProgress progress = null,
@@ -88,7 +87,7 @@ namespace Dot.Core.Loader
         {
             if (isInit)
             {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { pathOrAddress }, true, priority, complete, progress, null, null, userData);
+                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { address }, true, priority, complete, progress, null, null, userData);
             }
             else
             {
@@ -98,7 +97,7 @@ namespace Dot.Core.Loader
         }
 
         public AssetLoaderHandle InstanceBatchAssetAsync(
-            string[] pathOrAddresses,
+            string[] address,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
             AssetLoaderPriority priority = AssetLoaderPriority.Default,
@@ -108,7 +107,7 @@ namespace Dot.Core.Loader
         {
             if (isInit)
             {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(pathOrAddresses, true, priority, complete, progress, batchComplete, batchProgress, userData);
+                return assetLoader.LoadOrInstanceBatchAssetAsync(address, true, priority, complete, progress, batchComplete, batchProgress, userData);
             }
             else
             {
@@ -117,16 +116,16 @@ namespace Dot.Core.Loader
             }
         }
 
-        public UnityObject InstantiateAsset(string pathOrAddress,UnityObject asset)
+        public UnityObject InstantiateAsset(string address,UnityObject asset)
         {
             if (isInit)
             {
-                if(string.IsNullOrEmpty(pathOrAddress) || asset == null)
+                if(string.IsNullOrEmpty(address) || asset == null)
                 {
-                    Debug.LogError($"AssetManager::InstantiateAsset->asset is null or asset is null.assetPath = {(pathOrAddress ?? "")}");
+                    Debug.LogError($"AssetManager::InstantiateAsset->asset is null or asset is null.assetPath = {(address ?? "")}");
                     return null;
                 }
-                return assetLoader?.InstantiateAsset(pathOrAddress, asset);
+                return assetLoader?.InstantiateAsset(address, asset);
             }
             else
             {
@@ -135,7 +134,7 @@ namespace Dot.Core.Loader
             }
         }
 
-        public SceneLoaderHandle LoadSceneAsync(string pathOrAddress,
+        public SceneLoaderHandle LoadSceneAsync(string address,
             OnSceneLoadComplete completeCallback,
             OnSceneLoadProgress progressCallback,
             LoadSceneMode loadMode = LoadSceneMode.Single,
@@ -147,10 +146,10 @@ namespace Dot.Core.Loader
                 Debug.LogError("AssetManager::LoadSceneAsync->sceneLoader has not been inited");
                 return null;
             }
-            return sceneLoader.LoadSceneAsync(pathOrAddress, completeCallback, progressCallback, loadMode, activateOnLoad, userData);
+            return sceneLoader.LoadSceneAsync(address, completeCallback, progressCallback, loadMode, activateOnLoad, userData);
         }
 
-        public void UnloadSceneAsync(string pathOrAddress,
+        public void UnloadSceneAsync(string address,
             OnSceneUnloadComplete completeCallback,
             OnSceneUnloadProgress progressCallback,
             SystemObject userData = null)
@@ -160,7 +159,7 @@ namespace Dot.Core.Loader
                 Debug.LogError("AssetManager::LoadSceneAsync->sceneLoader has not been inited");
                 return;
             }
-            sceneLoader.UnloadSceneAsync(pathOrAddress, completeCallback, progressCallback, userData);
+            sceneLoader.UnloadSceneAsync(address, completeCallback, progressCallback, userData);
         }
 
         public void UnloadUnusedAsset(Action callback = null)
@@ -187,11 +186,11 @@ namespace Dot.Core.Loader
             }
         }
         
-        public string[] GetAssetPathOrAddressByLabel(string label)
+        public string[] GetAssetAddressByLabel(string label)
         {
             if(isInit && assetLoader!=null)
             {
-                return assetLoader.GetAssetPathOrAddressByLabel(label);
+                return assetLoader.GetAssetAddressByLabel(label);
             }
             return null;
         }

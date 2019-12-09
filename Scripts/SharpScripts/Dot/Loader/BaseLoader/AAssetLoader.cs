@@ -26,38 +26,28 @@ namespace Dot.Core.Loader
         private bool isInitFinished = false;
         private bool isInitSuccess = false;
 
-        protected AssetPathMode pathMode = AssetPathMode.Address;
         protected AssetAddressConfig assetAddressConfig = null;
 
         internal string GetAssetPath(string pathOrAddress)
         {
-            if(pathMode == AssetPathMode.Address)
-            {
-                return assetAddressConfig.GetAssetPathByAddress(pathOrAddress);
-            }
-            return pathOrAddress;
+           return assetAddressConfig.GetAssetPathByAddress(pathOrAddress);
         }
 
-        public string[] GetAssetPathOrAddressByLabel(string label)
+        public string[] GetAssetAddressByLabel(string label)
         {
             if(isInitSuccess && assetAddressConfig!=null)
             {
-                if(pathMode == AssetPathMode.Address)
-                {
-                    return assetAddressConfig.GetAssetAddressByLabel(label);
-                }
-                return assetAddressConfig.GetAssetPathByLabel(label);
+                return assetAddressConfig.GetAssetAddressByLabel(label);
             }
             return null;
         }
 
         protected Action<bool> initCallback = null;
         private int maxLoadingCount = 5;
-        public void Initialize(Action<bool> initCallback,AssetPathMode pathMode,int maxLoadingCount,string assetRootDir)
+        public void Initialize(Action<bool> initCallback,int maxLoadingCount,string assetRootDir)
         {
             this.initCallback = initCallback;
             this.maxLoadingCount = maxLoadingCount;
-            this.pathMode = pathMode;
 
             InnerInitialize(assetRootDir);
         }
@@ -86,19 +76,12 @@ namespace Dot.Core.Loader
             AssetLoaderData loaderData = loaderDataPool.Get();
             loaderData.pathOrAddresses = pathOrAddresses;
 
-            if (pathMode == AssetPathMode.Address)
+            loaderData.assetPaths = assetAddressConfig.GetAssetPathByAddress(pathOrAddresses);
+            if (loaderData.assetPaths == null)
             {
-                loaderData.assetPaths = assetAddressConfig.GetAssetPathByAddress(pathOrAddresses);
-                if (loaderData.assetPaths == null)
-                {
-                    loaderDataPool.Release(loaderData);
-                    Debug.LogError($"AAssetLoader::GetLoaderData->asset not found.address = {string.Join(",", pathOrAddresses)}");
-                    return null;
-                }
-            }
-            else
-            {
-                loaderData.assetPaths = pathOrAddresses;
+                loaderDataPool.Release(loaderData);
+                Debug.LogError($"AAssetLoader::GetLoaderData->asset not found.address = {string.Join(",", pathOrAddresses)}");
+                return null;
             }
             loaderData.InitData();
 

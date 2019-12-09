@@ -22,12 +22,6 @@ namespace Dot.Core.Loader
         AssetBundle,
     }
 
-    public enum AssetPathMode
-    {
-        Address,
-        Path,
-    }
-
     public enum AssetLoaderPriority
     {
         VeryLow = 100,

@@ -55,7 +55,7 @@ namespace Dot.Core.Loader
             {
                 isSuccess = false;
             }
-            if(isSuccess && pathMode == AssetPathMode.Address && assetAddressConfig == null)
+            if(isSuccess && assetAddressConfig == null)
             {
                 isSuccess = false;
             }
@@ -291,12 +291,9 @@ namespace Dot.Core.Loader
             }
         }
 
-        public override UnityObject InstantiateAsset(string assetPath, UnityObject asset)
+        public override UnityObject InstantiateAsset(string address, UnityObject asset)
         {
-            if(pathMode == AssetPathMode.Address)
-            {
-                assetPath = assetAddressConfig.GetAssetPathByAddress(assetPath);
-            }
+            string assetPath = assetAddressConfig.GetAssetPathByAddress(address);
             if(assetNodeDic.TryGetValue(assetPath,out AssetNode assetNode))
             {
                 if(assetNode.IsDone)
