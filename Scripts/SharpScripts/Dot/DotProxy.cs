@@ -37,17 +37,20 @@ namespace Dot
 
         private void Update()
         {
-            TimerManager.GetInstance().DoUpdate(Time.deltaTime);
-            LuaManager.GetInstance().DoUpdate(Time.deltaTime);
+            float deltaTime = Time.deltaTime;
+
+            TimerManager.GetInstance().DoUpdate(deltaTime);
+            LuaManager.GetInstance().DoUpdate(deltaTime);
+            AssetManager.GetInstance().DoUpdate(deltaTime);
         }
 
         private void OnDestroy()
         {
             LuaManager.GetInstance().DoDispose();
             TimerManager.GetInstance().DoDispose();
+            AssetManager.GetInstance().DoDispose();
 
             proxy = null;
         }
-
     }
 }
