@@ -42,11 +42,11 @@ namespace DotEditor.Lua.Gen
         }
     }
 
-    public class GenTabCallCSharpAssemblies : GenTabAssemblies ,IExtractInjectObject
+    public class GenTabCallCSharpAssemblies : GenTabAssemblies ,IEIContextObject
     {
     }
 
-    public class GenTabCallLuaAssemblies : GenTabAssemblies,IExtractInjectObject
+    public class GenTabCallLuaAssemblies : GenTabAssemblies, IEIContextObject
     {
 
     }
@@ -65,6 +65,17 @@ namespace DotEditor.Lua.Gen
     public class GenTabBlacks
     {
         public List<GenTabBlackData> datas = new List<GenTabBlackData>();
+        public void Sort()
+        {
+            datas.Sort((item1, item2) =>
+            {
+                return item1.typeFullName.CompareTo(item2.typeFullName);
+            });
+            foreach(var data in datas)
+            {
+                data.Sort();
+            }
+        }
     }
 
     public class GenTabBlackData
@@ -72,6 +83,27 @@ namespace DotEditor.Lua.Gen
         public string typeFullName;
         public bool isFoldout = false;
         public List<GenTabMemberData> datas = new List<GenTabMemberData>();
+
+        public void Sort()
+        {
+            datas.Sort((item1, item2) =>
+            {
+                int mType1 = (int)item1.memberType;
+                int mType2 = (int)item2.memberType;
+                if (mType1 > mType2)
+                {
+                    return 1;
+                }
+                else if (mType1 < mType2)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return item1.memberName.CompareTo(item2.memberName);
+                }
+            });
+        }
     }
 
     public enum GenTabMemberType

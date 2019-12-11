@@ -10,13 +10,13 @@ namespace DotEditor.Lua.Gen.Tabs
 {
     public class GenGCOptimizeTab : AGenTab
     {
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenConfig genConfig;
 
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenTabCallLuaAssemblies tabCallLuaAssemblies;
 
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenTabCallCSharpAssemblies tabCallCSharpAssemblies;
 
         public GenTabOptimize tabOptimize;

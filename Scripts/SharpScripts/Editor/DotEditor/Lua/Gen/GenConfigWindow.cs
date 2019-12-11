@@ -29,7 +29,7 @@ namespace DotEditor.Lua.Gen
             "UnityEngine.TestRunner",
         };
 
-        private ExtractInjectContext context = new ExtractInjectContext();
+        private EIContext context = new EIContext();
         private GenConfig genConfig;
 
         private GUIContent[] toolbarContents = new GUIContent[]

@@ -2,6 +2,7 @@
 using DotEditor.Util;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using XLua;
 
@@ -153,5 +154,36 @@ namespace DotEditor.Lua.Gen
                 return result;
             }
         }
+
+#if UNITY_2018_1_OR_NEWER
+        [BlackList]
+        public static Func<MemberInfo, bool> MethodFilter = (memberInfo) =>
+        {
+            if (memberInfo.DeclaringType.IsGenericType && memberInfo.DeclaringType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                if (memberInfo.MemberType == MemberTypes.Constructor)
+                {
+                    ConstructorInfo constructorInfo = memberInfo as ConstructorInfo;
+                    var parameterInfos = constructorInfo.GetParameters();
+                    if (parameterInfos.Length > 0)
+                    {
+                        if (typeof(System.Collections.IEnumerable).IsAssignableFrom(parameterInfos[0].ParameterType))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else if (memberInfo.MemberType == MemberTypes.Method)
+                {
+                    var methodInfo = memberInfo as MethodInfo;
+                    if (methodInfo.Name == "TryAdd" || methodInfo.Name == "Remove" && methodInfo.GetParameters().Length == 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+#endif
     }
 }

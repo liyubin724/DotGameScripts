@@ -8,10 +8,10 @@ namespace DotEditor.Lua.Gen.Tabs
 {
     public class GenLuaCallCSharpTab : AGenTab
     {
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenConfig genConfig;
 
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenTabCallCSharpAssemblies tabAssemblies;
 
         private GenGenericDrawer genericDrawer;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Gen.Tabs
 {
-    public abstract class AGenTab : UsedExtractInject
+    public abstract class AGenTab : EIObject
     {
         protected string searchText = string.Empty;
         public virtual void DoEnable()

@@ -12,13 +12,13 @@ namespace DotEditor.Lua.Gen.Tabs
 {
     public class GenBlackListTab : AGenTab
     {
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenConfig genConfig;
 
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenTabCallLuaAssemblies tabCallLuaAssemblies;
 
-        [ExtractInjectField(ExtractInjectUsage.In)]
+        [EIField(EIFieldUsage.In)]
         public GenTabCallCSharpAssemblies tabCallCSharpAssemblies;
 
         public GenTabBlacks tabBlacks;
@@ -90,6 +90,8 @@ namespace DotEditor.Lua.Gen.Tabs
 
                 tabBlacks.datas.Add(bData);
             }
+
+            tabBlacks.Sort();
         }
 
         private Vector2 scrollPos = Vector2.zero;

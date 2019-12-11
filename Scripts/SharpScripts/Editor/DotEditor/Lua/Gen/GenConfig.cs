@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Gen
 {
-    public class GenConfig : ScriptableObject,IExtractInjectObject
+    public class GenConfig : ScriptableObject,IEIContextObject
     {
         public List<string> callCSharpTypeNames = new List<string>();
         public List<string> callLuaTypeNames = new List<string>();
