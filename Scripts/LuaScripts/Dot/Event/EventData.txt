@@ -1,0 +1,58 @@
+----public----
+EventData =
+    Class(
+    function(self, receiver, func, isOnce, data)
+        self.receiver = receiver
+        self.func = func
+        self.data = data
+        self.isOnce = isOnce
+    end
+)
+
+function EventData:GetReceiver()
+    return self.receiver
+end
+
+function EventData:GetFunc()
+    return self.func
+end
+
+function EventData:IsOnce()
+    return self.func
+end
+
+function EventData:GetData()
+    return self.data
+end
+
+function EventData:Invoke(...)
+    if self.func then
+        if self.receiver then
+            if self.data then
+                self.func(self.receiver, self.data, ...)
+            else
+                self.func(self.receiver, ...)
+            end
+        else
+            if self.data then
+                self.func(self.data, ...)
+            else
+                self.func(...)
+            end
+        end
+    else
+        Logger.LogError("EventData::Invoke->func is nil")
+    end
+end
+
+function EventData:Equal(other)
+    if self == other then
+        return true
+    end
+
+    if other == nil then
+        return false
+    end
+
+    return self.receiver == other.receiver and self.func == other.func
+end

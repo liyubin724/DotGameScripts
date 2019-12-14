@@ -8,13 +8,9 @@ function Logger.Error(message)
 end
 
 function Logger.Info(message)
-    if IsDebug then
-        print(message)
-    end
+    print(message)
 end
 
 function Logger.Warning(message)
-    if IsDebug then
-        print(message)
-    end
+    print(message)
 end

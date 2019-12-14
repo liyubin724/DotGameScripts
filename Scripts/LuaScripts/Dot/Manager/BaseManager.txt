@@ -1,0 +1,5 @@
+BaseManager = {}
+BaseManager.__index = BaseManager
+
+function BaseManager:DoDestroy()
+end

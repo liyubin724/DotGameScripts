@@ -1,0 +1,72 @@
+----public----
+--将table转换为字符串，如果当前在调试模式下，将会使用Json格式输出
+--table表的内容
+--@param tbl:需要输出的table
+--@return 调试模式下返回Json字符串，否则返回Table的地址串
+function TableUtil.ToString(tbl)
+    if not tbl then
+        return "{nil}"
+    end
+    if type(tbl) ~= "table" then
+        return string.format("{%s}", tostring(tbl))
+    end
+    if IsDebug then
+        local easyJson = require("Dot/Tools/EasyJson/easyjson")
+        return easyJson.encode(tbl, true)
+    end
+
+    return tostring(tbl)
+end
+
+----public----
+--获取table中所有的键，对于数组表示的table键为所在的位置
+--@param tbl:
+function TableUtil.Keys(tbl)
+    if not tbl then
+        return {}
+    end
+
+    local keys = {}
+    for k, _ in pairs(tbl) do
+        table.insert(keys, k)
+    end
+    return keys
+end
+
+----public----
+--判断table是否是数组
+--@tbl
+function TableUtil.IsArray(tbl)
+    if type(tbl) ~= "table" then
+        return false
+    end
+
+    local n = #tbl
+    for i, _ in pairs(tbl) do
+        if type(i) ~= "number" then
+            return false
+        end
+
+        if i > n then
+            return false
+        end
+    end
+
+    return true
+end
+
+----public----
+--清空Table的内容
+--@param tbl
+function TableUtil.Clear(tbl)
+    if not tbl or type(tbl) ~= "table" then
+        return
+    end
+
+    local keys = TableUtil.Keys(tbl)
+    if keys and #keys > 0 then
+        for index = 1, #keys do
+            tbl[keys[index]] = nil
+        end
+    end
+end

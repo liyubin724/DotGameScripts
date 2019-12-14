@@ -1,0 +1,73 @@
+require("Dot/Manager/BaseManager")
+
+GlobalManager =
+    Class(
+    function(self)
+        self.items = {}
+    end
+)
+
+----public----
+--
+--@param name:
+--@param mgr:
+function GlobalManager:AddManager(name, mgr)
+    if not name or type(name) ~= "string" then
+        Logger.LogError("DotGlobal::AddGlobal->name is not string")
+        return
+    end
+    if not mgr or type(mgr) ~= "table" then
+        Logger.LogError("DotGlobal::AddGlobal->target is not table")
+        return
+    end
+    if self.items[name] then
+        Logger.LogError("DotGlobal::AddGlobal->the name has been add")
+        return
+    end
+
+    self.items[name] = mgr
+
+    return mgr
+end
+
+----public----
+--
+--@param name:
+--@param isDestroy:
+function GlobalManager:RemoveManager(name,isDestroy)
+    isDestroy = isDestroy or true
+
+    if not name or type(name) ~= "string" then
+        Logger.LogError("DotGlobal::AddGlobal->name is not string")
+        return
+    end
+
+    local mgr = self.items[name]
+    if mgr then
+        if isDestroy then
+            mgr:DoDestroy()
+        end
+        self.items[name] = nil
+    end
+end
+
+----public----
+--
+--@param name
+--@return
+function GlobalManager:GetManager(name)
+    return self.items[name]
+end
+
+----public----
+--
+--@param isDestroy
+function GlobalManager:RemoveAll(isDestroy)
+    isDestroy = isDestroy or true
+    if isDestroy then
+        for _, mgr in pairs(self.items) do
+            mgr:DoDestroy()
+        end
+    end
+    self.items = {}
+end

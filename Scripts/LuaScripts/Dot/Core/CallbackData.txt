@@ -5,6 +5,8 @@ CallbackData = Class(function(self,receiver,func)
 
     if self.receiver then
         self.isInstance = true
+    else
+        self.isInstance = false
     end
 end)
 
@@ -28,26 +30,28 @@ end
 
 function CallbackData:Invoke(...)
     if self.func then
-        if self.receiver then
+        if self.isInstance then
             self.func(self.receiver,...)
         else
-            if not self.isInstance then
-                self.func(...)
-            else
-                error("CallbackData::Invoke->receiver has been released")
-            end
+            self.func(...)
         end
     else
         error("CallbackData::Invoke->func is nil")
     end
 end
 
-function CallbackData:Equal(otherCallbackData)
-    if self == otherCallbackData then
+function CallbackData:Equal(other)
+    if self == other then
         return true
     end
-    if self.receiver == otherCallbackData.receiver and self.func == otherCallbackData.func then
+
+    if self.isInstance ~= other.isInstance then
+        return false
+    end
+
+    if self.receiver == other.receiver and self.func == other.func then
         return true
     end
+
     return false
 end
