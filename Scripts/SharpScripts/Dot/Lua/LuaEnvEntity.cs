@@ -44,6 +44,7 @@ namespace Dot.Lua
 #if DEBUG
             luaEnv.Global.Set("IsDebug", true);
 #endif
+            luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidjson);
 
             LuaScriptFileLoader.ScriptLoadFromFile(luaEnv, scriptPathFormats);
 

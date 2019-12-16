@@ -1,0 +1,14 @@
+GameManager = Class(function(self)
+end)
+
+function GameManager:DoStart()
+    GlobalEvent:Trigger(EventID.AppStart)
+end
+
+function GameManager:DoUpdate(deltaTime)
+    GlobalEvent:Trigger(EventID.AppUpdate,deltaTime)
+end
+
+function GameManager:DoDestroy()
+    GlobalEvent:Trigger(EventID.AppDestroy)
+end

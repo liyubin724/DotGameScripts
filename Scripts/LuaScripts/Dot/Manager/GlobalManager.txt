@@ -1,11 +1,60 @@
 require("Dot/Manager/BaseManager")
 
+GMgrName =
+{
+    GEvent = "GlobalEvent",
+}
+
 GlobalManager =
     Class(
     function(self)
         self.items = {}
+        self:OnInit()
     end
 )
+
+----private----
+function GlobalManager:OnInit()
+    self:AddManager(GMgrName.GEvent, EventDispatcher())
+
+    self:AddListener()
+end
+
+----private----
+function GlobalManager:AddListener()
+    local gEvent = self:GetManager(GMgrName.GEvent)
+    gEvent:Register(EventID.AppStart, EventData(self,GlobalManager.DoAppStart))
+    gEvent:Register(EventID.AppUpdate, EventData(self,GlobalManager.DoAppUpdate))
+    gEvent:Register(EventID.AppDestroy, EventData(self,GlobalManager.DoAppDestroy))
+end
+
+----private----
+function GlobalManager:RemoveListener()
+    local gEvent = self:GetManager(GMgrName.GEvent)
+    gEvent:Unregister(EventID.AppStart, EventData(self,GlobalManager.DoAppStart))
+    gEvent:Unregister(EventID.AppUpdate, EventData(self,GlobalManager.DoAppUpdate))
+    gEvent:Unregister(EventID.AppDestroy, EventData(self,GlobalManager.DoAppDestroy))
+end
+
+----private----
+function GlobalManager:DoAppStart()
+    print("GlobalManager::DoAppStart->Start")
+end
+
+----private----
+function GlobalManager:DoAppUpdate(deltaTime)
+    print("GlobalManager::DoAppUpdate->Update.time = "..tostring(deltaTime))
+end
+
+----private----
+function GlobalManager:DoAppDestroy()
+
+    print("GlobalManager::DoDestroy->Start")
+
+    self.RemoveListener()
+
+    self.RemoveAll(true)
+end
 
 ----public----
 --
@@ -34,7 +83,7 @@ end
 --
 --@param name:
 --@param isDestroy:
-function GlobalManager:RemoveManager(name,isDestroy)
+function GlobalManager:RemoveManager(name, isDestroy)
     isDestroy = isDestroy or true
 
     if not name or type(name) ~= "string" then

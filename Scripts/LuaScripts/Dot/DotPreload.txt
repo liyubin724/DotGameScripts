@@ -1,10 +1,10 @@
-EasyJson = require("Dot/Tools/EasyJson/easyjson")
-
 require("Dot/Core/Class")
 require("Dot/Utils/TableUtil")
 require("Dot/Event/EventDispatcher")
 require("Dot/Debug/Logger")
 require("Dot/Manager/GlobalManager")
 
+Json = require("rapidjson")
+
 GlobalMgr = GlobalManager()
-GlobalEvent = GlobalMgr:AddManager(EventDispatcher())
+GlobalEvent = GlobalMgr:GetManager(GMgrName.GEvent)
