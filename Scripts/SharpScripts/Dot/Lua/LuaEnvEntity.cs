@@ -45,7 +45,7 @@ namespace Dot.Lua
             luaEnv.Global.Set("IsDebug", true);
 #endif
             luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidjson);
-            luaEnv.AddBuildin("protobuf", XLua.LuaDLL.Lua.LoadProtobuf);
+            luaEnv.AddBuildin("pb", XLua.LuaDLL.Lua.LoadProtobuf);
 
             LuaScriptFileLoader.ScriptLoadFromFile(luaEnv, scriptPathFormats);
 

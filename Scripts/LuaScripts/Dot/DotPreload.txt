@@ -5,7 +5,5 @@ require("Dot/Debug/Logger")
 require("Dot/Manager/GlobalManager")
 
 Json = require("rapidjson")
-PB = require("protobuf")
-
 GlobalMgr = GlobalManager()
 GlobalEvent = GlobalMgr:GetManager(GMgrName.GEvent)

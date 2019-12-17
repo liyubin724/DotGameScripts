@@ -148,7 +148,7 @@ namespace DotEditor.Lua.Gen
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
-                    if(type.IsNotPublic || type.IsInterface || type.IsAbstract)
+                    if(type.IsNotPublic || type.IsInterface || (!type.IsSealed && type.IsAbstract))
                     {
                         continue;
                     }

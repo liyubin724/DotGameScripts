@@ -43,7 +43,7 @@ end
 
 ----private----
 function GlobalManager:DoAppUpdate(deltaTime)
-    print("GlobalManager::DoAppUpdate->Update.time = "..tostring(deltaTime))
+    --print("GlobalManager::DoAppUpdate->Update.time = "..tostring(deltaTime))
 end
 
 ----private----
