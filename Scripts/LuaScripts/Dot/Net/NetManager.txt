@@ -1,0 +1,24 @@
+NetManager =
+    Class(
+    function(self,protoInfo)
+        self.protoInfo = protoInfo
+
+        self:RegisterProto()
+    end
+)
+
+function NetManager:RegisterProto()
+    local pb = require("pb")
+    local ProtobufFileLoader = CS.Dot.Lua.Loader.ProtobufFileLoader
+
+    local protos = self.protoInfo.protos
+    for i=1,#protos do
+        local pbPath = string.format( "Game/Proto/%s.pb",protos[i])
+        local bytes = ProtobufFileLoader.LoadProtobuf(pbPath)
+        pb.load(bytes)
+    end
+end
+
+function NetManager:Connect()
+
+end

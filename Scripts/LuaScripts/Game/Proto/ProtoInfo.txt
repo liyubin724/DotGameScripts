@@ -1,0 +1,12 @@
+local protoInfo = {}
+protoInfo.protos = {
+    "SearchResult",
+}
+
+protoInfo.msg = {
+    [S2CMsgID.S2C_Login] = "SearchResult"
+}
+
+return protoInfo
+
+

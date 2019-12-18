@@ -1,0 +1,7 @@
+C2SMsgID = {
+    C2S_Login = 1001,
+}
+
+S2CMsgID = {
+    S2C_Login = 2001,
+}
