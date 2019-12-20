@@ -126,7 +126,7 @@ namespace Dot.Core.Pool
         {
             if (limitMaxAmount != 0 && usedItemList.Count > limitMaxAmount)
             {
-                LogUtil.LogWarning(this,"GameObjectPool::GetItem->Large than Max Amount");
+                LogUtil.LogWarning(typeof(GameObjectPool), "GameObjectPool::GetItem->Large than Max Amount");
                 return null;
             }
 
@@ -226,7 +226,7 @@ namespace Dot.Core.Pool
         {
             if(item == null)
             {
-                LogUtil.LogError(this, "GameObjectPool::ReleaseItem->Item is Null");
+                LogUtil.LogError(typeof(GameObjectPool), "GameObjectPool::ReleaseItem->Item is Null");
                 return;
             }
 

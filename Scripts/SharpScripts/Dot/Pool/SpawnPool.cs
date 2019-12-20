@@ -53,12 +53,12 @@ namespace Dot.Core.Pool
         {
             if(template == null)
             {
-                LogUtil.LogError(this, "SpawnPool::CreateGameObjectPool->Template Item is Null");
+                LogUtil.LogError(typeof(SpawnPool), "SpawnPool::CreateGameObjectPool->Template Item is Null");
                 return null;
             }
             if (goPools.TryGetValue(assetPath, out GameObjectPool goPool))
             {
-                LogUtil.LogWarning(this,"SpawnPool::CreateGameObjectPool->the asset pool has been created.assetPath = " + assetPath);
+                LogUtil.LogWarning(typeof(SpawnPool), "SpawnPool::CreateGameObjectPool->the asset pool has been created.assetPath = " + assetPath);
             }
             else
             {

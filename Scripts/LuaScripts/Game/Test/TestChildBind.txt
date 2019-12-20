@@ -1,0 +1,30 @@
+----private----
+--Constructor 
+TestChildBind = Class(function(self)
+
+end)
+
+----protected----
+function TestChildBind:DoAwake()
+    Logger.Info("TestChildBind",self.innerCube.gameObject.name)
+end
+
+----protected----
+function TestChildBind:DoEnable()
+
+end
+
+----protected----
+function TestChildBind:DoStart()
+
+end
+
+----protected----
+function TestChildBind:DoDisable()
+
+end
+
+----protected----
+function TestChildBind:DoDestroy()
+
+end

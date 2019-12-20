@@ -4,6 +4,12 @@ require("Dot/Event/EventDispatcher")
 require("Dot/Debug/Logger")
 require("Dot/Manager/GlobalManager")
 
+if IsDebug then
+    Logger.SetEnable(true, true, true)
+else
+    Logger.SetEnable(true, false, false)
+end
+
 Json = require("rapidjson")
 GlobalMgr = GlobalManager()
 GlobalEvent = GlobalMgr:GetManager(GMgrName.GEvent)

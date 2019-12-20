@@ -1,5 +1,6 @@
 ﻿using log4net;
 using log4net.Config;
+using System;
 using System.IO;
 using System.Text;
 
@@ -27,9 +28,9 @@ namespace Dot.Log
             }
             return null;
         }
-        public static void LogError(object senderObj, string message)
+        public static void LogError(Type type, string message)
         {
-            LogError(senderObj.GetType().Name, message);
+            LogError(type.Name, message);
         }
 
         public static void LogError(string loggerName, string message)
@@ -41,9 +42,9 @@ namespace Dot.Log
         {
             Logger(loggerName)?.ErrorFormat(loggerName, msgFormat, args);
         }
-        public static void LogWarning(object senderObj, string message)
+        public static void LogWarning(Type type, string message)
         {
-            LogWarning(senderObj.GetType().Name, message);
+            LogWarning(type.Name, message);
         }
 
         public static void LogWarning(string loggerName, string message)
@@ -55,17 +56,17 @@ namespace Dot.Log
         {
             Logger(loggerName)?.WarnFormat(loggerName, msgFormat, args);
         }
-        public static void Log(object senderObj, string message)
+        public static void LogInfo(Type type, string message)
         {
-            Log(senderObj.GetType().Name, message);
+            LogInfo(type.Name, message);
         }
 
-        public static void Log(string loggerName, string message)
+        public static void LogInfo(string loggerName, string message)
         {
             Logger(loggerName)?.Info(message);
         }
 
-        public static void LogFormat(string loggerName, string msgFormat, params object[] args)
+        public static void LogInfoFormat(string loggerName, string msgFormat, params object[] args)
         {
             Logger(loggerName)?.InfoFormat(msgFormat, args);
         }

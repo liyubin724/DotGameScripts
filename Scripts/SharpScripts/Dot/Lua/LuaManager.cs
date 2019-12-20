@@ -24,7 +24,7 @@ namespace Dot.Lua
                     return entity.LuaEnv;
                 }else
                 {
-                    LogUtil.LogError(this, $"LuaManager::this[LuaEnvType]=>LuaEnv not found.EnvType = {envType}");
+                    LogUtil.LogError(typeof(LuaManager), $"LuaManager::this[LuaEnvType]=>LuaEnv not found.EnvType = {envType}");
                     return null;
                 }
             }
@@ -34,7 +34,7 @@ namespace Dot.Lua
         {
             if(HasLuaEnv(envType))
             {
-                LogUtil.LogError(this, "LuaManager::NewLuaEnv->LuaEnv has been created.");
+                LogUtil.LogError(typeof(LuaManager), "LuaManager::NewLuaEnv->LuaEnv has been created.");
                 return;
             }
 

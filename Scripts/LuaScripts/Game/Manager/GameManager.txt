@@ -3,19 +3,17 @@ end)
 
 function GameManager:DoStart()
     GlobalEvent:Trigger(EventID.AppStart)
-    
-    local pb = require("pb")
-    local bytes = CS.Dot.Lua.Loader.ProtobufFileLoader.LoadProtobuf("SearchResult")
-    pb.load(bytes)
-     --pb.loadfile("D:/WorkSpace/DotGameProject/DotGameScripts/Scripts/LuaScripts/Dot/Net/SearchResult.pb")
-    local sr = {}
-    sr.query = "test"
-    sr.page_number = 11
-    sr.result_per_page = 12
-    
-    local data = pb.encode("SearchRequest",sr)
-    local msg = pb.decode("SearchRequest",data)
-    print(msg.query)
+    -- local pb = require("pb")
+    -- local bytes = CS.Dot.Lua.Loader.ProtobufFileLoader.LoadProtobuf("SearchResult")
+    -- pb.load(bytes)
+    --  --pb.loadfile("D:/WorkSpace/DotGameProject/DotGameScripts/Scripts/LuaScripts/Dot/Net/SearchResult.pb")
+    -- local sr = {}
+    -- sr.query = "test"
+    -- sr.page_number = 11
+    -- sr.result_per_page = 12
+    -- local data = pb.encode("SearchRequest",sr)
+    -- local msg = pb.decode("SearchRequest",data)
+    -- print(msg.query)
 end
 
 function GameManager:DoUpdate(deltaTime)

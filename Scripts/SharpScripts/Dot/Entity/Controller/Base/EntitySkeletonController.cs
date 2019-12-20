@@ -48,7 +48,7 @@ namespace Dot.Core.Entity.Controller
             skeletonGO = uObj as GameObject;
             if(skeletonGO == null)
             {
-                LogUtil.LogError(this, "EntitySkeletonController::OnSkeletonLoadFinish->skeleton is null");
+                LogUtil.LogError(typeof(EntitySkeletonController), "EntitySkeletonController::OnSkeletonLoadFinish->skeleton is null");
                 return;
             }
 

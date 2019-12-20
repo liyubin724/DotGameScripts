@@ -22,7 +22,7 @@ namespace Dot.Lua
         {
             if(!IsValid())
             {
-                LogUtil.LogError(this,"LuaAsset::DoRequire->ScriptName or ScriptPath is NULL!");
+                LogUtil.LogError(typeof(LuaAsset), "LuaAsset::DoRequire->ScriptName or ScriptPath is NULL!");
                 return false;
             }
             if(luaEnv.Global.ContainsKey<string>(scriptFileName))
@@ -39,7 +39,7 @@ namespace Dot.Lua
         {
             if (!IsValid())
             {
-                LogUtil.LogError(this, "LuaAsset::GetInstance->ScriptFileName or ScriptFilePath is NULL!");
+                LogUtil.LogError(typeof(LuaAsset), "LuaAsset::GetInstance->ScriptFileName or ScriptFilePath is NULL!");
                 return null;
             }
 

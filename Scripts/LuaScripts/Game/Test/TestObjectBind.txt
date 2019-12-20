@@ -1,0 +1,23 @@
+TestObjectBind = Class(function(self)
+
+end)
+
+function TestObjectBind:DoAwake()
+    Logger.Info("TestObjectBind", {name = self.cube.transform.name})
+end
+
+function TestObjectBind:DoEnable()
+
+end
+
+function TestObjectBind:DoStart()
+
+end
+
+function TestObjectBind:DoDisable()
+
+end
+
+function TestObjectBind:DoDestroy()
+
+end

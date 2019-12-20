@@ -1,0 +1,24 @@
+TestLuaScriptBind = Class(function(self)
+
+end)
+
+function TestLuaScriptBind:DoAwake()
+    Logger.Info("TestLuaScriptBind","Lua DoAwake")
+    Logger.Info("TestLuaScriptBind",self.gameObject.name)
+end
+
+function TestLuaScriptBind:DoEnable()
+    Logger.Info("TestLuaScriptBind","Lua DoEnable")
+end
+
+function TestLuaScriptBind:DoStart()
+    Logger.Info("TestLuaScriptBind","Lua DoStart")
+end
+
+function TestLuaScriptBind:DoDisable()
+    Logger.Info("TestLuaScriptBind","Lua DoDisable")
+end
+
+function TestLuaScriptBind:DoDestroy()
+    Logger.Info("TestLuaScriptBind","Lua DoDestroy")
+end

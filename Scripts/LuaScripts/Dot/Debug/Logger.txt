@@ -1,16 +1,31 @@
+local LogUtil = CS.Dot.Log.LogUtil
+local table = table
 ----private----
 Logger = {}
 Logger.__index = Logger
 
 ----public----
-function Logger.Error(message)
-    print(message)
+
+function Logger.SetEnable(isErrorEnable,isWarningEnable,isInfoEnable)
+    Logger.isErrorEnable = isErrorEnable or true
+    Logger.isWarningEnable = isWarningEnable or true
+    Logger.isInfoEnable = isInfoEnable or true
 end
 
-function Logger.Info(message)
-    print(message)
+function Logger.Error(loggerName,data)
+    if Logger.isErrorEnable then
+        LogUtil.LogError(loggerName,table.tostring(data))
+    end
 end
 
-function Logger.Warning(message)
-    print(message)
+function Logger.Warning(loggerName,data)
+    if Logger.isWarningEnable then
+        LogUtil.LogWarning(loggerName,table.tostring(data))
+    end
+end
+
+function Logger.Info(loggerName,data)
+    if Logger.isInfoEnable then
+        LogUtil.LogInfo(loggerName,table.tostring(data))
+    end
 end

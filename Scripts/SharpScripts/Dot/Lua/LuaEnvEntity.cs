@@ -71,7 +71,7 @@ namespace Dot.Lua
                         asset.DoRequire(luaEnv);
                     }else
                     {
-                        LogUtil.LogError(this, "LuaEnvEntity::DoStart->param is an unvalid asset");
+                        LogUtil.LogError(typeof(LuaEnvEntity), "LuaEnvEntity::DoStart->param is an unvalid asset");
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace Dot.Lua
                 }
                 else
                 {
-                    LogUtil.LogError(this, "LuaEnvEntity:DoStart->Bridge Not found.plz require it at first");
+                    LogUtil.LogError(typeof(LuaEnvEntity), "LuaEnvEntity:DoStart->Bridge Not found.plz require it at first");
                 }
             }
         }

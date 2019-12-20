@@ -42,7 +42,7 @@ namespace Dot.Core.Effect
         {
             if(scenarioSpawnDic.ContainsKey(scenarioType))
             {
-                LogUtil.LogError(this, "");
+                LogUtil.LogError(typeof(EffectManager), "");
                 return;
             }
             scenarioSpawnDic.Add(scenarioType, spawnName);

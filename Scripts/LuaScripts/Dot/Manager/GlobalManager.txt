@@ -38,7 +38,7 @@ end
 
 ----private----
 function GlobalManager:DoAppStart()
-    print("GlobalManager::DoAppStart->Start")
+    --print("GlobalManager::DoAppStart->Start")
 end
 
 ----private----

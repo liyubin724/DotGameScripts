@@ -44,7 +44,7 @@ namespace Dot.Core.Entity
         {
             if (controller == null)
             {
-                LogUtil.LogError(this, "EntityObject::this[index]-> value is null");
+                LogUtil.LogError(typeof(EntityObject), "EntityObject::this[index]-> value is null");
                 return;
             }
             if (!controllerDic.ContainsKey(index))
@@ -52,7 +52,7 @@ namespace Dot.Core.Entity
                 controllerDic.Add(index, controller);
             }else
             {
-                LogUtil.LogError(this, "EntityObject::this[index]->controller has been added.if you want to replace it,please use ReplaceController instead");
+                LogUtil.LogError(typeof(EntityObject), "EntityObject::this[index]->controller has been added.if you want to replace it,please use ReplaceController instead");
             }
         }
 

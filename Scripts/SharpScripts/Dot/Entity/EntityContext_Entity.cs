@@ -70,7 +70,7 @@ namespace Dot.Core.Entity
         {
             if (entityDic.ContainsKey(entity.UniqueID))
             {
-                LogUtil.LogError(this, "");
+                LogUtil.LogError(typeof(EntityContext), "");
                 return;
             }
 
