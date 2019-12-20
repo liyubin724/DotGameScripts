@@ -1,12 +1,6 @@
 local LogUtil = CS.Dot.Log.LogUtil
 local table = table
 
-LoggerMessageType = {
-    Info = 0,
-    Warning = 1,
-    Error = 2,
-}
-
 ----private----
 Logger = {}
 Logger.__index = Logger
@@ -21,18 +15,18 @@ end
 
 function Logger.Error(loggerName,data)
     if Logger.isErrorEnable then
-        PrintLogMessage(loggerName,LoggerMessageType.Error,"LUA:"..table.tostring(data))
+        LogUtil.LogError(loggerName,"LUA:"..table.tostring(data))
     end
 end
 
 function Logger.Warning(loggerName,data)
     if Logger.isWarningEnable then
-        PrintLogMessage(loggerName,LoggerMessageType.Warning,"LUA:"..table.tostring(data))
+        LogUtil.LogWarning(loggerName,"LUA:"..table.tostring(data))
     end
 end
 
 function Logger.Info(loggerName,data)
     if Logger.isInfoEnable then
-        PrintLogMessage(loggerName,LoggerMessageType.Info,"LUA:"..table.tostring(data))
+        LogUtil.LogInfo(loggerName,"LUA:"..table.tostring(data))
     end
 end

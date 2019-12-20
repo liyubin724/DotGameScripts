@@ -99,14 +99,6 @@ namespace XLua
                 }
 #endif
 
-                //Extern:By Dot
-            LuaAPI.lua_pushstdcallcfunction(rawL, StaticLuaCallbacks.PrintLogMessage);
-            if(0!=LuaAPI.xlua_setglobal(rawL,"PrintLogMessage"))
-            {
-                throw new Exception("call xlua_setglobal fail!");
-            }
-            //Extern:By Dot
-
                 //template engine lib register
                 TemplateEngine.LuaTemplate.OpenLib(rawL);
 
