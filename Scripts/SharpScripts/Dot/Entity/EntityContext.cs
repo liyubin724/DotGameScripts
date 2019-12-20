@@ -1,11 +1,7 @@
-﻿using Dot.Core.Event;
-using Dot.Core.Generic;
-using Dot.Core.Logger;
+﻿using Dot.Core.Generic;
 using Dot.Core.Util;
 using Game.Entity;
-using System.Collections.Generic;
 using UnityEngine;
-using SystemObject = System.Object;
 
 namespace Dot.Core.Entity
 {

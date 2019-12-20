@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using System.Collections.Generic;
 
 namespace Dot.Core.Entity
@@ -70,7 +70,7 @@ namespace Dot.Core.Entity
         {
             if (entityDic.ContainsKey(entity.UniqueID))
             {
-                DebugLogger.LogError("");
+                LogUtil.LogError(this, "");
                 return;
             }
 

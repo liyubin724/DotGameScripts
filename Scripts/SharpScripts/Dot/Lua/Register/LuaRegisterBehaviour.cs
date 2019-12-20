@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using System;
 using UnityEngine;
 using XLua;
@@ -32,7 +32,7 @@ namespace Dot.Lua.Register
             luaEnv = LuaManager.GetInstance()[envType];
             if(luaEnv == null)
             {
-                DebugLogger.LogError($"LuaRegisterBehaviour::InitLua->LuaEnv is null. envType = {envType}");
+                LogUtil.LogError(this, $"LuaRegisterBehaviour::InitLua->LuaEnv is null. envType = {envType}");
                 return;
             }
             
@@ -51,7 +51,7 @@ namespace Dot.Lua.Register
                     RegisterLuaBehaviourArr();
                 }else
                 {
-                    DebugLogger.LogError($"LuaRegisterBehaviour::InitLua->objTable is null.");
+                    LogUtil.LogError(this, $"LuaRegisterBehaviour::InitLua->objTable is null.");
                     return;
                 }
             }
@@ -71,7 +71,7 @@ namespace Dot.Lua.Register
                 {
                     if (regLuaBehaviour[i].behaviour == null)
                     {
-                        DebugLogger.LogError("LuaBehaviour::RegisterLuaBehaviour->behaviour is null.objName = " + name + "  index = " + i);
+                        LogUtil.LogError(this, "LuaBehaviour::RegisterLuaBehaviour->behaviour is null.objName = " + name + "  index = " + i);
                         continue;
                     }
                     regLuaBehaviour[i].behaviour.InitLua();
@@ -89,7 +89,7 @@ namespace Dot.Lua.Register
                 {
                     if (string.IsNullOrEmpty(regLuaBehaviourArr[i].name))
                     {
-                        DebugLogger.LogError("LuaBehaviour::RegisterLuaBehaviourArr->Group Name is Null, index = " + i);
+                        LogUtil.LogError(this, "LuaBehaviour::RegisterLuaBehaviourArr->Group Name is Null, index = " + i);
                         continue;
                     }
 
@@ -102,7 +102,7 @@ namespace Dot.Lua.Register
                         {
                             if (behs[j] == null)
                             {
-                                DebugLogger.LogError("LuaBehaviour::RegisterLuaBehaviourArr->behaviour is Null, index = " + j);
+                                LogUtil.LogError(this, "LuaBehaviour::RegisterLuaBehaviourArr->behaviour is Null, index = " + j);
                                 continue;
                             }
                             behs[j].InitLua();
@@ -123,7 +123,7 @@ namespace Dot.Lua.Register
             {
                 if (regLuaObject[i].obj == null || regLuaObject[i].regObj == null)
                 {
-                    DebugLogger.LogError("LuaBehaviour::RegisterLuaObjects->obj or regObj is Null");
+                    LogUtil.LogError(this, "LuaBehaviour::RegisterLuaObjects->obj or regObj is Null");
                     continue;
                 }
                 string regName = regLuaObject[i].name;
@@ -144,7 +144,7 @@ namespace Dot.Lua.Register
                 {
                     if (string.IsNullOrEmpty(regLuaObjectArr[i].name))
                     {
-                        DebugLogger.LogError("LuaBehaviour::RegisterLuaObjectArr->Group Name is Null, index = " + i);
+                        LogUtil.LogError(this, "LuaBehaviour::RegisterLuaObjectArr->Group Name is Null, index = " + i);
                         continue;
                     }
 
@@ -157,7 +157,7 @@ namespace Dot.Lua.Register
                         {
                             if (luaObjs[j].regObj == null)
                             {
-                                DebugLogger.LogError("LuaBehaviour::RegisterLuaObjectArr->obj or regObj is Null");
+                                LogUtil.LogError(this, "LuaBehaviour::RegisterLuaObjectArr->obj or regObj is Null");
                                 continue;
                             }
 

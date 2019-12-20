@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using Dot.Core.Timer;
 using Dot.Lua.Loader;
 using System;
@@ -71,7 +71,7 @@ namespace Dot.Lua
                         asset.DoRequire(luaEnv);
                     }else
                     {
-                        DebugLogger.LogError("LuaEnvEntity::DoStart->param is an unvalid asset");
+                        LogUtil.LogError(this, "LuaEnvEntity::DoStart->param is an unvalid asset");
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace Dot.Lua
                 }
                 else
                 {
-                    DebugLogger.LogError("LuaEnvEntity:DoStart->Bridge Not found.plz require it at first");
+                    LogUtil.LogError(this, "LuaEnvEntity:DoStart->Bridge Not found.plz require it at first");
                 }
             }
         }

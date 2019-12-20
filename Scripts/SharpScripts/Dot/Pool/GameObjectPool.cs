@@ -1,7 +1,6 @@
-﻿using Dot.Core.Loader;
-using Dot.Core.Logger;
-using Dot.Core.Timer;
+﻿using Dot.Core.Timer;
 using Dot.Core.Util;
+using Dot.Log;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -127,7 +126,7 @@ namespace Dot.Core.Pool
         {
             if (limitMaxAmount != 0 && usedItemList.Count > limitMaxAmount)
             {
-                DebugLogger.LogWarning("GameObjectPool::GetItem->Large than Max Amount");
+                LogUtil.LogWarning(this,"GameObjectPool::GetItem->Large than Max Amount");
                 return null;
             }
 
@@ -227,7 +226,7 @@ namespace Dot.Core.Pool
         {
             if(item == null)
             {
-                DebugLogger.LogError("GameObjectPool::ReleaseItem->Item is Null");
+                LogUtil.LogError(this, "GameObjectPool::ReleaseItem->Item is Null");
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,12 +53,12 @@ namespace Dot.Core.Pool
         {
             if(template == null)
             {
-                DebugLogger.LogError("SpawnPool::CreateGameObjectPool->Template Item is Null");
+                LogUtil.LogError(this, "SpawnPool::CreateGameObjectPool->Template Item is Null");
                 return null;
             }
             if (goPools.TryGetValue(assetPath, out GameObjectPool goPool))
             {
-                DebugLogger.LogWarning("SpawnPool::CreateGameObjectPool->the asset pool has been created.assetPath = " + assetPath);
+                LogUtil.LogWarning(this,"SpawnPool::CreateGameObjectPool->the asset pool has been created.assetPath = " + assetPath);
             }
             else
             {

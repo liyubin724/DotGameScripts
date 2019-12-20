@@ -1,6 +1,6 @@
-﻿using Dot.Core.Logger;
-using Dot.Core.Pool;
+﻿using Dot.Core.Pool;
 using Dot.Core.Util;
+using Dot.Log;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +42,7 @@ namespace Dot.Core.Effect
         {
             if(scenarioSpawnDic.ContainsKey(scenarioType))
             {
-                DebugLogger.LogError("");
+                LogUtil.LogError(this, "");
                 return;
             }
             scenarioSpawnDic.Add(scenarioType, spawnName);

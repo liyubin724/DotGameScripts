@@ -1,5 +1,4 @@
-﻿using Dot.Core.Logger;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace Dot.Core.Pool
@@ -34,9 +33,6 @@ namespace Dot.Core.Pool
 
         public void Release<T>(T element) where T:IObjectPoolItem
         {
-            if (m_Stack.Count > 0 && ReferenceEquals(m_Stack.Peek(), element))
-                DebugLogger.LogError("Internal error. Trying to destroy object that is already released to pool.");
-
             element.OnRelease();
 
             m_Stack.Push(element);
@@ -90,9 +86,6 @@ namespace Dot.Core.Pool
 
         public void Release(T element)
         {
-            if (m_Stack.Count > 0 && ReferenceEquals(m_Stack.Peek(), element))
-                DebugLogger.LogError("Internal error. Trying to destroy object that is already released to pool.");
-
             element.OnRelease();
 
             m_Stack.Push(element);

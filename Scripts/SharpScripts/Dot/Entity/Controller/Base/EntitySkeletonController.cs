@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Event;
-using Dot.Core.Logger;
+using Dot.Log;
 using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
@@ -48,7 +48,7 @@ namespace Dot.Core.Entity.Controller
             skeletonGO = uObj as GameObject;
             if(skeletonGO == null)
             {
-                DebugLogger.LogError("EntitySkeletonController::OnSkeletonLoadFinish->skeleton is null");
+                LogUtil.LogError(this, "EntitySkeletonController::OnSkeletonLoadFinish->skeleton is null");
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using Dot.Core.Pool;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,7 +65,7 @@ namespace Dot.Core.UI.Atlas
             if (texture == null) return;
             if(!texture.isReadable)
             {
-                DebugLogger.LogError("DynamicAtlasAssembly::AddRawImageSprite->texture is not readable.path ="+rawImagePath);
+                LogUtil.LogError(this, "DynamicAtlasAssembly::AddRawImageSprite->texture is not readable.path =" +rawImagePath);
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace Dot.Core.UI.Atlas
 
             if (texture.width > width || texture.height > height)
             {
-                DebugLogger.LogError("DynamicAtlasAssembly::AddRawImageSprite->texture is too large,path = " + rawImagePath);
+                LogUtil.LogError(this, "DynamicAtlasAssembly::AddRawImageSprite->texture is too large,path = " + rawImagePath);
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Dot.Core.UI.Atlas
             }
             if (imageAtlasData.Atlas == null)
             {
-                DebugLogger.LogError("DynamicAtlasAssembly::AddRawImageSprite->texture add failed,path = " + rawImagePath);
+                LogUtil.LogError(this, "DynamicAtlasAssembly::AddRawImageSprite->texture add failed,path = " + rawImagePath);
                 dataPool.Release(imageAtlasData);
                 return;
             }

@@ -1,6 +1,7 @@
 ﻿using Dot.Core.Loader;
 using Dot.Core.Timer;
 using Dot.Core.Util;
+using Dot.Log;
 using Dot.Lua;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -22,7 +23,7 @@ namespace Dot
             }
         }
 
-        private static DotProxy proxy = null;
+        public static DotProxy proxy = null;
 
         private void Awake()
         {
@@ -52,5 +53,7 @@ namespace Dot
 
             proxy = null;
         }
+
+        public void InitLog(string logConfig) => LogManager.GetInstance().InitLog(logConfig);
     }
 }

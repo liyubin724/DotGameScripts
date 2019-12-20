@@ -1,10 +1,6 @@
 ﻿using Dot;
 using Dot.Lua;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using XLua;
 
 namespace Game
 {
@@ -14,9 +10,23 @@ namespace Game
         public LuaEnvType luaEnvType = LuaEnvType.Game;
         public string luaMgrName = "LuaManager";
 
+        public TextAsset editorLogConfig = null;
+        public TextAsset runtimeLogConfig = null;
+
         private void Awake()
         {
             DotProxy.StartUp();
+#if UNITY_EDITOR
+            if (editorLogConfig != null)
+            {
+                DotProxy.proxy.InitLog(editorLogConfig.text);
+            }
+#else
+            if(runtimeLogConfig!=null)
+            {
+                DotProxy.proxy.InitLog(runtimeLogConfig.text);
+            }
+#endif
 
             string[] luaPathFormat = new string[]
             {

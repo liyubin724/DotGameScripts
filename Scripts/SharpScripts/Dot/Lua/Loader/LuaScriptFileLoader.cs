@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using System.IO;
 using XLua;
 
@@ -29,7 +29,7 @@ namespace Dot.Lua.Loader
                 }
             }
 
-            DebugLogger.LogError($"LuaScriptFileLoader::LoadFromFile->Script not found.filePath = {filePath}");
+            LogUtil.LogError(typeof(LuaScriptFileLoader).Name, $"LuaScriptFileLoader::LoadFromFile->Script not found.filePath = {filePath}");
 
             return null;
         }

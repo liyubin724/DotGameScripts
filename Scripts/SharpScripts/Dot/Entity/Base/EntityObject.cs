@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Entity.Data;
 using Dot.Core.Event;
-using Dot.Core.Logger;
+using Dot.Log;
 using System.Collections.Generic;
 
 namespace Dot.Core.Entity
@@ -44,7 +44,7 @@ namespace Dot.Core.Entity
         {
             if (controller == null)
             {
-                DebugLogger.LogError("EntityObject::this[index]-> value is null");
+                LogUtil.LogError(this, "EntityObject::this[index]-> value is null");
                 return;
             }
             if (!controllerDic.ContainsKey(index))
@@ -52,7 +52,7 @@ namespace Dot.Core.Entity
                 controllerDic.Add(index, controller);
             }else
             {
-                DebugLogger.LogError("EntityObject::this[index]->controller has been added.if you want to replace it,please use ReplaceController instead");
+                LogUtil.LogError(this, "EntityObject::this[index]->controller has been added.if you want to replace it,please use ReplaceController instead");
             }
         }
 

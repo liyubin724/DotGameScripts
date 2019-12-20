@@ -1,6 +1,6 @@
-﻿using Dot.Core.Logger;
-using Dot.Core.Pool;
+﻿using Dot.Core.Pool;
 using Dot.Core.Timer;
+using Dot.Log;
 using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
@@ -74,13 +74,13 @@ namespace Dot.Core.Effect
             GameObject effectGO = (GameObject)uObj;
             if(uObj == null)
             {
-                DebugLogger.LogError($"EffectController::OnEffectLoadComplete->uObj is Null.assetPath = {effectPath}");
+                LogUtil.LogError(this,$"EffectController::OnEffectLoadComplete->uObj is Null.assetPath = {effectPath}");
                 return;
             }
             EffectBehaviour effectBehaviour = effectGO.GetComponent<EffectBehaviour>();
             if(effectBehaviour == null)
             {
-                DebugLogger.LogError($"EffectController::OnEffectLoadComplete->Effect not contain EffectBehaviour.assetPath = {effectPath}");
+                LogUtil.LogError(this,$"EffectController::OnEffectLoadComplete->Effect not contain EffectBehaviour.assetPath = {effectPath}");
                 UnityObject.Destroy(uObj);
                 return;
             }
@@ -103,7 +103,7 @@ namespace Dot.Core.Effect
             effectBehaviour = objPool.GetComponentItem<EffectBehaviour>();
             if (effectBehaviour == null)
             {
-                DebugLogger.LogError($"EffectController::OnEffectLoadComplete->Effect not contain EffectBehaviour.assetPath = {effectPath}");
+                LogUtil.LogError(this,$"EffectController::OnEffectLoadComplete->Effect not contain EffectBehaviour.assetPath = {effectPath}");
                 UnityObject.Destroy(uObj);
                 return;
             }

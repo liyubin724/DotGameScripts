@@ -1,4 +1,4 @@
-﻿using Dot.Core.Logger;
+﻿using Dot.Log;
 using Dot.Core.Util;
 using System.Collections.Generic;
 using XLua;
@@ -24,7 +24,7 @@ namespace Dot.Lua
                     return entity.LuaEnv;
                 }else
                 {
-                    DebugLogger.LogError($"LuaManager::this[LuaEnvType]=>LuaEnv not found.EnvType = {envType}");
+                    LogUtil.LogError(this, $"LuaManager::this[LuaEnvType]=>LuaEnv not found.EnvType = {envType}");
                     return null;
                 }
             }
@@ -34,7 +34,7 @@ namespace Dot.Lua
         {
             if(HasLuaEnv(envType))
             {
-                DebugLogger.LogWarning("LuaManager::NewLuaEnv->LuaEnv has been created.");
+                LogUtil.LogError(this, "LuaManager::NewLuaEnv->LuaEnv has been created.");
                 return;
             }
 
