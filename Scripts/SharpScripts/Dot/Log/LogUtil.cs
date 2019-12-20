@@ -70,5 +70,20 @@ namespace Dot.Log
         {
             Logger(loggerName)?.InfoFormat(msgFormat, args);
         }
+
+        public static void LogFatal(Type type, string message)
+        {
+            LogFatal(type.Name, message);
+        }
+
+        public static void LogFatal(string loggerName, string message)
+        {
+            Logger(loggerName)?.Fatal(message);
+        }
+
+        public static void LogFatalFormat(string loggerName, string msgFormat, params object[] args)
+        {
+            Logger(loggerName)?.FatalFormat(msgFormat, args);
+        }
     }
 }
