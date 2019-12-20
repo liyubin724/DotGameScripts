@@ -63,6 +63,7 @@ namespace SuperScrollView
                 SerializedProperty itemData = mItemPrefabDataList.GetArrayElementAtIndex(i);
                 SerializedProperty mInitCreateCount = itemData.FindPropertyRelative("mInitCreateCount");
                 SerializedProperty mItemPrefab = itemData.FindPropertyRelative("mItemPrefab");
+                SerializedProperty mItemName = itemData.FindPropertyRelative("mItemName");
                 SerializedProperty mItemPrefabPadding = itemData.FindPropertyRelative("mPadding");
                 SerializedProperty mItemStartPosOffset = itemData.FindPropertyRelative("mStartPosOffset");
                 EditorGUILayout.BeginHorizontal();
@@ -76,7 +77,12 @@ namespace SuperScrollView
                 {
                     continue;
                 }
+                mItemName.stringValue = EditorGUILayout.TextField("ItemName", mItemName.stringValue);
                 mItemPrefab.objectReferenceValue = EditorGUILayout.ObjectField("ItemPrefab", mItemPrefab.objectReferenceValue, typeof(GameObject), true);
+                if(string.IsNullOrEmpty(mItemName.stringValue) && mItemPrefab.objectReferenceValue!=null)
+                {
+                    mItemName.stringValue = mItemPrefab.objectReferenceValue.name;
+                }
                 mItemPrefabPadding.floatValue = EditorGUILayout.FloatField("ItemPadding", mItemPrefabPadding.floatValue);
                 if(listView.ArrangeType == ListItemArrangeType.TopToBottom || listView.ArrangeType == ListItemArrangeType.BottomToTop)
                 {

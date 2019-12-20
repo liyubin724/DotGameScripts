@@ -10,6 +10,7 @@ namespace SuperScrollView
     [System.Serializable]
     public class ItemPrefabConfData
     {
+        public string mItemName = string.Empty;
         public GameObject mItemPrefab = null;
         public float mPadding = 0;
         public int mInitCreateCount = 0;
@@ -204,7 +205,7 @@ namespace SuperScrollView
                     Debug.LogError("A item prefab is null ");
                     continue;
                 }
-                if (prefabName == data.mItemPrefab.name)
+                if (prefabName == data.mItemName)
                 {
                     return data;
                 }
@@ -1010,7 +1011,7 @@ namespace SuperScrollView
                     Debug.LogError("A item prefab is null ");
                     continue;
                 }
-                string prefabName = data.mItemPrefab.name;
+                string prefabName = data.mItemName;
                 if (mItemPoolDict.ContainsKey(prefabName))
                 {
                     Debug.LogError("A item prefab with name " + prefabName + " has existed!");
