@@ -7,8 +7,8 @@ namespace Dot.Lua.Register
     [Serializable]
     public class RegisterBehaviourData
     {
-        public BehaviourData[] behaviourDatas = new BehaviourData[0];
-        public BehaviourArrayData[] behaviourArrayDatas = new BehaviourArrayData[0];
+        public BindBehaviourData[] behaviourDatas = new BindBehaviourData[0];
+        public BindBehaviourArrayData[] behaviourArrayDatas = new BindBehaviourArrayData[0];
 
         public void RegisterToLua(LuaEnv luaEnv, LuaTable objTable)
         {
@@ -75,14 +75,14 @@ namespace Dot.Lua.Register
     }
 
     [Serializable]
-    public class BehaviourData
+    public class BindBehaviourData
     {
         public string name;
         public LuaScriptBindBehaviour behaviour;
     }
 
     [Serializable]
-    public class BehaviourArrayData
+    public class BindBehaviourArrayData
     {
         public string name;
         public LuaScriptBindBehaviour[] behaviours = new LuaScriptBindBehaviour[0];

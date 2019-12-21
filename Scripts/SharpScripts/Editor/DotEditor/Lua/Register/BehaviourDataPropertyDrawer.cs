@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Register
 {
-    [CustomPropertyDrawer(typeof(BehaviourData))]
+    [CustomPropertyDrawer(typeof(BindBehaviourData))]
     public class BehaviourDataPropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
