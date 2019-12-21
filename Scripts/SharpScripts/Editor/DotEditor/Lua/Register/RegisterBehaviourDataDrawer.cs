@@ -16,11 +16,11 @@ namespace DotEditor.Lua.Register
 
         public void OnInspectorGUI()
         {
-            DrawBindBehaviourData();
-            DrawBindBehaviourArrayData();
+            DrawBehaviourDataList();
+            DrawBehaviourArrayDataList();
         }
 
-        private void DrawBindBehaviourData()
+        private void DrawBehaviourDataList()
         {
             ReorderableListGUI.Title("Bind Behaviour List");
             List<BindBehaviourData> dataList = new List<BindBehaviourData>(data.behaviourDatas);
@@ -44,7 +44,7 @@ namespace DotEditor.Lua.Register
             data.behaviourDatas = dataList.ToArray();
         }
 
-        private void DrawBindBehaviourArrayData()
+        private void DrawBehaviourArrayDataList()
         {
             ReorderableListGUI.Title("Bind Behaviour Array");
             List<BindBehaviourArrayData> dataList = new List<BindBehaviourArrayData>(data.behaviourArrayDatas);

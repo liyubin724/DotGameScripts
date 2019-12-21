@@ -89,6 +89,6 @@ namespace Dot.Lua.Register
     public class ObjectArrayData
     {
         public string name;
-        public ObjectData[] objects;
+        public ObjectData[] objects = new ObjectData[0];
     }
 }

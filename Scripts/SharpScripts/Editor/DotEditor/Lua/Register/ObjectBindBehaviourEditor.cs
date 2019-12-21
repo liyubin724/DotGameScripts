@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Register
 {
-    [CustomEditor(typeof(ChildBindBehaviour))]
-    public class ChildBindBehaviourEditor : LuaScriptBindBehaviourEditor
+    [CustomEditor(typeof(ObjectBindBehaviour))]
+    public class ObjectBindBehaviourEditor : LuaScriptBindBehaviourEditor
     {
-        private RegisterBehaviourDataDrawer dataDrawer = null;
+        private RegisterObjectDataDrawer dataDrawer = null;
+
         protected override void OnEnable()
         {
             base.OnEnable();
-            RegisterBehaviourData behaviourData = (target as ChildBindBehaviour).registerBehaviourData;
-
-            dataDrawer = new RegisterBehaviourDataDrawer(behaviourData);
+            RegisterObjectData objectData = (target as ObjectBindBehaviour).registerObjectData;
+            dataDrawer = new RegisterObjectDataDrawer(objectData);
         }
 
         public override void OnInspectorGUI()
@@ -26,7 +26,7 @@ namespace DotEditor.Lua.Register
 
             dataDrawer.OnInspectorGUI();
 
-            if(GUI.changed)
+            if (GUI.changed)
             {
                 EditorUtility.SetDirty(target);
             }
