@@ -58,6 +58,8 @@ namespace Rotorz.Games.Collections
         /// </returns>
         public delegate T ItemDrawer<T>(Rect position, T item);
 
+        public delegate float ItemHeightGetter(int index);
+
         /// <summary>
         /// Invoked to draw content for empty list.
         /// </summary>

@@ -23,6 +23,7 @@ namespace Rotorz.Games.Collections
     {
         private IList<T> list;
         private ReorderableListControl.ItemDrawer<T> itemDrawer;
+        private ReorderableListControl.ItemHeightGetter itemHeightGetter = null;
 
         /// <summary>
         /// Fixed height of each list item.
@@ -43,6 +44,14 @@ namespace Rotorz.Games.Collections
             this.FixedItemHeight = itemHeight;
         }
 
+        public GenericListAdaptor(IList<T> list, 
+            ReorderableListControl.ItemDrawer<T> itemDrawer,
+            ReorderableListControl.ItemHeightGetter itemHeightGetter)
+        {
+            this.list = list;
+            this.itemDrawer = itemDrawer ?? ReorderableListGUI.DefaultItemDrawer;
+            this.itemHeightGetter = itemHeightGetter ?? ReorderableListGUI.DefaultItemHeightGetter;
+        }
 
         /// <summary>
         /// Gets the underlying list data structure.
@@ -157,6 +166,10 @@ namespace Rotorz.Games.Collections
         /// <inheritdoc/>
         public virtual float GetItemHeight(int index)
         {
+            if(itemHeightGetter != null)
+            {
+                return itemHeightGetter(index);
+            }
             return this.FixedItemHeight;
         }
     }

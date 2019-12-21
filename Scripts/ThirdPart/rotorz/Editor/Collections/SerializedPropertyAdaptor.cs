@@ -32,6 +32,7 @@ namespace Rotorz.Games.Collections
         /// </remarks>
         public float FixedItemHeight;
 
+        public ReorderableListControl.ItemHeightGetter itemHeightGetter = null;
 
         /// <summary>
         /// Initializes a new instance of <see cref="SerializedPropertyAdaptor"/>.
@@ -48,6 +49,19 @@ namespace Rotorz.Games.Collections
 
             this.arrayProperty = arrayProperty;
             this.FixedItemHeight = fixedItemHeight;
+        }
+
+        public SerializedPropertyAdaptor(SerializedProperty arrayProperty, ReorderableListControl.ItemHeightGetter itemHeightGetter)
+        {
+            ExceptionUtility.CheckArgumentNotNull(arrayProperty, "arrayProperty");
+
+            if (!arrayProperty.isArray)
+            {
+                throw new InvalidOperationException("Specified serialized propery is not an array.");
+            }
+
+            this.arrayProperty = arrayProperty;
+            this.itemHeightGetter = itemHeightGetter ?? ReorderableListGUI.DefaultItemHeightGetter;
         }
 
         /// <summary>
@@ -174,6 +188,11 @@ namespace Rotorz.Games.Collections
         /// <inheritdoc/>
         public virtual float GetItemHeight(int index)
         {
+            if(itemHeightGetter != null)
+            {
+                return itemHeightGetter(index);
+            }
+
             return this.FixedItemHeight != 0f
                 ? this.FixedItemHeight
                 : EditorGUI.GetPropertyHeight(this[index], GUIContent.none, false)

@@ -86,6 +86,11 @@ namespace Rotorz.Games.Collections
             return item;
         }
 
+        public static float DefaultItemHeightGetter(int index)
+        {
+            return DefaultItemHeight;
+        }
+
         /// <summary>
         /// Draws text field allowing list items to be edited.
         /// </summary>
@@ -212,6 +217,17 @@ namespace Rotorz.Games.Collections
             var adaptor = new GenericListAdaptor<T>(list, drawItem, itemHeight);
             ReorderableListControl.DrawControlFromState(adaptor, drawEmpty, flags);
         }
+
+        private static void DoListField<T>(IList<T> list, 
+            ReorderableListControl.ItemDrawer<T> drawItem, 
+            ReorderableListControl.DrawEmpty drawEmpty,
+            ReorderableListControl.ItemHeightGetter itemHeight, 
+            ReorderableListFlags flags)
+        {
+            var adaptor = new GenericListAdaptor<T>(list, drawItem, itemHeight);
+            ReorderableListControl.DrawControlFromState(adaptor, drawEmpty, flags);
+        }
+
         /// <summary>
         /// Draw list field control with absolute positioning.
         /// </summary>
@@ -223,6 +239,16 @@ namespace Rotorz.Games.Collections
         /// <param name="flags">Optional flags to pass into list field.</param>
         /// <typeparam name="T">Type of list item.</typeparam>
         private static void DoListFieldAbsolute<T>(Rect position, IList<T> list, ReorderableListControl.ItemDrawer<T> drawItem, ReorderableListControl.DrawEmptyAbsolute drawEmpty, float itemHeight, ReorderableListFlags flags)
+        {
+            var adaptor = new GenericListAdaptor<T>(list, drawItem, itemHeight);
+            ReorderableListControl.DrawControlFromState(position, adaptor, drawEmpty, flags);
+        }
+
+        private static void DoListFieldAbsolute<T>(Rect position, IList<T> list, 
+            ReorderableListControl.ItemDrawer<T> drawItem, 
+            ReorderableListControl.DrawEmptyAbsolute drawEmpty,
+            ReorderableListControl.ItemHeightGetter itemHeight, 
+            ReorderableListFlags flags)
         {
             var adaptor = new GenericListAdaptor<T>(list, drawItem, itemHeight);
             ReorderableListControl.DrawControlFromState(position, adaptor, drawEmpty, flags);
@@ -379,6 +405,16 @@ namespace Rotorz.Games.Collections
             var adaptor = new SerializedPropertyAdaptor(arrayProperty, fixedItemHeight);
             ReorderableListControl.DrawControlFromState(adaptor, drawEmpty, flags);
         }
+
+        private static void DoListField(SerializedProperty arrayProperty,
+            ReorderableListControl.ItemHeightGetter itemHeight, 
+            ReorderableListControl.DrawEmpty drawEmpty, 
+            ReorderableListFlags flags)
+        {
+            var adaptor = new SerializedPropertyAdaptor(arrayProperty, itemHeight);
+            ReorderableListControl.DrawControlFromState(adaptor, drawEmpty, flags);
+        }
+
         /// <summary>
         /// Draw list field control for serializable property array.
         /// </summary>
@@ -393,6 +429,14 @@ namespace Rotorz.Games.Collections
             ReorderableListControl.DrawControlFromState(position, adaptor, drawEmpty, flags);
         }
 
+        private static void DoListFieldAbsolute(Rect position, SerializedProperty arrayProperty,
+            ReorderableListControl.ItemHeightGetter itemHeight,
+            ReorderableListControl.DrawEmptyAbsolute drawEmpty, 
+            ReorderableListFlags flags)
+        {
+            var adaptor = new SerializedPropertyAdaptor(arrayProperty, itemHeight);
+            ReorderableListControl.DrawControlFromState(position, adaptor, drawEmpty, flags);
+        }
 
         /// <inheritdoc cref="DoListField(SerializedProperty, float, ReorderableListControl.DrawEmpty, ReorderableListFlags)"/>
         public static void ListField(SerializedProperty arrayProperty, ReorderableListControl.DrawEmpty drawEmpty, ReorderableListFlags flags)
@@ -463,10 +507,33 @@ namespace Rotorz.Games.Collections
             }
         }
 
+        public static float CalculateListFieldHeight(SerializedProperty arrayProperty, 
+            ReorderableListControl.ItemHeightGetter itemHeight,
+            ReorderableListFlags flags)
+        {
+            // We need to push/pop flags so that nested controls are properly calculated.
+            var restoreFlags = DefaultListControl.Flags;
+            try
+            {
+                DefaultListControl.Flags = flags;
+                return DefaultListControl.CalculateListHeight(new SerializedPropertyAdaptor(arrayProperty,itemHeight));
+            }
+            finally
+            {
+                DefaultListControl.Flags = restoreFlags;
+            }
+        }
+
         /// <inheritdoc cref="CalculateListFieldHeight(SerializedProperty, ReorderableListFlags)"/>
         public static float CalculateListFieldHeight(SerializedProperty arrayProperty)
         {
             return CalculateListFieldHeight(arrayProperty, 0);
+        }
+
+        public static float CalculateListFieldHeight(SerializedProperty arrayProperty,
+            ReorderableListControl.ItemHeightGetter itemHeight)
+        {
+            return CalculateListFieldHeight(arrayProperty, itemHeight,0);
         }
 
         #endregion
