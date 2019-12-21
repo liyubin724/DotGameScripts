@@ -1,0 +1,15 @@
+require("Dot/UI/UIListViewController")
+TestListView = Class(UIListViewController,function(self)
+end)
+
+function TestListView:GetItemName(itemIndex)
+    return "ItemPrefab1"
+end
+
+function TestListView:SetItemData(item,itemIndex)
+    item:SetItemData({})
+end
+
+function TestListView:DoAwake()
+    self:InitListView(10)
+end

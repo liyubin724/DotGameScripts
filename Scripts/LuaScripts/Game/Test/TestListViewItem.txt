@@ -1,0 +1,8 @@
+require("Dot/UI/UIListViewItem")
+
+TestListViewItem = Class(UIListViewItem,function(self)
+end)
+
+function TestListViewItem:SetItemData(data)
+
+end

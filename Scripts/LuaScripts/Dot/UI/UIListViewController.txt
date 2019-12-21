@@ -1,0 +1,84 @@
+
+----private----
+-- Constructor
+UIListViewController = Class(function(self)
+end)
+
+----protected abstract----
+--Get the name of prefabName which was bind in list
+--@param itemIndex(int) : the index of data
+--@return (string) : the name of the prefab
+function UIListViewController:GetItemName(itemIndex)
+    error("it should be override")
+end
+
+----protected abstract----
+--Set the data for the item
+--@param item(table) :
+--@param itemIndex(int) : the index of data
+--@return(void)
+function UIListViewController:SetItemData(item,itemIndex)
+    error("it should be override")
+end
+
+----public----
+--Init the list view
+--@param itemCount(int) : the count of the item
+--@return void
+function UIListViewController:InitListView(itemCount)
+    self.listViewController:InitListView(itemCount)
+end
+
+----public----
+--reset the count of the list view
+--@param itemCount(int) : total count
+--@param resetPos(bool) :
+--@return void
+function UIListViewController:SetListItemCount(itemCount,resetPos)
+    self.listViewController:SetListItemCount(itemCount,resetPos or true)
+end
+
+----public----
+--@param itemIndex(int) : 
+--@return table : 
+function UIListViewController:GetShownItemByItemIndex(itemIndex)
+    return self.listViewController:GetShownItemByItemIndex(itemIndex)
+end
+
+----public----
+--@param index(int) : 
+--@return table : 
+function UIListViewController:GetShownItemByIndex(index)
+    return self.listViewController:GetShownItemByIndex(index)
+end
+
+----public----
+--
+--@param itemIndex(int)
+function UIListViewController:RefreshItemByItemIndex(itemIndex)
+    self.listViewController:RefreshItemByItemIndex(itemIndex)
+end
+
+----public----
+--
+--@return void
+function UIListViewController:RefreshAllShownItem()
+    self.listViewController:RefreshAllShownItem()
+end
+
+----public----
+--
+--@param itemIndex(int)
+--@param offset(float)
+--@return void
+function UIListViewController:MovePanelToItemIndex(itemIndex,offset)
+    self.listViewController:MovePanelToItemIndex(itemIndex,offset)
+end
+
+----public----
+--
+--@param itemIndex(int) :
+--@return void
+function UIListViewController:OnItemSizeChanged(itemIndex)
+    self.listViewController:OnItemSizeChanged(itemIndex)
+end

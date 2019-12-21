@@ -1,12 +1,10 @@
 ﻿using Dot.Lua.Register;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SuperScrollView;
+using UnityEngine;
 
 namespace Dot.UI
 {
+    [RequireComponent(typeof(LoopListViewItem2))]
     public class LuaLoopListViewItem : ObjectBindBehaviour
     {
     }

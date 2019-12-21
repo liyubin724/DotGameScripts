@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Dot.UI;
 using UnityEngine;
 
 namespace SuperScrollView
@@ -246,5 +245,6 @@ namespace SuperScrollView
             }
         }
 
+        public LuaLoopListViewItem LuaListViewItem { get; set; }
     }
 }

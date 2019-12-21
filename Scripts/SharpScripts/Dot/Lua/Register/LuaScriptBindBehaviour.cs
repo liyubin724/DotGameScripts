@@ -55,34 +55,22 @@ namespace Dot.Lua.Register
         protected virtual void Awake()
         {
             InitLua();
-            if (ObjTable != null)
-            {
-                ObjTable.Get<Action<LuaTable>>(LuaConfig.AWAKE_FUNCTION_NAME)?.Invoke(ObjTable);
-            }
+            CallAction(LuaConfig.AWAKE_FUNCTION_NAME);
         }
 
         protected virtual void Start()
         {
-            if (ObjTable != null)
-            {
-                ObjTable.Get<Action<LuaTable>>(LuaConfig.START_FUNCTION_NAME)?.Invoke(ObjTable);
-            }
+            CallAction(LuaConfig.START_FUNCTION_NAME);
         }
 
         protected virtual void OnEnable()
         {
-            if (ObjTable != null)
-            {
-                ObjTable.Get<Action<LuaTable>>(LuaConfig.ENABLE_FUNCTION_NAME)?.Invoke(ObjTable);
-            }
+            CallAction(LuaConfig.ENABLE_FUNCTION_NAME);
         }
 
-        protected virtual void OnDisable()
+        void OnDisable()
         {
-            if (ObjTable != null)
-            {
-                ObjTable.Get<Action<LuaTable>>(LuaConfig.DISABLE_FUNCTION_NAME)?.Invoke(ObjTable);
-            }
+            CallAction(LuaConfig.DISABLE_FUNCTION_NAME);
         }
 
         protected virtual void OnDestroy()
@@ -91,11 +79,44 @@ namespace Dot.Lua.Register
             {
                 return;
             }
-            ObjTable.Get<Action<LuaTable>>(LuaConfig.DESTROY_FUNCTION_NAME)?.Invoke(ObjTable);
+            CallAction(LuaConfig.DESTROY_FUNCTION_NAME);
 
             ObjTable.Dispose();
             ObjTable = null;
             luaEnv = null;
+        }
+
+        public void CallAction(string funcName)
+        {
+            if (ObjTable != null)
+            {
+                ObjTable.Get<Action<LuaTable>>(funcName)?.Invoke(ObjTable);
+            }
+        }
+
+        public void CallAction(string funcName,LuaTable item,int intValue)
+        {
+            if(ObjTable != null)
+            {
+                Action<LuaTable,LuaTable, int> action = ObjTable.Get<Action<LuaTable, LuaTable,int>>(funcName);
+                if(action !=null)
+                {
+                    action.Invoke(ObjTable, item,intValue);
+                }
+            }
+        }
+
+        public string CallFunc(string funcName,int intValue)
+        {
+            if(ObjTable != null)
+            {
+                Func<LuaTable, int, string> func = ObjTable.Get<Func<LuaTable, int, string>>(funcName);
+                if(func !=null)
+                {
+                    return func(ObjTable, intValue);
+                }
+            }
+            return null;
         }
     }
 }
