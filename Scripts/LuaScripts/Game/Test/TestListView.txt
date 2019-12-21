@@ -7,7 +7,7 @@ function TestListView:GetItemName(itemIndex)
 end
 
 function TestListView:SetItemData(item,itemIndex)
-    item:SetItemData({})
+    item:SetItemData({itemIndex = itemIndex})
 end
 
 function TestListView:DoAwake()

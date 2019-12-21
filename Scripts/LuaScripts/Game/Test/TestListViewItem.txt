@@ -4,5 +4,5 @@ TestListViewItem = Class(UIListViewItem,function(self)
 end)
 
 function TestListViewItem:SetItemData(data)
-
+    self.TextName.text = tostring(data.itemIndex)
 end
