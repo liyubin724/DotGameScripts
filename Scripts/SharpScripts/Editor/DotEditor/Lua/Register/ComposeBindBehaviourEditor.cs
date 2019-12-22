@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Register
 {
-    [CustomEditor(typeof(ComposeBindBehaviour))]
+    [CustomEditor(typeof(ComposeBindBehaviour), true)]
     public class ComposeBindBehaviourEditor : LuaScriptBindBehaviourEditor
     {
         private RegisterObjectDataDrawer objectDataDrawer = null;
@@ -13,10 +13,10 @@ namespace DotEditor.Lua.Register
         protected override void OnEnable()
         {
             base.OnEnable();
-            RegisterBehaviourData behaviourData = (target as ChildBindBehaviour).registerBehaviourData;
+            RegisterBehaviourData behaviourData = (target as ComposeBindBehaviour).registerBehaviourData;
             behaviourDataDrawer = new RegisterBehaviourDataDrawer(behaviourData);
 
-            RegisterObjectData objectData = (target as ObjectBindBehaviour).registerObjectData;
+            RegisterObjectData objectData = (target as ComposeBindBehaviour).registerObjectData;
             objectDataDrawer = new RegisterObjectDataDrawer(objectData);
         }
 

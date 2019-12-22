@@ -22,7 +22,7 @@ namespace DotEditor.Lua.Register
             DrawObjectArrayDataList();
         }
 
-        private ObjectData DrawObjectData(Rect position,ObjectData item)
+        private ObjectData DrawObjectData(Rect position,ObjectData item, bool isShowName)
         {
             if (item == null)
             {
@@ -32,8 +32,11 @@ namespace DotEditor.Lua.Register
 
             Rect curRect = position;
             curRect.height = EditorGUIUtility.singleLineHeight;
-            item.name = EditorGUI.TextField(curRect, "Name", item.name);
-            curRect.y += curRect.height;
+            if(isShowName)
+            {
+                item.name = EditorGUI.TextField(curRect, "Name", item.name);
+                curRect.y += curRect.height;
+            }
             item.obj = (GameObject)EditorGUI.ObjectField(curRect, "Obj", item.obj, typeof(GameObject), true);
             if (item.obj == null)
             {
@@ -118,7 +121,7 @@ namespace DotEditor.Lua.Register
             List<ObjectData> dataList = new List<ObjectData>(data.objectDatas);
             ReorderableListGUI.ListField<ObjectData>(dataList, (position, item) =>
             {
-                return DrawObjectData(position,item);
+                return DrawObjectData(position,item,true);
             }, EditorGUIUtility.singleLineHeight * 4);
 
             data.objectDatas = dataList.ToArray();
@@ -144,8 +147,8 @@ namespace DotEditor.Lua.Register
             List<ObjectData> dataList = new List<ObjectData>(item.objects);
             ReorderableListGUI.ListFieldAbsolute<ObjectData>(curRect, dataList,(childPosition, childItem) =>
             {
-                return DrawObjectData(childPosition, childItem);
-            }, EditorGUIUtility.singleLineHeight * 4);
+                return DrawObjectData(childPosition, childItem, false);
+            }, EditorGUIUtility.singleLineHeight * 3);
 
             item.objects = dataList.ToArray();
 
@@ -165,11 +168,11 @@ namespace DotEditor.Lua.Register
                 float height = 20;
                 if (arrayData.objects.Length == 0)
                 {
-                    return height += 60;
+                    return height += EditorGUIUtility.singleLineHeight * 3;
                 }
                 else
                 {
-                    return height += 40 + arrayData.objects.Length * 20*4;
+                    return height += 40+arrayData.objects.Length * 18*3;
                 }
             });
 

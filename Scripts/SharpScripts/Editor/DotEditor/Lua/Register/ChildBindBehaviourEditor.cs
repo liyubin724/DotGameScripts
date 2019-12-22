@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.Lua.Register
 {
-    [CustomEditor(typeof(ChildBindBehaviour))]
+    [CustomEditor(typeof(ChildBindBehaviour),true)]
     public class ChildBindBehaviourEditor : LuaScriptBindBehaviourEditor
     {
         private RegisterBehaviourDataDrawer dataDrawer = null;
