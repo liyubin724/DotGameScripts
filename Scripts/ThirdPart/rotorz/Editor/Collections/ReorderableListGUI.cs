@@ -493,6 +493,10 @@ namespace Rotorz.Games.Collections
             DoListFieldAbsolute(position, arrayProperty, 0, null, 0);
         }
 
+        public static void ListFieldAbsolute(Rect position, SerializedProperty arrayProperty, ReorderableListControl.ItemHeightGetter itemHeightGetter)
+        {
+            DoListFieldAbsolute(position, arrayProperty, itemHeightGetter,null, 0);
+        }
 
         /// <summary>
         /// Calculate height of list field for absolute positioning.
