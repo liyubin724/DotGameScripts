@@ -1,11 +1,11 @@
 ﻿using Dot.Core.Loader;
-using Dot.Core.UI.Atlas;
+using Dot.UI.Atlas;
 using UnityEngine;
 using UnityEngine.UI;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Core.UI
+namespace Dot.UI
 {
     public class DynamicAtlasImage : Image
     {

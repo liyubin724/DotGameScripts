@@ -24,7 +24,7 @@ namespace XLua
 #endif
         }
 
-        public void Action(int startIndex = 0,params SystemObject[] objs)
+        public void ActionParams(params SystemObject[] objs)
         {
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)
@@ -36,13 +36,13 @@ namespace XLua
             int errFunc = LuaAPI.load_error_func(L, luaEnv.errorFuncRef);
             LuaAPI.lua_getref(L, luaReference);
             int argsCount = 0;
-            if (objs != null && objs.Length > startIndex)
+            if (objs != null && objs.Length > 0)
             {
-                for (int i = startIndex; i < objs.Length; i++)
+                for (int i = 0; i < objs.Length; i++)
                 {
                     translator.PushByType(L, objs[i]);
                 }
-                argsCount = objs.Length - startIndex;
+                argsCount = objs.Length;
             }
             int error = LuaAPI.lua_pcall(L, argsCount, 0, errFunc);
             if (error != 0)

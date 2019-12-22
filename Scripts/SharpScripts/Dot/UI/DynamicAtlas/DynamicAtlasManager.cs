@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Dot.Core.Util;
+using System.Collections.Generic;
 using UnityEngine;
-using HeuristicMethod = Dot.Core.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
+using HeuristicMethod = Dot.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
 
-namespace Dot.Core.UI.Atlas
+namespace Dot.UI.Atlas
 {
-    public class DynamicAtlasManager : Util.Singleton<DynamicAtlasManager>
+    public class DynamicAtlasManager : Singleton<DynamicAtlasManager>
     {
         private static readonly string DefaultAtlasName = "DefaultDynamicAtlas";
         private static readonly int DefaultAtlasSize = 1024;

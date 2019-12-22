@@ -1,4 +1,4 @@
-﻿using Dot.Core.UI;
+﻿using Dot.UI;
 using DotEditor.Core.EGUI;
 using System.IO;
 using System.Linq;
@@ -10,9 +10,9 @@ using UnityEngine.Events;
 using UnityEngine.U2D;
 using UIIMageType = UnityEngine.UI.Image.Type;
 
-namespace DotEditor.Core.UI
+namespace DotEditor.UI
 {
-    [CustomEditor(typeof(SpriteAtlasImage),true)]
+    [CustomEditor(typeof(SpriteAtlasImage), true)]
     public class SpriteAtlasImageEditor : ImageEditor
     {
         private SerializedProperty m_SpriteAtlas;

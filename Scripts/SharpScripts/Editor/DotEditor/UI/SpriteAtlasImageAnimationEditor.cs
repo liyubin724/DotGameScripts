@@ -1,7 +1,7 @@
-﻿using Dot.Core.UI;
+﻿using Dot.UI;
 using UnityEditor;
 
-namespace DotEditor.Core.UI
+namespace DotEditor.UI
 {
     [CustomEditor(typeof(SpriteAtlasImageAnimation), false)]
     public class SpriteAtlasImageAnimationEditor : SpriteAtlasImageEditor

@@ -1,7 +1,12 @@
+----private----
 UIListViewItem = Class(function(self)
 
 end)
 
+----protected abstract----
+--
+--@param data
+--@return void
 function UIListViewItem:SetItemData(data)
-    
+    error("it should be override")
 end

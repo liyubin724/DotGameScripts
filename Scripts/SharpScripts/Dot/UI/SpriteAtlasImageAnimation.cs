@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Dot.Core.UI
+namespace Dot.UI
 {
-
-
-
     [AddComponentMenu("UI/Atlas Image Animation", 13)]
     [ExecuteInEditMode]
     public class SpriteAtlasImageAnimation : SpriteAtlasImage

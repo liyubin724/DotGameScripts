@@ -2,7 +2,7 @@
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-namespace Dot.Core.UI
+namespace Dot.UI
 {
     [AddComponentMenu("UI/Atlas Image", 10)]
     public class SpriteAtlasImage : Image

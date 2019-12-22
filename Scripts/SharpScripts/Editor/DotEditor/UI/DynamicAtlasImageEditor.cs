@@ -1,8 +1,8 @@
-﻿using Dot.Core.UI;
+﻿using Dot.UI;
 using UnityEditor;
 using UnityEditor.UI;
 
-namespace DotEditor.Core.UI
+namespace DotEditor.UI
 {
     [CustomEditor(typeof(DynamicAtlasImage), false)]
     public class DynamicAtlasImageEditor : ImageEditor

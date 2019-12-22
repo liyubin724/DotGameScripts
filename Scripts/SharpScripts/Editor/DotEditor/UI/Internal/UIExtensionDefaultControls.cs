@@ -1,11 +1,11 @@
-using Dot.Core.UI;
+using Dot.UI;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DotEditor.Core.UI
+namespace DotEditor.UI
 {
-    public static class UGUIExtensionDefaultControls
+    public static class UIExtensionDefaultControls
     {
         public struct Resources
         {

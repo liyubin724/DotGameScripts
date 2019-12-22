@@ -2,10 +2,10 @@
 using Dot.Core.Pool;
 using System.Collections.Generic;
 using UnityEngine;
-using static Dot.Core.UI.Atlas.DynamicAtlas;
-using HeuristicMethod = Dot.Core.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
+using static Dot.UI.Atlas.DynamicAtlas;
+using HeuristicMethod = Dot.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
 
-namespace Dot.Core.UI.Atlas
+namespace Dot.UI.Atlas
 {
     public class RawImageAtlasData : IObjectPoolItem
     {
@@ -41,7 +41,7 @@ namespace Dot.Core.UI.Atlas
         private HeuristicMethod method;
         private TextureFormat format;
 
-        private static ObjectPool<RawImageAtlasData> dataPool = new ObjectPool<RawImageAtlasData>(20);
+        private static Dot.Core.Pool.ObjectPool<RawImageAtlasData> dataPool = new Dot.Core.Pool.ObjectPool<RawImageAtlasData>(20);
 
         private List<DynamicAtlas> atlasList = new List<DynamicAtlas>();
         private Dictionary<string, RawImageAtlasData> rawImageDic = new Dictionary<string, RawImageAtlasData>();

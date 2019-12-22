@@ -12,9 +12,9 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using HeuristicMethod = Dot.Core.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
+using HeuristicMethod = Dot.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;
 
-namespace Dot.Core.UI.Atlas
+namespace Dot.UI.Atlas
 {
     [System.Serializable]
     public class DynamicAtlas

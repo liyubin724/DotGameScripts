@@ -8,7 +8,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Dot.Core.UI.Atlas
+namespace Dot.UI.Atlas
 {
     [System.Serializable]
     public class MaxRectsBinPack

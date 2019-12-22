@@ -1,4 +1,4 @@
-using Dot.Core.UI;
+using Dot.UI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,9 +8,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-namespace DotEditor.Core.UI
+namespace DotEditor.UI
 {
-    static internal class UGUIExtentMenuOptions
+    static internal class UIExtentMenuOptions
     {
         private const string kUILayerName = "UI";
 
@@ -22,9 +22,9 @@ namespace DotEditor.Core.UI
         private const string kDropdownArrowPath = "UI/Skin/DropdownArrow.psd";
         private const string kMaskPath = "UI/Skin/UIMask.psd";
 
-        static private UGUIExtensionDefaultControls.Resources s_StandardResources;
+        static private UIExtensionDefaultControls.Resources s_StandardResources;
 
-        static private UGUIExtensionDefaultControls.Resources GetStandardResources()
+        static private UIExtensionDefaultControls.Resources GetStandardResources()
         {
             if (s_StandardResources.standard == null)
             {
@@ -119,19 +119,19 @@ namespace DotEditor.Core.UI
         [MenuItem("GameObject/UI/Atlas Image", false, 1000)]
         static public void AddAtlasImage(MenuCommand menuCommand)
         {
-            GameObject go = UGUIExtensionDefaultControls.CreateAtlasImage(GetStandardResources());
+            GameObject go = UIExtensionDefaultControls.CreateAtlasImage(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
         [MenuItem("GameObject/UI/Dynamic Atlas Image", false, 1001)]
         static public void AddDynamicAtlasImage(MenuCommand menuCommand)
         {
-            GameObject go = UGUIExtensionDefaultControls.CreateDynamicAtlasImage(GetStandardResources());
+            GameObject go = UIExtensionDefaultControls.CreateDynamicAtlasImage(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
         [MenuItem("GameObject/UI/Atlas Image Animation", false, 1002)]
         static public void AddAtlasImageAnimation(MenuCommand menuCommand)
         {
-            GameObject go = UGUIExtensionDefaultControls.CreateAtlasImageAnimation(GetStandardResources());
+            GameObject go = UIExtensionDefaultControls.CreateAtlasImageAnimation(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
 
@@ -255,7 +255,7 @@ namespace DotEditor.Core.UI
                 return canvas.gameObject;
 
             // No canvas in the scene at all? Then create a new one.
-            return UGUIExtentMenuOptions.CreateNewUI();
+            return UIExtentMenuOptions.CreateNewUI();
         }
     }
 }
