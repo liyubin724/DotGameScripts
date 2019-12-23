@@ -26,6 +26,7 @@ namespace DotEditor.Lua.Event
 
             curRect.y += curRect.height;
             curRect.x += 12;
+            curRect.width -= 12;
 
             SerializedProperty paramType = property.FindPropertyRelative("paramType");
             EditorGUI.PropertyField(curRect,paramType);

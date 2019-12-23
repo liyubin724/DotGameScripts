@@ -37,7 +37,7 @@ namespace DotEditor.Lua.Gen
                         }
                         else
                         {
-                            Debug.LogError("Type Not Found");
+                            Debug.LogError("Type Not Found.name = "+typeFullName);
                         }
                     }
 

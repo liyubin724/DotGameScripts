@@ -116,22 +116,29 @@ namespace DotEditor.UI
             }
         }
 
-        [MenuItem("GameObject/UI/Atlas Image", false, 1000)]
+        [MenuItem("GameObject/UI/DotUI/Atlas Image", false, 1000)]
         static public void AddAtlasImage(MenuCommand menuCommand)
         {
             GameObject go = UIExtensionDefaultControls.CreateAtlasImage(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
-        [MenuItem("GameObject/UI/Dynamic Atlas Image", false, 1001)]
+        [MenuItem("GameObject/UI/DotUI/Dynamic Atlas Image", false, 1001)]
         static public void AddDynamicAtlasImage(MenuCommand menuCommand)
         {
             GameObject go = UIExtensionDefaultControls.CreateDynamicAtlasImage(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
-        [MenuItem("GameObject/UI/Atlas Image Animation", false, 1002)]
+        [MenuItem("GameObject/UI/DotUI/Atlas Image Animation", false, 1002)]
         static public void AddAtlasImageAnimation(MenuCommand menuCommand)
         {
             GameObject go = UIExtensionDefaultControls.CreateAtlasImageAnimation(GetStandardResources());
+            PlaceUIElementRoot(go, menuCommand);
+        }
+
+        [MenuItem("GameObject/UI/DotUI/Lua Button", false, 1003)]
+        static public void AddLuaButton(MenuCommand menuCommand)
+        {
+            GameObject go = UIExtensionDefaultControls.CreateLuaButton(GetStandardResources());
             PlaceUIElementRoot(go, menuCommand);
         }
 

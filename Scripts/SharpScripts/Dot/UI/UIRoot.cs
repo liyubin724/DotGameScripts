@@ -1,10 +1,5 @@
 ﻿using Dot.Core.Util;
 using Dot.Log;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Dot.UI
@@ -30,7 +25,7 @@ namespace Dot.UI
         {
             if(m_root!=null)
             {
-                LogUtil.LogError(typeof(UIRoot),"UIRoot::Awake->UIRoot has been initized!");
+                LogUtil.LogError(typeof(UIRoot),"UIRoot has been initized!");
                 Destroy(this);
                 return;
             }

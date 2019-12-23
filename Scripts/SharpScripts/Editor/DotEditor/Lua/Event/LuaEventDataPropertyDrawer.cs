@@ -31,6 +31,7 @@ namespace DotEditor.Lua.Event
 
             curRect.y += curRect.height;
             curRect.x += 12;
+            curRect.width -= 12;
 
             SerializedProperty bindBehaviour = property.FindPropertyRelative("bindBehaviour");
             EditorGUI.PropertyField(curRect, bindBehaviour);

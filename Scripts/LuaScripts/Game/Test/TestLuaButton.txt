@@ -1,0 +1,34 @@
+----private----
+--Constructor 
+TestLuaButton = Class(function(self)
+
+end)
+
+----protected----
+function TestLuaButton:DoAwake()
+
+end
+
+----protected----
+function TestLuaButton:DoEnable()
+
+end
+
+----protected----
+function TestLuaButton:DoStart()
+
+end
+
+----protected----
+function TestLuaButton:DoDisable()
+
+end
+
+----protected----
+function TestLuaButton:DoDestroy()
+
+end
+
+function TestLuaButton:DoButtonClick(intValue)
+    Logger.Info("TestLuaButton","Btn Click,value = "..tostring(intValue))
+end
