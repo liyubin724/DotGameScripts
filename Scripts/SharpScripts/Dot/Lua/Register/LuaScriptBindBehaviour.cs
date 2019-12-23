@@ -68,7 +68,7 @@ namespace Dot.Lua.Register
             CallAction(LuaConfig.ENABLE_FUNCTION_NAME);
         }
 
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             CallAction(LuaConfig.DISABLE_FUNCTION_NAME);
         }
