@@ -44,9 +44,24 @@ namespace DotEditor.AssetPacker
         private TreeViewState assetPackerTreeViewState;
 
         private AssetPackerConfig assetPackerConfig = null;
+        private Dictionary<string, List<AssetPackerAddressData>> addressDataDic = new Dictionary<string, List<AssetPackerAddressData>>(); 
         private void OnEnable()
         {
             assetPackerConfig = AssetPackerUtil.GetPackerConfig();
+
+            foreach(var groupData in assetPackerConfig.groupDatas)
+            {
+                foreach(var addressData in groupData.assetFiles)
+                {
+                    if(!addressDataDic.TryGetValue(addressData.assetAddress,out List<AssetPackerAddressData> list))
+                    {
+                        list = new List<AssetPackerAddressData>();
+                        addressDataDic.Add(addressData.assetAddress, list);
+                    }
+
+                    list.Add(addressData);
+                }
+            }
 
             if (PlayerSettingsUtil.HasScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL))
             {
@@ -83,7 +98,7 @@ namespace DotEditor.AssetPacker
         {
             EditorGUILayout.BeginHorizontal("toolbar", GUILayout.ExpandWidth(true));
             {
-                if (GUILayout.Button(isExpandAll ? "\u25BC" : "\u25BA", "toolbarbutton", GUILayout.Width(60)))
+                if (GUILayout.Button(isExpandAll ? "\u25BC" : "\u25BA", "toolbarbutton", GUILayout.Width(30)))
                 {
                     isExpandAll = !isExpandAll;
                     if (isExpandAll)
@@ -95,12 +110,11 @@ namespace DotEditor.AssetPacker
                         assetPackerTreeView.CollapseAll();
                     }
                 }
-                EditorGUILayout.Space();
                 EditorGUI.BeginChangeCheck();
                 {
-                    EditorGUIUtil.BeginLabelWidth(65);
+                    EditorGUIUtil.BeginLabelWidth(70);
                     {
-                        runMode = (RunMode)EditorGUILayout.EnumPopup("Run Mode:", runMode, EditorStyles.toolbarPopup, GUILayout.Width(180));
+                        runMode = (RunMode)EditorGUILayout.EnumPopup("Run Mode:", runMode, EditorStyles.toolbarPopup, GUILayout.Width(170));
                     }
                     EditorGUIUtil.EndLableWidth();
                 }
@@ -117,32 +131,33 @@ namespace DotEditor.AssetPacker
                 }
 
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Find Auto Group", "toolbarbutton", GUILayout.Width(120)))
-                {
+                //if (GUILayout.Button("Find Auto Group", "toolbarbutton", GUILayout.Width(120)))
+                //{
                     
-                }
+                //}
 
-                if (GUILayout.Button("Remove Auto Group", "toolbarbutton", GUILayout.Width(120)))
-                {
+                //if (GUILayout.Button("Remove Auto Group", "toolbarbutton", GUILayout.Width(120)))
+                //{
                     
-                }
+                //}
 
-                if (GUILayout.Button("Open Depend Win", "toolbarbutton", GUILayout.Width(160)))
-                {
+                //if (GUILayout.Button("Open Depend Win", "toolbarbutton", GUILayout.Width(160)))
+                //{
                     
-                }
+                //}
 
-                int newSelectedIndex = EditorGUILayout.Popup(selecteddSearchParamIndex, SearchParams, "ToolbarDropDown", GUILayout.Width(80));
+                int newSelectedIndex = EditorGUILayout.Popup(selecteddSearchParamIndex, SearchParams, "ToolbarDropDown", GUILayout.Width(60));
                 if (newSelectedIndex != selecteddSearchParamIndex)
                 {
                     selecteddSearchParamIndex = newSelectedIndex;
                     SetTreeModel();
                 }
 
-                EditorGUILayout.LabelField("", GUILayout.Width(200));
-                Rect lastRect = GUILayoutUtility.GetLastRect();
-                Rect searchFieldRect = new Rect(lastRect.x, lastRect.y, 180, 16);
-                string newSearchText = EditorGUI.TextField(searchFieldRect, "", searchText, "toolbarSeachTextField"); ;
+                Rect searchRect = EditorGUILayout.GetControlRect(GUILayout.Width(120));
+
+                Rect searchFieldRect = searchRect;
+                searchFieldRect.width = 100;
+                string newSearchText = EditorGUI.TextField(searchFieldRect, "", searchText, "toolbarSeachTextField");
                 Rect searchCancelRect = new Rect(searchFieldRect.x + searchFieldRect.width, searchFieldRect.y, 16, 16);
                 if (GUI.Button(searchCancelRect, "", "ToolbarSeachCancelButton"))
                 {
@@ -234,11 +249,11 @@ namespace DotEditor.AssetPacker
             for(int i =0;i<assetPackerConfig.groupDatas.Count;++i)
             {
                 AssetPackerGroupData groupData = assetPackerConfig.groupDatas[i];
+                AssetPackerTreeData groupTreeData = new AssetPackerTreeData();
+                groupTreeData.groupData = groupData;
+
                 TreeElementWithData<AssetPackerTreeData> groupElementData = new TreeElementWithData<AssetPackerTreeData>(
-                    new AssetPackerTreeData()
-                    {
-                        groupData = groupData,
-                    }, "", 0, (i + 1) * 100000);
+                    groupTreeData, "", 0, (i + 1) * 100000);
 
                 treeModel.AddElement(groupElementData, treeModelRoot, treeModelRoot.hasChildren ? treeModelRoot.children.Count : 0);
 
@@ -247,12 +262,18 @@ namespace DotEditor.AssetPacker
                     AssetPackerAddressData addressData = groupData.assetFiles[j];
                     if(FilterAddressData(addressData))
                     {
+                        AssetPackerTreeData elementTreeData = new AssetPackerTreeData();
+                        elementTreeData.groupData = groupData;
+                        elementTreeData.dataIndex = j;
+                        if (addressDataDic[addressData.assetAddress].Count > 1)
+                        {
+                            elementTreeData.repeatAddressDatas = addressDataDic[addressData.assetAddress].ToArray();
+                            elementTreeData.isAddressRepeat = true;
+                            groupTreeData.isAddressRepeat = true;
+                        }
+
                         TreeElementWithData<AssetPackerTreeData> elementData = new TreeElementWithData<AssetPackerTreeData>(
-                                new AssetPackerTreeData()
-                                {
-                                    dataIndex = j,
-                                    groupData = groupData,
-                                }, "", 1, (i + 1) * 100000 + (j + 1));
+                                elementTreeData, "", 1, (i + 1) * 100000 + (j + 1));
 
                         treeModel.AddElement(elementData, groupElementData, groupElementData.hasChildren ? groupElementData.children.Count : 0);
                     }

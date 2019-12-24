@@ -1,5 +1,6 @@
 ﻿using DotEditor.Core.EGUI;
 using DotEditor.Core.EGUI.TreeGUI;
+using DotEditor.Util;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -13,6 +14,9 @@ namespace DotEditor.AssetPacker
 
         public bool IsGroup { get => dataIndex < 0; }
 
+        public bool isAddressRepeat = false;
+        public AssetPackerAddressData[] repeatAddressDatas = null; 
+
         public static AssetPackerTreeData Root
         {
             get { return new AssetPackerTreeData(); }
@@ -21,6 +25,8 @@ namespace DotEditor.AssetPacker
 
     public class AssetPackerTreeView : TreeViewWithTreeModel<TreeElementWithData<AssetPackerTreeData>>
     {
+        private const float SINGLE_ROW_HEIGHT = 17;
+
         private GUIContent addressRepeatContent;
 
         public AssetPackerTreeView(TreeViewState state, TreeModel<TreeElementWithData<AssetPackerTreeData>> model)
@@ -48,11 +54,11 @@ namespace DotEditor.AssetPacker
             AssetPackerTreeData groupTreeData = viewItem.data.Data;
             if (groupTreeData.IsGroup)
             {
-                return EditorGUIUtility.singleLineHeight + 2;
+                return SINGLE_ROW_HEIGHT + 8;
             }
             else
             {
-                return rowHeight = EditorGUIUtility.singleLineHeight * 3 + 4;
+                return rowHeight = SINGLE_ROW_HEIGHT * 5;
             }
         }
         protected override void RowGUI(RowGUIArgs args)
@@ -66,6 +72,8 @@ namespace DotEditor.AssetPacker
             Rect contentRect = args.rowRect;
             contentRect.x += GetContentIndent(item);
             contentRect.width -= GetContentIndent(item);
+            contentRect.y += 2;
+            contentRect.height -= 4;
 
             GUILayout.BeginArea(contentRect);
             {
@@ -73,6 +81,14 @@ namespace DotEditor.AssetPacker
                 {
                     EditorGUILayout.BeginHorizontal();
                     {
+                        if (groupTreeData.isAddressRepeat)
+                        {
+                            if (GUILayout.Button(addressRepeatContent,GUILayout.Width(24)))
+                            {
+                                SetExpanded(args.item.id, true);
+                            }
+                        }
+
                         string groupName = groupData.groupName;
                         if (groupData.isMain)
                         {
@@ -97,18 +113,31 @@ namespace DotEditor.AssetPacker
                 {
                     GUILayout.BeginHorizontal();
                     {
-                        EditorGUIUtil.BeginLabelWidth(60);
+                        if (groupTreeData.isAddressRepeat)
+                        {
+                            if (GUILayout.Button(addressRepeatContent, GUILayout.Width(24)))
+                            {
+                                Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
+                                AssetAddressRepeatPopupWindow.ShowWin(groupTreeData.repeatAddressDatas, pos);
+                            }
+                        }
+                        EditorGUIUtil.BeginLabelWidth(80);
                         {
                             AssetPackerAddressData assetData = groupData.assetFiles[groupTreeData.dataIndex];
-                            //EditorGUILayout.LabelField(new GUIContent("" + args.row), GUILayout.Width(20));
                             EditorGUILayout.TextField("address:", assetData.assetAddress);
                             GUILayout.BeginVertical();
                             {
                                 EditorGUILayout.TextField("path:", assetData.assetPath);
                                 EditorGUILayout.TextField("bundle:", assetData.bundlePath);
                                 EditorGUILayout.TextField("labels:", string.Join(",", assetData.labels));
+                                EditorGUILayout.LabelField("compression:  ", assetData.compressionType.ToString());
                             }
                             GUILayout.EndVertical();
+
+                            if(GUILayout.Button("Select",GUILayout.Width(60),GUILayout.ExpandHeight(true)))
+                            {
+                                SelectionUtil.ActiveObject(assetData.assetPath);
+                            }
                         }
                         EditorGUIUtil.EndLableWidth();
                     }

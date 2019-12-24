@@ -105,7 +105,7 @@ namespace DotEditor.Core.Packer
                             if (GUILayout.Button(addressRepeatContent,GUILayout.Width(24)))
                             {
                                 Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
-                                AssetAddressRepeatPopupWindow.GetWindow().ShowWithParam(groupTreeData.repeatAddressList, pos);
+                                //AssetAddressRepeatPopupWindow.GetWindow().ShowWithParam(groupTreeData.repeatAddressList, pos);
                             }
                         }else
                         {
