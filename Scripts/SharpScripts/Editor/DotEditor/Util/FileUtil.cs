@@ -1,10 +1,48 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DotEditor.Core.Util
 {
     public static class FileUtil
     {
+        /// <summary>
+        /// 获取文件所在的所有目录的名称
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string[] GetFolderNames(string filePath)
+        {
+            if(string.IsNullOrEmpty(filePath))
+            {
+                return null;
+            }
+
+            filePath = filePath.Replace("\\", "/");
+            var splitPath = filePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string[] result = new string[splitPath.Length - 1];
+            Array.Copy(splitPath, 0, result, 0, splitPath.Length - 1);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取文件所在的目录名称
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string GetParentFolderName(string filePath)
+        {
+            string[] folderNames = GetFolderNames(filePath);
+            if(folderNames == null || folderNames.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return folderNames[folderNames.Length - 1];
+        }
+
         /// <summary>
         /// 从指定的路径下读取序列化的二进制数据为指定的对象
         /// 
