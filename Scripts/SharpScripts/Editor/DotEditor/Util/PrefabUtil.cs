@@ -4,7 +4,7 @@ using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 using SystemObject = System.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class PrefabUtil
     {

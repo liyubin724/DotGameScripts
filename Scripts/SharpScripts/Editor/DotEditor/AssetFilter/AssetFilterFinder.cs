@@ -1,11 +1,11 @@
-﻿using DotEditor.Core.Util;
+﻿using DotEditor.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FileUtil = DotEditor.Core.Util.FileUtil;
+using FileUtil = DotEditor.Util.FileUtil;
 
-namespace DotEditor.AssertFilter
+namespace DotEditor.AssetFilter
 {
     [Serializable]
     public class AssetFilterFinder

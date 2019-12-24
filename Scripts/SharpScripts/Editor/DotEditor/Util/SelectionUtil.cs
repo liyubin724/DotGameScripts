@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class SelectionUtil
     {

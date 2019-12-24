@@ -1,14 +1,14 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssertFilter.AssetAddress
+namespace DotEditor.AssetFilter.AssetAddress
 {
     [CustomPropertyDrawer(typeof(AssetAddressOperation))]
     public class AssetAddressOperationPropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return (property.CountInProperty() + 1) * EditorGUIUtility.singleLineHeight;
+            return 6 * EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -23,7 +23,7 @@ namespace DotEditor.AssertFilter.AssetAddress
 
             SerializedProperty packModeType = property.FindPropertyRelative("packModeType");
             SerializedProperty addressMode = property.FindPropertyRelative("addressMode");
-            SerializedProperty isMD5ForBundleName = property.FindPropertyRelative("isMD5ForBundleName");
+            SerializedProperty bundleNameType = property.FindPropertyRelative("bundleNameType");
             SerializedProperty labels = property.FindPropertyRelative("labels");
             SerializedProperty compressionType = property.FindPropertyRelative("compressionType");
 
@@ -32,7 +32,7 @@ namespace DotEditor.AssertFilter.AssetAddress
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, addressMode);
             curRect.y += curRect.height;
-            EditorGUI.PropertyField(curRect, isMD5ForBundleName);
+            EditorGUI.PropertyField(curRect, bundleNameType);
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, labels);
             curRect.y += curRect.height;

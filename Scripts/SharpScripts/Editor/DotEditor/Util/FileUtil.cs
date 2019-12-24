@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class FileUtil
     {

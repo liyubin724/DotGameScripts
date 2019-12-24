@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DotEditor.AssertFilter.AssetAddress
+namespace DotEditor.AssetFilter.AssetAddress
 {
     [CreateAssetMenu(fileName = "asset_address_group", menuName = "Asset/Asset Address Group", order = 0)]
     public class AssetAddressGroup : ScriptableObject

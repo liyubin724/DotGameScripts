@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
+using FileUtil = DotEditor.Util.FileUtil;
 
 namespace DotEditor.Core.BundleDepend
 {
@@ -34,7 +35,7 @@ namespace DotEditor.Core.BundleDepend
         AssetDependFinder finder = null;
         private void OnEnable()
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             finder = BundlePackUtil.CreateAssetDependFinder(tagConfig, true);
         }
 

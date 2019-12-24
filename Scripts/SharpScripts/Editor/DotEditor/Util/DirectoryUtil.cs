@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class DirectoryUtil
     {

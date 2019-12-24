@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssertFilter.AssetAddress
+namespace DotEditor.AssetFilter.AssetAddress
 {
-    public static class AssetAddressFilter
+    public static class AssetAddressUtil
     {
         public static AssetAddressConfig GetAddressConfig(bool isCreateIfNot = true)
         {
@@ -24,5 +24,11 @@ namespace DotEditor.AssertFilter.AssetAddress
 
             return addressConfig;
         }
+
+        public static void UpdateAddressConfig()
+        {
+
+        }
+
     }
 }

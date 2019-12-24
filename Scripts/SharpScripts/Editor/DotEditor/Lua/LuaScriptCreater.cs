@@ -1,4 +1,4 @@
-﻿using DotEditor.Core.Util;
+﻿using DotEditor.Util;
 using System.IO;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;

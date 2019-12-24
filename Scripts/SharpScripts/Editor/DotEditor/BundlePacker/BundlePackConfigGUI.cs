@@ -2,6 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 
+using FileUtil = DotEditor.Util.FileUtil;
+
 namespace DotEditor.Core.Packer
 {
     internal class BundlePackConfigGUI
@@ -36,7 +38,7 @@ namespace DotEditor.Core.Packer
             appendHashContent = new GUIContent("Append Hash", "Append the hash to the assetBundle name.");
             cleanBeforeBuildContent = new GUIContent("Clean Output Dir", "Delete the output dir before build");
 
-            packConfig = Util.FileUtil.ReadFromBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath());
+            packConfig = FileUtil.ReadFromBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath());
             isForceRebuild = packConfig.bundleOptions.HasFlag(BuildAssetBundleOptions.ForceRebuildAssetBundle);
             isAppendHash = packConfig.bundleOptions.HasFlag(BuildAssetBundleOptions.AppendHashToAssetBundleName);
         }
@@ -116,7 +118,7 @@ namespace DotEditor.Core.Packer
 
             if (GUI.changed)
             {
-                Util.FileUtil.SaveToBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath(), packConfig);
+                FileUtil.SaveToBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath(), packConfig);
             }
         }
     }

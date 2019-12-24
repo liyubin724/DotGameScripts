@@ -2,13 +2,14 @@
 using DotEditor.Core.BundleDepend;
 using DotEditor.Core.EGUI;
 using DotEditor.Core.EGUI.TreeGUI;
-using DotEditor.Core.Util;
+using DotEditor.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
+using FileUtil = DotEditor.Util.FileUtil;
 
 namespace DotEditor.Core.Packer
 {
@@ -28,6 +29,10 @@ namespace DotEditor.Core.Packer
             win.Show();
         }
 
+
+
+
+
         private static readonly string ASSET_BUNDLE_SYMBOL = "ASSET_BUNDLE";
 
         private AssetBundleTagConfigTreeView detailGroupTreeView;
@@ -38,7 +43,7 @@ namespace DotEditor.Core.Packer
 
         private void OnEnable()
         {
-            tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             packConfigGUI = new BundlePackConfigGUI();
 
             if(PlayerSettingsUtil.HasScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL))
@@ -256,14 +261,14 @@ namespace DotEditor.Core.Packer
                 {
                     BundlePackUtil.FindAndAddAutoGroup(true);
 
-                    tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+                    tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
                     FilterTreeModel();
                 }
 
                 if(GUILayout.Button("Remove Auto Group", "toolbarbutton", GUILayout.Width(120)))
                 {
                     BundlePackUtil.DeleteAutoGroup();
-                    tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+                    tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
                     FilterTreeModel();
                 }
 
@@ -311,7 +316,7 @@ namespace DotEditor.Core.Packer
                     EditorUtility.DisplayDialog("Error", "Address Repeat!", "OK");
                 }
 
-                tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+                tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
                 FilterTreeModel();
             }
             if(GUILayout.Button("Update Address Config"))

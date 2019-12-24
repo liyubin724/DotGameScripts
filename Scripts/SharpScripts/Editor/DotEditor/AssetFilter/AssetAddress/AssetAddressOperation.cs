@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotEditor.AssertFilter.AssetAddress
+namespace DotEditor.AssetFilter.AssetAddress
 {
     public enum AssertCompressionMode
     {
@@ -22,12 +22,18 @@ namespace DotEditor.AssertFilter.AssetAddress
         FileNameWithoutExtension,
     }
 
+    public enum AssetBundleNameType
+    {
+        Origin = 0,
+        MD5,
+    }
+
     [Serializable]
     public class AssetAddressOperation
     {
         public AssertPackMode packModeType = AssertPackMode.Together;
         public AssertAddressMode addressMode = AssertAddressMode.FullPath;
-        public bool isMD5ForBundleName = false;
+        public AssetBundleNameType bundleNameType = AssetBundleNameType.Origin;
         public string labels = string.Empty;
         public AssertCompressionMode compressionType = AssertCompressionMode.LZ4;
     }

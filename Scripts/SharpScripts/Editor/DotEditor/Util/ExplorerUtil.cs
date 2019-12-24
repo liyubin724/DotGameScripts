@@ -1,4 +1,4 @@
-﻿namespace DotEditor.Core.Util
+﻿namespace DotEditor.Util
 {
     public static class ExplorerUtil
     {

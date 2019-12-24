@@ -3,7 +3,7 @@ using Rotorz.Games.Collections;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssertFilter
+namespace DotEditor.AssetFilter
 {
     [CustomPropertyDrawer(typeof(AssetFilterFinder))]
     public class AssetFilterFinderPropertyDrawer : PropertyDrawer

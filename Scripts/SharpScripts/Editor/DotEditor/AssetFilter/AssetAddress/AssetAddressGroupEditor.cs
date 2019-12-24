@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssertFilter.AssetAddress
+namespace DotEditor.AssetFilter.AssetAddress
 {
     [CustomEditor(typeof(AssetAddressGroup))]
     public class AssetAddressGroupEditor : Editor
@@ -42,11 +42,11 @@ namespace DotEditor.AssertFilter.AssetAddress
 
             EditorGUILayout.Space();
             ReorderableListGUI.Title("Finders");
-            ReorderableListGUI.ListField(finders, ReorderableListGUI.DefaultItemHeight * 5 ,() =>
+            ReorderableListGUI.ListField(finders, ReorderableListGUI.DefaultItemHeight * 5, () =>
             {
                 GUILayout.Label("List is empty!", EditorStyles.miniLabel);
             });
-           
+
             serializedObject.ApplyModifiedProperties();
 
             if(GUILayout.Button("Execute",GUILayout.Height(40)))

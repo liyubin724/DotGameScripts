@@ -2,6 +2,7 @@
 using DotEditor.Core.Packer;
 using System.Collections.Generic;
 using UnityEngine;
+using FileUtil = DotEditor.Util.FileUtil;
 
 namespace DotEditor.Core.AssetRuler.AssetAddress
 {
@@ -16,7 +17,7 @@ namespace DotEditor.Core.AssetRuler.AssetAddress
                 group.Execute(result);
             }
 
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             tagConfig.groupDatas.Clear();
 
             foreach (var groupResult in result.groupResults)
@@ -49,7 +50,7 @@ namespace DotEditor.Core.AssetRuler.AssetAddress
                 }
             }
 
-            Util.FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
+            FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
 
             return result;
         }

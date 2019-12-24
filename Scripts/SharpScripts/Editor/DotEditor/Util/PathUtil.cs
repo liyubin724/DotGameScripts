@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class PathUtil
     {

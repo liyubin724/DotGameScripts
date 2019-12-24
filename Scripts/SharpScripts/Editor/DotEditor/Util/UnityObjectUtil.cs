@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class UnityObjectUtil
     {

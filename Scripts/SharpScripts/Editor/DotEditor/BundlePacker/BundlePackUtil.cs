@@ -1,7 +1,7 @@
 ﻿using Dot.Core.Loader;
 using Dot.Core.Loader.Config;
 using DotEditor.Core.AssetRuler.AssetAddress;
-using DotEditor.Core.Util;
+using DotEditor.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +13,7 @@ using UnityEditor.U2D;
 using UnityObject = UnityEngine.Object;
 using System.Text;
 using DotEditor.Core.BundleDepend;
+using FileUtil = DotEditor.Util.FileUtil;
 
 namespace DotEditor.Core.Packer
 {
@@ -70,7 +71,7 @@ namespace DotEditor.Core.Packer
 
         public static void UpdateAddressConfig()
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             AssetAddressConfig config = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(AssetAddressConfig.CONFIG_PATH);
             if (config == null)
             {
@@ -109,7 +110,7 @@ namespace DotEditor.Core.Packer
 
         public static void CreateAddressKeyClass()
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
 
             List<string> fieldNameAndValues = new List<string>();
             foreach (var group in tagConfig.groupDatas)
@@ -161,7 +162,7 @@ namespace DotEditor.Core.Packer
         /// <param name="isShowProgressBar">是否显示进度</param>
         public static void SetAssetBundleNames(bool isShowProgressBar = false)
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
 
             AssetImporter assetImporter = AssetImporter.GetAtPath(AssetAddressConfig.CONFIG_PATH);
             assetImporter.assetBundleName = AssetAddressConfig.CONFIG_ASSET_BUNDLE_NAME;
@@ -307,7 +308,7 @@ namespace DotEditor.Core.Packer
             ClearAssetBundleNames(isShowProgressBar);
             SetAssetBundleNames(isShowProgressBar);
 
-            BundlePackConfig packConfig = Util.FileUtil.ReadFromBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath());
+            BundlePackConfig packConfig = FileUtil.ReadFromBinary<BundlePackConfig>(BundlePackUtil.GetPackConfigPath());
             PackAssetBundle(packConfig);
 
             return true;
@@ -315,7 +316,7 @@ namespace DotEditor.Core.Packer
 
         public static bool IsAddressRepeat()
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             AssetAddressData[] datas = (from groupData in tagConfig.groupDatas
                                         where groupData.isMain
                                         from assetData in groupData.assetDatas
@@ -361,7 +362,7 @@ namespace DotEditor.Core.Packer
 
         internal static void DeleteAutoGroup()
         {
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             for (int i = 0; i < tagConfig.groupDatas.Count; ++i)
             {
                 if (tagConfig.groupDatas[i].groupName == AUTO_REPEAT_GROUP_NAME)
@@ -370,14 +371,14 @@ namespace DotEditor.Core.Packer
                     break;
                 }
             }
-            Util.FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
+            FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
         }
 
         internal static void FindAndAddAutoGroup(bool isShowProgressBar = false)
         {
             DeleteAutoGroup();
 
-            AssetBundleTagConfig tagConfig = Util.FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
+            AssetBundleTagConfig tagConfig = FileUtil.ReadFromBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath());
             AssetDependFinder finder = CreateAssetDependFinder(tagConfig, isShowProgressBar);
 
             Dictionary<string, int> repeatAssetDic = finder.GetRepeatUsedAssets();
@@ -399,7 +400,7 @@ namespace DotEditor.Core.Packer
                 tagConfig.groupDatas.Add(gData);
             }
 
-            Util.FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
+            FileUtil.SaveToBinary<AssetBundleTagConfig>(BundlePackUtil.GetTagConfigPath(), tagConfig);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DotEditor.Core.Packer;
-using DotEditor.Core.Util;
+using DotEditor.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;

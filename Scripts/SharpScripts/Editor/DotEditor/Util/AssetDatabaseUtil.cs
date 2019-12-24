@@ -1,15 +1,14 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityObject = UnityEngine.Object;
 using SystemObject = System.Object;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
+using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Util
 {
     public static class AssetDatabaseUtil
     {
