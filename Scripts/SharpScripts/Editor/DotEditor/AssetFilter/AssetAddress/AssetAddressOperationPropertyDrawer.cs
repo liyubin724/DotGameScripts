@@ -21,14 +21,14 @@ namespace DotEditor.AssetFilter.AssetAddress
             curRect.x += 16;
             curRect.width -= 16;
 
-            SerializedProperty packModeType = property.FindPropertyRelative("packModeType");
+            SerializedProperty packMode = property.FindPropertyRelative("packMode");
             SerializedProperty addressMode = property.FindPropertyRelative("addressMode");
             SerializedProperty bundleNameType = property.FindPropertyRelative("bundleNameType");
             SerializedProperty labels = property.FindPropertyRelative("labels");
             SerializedProperty compressionType = property.FindPropertyRelative("compressionType");
 
             curRect.y += curRect.height;
-            EditorGUI.PropertyField(curRect, packModeType);
+            EditorGUI.PropertyField(curRect, packMode);
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, addressMode);
             curRect.y += curRect.height;

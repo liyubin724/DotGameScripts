@@ -102,6 +102,14 @@ namespace Dot.Asset.Datas
             return result;
         }
 
+        public void Clear()
+        {
+            addressDatas = new AssetAddressData[0];
+            addressToDataDic.Clear();
+            pathToDataDic.Clear();
+            labelToAddressDic.Clear();
+        }
+
         [Serializable]
         public class AssetAddressData
         {

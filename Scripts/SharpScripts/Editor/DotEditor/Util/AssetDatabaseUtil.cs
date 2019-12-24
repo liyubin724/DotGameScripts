@@ -48,7 +48,7 @@ namespace DotEditor.Util
         /// <returns></returns>
         public static string[] FindAssets<T>() where T : UnityEngine.Object
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets($"t:{typeof(T).Name} "));
+            return GetAssetPathByGUID(AssetDatabase.FindAssets($"t:{typeof(T).FullName} "));
         }
 
         /// <summary>

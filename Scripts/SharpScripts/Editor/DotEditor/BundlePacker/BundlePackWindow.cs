@@ -29,10 +29,6 @@ namespace DotEditor.Core.Packer
             win.Show();
         }
 
-
-
-
-
         private static readonly string ASSET_BUNDLE_SYMBOL = "ASSET_BUNDLE";
 
         private AssetBundleTagConfigTreeView detailGroupTreeView;
