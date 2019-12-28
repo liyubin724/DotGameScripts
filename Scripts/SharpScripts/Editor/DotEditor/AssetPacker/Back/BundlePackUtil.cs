@@ -25,7 +25,7 @@ namespace DotEditor.Core.Packer
         {
             var dataPath = Path.GetFullPath(".");
             dataPath = dataPath.Replace("\\", "/");
-            dataPath += "/Library/BundlePack/pack_config.data";
+            dataPath += "/Library/BundlePack/bundle_config.data";
             return dataPath;
         }
 

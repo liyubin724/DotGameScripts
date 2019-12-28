@@ -69,7 +69,7 @@ namespace DotEditor.AssetFilter.AssetAddress
             {
                 bundleName = MD5Util.GetMD5(bundleName);
             }
-            return bundleName;
+            return bundleName.ToLower();
         }
 
         public string[] GetLabels()

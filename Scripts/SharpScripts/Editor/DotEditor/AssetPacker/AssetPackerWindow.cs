@@ -1,4 +1,5 @@
-﻿using DotEditor.Core.EGUI;
+﻿using DotEditor.AssetFilter.AssetAddress;
+using DotEditor.Core.EGUI;
 using DotEditor.Core.EGUI.TreeGUI;
 using DotEditor.Util;
 using System;
@@ -47,7 +48,7 @@ namespace DotEditor.AssetPacker
         private Dictionary<string, List<AssetPackerAddressData>> addressDataDic = new Dictionary<string, List<AssetPackerAddressData>>(); 
         private void OnEnable()
         {
-            assetPackerConfig = AssetPackerUtil.GetPackerConfig();
+            assetPackerConfig = AssetPackerUtil.GetAssetPackerConfig();
 
             foreach(var groupData in assetPackerConfig.groupDatas)
             {
@@ -78,10 +79,9 @@ namespace DotEditor.AssetPacker
 
             EditorGUILayout.LabelField("Asset Packer Group", lableStyle, GUILayout.ExpandWidth(true));
 
-            Rect lastRect = EditorGUILayout.GetControlRect(GUILayout.ExpandHeight(true),GUILayout.ExpandWidth(true));
-            Rect treeViewRect = lastRect;
-            treeViewRect.height -= 160;
-
+            EditorGUILayout.LabelField("", GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
+            
+            Rect lastRect = GUILayoutUtility.GetLastRect();
             if (assetPackerTreeView == null)
             {
                 InitTreeView();
@@ -91,7 +91,29 @@ namespace DotEditor.AssetPacker
                 };
             }
 
-            assetPackerTreeView?.OnGUI(treeViewRect);
+            assetPackerTreeView?.OnGUI(lastRect);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.BeginVertical();
+                {
+                    DrawBundleConfig();
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUILayout.Width(200));
+                {
+                    DrawBundleOperation();
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUILayout.Width(200));
+                {
+                    DrawBundleAutoOperation();
+                }
+                EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawToolbar()
@@ -279,6 +301,55 @@ namespace DotEditor.AssetPacker
                     }
                 }
             }
+        }
+
+        private BundlePackConfig bundlePackConfig = null;
+        private void DrawBundleConfig()
+        {
+            if(bundlePackConfig == null)
+            {
+                bundlePackConfig = AssetPackerUtil.GetBundlePackConfig();
+            }
+
+            bundlePackConfig.bundleOutputDir = EditorGUILayoutUtil.DrawDiskFolderSelection("Bundle Output Dir", bundlePackConfig.bundleOutputDir);
+            bundlePackConfig.cleanupBeforeBuild = EditorGUILayout.Toggle("Cleanup", bundlePackConfig.cleanupBeforeBuild);
+            bundlePackConfig.buildTarget = (ValidBuildTarget)EditorGUILayout.EnumPopup("Build Target", bundlePackConfig.buildTarget);
+            bundlePackConfig.compression = (CompressOption)EditorGUILayout.EnumPopup("Compression", bundlePackConfig.compression);
+        }
+
+        private void DrawBundleOperation()
+        {
+            if(GUILayout.Button("Update Address"))
+            {
+                AssetAddressUtil.UpdateAddressConfig();
+            }
+            if(GUILayout.Button("Set Bundle Names"))
+            {
+                AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+            }
+            if(GUILayout.Button("Clear Bundle Names"))
+            {
+                AssetPackerUtil.ClearBundleNames();
+            }
+            if(GUILayout.Button("Pack Bundle"))
+            {
+                AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+            }
+        }
+
+        private void DrawBundleAutoOperation()
+        {
+            EditorGUIUtil.BeginGUIBackgroundColor(Color.red);
+            {
+                if(GUILayout.Button("Auto Pack Bundle",GUILayout.Height(40)))
+                {
+                    AssetAddressUtil.UpdateAddressConfig();
+                    AssetPackerUtil.ClearBundleNames();
+                    AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+                    AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+                }
+            }
+            EditorGUIUtil.EndGUIBackgroundColor();
         }
     }
 }
