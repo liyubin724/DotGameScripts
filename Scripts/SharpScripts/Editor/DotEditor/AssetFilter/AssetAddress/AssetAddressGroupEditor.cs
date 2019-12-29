@@ -54,9 +54,7 @@ namespace DotEditor.AssetFilter.AssetAddress
             if(GUILayout.Button("Execute",GUILayout.Height(40)))
             {
                 AssetAddressUtil.UpdateAddressConfig();
-
                 EditorUtility.DisplayDialog("Finished", "Finished", "OK");
-                SelectionUtil.ActiveObject(AssetAddressConfig.CONFIG_PATH);
             }
         }
     }

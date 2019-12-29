@@ -1,5 +1,4 @@
 ﻿using Dot.Asset.Datas;
-using Dot.Serialize.Binary;
 using DotEditor.AssetFilter.AssetAddress;
 using DotEditor.Util;
 using Newtonsoft.Json;
@@ -74,10 +73,10 @@ namespace DotEditor.AssetPacker
         {
             BundlePackConfig bundlePackConfig = null;
 
-            var dataPath = $"{Path.GetFullPath(".").Replace("\\", "/")}/{BUNDLE_PACK_CONFIG_PATH}";
-            if(File.Exists(dataPath))
+            string configPath = AssetConst.BundlePackConfigPath;
+            if(File.Exists(configPath))
             {
-                bundlePackConfig = BinarySerializeReader.ReadFromBinary<BundlePackConfig>(dataPath);
+                bundlePackConfig = JsonConvert.DeserializeObject<BundlePackConfig>(configPath);
             }
             if(bundlePackConfig == null)
             {
@@ -93,8 +92,14 @@ namespace DotEditor.AssetPacker
             {
                 return;
             }
-            var dataPath = $"{Path.GetFullPath(".").Replace("\\", "/")}/{BUNDLE_PACK_CONFIG_PATH}";
-            BinarySerializeWriter.WriteToBinary<BundlePackConfig>(dataPath, config);
+            string configPath = AssetConst.BundlePackConfigPath;
+            string dir = Path.GetDirectoryName(configPath);
+            if(!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            File.WriteAllText(configPath, json);
         }
 
         public static void ClearBundleNames(bool isShowProgressBar = false)
@@ -204,7 +209,7 @@ namespace DotEditor.AssetPacker
 
         public static void PackAssetBundle(AssetPackerConfig assetPackerConfig, BundlePackConfig bundlePackConfig, bool isShowProgressBar = false)
         {
-            string outputDir = $"{bundlePackConfig.bundleOutputDir}/{bundlePackConfig.buildTarget.ToString()}/assetbundles";
+            string outputDir = $"{bundlePackConfig.bundleOutputDir}/{bundlePackConfig.buildTarget.ToString()}/{AssetConst.ASSET_BUNDLE_DIR_NAME}";
             if(bundlePackConfig.cleanupBeforeBuild && Directory.Exists(outputDir))
             {
                 Directory.Delete(outputDir, true);
@@ -218,7 +223,7 @@ namespace DotEditor.AssetPacker
             var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputDir, bundlePackConfig.GetBundleOptions(), bundlePackConfig.GetBuildTarget());
             if(manifest!=null)
             {
-                SaveManifestAsJson(assetPackerConfig, manifest,outputDir+"/manifest.json");
+                SaveManifestAsJson(assetPackerConfig, manifest,$"{outputDir}/{AssetConst.ASSET_MANIFEST_NAME}{AssetConst.ASSET_MANIFEST_EXT}");
             }else
             {
                 Debug.LogError("AssetPackerUtil::PackAssetBundle->Build Failed");
@@ -235,8 +240,6 @@ namespace DotEditor.AssetPacker
                 groupData.assetFiles.ForEach((addressData) =>
                 {
                     AssetBundleDetail detail = new AssetBundleDetail();
-                    detail.isPreload = groupData.isPreload;
-                    detail.isNeverDestroy = groupData.isNeverDestroy;
                     detail.name = addressData.bundlePath;
                     detail.hash = manifest.GetAssetBundleHash(addressData.bundlePath).ToString();
                     detail.crc = manifest.GetAssetBundleCrc(addressData.bundlePath).ToString();

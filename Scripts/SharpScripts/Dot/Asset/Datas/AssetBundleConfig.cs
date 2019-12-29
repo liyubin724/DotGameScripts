@@ -42,8 +42,5 @@ namespace Dot.Asset.Datas
         public string hash;
         public string crc;
         public string[] dependencies = new string[0];
-
-        public bool isPreload = false;
-        public bool isNeverDestroy = false;
     }
 }

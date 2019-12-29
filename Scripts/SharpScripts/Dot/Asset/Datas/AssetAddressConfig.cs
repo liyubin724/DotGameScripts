@@ -5,10 +5,9 @@ using UnityEngine;
 
 namespace Dot.Asset.Datas
 {
-    public class AssetAddressConfig : ScriptableObject, ISerializationCallbackReceiver
+    [Serializable]
+    public class AssetAddressConfig
     {
-        public static readonly string CONFIG_PATH = "Assets/Tools/AssetAddress/asset_address_config.asset";
-
         public AssetAddressData[] addressDatas = new AssetAddressData[0];
 
         private Dictionary<string, AssetAddressData> addressToDataDic = new Dictionary<string, AssetAddressData>();
@@ -16,7 +15,7 @@ namespace Dot.Asset.Datas
 
         private Dictionary<string, List<string>> labelToAddressDic = new Dictionary<string, List<string>>();
 
-        public void OnAfterDeserialize()
+        public void InitConfig()
         {
             foreach (var data in addressDatas)
             {
@@ -54,10 +53,6 @@ namespace Dot.Asset.Datas
                     }
                 }
             }
-        }
-
-        public void OnBeforeSerialize()
-        {
         }
 
         public string GetPathByAddress(string address)
@@ -117,6 +112,9 @@ namespace Dot.Asset.Datas
             public string assetPath;
             public string bundlePath;
             public string[] labels = new string[0];
+
+            public bool isPreload = false;
+            public bool isNeverDestroy = false;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Dot.Asset.Datas;
 using DotEditor.Util;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using static Dot.Asset.Datas.AssetAddressConfig;
@@ -11,22 +13,39 @@ namespace DotEditor.AssetFilter.AssetAddress
     {
         public static AssetAddressConfig GetAddressConfig(bool isCreateIfNot = true)
         {
-            AssetAddressConfig addressConfig = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(AssetAddressConfig.CONFIG_PATH);
-
-            if(addressConfig == null && isCreateIfNot)
+            string configPath = AssetConst.AssetAddressConfigPath;
+            AssetAddressConfig config = null;        
+            if(File.Exists(configPath))
             {
-                addressConfig = ScriptableObject.CreateInstance<AssetAddressConfig>();
-                AssetDatabase.CreateAsset(addressConfig, AssetAddressConfig.CONFIG_PATH);
-                AssetDatabase.ImportAsset(AssetAddressConfig.CONFIG_PATH);
+                config = JsonConvert.DeserializeObject<AssetAddressConfig>(configPath);
             }
 
-            return addressConfig;
+            if(config == null && isCreateIfNot)
+            {
+                config = new AssetAddressConfig();
+            }
+            return config;
+        }
+
+        public static void SaveAddressConfig(AssetAddressConfig config)
+        {
+            if (config == null)
+            {
+                return;
+            }
+            string configPath = AssetConst.AssetAddressConfigPath;
+            string dir = Path.GetDirectoryName(configPath);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            File.WriteAllText(configPath, json);
         }
 
         public static void UpdateAddressConfig()
         {
-            AssetAddressConfig addressConfig = GetAddressConfig();
-            addressConfig.Clear();
+            AssetAddressConfig addressConfig = new AssetAddressConfig();
 
             string[] groupPaths = AssetDatabaseUtil.FindAssets<AssetAddressGroup>();
             List<AssetAddressData> addressDatas = new List<AssetAddressData>();
@@ -39,12 +58,9 @@ namespace DotEditor.AssetFilter.AssetAddress
                     UpdateAddressConfig(addressDatas, addressGroup);
                 }
             }
-
             addressConfig.addressDatas = addressDatas.ToArray();
 
-            EditorUtility.SetDirty(addressConfig);
-
-            AssetDatabase.SaveAssets();
+            AssetAddressUtil.SaveAddressConfig(addressConfig);
         }
 
         private static void UpdateAddressConfig(List<AssetAddressData> addressDatas, AssetAddressGroup addressGroup)
@@ -61,6 +77,9 @@ namespace DotEditor.AssetFilter.AssetAddress
                         addressData.assetPath = assetPath;
                         addressData.bundlePath = addressGroup.operation.GetBundleName(assetPath);
                         addressData.labels = addressGroup.operation.GetLabels();
+
+                        addressData.isPreload = addressGroup.isPreload;
+                        addressData.isNeverDestroy = addressGroup.isNeverDestroy;
 
                         addressDatas.Add(addressData);
                     }

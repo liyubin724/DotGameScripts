@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dot.Asset.Datas;
+using System;
 using UnityEditor;
 
 namespace DotEditor.AssetPacker
@@ -20,12 +21,17 @@ namespace DotEditor.AssetPacker
     [Serializable]
     public class BundlePackConfig
     {
-        public string bundleOutputDir = "D:/assetbundle";
+        public string bundleOutputDir = null;
         public bool cleanupBeforeBuild = false;
         public ValidBuildTarget buildTarget = ValidBuildTarget.StandaloneWindows64;
         public CompressOption compression = CompressOption.StandardCompression;
 
         public BuildAssetBundleOptions bundleOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
+
+        public BundlePackConfig()
+        {
+            bundleOutputDir = AssetConst.AssetConfigDir;
+        }
 
         internal BuildTarget GetBuildTarget()
         {

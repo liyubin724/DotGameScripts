@@ -1,204 +1,105 @@
 ﻿using Dot.Core.Util;
 using System;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Core.Loader
+namespace Dot.Asset
 {
-    public class AssetManager : Singleton<AssetManager>
+    public delegate void OnAssetLoadComplete(string address, UnityObject uObj, SystemObject userData);
+    public delegate void OnAssetLoadProgress(string address, float progress, SystemObject userData);
+
+    public delegate void OnBatchAssetLoadComplete(string[] addresses, UnityObject[] uObjs, SystemObject userData);
+    public delegate void OnBatchAssetsLoadProgress(string[] addresses, float[] progresses, SystemObject userData);
+
+    public enum AssetLoaderMode
     {
-        private AAssetLoader assetLoader = null;
-        private SceneAssetLoader sceneLoader = null;
-        private bool isInit = false;
-        public void InitLoader(AssetLoaderMode loaderMode, 
-            int maxLoadingCount, 
-            string assetRootDir, 
-            Action<bool> initCallback)
-        {
-            if (loaderMode == AssetLoaderMode.AssetBundle)
-            {
-                assetLoader = new AssetBundleLoader();
-            }
-            else if (loaderMode == AssetLoaderMode.AssetDatabase)
-            {
-#if UNITY_EDITOR
-                assetLoader = new AssetDatabaseLoader();
-#else
-                Debug.LogError("AssetManager::InitLoader->AssetLoaderMode(AssetDatabase) can be used in Editor");
-#endif
-            }
-            assetLoader?.Initialize((isSuccess) =>
-            {
-                isInit = isSuccess;
-                if(isSuccess)
-                {
-                    sceneLoader = new SceneAssetLoader(loaderMode, assetLoader);
-                }
+        AssetDatabase,
+        AssetBundle,
+    }
 
-                initCallback?.Invoke(isSuccess);
-            },maxLoadingCount,assetRootDir);
+    public enum AssetLoaderPriority
+    {
+        VeryLow = 100,
+        Low = 200,
+        Default = 300,
+        High = 400,
+        VeryHigh = 500,
+    }
+
+    public partial class AssetManager : Singleton<AssetManager>
+    {
+
+        public void InitManager(AssetLoaderMode loaderMode,
+            Action<bool> initCallback,
+            int maxLoadingCount,
+            string assetRootDir)
+        {
+
         }
 
-        public AssetLoaderHandle LoadAssetAsync(
-            string address,
-            OnAssetLoadComplete complete, 
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,  
-            OnAssetLoadProgress progress = null,
-            SystemObject userData = null)
+        private void LoadAssetAsync(string address,
+            OnAssetLoadComplete complete,
+            OnAssetLoadProgress progress,
+            AssetLoaderPriority priority,
+            SystemObject userData)
         {
-            if(isInit)
-            {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { address }, false, priority, complete, progress, null, null, userData);
-            }else
-            {
-                Debug.LogError("AssetManager::LoadAssetAsync->init is failed");
-                return null;
-            }
+
         }
 
-        public AssetLoaderHandle LoadBatchAssetAsync(
-            string[] address,
+        private void LoadBatchAssetAsync(string[] addresses,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            SystemObject userData = null)
+            OnAssetLoadProgress progress,
+            OnBatchAssetsLoadProgress batchProgress,
+            AssetLoaderPriority priority,
+            SystemObject userData)
         {
-            if (isInit)
-            {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(address, false, priority, complete, progress, batchComplete, batchProgress, userData);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::LoadAssetAsync->init is failed");
-                return null;
-            }
+
         }
 
-        public AssetLoaderHandle InstanceAssetAsync(
-            string address,
+        private void InstantiateAssetAsync(string address,
             OnAssetLoadComplete complete,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            OnAssetLoadProgress progress = null,
-            SystemObject userData = null)
+            OnAssetLoadProgress progress,
+            AssetLoaderPriority priority,
+            SystemObject userData)
         {
-            if (isInit)
-            {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(new string[] { address }, true, priority, complete, progress, null, null, userData);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::LoadAssetAsync->init is failed");
-                return null;
-            }
+
         }
 
-        public AssetLoaderHandle InstanceBatchAssetAsync(
-            string[] address,
+        private void InstantiateBatchAssetAsync(string[] addresses,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            SystemObject userData = null)
+            OnAssetLoadProgress progress,
+            OnBatchAssetsLoadProgress batchProgress,
+            AssetLoaderPriority priority,
+            SystemObject userData)
         {
-            if (isInit)
-            {
-                return assetLoader.LoadOrInstanceBatchAssetAsync(address, true, priority, complete, progress, batchComplete, batchProgress, userData);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::LoadAssetAsync->init is failed");
-                return null;
-            }
+
         }
 
-        public UnityObject InstantiateAsset(string address,UnityObject asset)
+        public UnityObject InstantiateAsset(string address, UnityObject asset)
         {
-            if (isInit)
-            {
-                if(string.IsNullOrEmpty(address) || asset == null)
-                {
-                    Debug.LogError($"AssetManager::InstantiateAsset->asset is null or asset is null.assetPath = {(address ?? "")}");
-                    return null;
-                }
-                return assetLoader?.InstantiateAsset(address, asset);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::InstantiateAsset->init is failed");
-                return null;
-            }
-        }
-
-        public SceneLoaderHandle LoadSceneAsync(string address,
-            OnSceneLoadComplete completeCallback,
-            OnSceneLoadProgress progressCallback,
-            LoadSceneMode loadMode = LoadSceneMode.Single,
-            bool activateOnLoad = true,
-            SystemObject userData = null)
-        {
-            if(sceneLoader == null)
-            {
-                Debug.LogError("AssetManager::LoadSceneAsync->sceneLoader has not been inited");
-                return null;
-            }
-            return sceneLoader.LoadSceneAsync(address, completeCallback, progressCallback, loadMode, activateOnLoad, userData);
-        }
-
-        public void UnloadSceneAsync(string address,
-            OnSceneUnloadComplete completeCallback,
-            OnSceneUnloadProgress progressCallback,
-            SystemObject userData = null)
-        {
-            if (sceneLoader == null)
-            {
-                Debug.LogError("AssetManager::LoadSceneAsync->sceneLoader has not been inited");
-                return;
-            }
-            sceneLoader.UnloadSceneAsync(address, completeCallback, progressCallback, userData);
+            return null;
         }
 
         public void UnloadUnusedAsset(Action callback = null)
         {
-            if (isInit)
-            {
-                assetLoader?.UnloadUnusedAssets(callback);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::InstantiateAsset->init is failed");
-            }
+
         }
 
-        public void UnloadAssetLoader(AssetLoaderHandle handle, bool destroyIfLoaded = false)
+        public void CancelAssetAsync()
         {
-            if (isInit)
-            {
-               assetLoader?.UnloadAssetLoader(handle, destroyIfLoaded);
-            }
-            else
-            {
-                Debug.LogError("AssetManager::InstantiateAsset->init is failed");
-            }
-        }
-        
-        public string[] GetAssetAddressByLabel(string label)
-        {
-            if(isInit && assetLoader!=null)
-            {
-                return assetLoader.GetAssetAddressByLabel(label);
-            }
-            return null;
+
         }
 
         public void DoUpdate(float deltaTime)
         {
-            assetLoader?.DoUpdate(deltaTime);
-            sceneLoader?.DoUpdate(deltaTime);
+
         }
+
     }
 }
