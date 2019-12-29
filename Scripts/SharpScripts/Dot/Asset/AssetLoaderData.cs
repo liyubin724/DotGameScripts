@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Dot.Core.Pool;
+using Dot.Pool;
 using Priority_Queue;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
@@ -35,7 +35,7 @@ namespace Dot.Asset
 
         internal DataState State { get; set; }
        
-        public void OnNew()
+        public void OnGet()
         {
         }
 

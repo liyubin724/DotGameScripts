@@ -1,8 +1,8 @@
-﻿namespace Dot.Core.Pool
+﻿namespace Dot.Pool
 {
     public interface IObjectPoolItem
     {
-        void OnNew();
+        void OnGet();
         void OnRelease();
     }
 }

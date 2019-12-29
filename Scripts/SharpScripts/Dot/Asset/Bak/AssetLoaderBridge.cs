@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using System;
 using System.Collections.Generic;
 using SystemObject = System.Object;
@@ -13,7 +13,7 @@ namespace Dot.Core.Loader
         public OnBatchAssetLoadComplete batchComplete;
         public SystemObject userData;
 
-        public void OnNew()
+        public void OnGet()
         {
         }
 

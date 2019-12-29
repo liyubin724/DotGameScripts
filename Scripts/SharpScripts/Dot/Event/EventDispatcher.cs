@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using Dot.Core.Timer;
 using System.Collections.Generic;
 using SystemObject = System.Object;
@@ -168,7 +168,7 @@ namespace Dot.Core.Event
             return eventParams[index];
         }
 
-        public void OnNew()
+        public void OnGet()
         {
             
         }

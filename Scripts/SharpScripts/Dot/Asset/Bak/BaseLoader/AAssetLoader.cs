@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Generic;
 using Dot.Core.Loader.Config;
-using Dot.Core.Pool;
+using Dot.Pool;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;

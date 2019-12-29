@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using System;
 
 namespace Dot.Core.AI.AStar
@@ -70,7 +70,7 @@ namespace Dot.Core.AI.AStar
             return node.X == X && node.Y == Y;
         }
         
-        public void OnNew()
+        public void OnGet()
         {
             
         }

@@ -1,5 +1,5 @@
 ﻿using Dot.Log;
-using Dot.Core.Pool;
+using Dot.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 using static Dot.UI.Atlas.DynamicAtlas;
@@ -21,7 +21,7 @@ namespace Dot.UI.Atlas
         public void Release() => --retainCount;
         public bool IsInUsing() => retainCount > 0;
 
-        public void OnNew()
+        public void OnGet()
         {
         }
 
@@ -41,7 +41,7 @@ namespace Dot.UI.Atlas
         private HeuristicMethod method;
         private TextureFormat format;
 
-        private static Dot.Core.Pool.ObjectPool<RawImageAtlasData> dataPool = new Dot.Core.Pool.ObjectPool<RawImageAtlasData>(20);
+        private static Dot.Pool.ObjectPool<RawImageAtlasData> dataPool = new Dot.Pool.ObjectPool<RawImageAtlasData>(20);
 
         private List<DynamicAtlas> atlasList = new List<DynamicAtlas>();
         private Dictionary<string, RawImageAtlasData> rawImageDic = new Dictionary<string, RawImageAtlasData>();

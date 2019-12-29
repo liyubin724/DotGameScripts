@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -108,7 +108,7 @@ namespace Dot.Core.Loader
             return false;
         }
 
-        public void OnNew() { }
+        public void OnGet() { }
         public void OnRelease()
         {
             assetPath = null;
@@ -209,7 +209,7 @@ namespace Dot.Core.Loader
             return IsScene ? assetBundle : assetBundle?.LoadAsset(assetPath);
         }
 
-        public void OnNew() { }
+        public void OnGet() { }
         public void OnRelease()
         {
             bundlePath = null;
