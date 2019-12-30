@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotEditor.Core.EGUI;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace DotEditor.EGUI
 {
     public class EGUIToolbarSearchField
     {
-        private static readonly int FIELD_WIDTH = 150;
+        private static readonly int FIELD_WIDTH = 160;
         private static readonly int FIELD_HEIGHT = 16;
 
         public string Text { get; set; } = string.Empty;
@@ -53,7 +54,7 @@ namespace DotEditor.EGUI
                 textFieldRect = new Rect(rect.x, rect.y + 2, rect.width - 16, 14);
             }else
             {
-                textFieldRect = new Rect(rect.x + 32, rect.y + 2, rect.width - 48, 14);
+                textFieldRect = new Rect(rect.x + 36, rect.y + 2, rect.width - 48, 14);
             }
             string searchText = GUI.TextField(textFieldRect, Text, "toolbarSeachTextField");
             if (searchText != Text)
@@ -65,12 +66,15 @@ namespace DotEditor.EGUI
             if(Categories!=null && Categories.Length>0)
             {
                 Rect popRect = new Rect(rect.x, rect.y + 2, 48, 16);
-                int index = EditorGUI.Popup(popRect, "", CategoryIndex, Categories, "ToolbarSeachTextFieldPopup");
-                if(index != CategoryIndex)
+                using(new GUI.ClipScope(popRect))
                 {
-                    CategoryIndex = index;
+                    int index = EditorGUI.Popup(new Rect(0,0,48,16), "", CategoryIndex, Categories, "ToolbarSeachTextFieldPopup");
+                    if (index != CategoryIndex)
+                    {
+                        CategoryIndex = index;
 
-                    onCategoryChagned?.Invoke(Categories[CategoryIndex]);
+                        onCategoryChagned?.Invoke(Categories[CategoryIndex]);
+                    }
                 }
             }
 

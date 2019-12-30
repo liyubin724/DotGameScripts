@@ -1,6 +1,7 @@
 ﻿using DotEditor.AssetFilter.AssetAddress;
 using DotEditor.Core.EGUI;
 using DotEditor.Core.EGUI.TreeGUI;
+using DotEditor.EGUI;
 using DotEditor.Util;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace DotEditor.AssetPacker
         }
         private static readonly string ASSET_BUNDLE_SYMBOL = "ASSET_BUNDLE";
 
-        public string[] SearchParams = new string[]
+        private EGUIToolbarSearchField searchField = null;
+        public string[] SearchCategories = new string[]
         {
             "All",
             "Address",
@@ -35,7 +37,7 @@ namespace DotEditor.AssetPacker
             "Bundle",
             "Labels",
         };
-        private int selecteddSearchParamIndex = 0;
+        private int searchCategoryIndex = 0;
         private string searchText = "";
         private bool isExpandAll = false;
 
@@ -168,35 +170,31 @@ namespace DotEditor.AssetPacker
                     
                 //}
 
-                int newSelectedIndex = EditorGUILayout.Popup(selecteddSearchParamIndex, SearchParams, "ToolbarDropDown", GUILayout.Width(60));
-                if (newSelectedIndex != selecteddSearchParamIndex)
-                {
-                    selecteddSearchParamIndex = newSelectedIndex;
-                    SetTreeModel();
-                }
 
-                Rect searchRect = EditorGUILayout.GetControlRect(GUILayout.Width(120));
-
-                Rect searchFieldRect = searchRect;
-                searchFieldRect.width = 100;
-                string newSearchText = EditorGUI.TextField(searchFieldRect, "", searchText, "toolbarSeachTextField");
-                Rect searchCancelRect = new Rect(searchFieldRect.x + searchFieldRect.width, searchFieldRect.y, 16, 16);
-                if (GUI.Button(searchCancelRect, "", "ToolbarSeachCancelButton"))
+                if(searchField == null)
                 {
-                    newSearchText = "";
-                    GUI.FocusControl("");
-                }
-                if (newSearchText != searchText)
-                {
-                    searchText = newSearchText;
-                    EditorApplication.delayCall += () =>
+                    searchField = new EGUIToolbarSearchField((text) =>
                     {
-                        SetTreeModel();
-                        isExpandAll = true;
-                        assetPackerTreeView.ExpandAll();
-                    };
+                        if(searchText!=text)
+                        {
+                            searchText = text;
+                            SetTreeModel();
+                        }
+                    }, (category) =>
+                    {
+                        int newIndex = Array.IndexOf(SearchCategories, category);
+                        if(searchCategoryIndex!=newIndex)
+                        {
+                            searchCategoryIndex = newIndex;
+                            SetTreeModel();
+                        }
+                    });
+
+                    searchField.Categories = SearchCategories;
+                    searchField.CategoryIndex = 0;
 
                 }
+                searchField.OnGUILayout();
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -221,7 +219,7 @@ namespace DotEditor.AssetPacker
             }
 
             bool isValid = false;
-            if (selecteddSearchParamIndex == 0 || selecteddSearchParamIndex == 1)
+            if (searchCategoryIndex == 0 || searchCategoryIndex == 1)
             {
                 if (!string.IsNullOrEmpty(addressData.assetAddress))
                 {
@@ -230,7 +228,7 @@ namespace DotEditor.AssetPacker
             }
             if (!isValid)
             {
-                if (selecteddSearchParamIndex == 0 || selecteddSearchParamIndex == 2)
+                if (searchCategoryIndex == 0 || searchCategoryIndex == 2)
                 {
                     if (!string.IsNullOrEmpty(addressData.assetPath))
                     {
@@ -240,7 +238,7 @@ namespace DotEditor.AssetPacker
             }
             if (!isValid)
             {
-                if (selecteddSearchParamIndex == 0 || selecteddSearchParamIndex == 3)
+                if (searchCategoryIndex == 0 || searchCategoryIndex == 3)
                 {
                     if (!string.IsNullOrEmpty(addressData.bundlePath))
                     {
@@ -251,7 +249,7 @@ namespace DotEditor.AssetPacker
             if (!isValid)
             {
                 string label = string.Join(",", addressData.labels);
-                if (selecteddSearchParamIndex == 0 || selecteddSearchParamIndex == 4)
+                if (searchCategoryIndex == 0 || searchCategoryIndex == 4)
                 {
                     if (!string.IsNullOrEmpty(label))
                     {

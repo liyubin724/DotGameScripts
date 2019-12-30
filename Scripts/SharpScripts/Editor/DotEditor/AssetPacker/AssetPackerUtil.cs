@@ -68,7 +68,6 @@ namespace DotEditor.AssetPacker
             return addressDatas;
         }
 
-        private static readonly string BUNDLE_PACK_CONFIG_PATH = "Library/BundlePack/bundle_config.data";
         public static BundlePackConfig GetBundlePackConfig()
         {
             BundlePackConfig bundlePackConfig = null;
