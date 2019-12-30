@@ -1,8 +1,8 @@
 ﻿using Dot.FieldDrawer;
-using Rotorz.Games.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.EGUI.FieldDrawer
@@ -12,6 +12,9 @@ namespace DotEditor.EGUI.FieldDrawer
     {
         private bool isMultilineText = false;
         private int multilineHeight = 0;
+
+        private ReorderableList rList = null;
+        private List<string> valueList = null;
         public StringListDrawer(FieldInfo fieldInfo) : base(fieldInfo)
         {
             FieldMultilineText attr = fieldInfo.GetCustomAttribute<FieldMultilineText>();
@@ -22,40 +25,63 @@ namespace DotEditor.EGUI.FieldDrawer
             }
         }
 
-        protected override void OnDraw(object data, bool isShowDesc)
+        public override void SetData(object data)
         {
-            ReorderableListGUI.Title(fieldInfo.Name);
-            List<string> list = (List<string>)fieldInfo.GetValue(data);
-            if (list == null)
+            base.SetData(data);
+            valueList = (List<string>)fieldInfo.GetValue(data);
+            if (valueList != null)
+            {
+                rList = new ReorderableList(valueList, typeof(float), true, true, true, true);
+                rList.drawHeaderCallback = (rect) =>
+                {
+                    EditorGUI.LabelField(rect, fieldInfo.Name, EditorStyles.boldLabel);
+                };
+                rList.drawElementCallback = (rect, index, isActive, isFocused) =>
+                {
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y, 40, rect.height), "" + index);
+                    if (isMultilineText)
+                    {
+                        EditorGUI.TextArea(new Rect(rect.x + 40, rect.y, rect.width - 40, rect.height), valueList[index]);
+                    }else
+                    {
+                        EditorGUI.TextField(new Rect(rect.x + 40, rect.y, rect.width - 40, rect.height), valueList[index]);
+                    }
+                };
+                rList.onAddCallback = (list) =>
+                {
+                    list.list.Add("");
+                };
+                if(isMultilineText)
+                {
+                    rList.elementHeight = multilineHeight;
+                }
+            }
+            else
+            {
+                rList = null;
+            }
+        }
+
+        protected override void OnDraw(bool isShowDesc)
+        {
+            if (valueList == null)
             {
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Data is null");
+                    EditorGUILayout.LabelField(fieldInfo.Name, "Data is null");
                     if (GUILayout.Button("New", GUILayout.Width(40)))
                     {
-                        list = new List<string>();
-                        fieldInfo.SetValue(data, list);
+                        valueList = new List<string>();
+                        fieldInfo.SetValue(data, valueList);
+
+                        SetData(data);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
             }
             else
             {
-                if(isMultilineText)
-                {
-                    ReorderableListGUI.ListField<string>(list, (position, value) =>
-                    {
-                        return EditorGUI.TextArea(position, value);
-                    }, multilineHeight);
-                }
-                else
-                {
-                    ReorderableListGUI.ListField<string>(list, (position, value) =>
-                    {
-                        return EditorGUI.TextField(position, value);
-                    });
-                }
-                
+                rList.DoLayoutList();
             }
         }
     }

@@ -1,7 +1,7 @@
-﻿using Rotorz.Games.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.EGUI.FieldDrawer
@@ -9,33 +9,58 @@ namespace DotEditor.EGUI.FieldDrawer
     [TargetFieldType(typeof(List<float>))]
     public class FloatListDrawer : AFieldDrawer
     {
+        private ReorderableList rList = null;
+        private List<float> valueList = null;
         public FloatListDrawer(FieldInfo fieldInfo) : base(fieldInfo)
         {
         }
 
-        protected override void OnDraw(object data, bool isShowDesc)
+        public override void SetData(object data)
         {
-            ReorderableListGUI.Title(fieldInfo.Name);
-            List<float> list = (List<float>)fieldInfo.GetValue(data);
-            if (list == null)
+            base.SetData(data);
+            valueList = (List<float>)fieldInfo.GetValue(data);
+            if(valueList != null)
             {
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                rList = new ReorderableList(valueList, typeof(float), true, true, true, true);
+                rList.drawHeaderCallback = (rect) =>
                 {
-                    EditorGUILayout.LabelField("Data is null");
-                    if (GUILayout.Button("New", GUILayout.Width(40)))
-                    {
-                        list = new List<float>();
-                        fieldInfo.SetValue(data, list);
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
+                    EditorGUI.LabelField(rect, fieldInfo.Name, EditorStyles.boldLabel);
+                };
+                rList.drawElementCallback = (rect, index, isActive, isFocused) =>
+                {
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y, 40, rect.height), "" + index);
+                    EditorGUI.FloatField(new Rect(rect.x+40,rect.y,rect.width-40,rect.height), valueList[index]);
+                };
+                rList.onAddCallback = (list) =>
+                {
+                    list.list.Add(0.0f);
+                };
             }
             else
             {
-                ReorderableListGUI.ListField<float>(list, (position, value) =>
+                rList = null;
+            }
+        }
+
+        protected override void OnDraw(bool isShowDesc)
+        {
+            if(valueList == null)
+            {
+                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 {
-                    return EditorGUI.FloatField(position, value);
-                });
+                    EditorGUILayout.LabelField(fieldInfo.Name,"Data is null");
+                    if (GUILayout.Button("New", GUILayout.Width(40)))
+                    {
+                        valueList = new List<float>();
+                        fieldInfo.SetValue(data, valueList);
+
+                        SetData(data);
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }else
+            {
+                rList.DoLayoutList();
             }
         }
     }

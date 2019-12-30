@@ -3,6 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using System;
+using SystemObject = System.Object;
 
 namespace DotEditor.EGUI.FieldDrawer
 {
@@ -11,29 +12,48 @@ namespace DotEditor.EGUI.FieldDrawer
     {
         private FieldData[] fieldDatas = null;
         private bool isFoldout = false;
+        private SystemObject valueObject = null;
         public DefalutClassDrawer(FieldInfo fieldInfo) : base(fieldInfo)
         {
             fieldDatas = FieldDrawerUtil.GetTypeFieldDrawer(fieldInfo.FieldType);
         }
 
-        protected override void OnDraw(object data, bool isShowDesc)
+        public override void SetData(object data)
+        {
+            base.SetData(data);
+            valueObject = fieldInfo.GetValue(data);
+
+            if(valueObject!=null)
+            {
+                foreach(var fd in fieldDatas)
+                {
+                    if(fd.drawer!=null)
+                    {
+                        fd.drawer.SetData(valueObject);
+                    }
+                }
+            }
+
+        }
+
+        protected override void OnDraw(bool isShowDesc)
         {
             isFoldout = EditorGUILayout.Foldout(isFoldout, fieldInfo.Name, true);
             if(isFoldout)
             {
-                object innerData = fieldInfo.GetValue(data);
-                
                 EditorGUIUtil.BeginIndent();
                 {
-                    if (innerData == null)
+                    if (valueObject == null)
                     {
                         EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                         {
                             EditorGUILayout.LabelField("Data is null");
                             if (GUILayout.Button("New", GUILayout.Width(40)))
                             {
-                                innerData = Activator.CreateInstance(fieldInfo.FieldType);
-                                fieldInfo.SetValue(data, innerData);
+                                valueObject = Activator.CreateInstance(fieldInfo.FieldType);
+                                fieldInfo.SetValue(data, valueObject);
+
+                                SetData(data);
                             }
                         }
                         EditorGUILayout.EndHorizontal();
@@ -50,7 +70,7 @@ namespace DotEditor.EGUI.FieldDrawer
                                 }
                                 else
                                 {
-                                    fieldData.drawer.DrawField(innerData, isShowDesc);
+                                    fieldData.drawer.DrawField(isShowDesc);
                                 }
                             }
                         }

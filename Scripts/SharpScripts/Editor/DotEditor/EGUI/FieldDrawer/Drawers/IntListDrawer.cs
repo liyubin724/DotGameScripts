@@ -1,7 +1,7 @@
-﻿using Rotorz.Games.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.EGUI.FieldDrawer
@@ -9,32 +9,60 @@ namespace DotEditor.EGUI.FieldDrawer
     [TargetFieldType(typeof(List<int>))]
     public class IntListDrawer : AFieldDrawer
     {
+        private ReorderableList rList = null;
+        private List<int> valueList = null;
+
         public IntListDrawer(FieldInfo fieldInfo) : base(fieldInfo)
         {
         }
 
-        protected override void OnDraw(object data, bool isShowDesc)
+        public override void SetData(object data)
         {
-            ReorderableListGUI.Title(fieldInfo.Name);
-            List<int> list = (List<int>)fieldInfo.GetValue(data);
-            if (list == null)
+            base.SetData(data);
+            valueList = (List<int>)fieldInfo.GetValue(data);
+            if (valueList != null)
+            {
+                rList = new ReorderableList(valueList, typeof(float), true, true, true, true);
+                rList.drawHeaderCallback = (rect) =>
+                {
+                    EditorGUI.LabelField(rect, fieldInfo.Name, EditorStyles.boldLabel);
+                };
+                rList.drawElementCallback = (rect, index, isActive, isFocused) =>
+                {
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y, 40, rect.height), "" + index);
+                    EditorGUI.IntField(new Rect(rect.x + 40, rect.y, rect.width - 40, rect.height), valueList[index]);
+                };
+                rList.onAddCallback = (list) =>
+                {
+                    list.list.Add(0);
+                };
+            }
+            else
+            {
+                rList = null;
+            }
+        }
+
+        protected override void OnDraw(bool isShowDesc)
+        {
+            if (valueList == null)
             {
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Data is null");
-                    if(GUILayout.Button("New",GUILayout.Width(40)))
+                    EditorGUILayout.LabelField(fieldInfo.Name, "Data is null");
+                    if (GUILayout.Button("New", GUILayout.Width(40)))
                     {
-                        list = new List<int>();
-                        fieldInfo.SetValue(data, list);
+                        valueList = new List<int>();
+                        fieldInfo.SetValue(data, valueList);
+
+                        SetData(data);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
-            }else
+            }
+            else
             {
-                ReorderableListGUI.ListField<int>(list, (position, value) =>
-                {
-                    return EditorGUI.IntField(position, value);
-                });
+                rList.DoLayoutList();
             }
         }
     }

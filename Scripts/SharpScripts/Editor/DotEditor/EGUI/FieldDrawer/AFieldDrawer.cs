@@ -11,17 +11,23 @@ namespace DotEditor.EGUI.FieldDrawer
         protected FieldInfo fieldInfo = null;
 
         private FieldDesc descAttr = null;
-        private FieldReadonly readonlyAttr = null;
+        private bool isReadonly = false;
 
         protected AFieldDrawer(FieldInfo fieldInfo)
         {
             this.fieldInfo = fieldInfo;
 
             descAttr = this.fieldInfo.GetCustomAttribute<FieldDesc>();
-            readonlyAttr = this.fieldInfo.GetCustomAttribute<FieldReadonly>();
+            isReadonly = this.fieldInfo.GetCustomAttribute<FieldReadonly>() != null;
         }
 
-        public void DrawField(SystemObject data,bool isShowDesc)
+        protected SystemObject data;
+        public virtual void SetData(SystemObject data)
+        {
+            this.data = data;
+        }
+
+        public void DrawField(bool isShowDesc)
         {
             bool isShowDescAsContent = descAttr != null && isShowDesc;
             bool isShowDescAsTip = descAttr != null && !isShowDescAsContent;
@@ -38,9 +44,9 @@ namespace DotEditor.EGUI.FieldDrawer
                 EditorGUILayout.BeginHorizontal();
             }
 
-            EditorGUI.BeginDisabledGroup(readonlyAttr != null);
+            EditorGUI.BeginDisabledGroup(isReadonly);
             {
-                OnDraw(data,isShowDesc);
+                OnDraw(isShowDesc);
             }
             EditorGUI.EndDisabledGroup();
 
@@ -60,6 +66,6 @@ namespace DotEditor.EGUI.FieldDrawer
             }
         }
 
-        protected abstract void OnDraw(SystemObject data, bool isShowDesc);
+        protected abstract void OnDraw(bool isShowDesc);
     }
 }

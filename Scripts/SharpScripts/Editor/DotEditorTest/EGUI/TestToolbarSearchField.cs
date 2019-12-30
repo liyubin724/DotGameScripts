@@ -1,6 +1,7 @@
 ﻿using Dot.FieldDrawer;
 using DotEditor.EGUI;
 using DotEditor.EGUI.FieldDrawer;
+using ReflectionMagic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace DotEditorTest.EGUI
 
     public class TestData2
     {
+        [FieldDesc("Test data2")]
         public int IntValue;
         public string StrValue;
     }
@@ -45,7 +47,9 @@ namespace DotEditorTest.EGUI
         [MenuItem("Test/toolbarsearchfield")]
         public static void ShowWin()
         {
-            EditorWindow.GetWindow<TestToolbarSearchField>().Show();
+            var win = EditorWindow.GetWindow<TestToolbarSearchField>();
+
+            win.AsDynamic().ShowTooltip();
         }
 
         private EGUIToolbarSearchField searchField = null;
@@ -61,7 +65,7 @@ namespace DotEditorTest.EGUI
             {
                 drawer = new ObjectDrawer("TestData",testData);
             }
-            drawer.OnGUI(true);
+            drawer.OnGUI(false);
         }
     }
 }

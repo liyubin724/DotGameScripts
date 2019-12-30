@@ -17,6 +17,13 @@ namespace DotEditor.EGUI.FieldDrawer
             if(data!=null)
             {
                 fieldDatas = FieldDrawerUtil.GetTypeFieldDrawer(data.GetType());
+                foreach(var fd in fieldDatas)
+                {
+                    if(fd.drawer!=null)
+                    {
+                        fd.drawer.SetData(data);
+                    }
+                }
             }
         }
         
@@ -40,7 +47,7 @@ namespace DotEditor.EGUI.FieldDrawer
                         }
                         else
                         {
-                            fieldData.drawer.DrawField(data, isShowDesc);
+                            fieldData.drawer.DrawField( isShowDesc);
                         }
                     }
                 }

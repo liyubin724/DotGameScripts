@@ -20,7 +20,7 @@ namespace DotEditor.EGUI.FieldDrawer
             }
         }
 
-        protected override void OnDraw(object data, bool isShowDesc)
+        protected override void OnDraw(bool isShowDesc)
         {
             string value = (string)fieldInfo.GetValue(data);
 
