@@ -13,15 +13,6 @@ namespace Dot.Asset
     {
         protected override void DoInitUpdate()
         {
-            //addressConfig = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(AssetAddressConfig.CONFIG_PATH);
-            //if(addressConfig!=null)
-            //{
-            //    State = AssetLoaderState.Running;
-            //}else
-            //{
-            //    LogUtil.LogError(AAssetLoader.LOGGER_NAME, "AssetAddressConfig is null");
-            //    State = AssetLoaderState.Error;
-            //}
         }
 
         protected override void OnDataUpdate(AssetLoaderData data)
@@ -31,7 +22,12 @@ namespace Dot.Asset
 
         protected override void OnOperationFinished(AAsyncOperation operation)
         {
-            
+            string assetPath = operation.AssetPath;
+            if(assetNodeDic.TryGetValue(assetPath,out AAssetNode assetNode))
+            {
+                DatabaseAssetNode node = assetNode as DatabaseAssetNode;
+                node.SetAsset(operation.GetAsset());
+            }
         }
 
         protected override void OnUnloadUnusedAsset()
@@ -41,9 +37,21 @@ namespace Dot.Asset
 
         protected override bool StartLoadingData(AssetLoaderData data)
         {
-            foreach(var assetPath in data.paths)
+            for(int i =0;i<data.paths.Length;++i)
             {
-                operationList.Add(new DatabaseAsyncOperation(assetPath));
+                string assetPath = data.paths[i];
+                if (!assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
+                {
+                    assetNode = new DatabaseAssetNode();
+                    assetNode.InitNode(assetPath);
+                    
+                    operationList.Add(new DatabaseAsyncOperation()
+                    {
+                        AssetPath = assetPath
+                    });
+                }
+                assetNode.Retain();
+                data.AddAssetNode(i, assetNode);
             }
 
             return true;

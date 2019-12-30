@@ -1,26 +1,41 @@
 ﻿#if UNITY_EDITOR
+using Dot.Asset.Datas;
+using Dot.Log;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    public class DatabaseAssetNode : AssetNode
+    public class DatabaseAssetNode : AAssetNode
     {
-        public UnityObject UObject { get; set; }
+        private UnityObject uObject = null;
+        public void SetAsset(UnityObject uObj)
+        {
+            uObject = uObj;
+            State = NodeState.Finished;
+        }
 
         public override UnityEngine.Object GetAsset()
         {
-            return UObject;
+            if(State == NodeState.Finished)
+            {
+                return uObject;
+            }else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Asset is not loaded");
+                return null;
+            }
         }
 
         public override UnityEngine.Object GetInstance()
         {
-            if(UObject!=null)
+            if(State == NodeState.Finished && uObject!=null)
             {
-                var instance = UnityObject.Instantiate(UObject);
-                return instance;
+                return UnityObject.Instantiate(uObject);
+            }else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "State is not finished or object is null");
+                return null;
             }
-
-            return null;
         }
 
         public override bool IsAlive()
@@ -34,7 +49,7 @@ namespace Dot.Asset
 
         public override bool IsDone()
         {
-            return UObject != null;
+            return State == NodeState.Finished;
         }
     }
 }

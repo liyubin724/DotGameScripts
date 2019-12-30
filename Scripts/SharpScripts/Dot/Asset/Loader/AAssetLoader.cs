@@ -19,13 +19,13 @@ namespace Dot.Asset
 
     public abstract class AAssetLoader
     {
-        public const string LOGGER_NAME = "AssetLoader";
-
         protected ObjectPool<AssetLoaderData> dataPool = new ObjectPool<AssetLoaderData>(5);
 
         protected StablePriorityQueue<AssetLoaderData> dataWaitingQueue = new StablePriorityQueue<AssetLoaderData>(10);
         protected List<AssetLoaderData> dataLoadingList = new List<AssetLoaderData>();
         protected List<AAsyncOperation> operationList = new List<AAsyncOperation>();
+
+        protected Dictionary<string, AAssetNode> assetNodeDic = new Dictionary<string, AAssetNode>();
 
         protected Action<bool> initCallback = null;
         private int maxLoadingCount = 5;
@@ -38,6 +38,13 @@ namespace Dot.Asset
             initCallback = callback;
             maxLoadingCount = maxCount;
             State = AssetLoaderState.Initing;
+
+            addressConfig = AssetConst.GetAddressConfig();
+            if(addressConfig == null)
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
+                State = AssetLoaderState.Error;
+            }
         }
         protected abstract void DoInitUpdate();
 
@@ -80,8 +87,7 @@ namespace Dot.Asset
                 return;
             }else if(State!= AssetLoaderState.Running)
             {
-                LogUtil.LogError(LOGGER_NAME, "Init Failed");
-
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Init Failed");
                 return;
             }
 
@@ -120,13 +126,13 @@ namespace Dot.Asset
         {
             if(data.addresses == null || data.addresses.Length == 0)
             {
-                LogUtil.LogError(LOGGER_NAME, "Addresses is null");
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Addresses is null");
                 return false;
             }
 
             if(addressConfig == null)
             {
-                LogUtil.LogError(LOGGER_NAME, "addressConfigs is null");
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "addressConfigs is null");
                 return false;
             }
 
@@ -200,7 +206,7 @@ namespace Dot.Asset
         {
             if(unloadUnusedCallback!=null)
             {
-                LogUtil.LogError(LOGGER_NAME, "UnloadUnusedAsset is running!!");
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "UnloadUnusedAsset is running!!");
                 return;
             }
 

@@ -9,12 +9,8 @@
 
     public abstract class AAsyncOperation
     {
-        protected string assetFullPath = null;
+        internal string AssetPath { get; set; }
         internal OperationState State { get; set; } = OperationState.None;
-
-        public AAsyncOperation(string assetFullPath)
-        {
-        }
 
         internal void DoUpdate()
         {
@@ -29,7 +25,7 @@
 
         protected abstract void OnOperationStart();
         protected abstract void OnOperationLoading();
-        protected abstract UnityEngine.Object GetAsset();
-        protected abstract float GetProgress();
+        internal abstract UnityEngine.Object GetAsset();
+        internal abstract float GetProgress();
     }
 }

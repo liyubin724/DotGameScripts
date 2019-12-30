@@ -34,7 +34,18 @@ namespace Dot.Asset
         internal AssetHandler handler = null;
 
         internal DataState State { get; set; }
-       
+
+        private AAssetNode[] assetNodes = null;
+        
+        public void AddAssetNode(int index, AAssetNode node)
+        {
+            if(assetNodes == null)
+            {
+                assetNodes = new AAssetNode[addresses.Length];
+            }
+            assetNodes[index] = node;
+        }
+
         public void OnGet()
         {
         }

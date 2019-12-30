@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 
 namespace Dot.Asset.Datas
 {
     public static class AssetConst
     {
+        public const string LOGGER_NAME = "AssetLoader";
+
         public static readonly string ASSET_MANIFEST_NAME = "manifest_config";
         public static readonly string ASSET_MANIFEST_EXT = ".json";
         public static readonly string ASSET_ADDRESS_NAME = "address_config";
@@ -12,6 +15,19 @@ namespace Dot.Asset.Datas
         public static readonly string ASSET_BUNDLE_PACK_EXT = ".json";
 
         public static readonly string ASSET_BUNDLE_DIR_NAME = "assetbundles";
+
+        public static AssetAddressConfig GetAddressConfig()
+        {
+            string configPath = AssetConst.AssetAddressConfigPath;
+
+            AssetAddressConfig config = null;
+            if (File.Exists(configPath))
+            {
+                config = JsonConvert.DeserializeObject<AssetAddressConfig>(configPath);
+            }
+
+            return config;
+        }
 
         public static string AssetConfigDir
         {

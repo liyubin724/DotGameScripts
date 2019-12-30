@@ -1,8 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Dot.Pool
 {
+    public interface IObjectPoolItem
+    {
+        void OnGet();
+        void OnRelease();
+    }
+
     public class ObjectPool<T> where T : class,IObjectPoolItem,new()
     {
         private Stack<T> m_Stack = new Stack<T>();

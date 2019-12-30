@@ -5,16 +5,12 @@ namespace Dot.Asset
 {
     public class DatabaseAsyncOperation : AAsyncOperation
     {
-        public DatabaseAsyncOperation(string assetFullPath) : base(assetFullPath)
+        internal override UnityEngine.Object GetAsset()
         {
+            return AssetDatabase.LoadAssetAtPath(AssetPath, typeof(UnityEngine.Object));
         }
 
-        protected override UnityEngine.Object GetAsset()
-        {
-            return AssetDatabase.LoadAssetAtPath(assetFullPath, typeof(UnityEngine.Object));
-        }
-
-        protected override float GetProgress()
+        internal override float GetProgress()
         {
             if(State == OperationState.Finished)
             {
