@@ -31,7 +31,7 @@ namespace DotEditorTest.EGUI
         [FieldMultilineText(60)]
         public List<string> strList;
         public TestEnum testEnum;
-
+        [FieldDesc("Test Data2 Value", "data")]
         public TestData2 data2;
     }
 

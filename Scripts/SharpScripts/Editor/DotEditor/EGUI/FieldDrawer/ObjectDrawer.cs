@@ -29,30 +29,41 @@ namespace DotEditor.EGUI.FieldDrawer
         
         public void OnGUI(bool isShowDesc = false)
         {
-            EditorGUILayout.LabelField(title);
-
-            EditorGUIUtil.BeginIndent();
+            bool isNeedIndent = false;
+            if(!string.IsNullOrEmpty(title))
             {
-                if (data == null)
+                EditorGUILayout.LabelField(title);
+                isNeedIndent = true;
+            }
+
+            if(isNeedIndent)
+            {
+                EditorGUIUtil.BeginIndent();
+            }
+
+            if (data == null)
+            {
+                EditorGUILayout.HelpBox("Data is null", MessageType.Error);
+            }
+            else
+            {
+                foreach (var fieldData in fieldDatas)
                 {
-                    EditorGUILayout.HelpBox("Data is null", MessageType.Error);
-                }
-                else
-                {
-                    foreach (var fieldData in fieldDatas)
+                    if (fieldData.drawer == null)
                     {
-                        if (fieldData.drawer == null)
-                        {
-                            EditorGUILayout.LabelField(fieldData.name, "Drawer is null");
-                        }
-                        else
-                        {
-                            fieldData.drawer.DrawField( isShowDesc);
-                        }
+                        EditorGUILayout.LabelField(fieldData.name, "Drawer is null");
+                    }
+                    else
+                    {
+                        fieldData.drawer.DrawField(isShowDesc);
                     }
                 }
             }
-            EditorGUIUtil.EndIndent();
+
+            if (isNeedIndent)
+            {
+                EditorGUIUtil.EndIndent();
+            }
         }
     }
 }

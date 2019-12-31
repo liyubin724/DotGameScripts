@@ -11,18 +11,28 @@ namespace DotEditor.EGUI.FieldDrawer
         {
         }
 
-        protected override void OnDraw(bool isShowDesc)
+        protected override void OnDraw(bool isReadonly, bool isShowDesc)
         {
             object value = (Enum)fieldInfo.GetValue(data);
 
-            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.BeginHorizontal();
             {
-                value = EditorGUILayout.EnumPopup(nameContent, (Enum)value);
+                EditorGUI.BeginDisabledGroup(isReadonly);
+                {
+                    EditorGUI.BeginChangeCheck();
+                    {
+                        value = EditorGUILayout.EnumPopup(nameContent, (Enum)value);
+                    }
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        fieldInfo.SetValue(data, value);
+                    }
+                }
+                EditorGUI.EndDisabledGroup();
+
+                OnDrawAskOperation();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                fieldInfo.SetValue(data, value);
-            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

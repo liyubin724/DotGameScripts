@@ -10,18 +10,30 @@ namespace DotEditor.EGUI.FieldDrawer
         {
         }
 
-        protected override void OnDraw(bool isShowDesc)
+        protected override void OnDraw(bool isReadonly, bool isShowDesc)
         {
             bool value = (bool)fieldInfo.GetValue(data);
 
-            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.BeginHorizontal();
             {
-                value = EditorGUILayout.Toggle(nameContent, value);
+                EditorGUI.BeginDisabledGroup(isReadonly);
+                {
+                    EditorGUI.BeginChangeCheck();
+                    {
+                        value = EditorGUILayout.Toggle(nameContent, value);
+                    }
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        fieldInfo.SetValue(data, value);
+                    }
+                }
+                EditorGUI.EndDisabledGroup();
+
+                OnDrawAskOperation();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                fieldInfo.SetValue(data, value);
-            }
+            EditorGUILayout.EndHorizontal();
+
+            
         }
     }
 }

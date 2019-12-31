@@ -2,6 +2,7 @@
 using DotEditor.Core.EGUI;
 using DotEditor.Core.EGUI.TreeGUI;
 using DotEditor.EGUI;
+using DotEditor.EGUI.FieldDrawer;
 using DotEditor.Util;
 using System;
 using System.Collections.Generic;
@@ -81,9 +82,6 @@ namespace DotEditor.AssetPacker
 
             EditorGUILayout.LabelField("Asset Packer Group", lableStyle, GUILayout.ExpandWidth(true));
 
-            EditorGUILayout.LabelField("", GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
-            
-            Rect lastRect = GUILayoutUtility.GetLastRect();
             if (assetPackerTreeView == null)
             {
                 InitTreeView();
@@ -92,30 +90,33 @@ namespace DotEditor.AssetPacker
                     SetTreeModel();
                 };
             }
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            GUILayout.Label("", GUILayout.ExpandWidth(true), GUILayout.Height(position.height - lastRect.y-lastRect.height -120));
+            lastRect = GUILayoutUtility.GetLastRect();
+            Rect treeViewRect = new Rect(lastRect.x, lastRect.y, lastRect.width, lastRect.height);
+            assetPackerTreeView?.OnGUI(treeViewRect);
 
-            assetPackerTreeView?.OnGUI(lastRect);
-
-            EditorGUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
             {
-                EditorGUILayout.BeginVertical();
+                GUILayout.BeginVertical();
                 {
                     DrawBundleConfig();
                 }
-                EditorGUILayout.EndVertical();
+                GUILayout.EndVertical();
 
-                EditorGUILayout.BeginVertical(GUILayout.Width(200));
+                GUILayout.BeginVertical(GUILayout.Width(200));
                 {
                     DrawBundleOperation();
                 }
-                EditorGUILayout.EndVertical();
+                GUILayout.EndVertical();
 
-                EditorGUILayout.BeginVertical(GUILayout.Width(200));
+                GUILayout.BeginVertical(GUILayout.Width(200));
                 {
                     DrawBundleAutoOperation();
                 }
-                EditorGUILayout.EndVertical();
+                GUILayout.EndVertical();
             }
-            EditorGUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
         }
 
         private void DrawToolbar()
@@ -155,21 +156,6 @@ namespace DotEditor.AssetPacker
                 }
 
                 GUILayout.FlexibleSpace();
-                //if (GUILayout.Button("Find Auto Group", "toolbarbutton", GUILayout.Width(120)))
-                //{
-                    
-                //}
-
-                //if (GUILayout.Button("Remove Auto Group", "toolbarbutton", GUILayout.Width(120)))
-                //{
-                    
-                //}
-
-                //if (GUILayout.Button("Open Depend Win", "toolbarbutton", GUILayout.Width(160)))
-                //{
-                    
-                //}
-
 
                 if(searchField == null)
                 {
@@ -308,6 +294,7 @@ namespace DotEditor.AssetPacker
             {
                 bundlePackConfig = AssetPackerUtil.GetBundlePackConfig();
             }
+
             EditorGUI.BeginChangeCheck();
             {
                 bundlePackConfig.bundleOutputDir = EditorGUILayoutUtil.DrawDiskFolderSelection("Bundle Output Dir", bundlePackConfig.bundleOutputDir);

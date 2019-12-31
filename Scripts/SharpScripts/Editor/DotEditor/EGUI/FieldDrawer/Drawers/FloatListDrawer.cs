@@ -42,7 +42,7 @@ namespace DotEditor.EGUI.FieldDrawer
             }
         }
 
-        protected override void OnDraw(bool isShowDesc)
+        protected override void OnDraw(bool isReadonly, bool isShowDesc)
         {
             if(valueList == null)
             {

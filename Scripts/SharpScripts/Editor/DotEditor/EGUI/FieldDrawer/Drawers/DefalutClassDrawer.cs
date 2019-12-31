@@ -33,12 +33,17 @@ namespace DotEditor.EGUI.FieldDrawer
                     }
                 }
             }
-
         }
 
-        protected override void OnDraw(bool isShowDesc)
+        protected override void OnDraw(bool isReadonly, bool isShowDesc)
         {
-            isFoldout = EditorGUILayout.Foldout(isFoldout, nameContent, true);
+            EditorGUILayout.BeginHorizontal();
+            {
+                isFoldout = EditorGUILayout.Foldout(isFoldout, nameContent, true);
+                OnDrawAskOperation();
+            }
+            EditorGUILayout.EndHorizontal();
+
             if(isFoldout)
             {
                 EditorGUIUtil.BeginIndent();
@@ -76,11 +81,11 @@ namespace DotEditor.EGUI.FieldDrawer
                         }
                         EditorGUILayout.EndVertical();
                     }
-                    
+
                 }
                 EditorGUIUtil.EndIndent();
-
             }
+
         }
     }
 }

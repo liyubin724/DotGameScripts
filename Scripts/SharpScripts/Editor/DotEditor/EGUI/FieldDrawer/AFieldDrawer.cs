@@ -38,49 +38,34 @@ namespace DotEditor.EGUI.FieldDrawer
 
         public void DrawField(bool isShowDesc)
         {
-            bool isShowDescAsContent = descAttr != null && isShowDesc;
-            bool isShowDescAsTip = descAttr != null && !isShowDescAsContent;
-
-            if(isShowDescAsContent)
-            {
-                EditorGUILayout.BeginVertical();
-
-                EditorGUILayout.HelpBox(descAttr.DetailDesc, MessageType.Info);
-            }
-
-            if(isShowDescAsTip)
-            {
-                EditorGUILayout.BeginHorizontal();
-            }
-
-            EditorGUI.BeginDisabledGroup(isReadonly);
-            {
-                OnDraw(isShowDesc);
-            }
-            EditorGUI.EndDisabledGroup();
-
+            bool showDesc = descAttr != null && isShowDesc;
             
-            if(isShowDescAsTip)
+            EditorGUILayout.BeginVertical();
             {
-                if(descAttr!=null)
+                if(showDesc)
                 {
-                    GUIContent askBtn = new GUIContent("?");
-                    Rect rect = GUILayoutUtility.GetRect(askBtn,EditorStyles.miniButton, GUILayout.Width(16), GUILayout.Height(16));
-                    if(GUI.Button(rect,askBtn, EditorStyles.miniButton))
-                    {
-                        Rect position = GUIUtility.GUIToScreenRect(rect);
-                        FieldDescPopWindow.ShowWin(position, fieldInfo.Name, descAttr.DetailDesc);
-                    }
+                    EditorGUILayout.LabelField(descAttr.DetailDesc, EditorStyles.helpBox);
                 }
-                EditorGUILayout.EndHorizontal();
-            }
 
-            if(isShowDescAsContent)
-            {
-                EditorGUILayout.EndVertical();
+                OnDraw(isReadonly,isShowDesc);
             }
+            EditorGUILayout.EndVertical();
         }
 
-        protected abstract void OnDraw(bool isShowDesc);
+        protected abstract void OnDraw(bool isReadonly,bool isShowDesc);
+
+        protected void OnDrawAskOperation()
+        {
+            if (descAttr != null)
+            {
+                GUIContent askBtn = new GUIContent("?");
+                Rect rect = GUILayoutUtility.GetRect(askBtn, EditorStyles.miniButton, GUILayout.Width(16), GUILayout.Height(16));
+                if (GUI.Button(rect, askBtn, EditorStyles.miniButton))
+                {
+                    Rect position = GUIUtility.GUIToScreenRect(rect);
+                    FieldDescPopWindow.ShowWin(position, fieldInfo.Name, descAttr.DetailDesc);
+                }
+            }
+        }
     }
 }

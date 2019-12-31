@@ -20,30 +20,42 @@ namespace DotEditor.EGUI.FieldDrawer
             }
         }
 
-        protected override void OnDraw(bool isShowDesc)
+        protected override void OnDraw(bool isReadonly, bool isShowDesc)
         {
             string value = (string)fieldInfo.GetValue(data);
 
-            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.BeginHorizontal();
             {
-                if(isMultilineText)
+                EditorGUI.BeginDisabledGroup(isReadonly);
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    EditorGUI.BeginChangeCheck();
                     {
-                        EditorGUILayout.LabelField(nameContent);
-                        value = EditorGUILayout.TextArea(value, GUILayout.Height(multilineHeight));
-                    }
-                    EditorGUILayout.EndHorizontal();
+                        if (isMultilineText)
+                        {
+                            EditorGUILayout.BeginHorizontal();
+                            {
+                                EditorGUILayout.LabelField(nameContent);
+                                value = EditorGUILayout.TextArea(value, GUILayout.Height(multilineHeight));
+                            }
+                            EditorGUILayout.EndHorizontal();
 
-                }else
-                {
-                    value = EditorGUILayout.TextField(nameContent, value);
+                        }
+                        else
+                        {
+                            value = EditorGUILayout.TextField(nameContent, value);
+                        }
+                    }
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        fieldInfo.SetValue(data, value);
+                    }
                 }
+                EditorGUI.EndDisabledGroup();
+
+                OnDrawAskOperation();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                fieldInfo.SetValue(data, value);
-            }
+            EditorGUILayout.EndHorizontal();
+
         }
     }
 }
