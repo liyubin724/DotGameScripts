@@ -16,7 +16,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             EditorGUI.BeginChangeCheck();
             {
-                value = EditorGUILayout.Toggle(fieldInfo.Name, value);
+                value = EditorGUILayout.Toggle(nameContent, value);
             }
             if (EditorGUI.EndChangeCheck())
             {

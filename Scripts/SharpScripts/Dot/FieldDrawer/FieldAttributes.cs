@@ -5,10 +5,12 @@ namespace Dot.FieldDrawer
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class FieldDesc : Attribute
     {
-        public string Desc { get; set; }
-        public FieldDesc(string desc)
+        public string BriefDesc { get; set; }
+        public string DetailDesc { get; set; }
+        public FieldDesc(string detail = "",string brief = "")
         {
-            Desc = desc;
+            DetailDesc = detail;
+            BriefDesc = brief;
         }
     }
 

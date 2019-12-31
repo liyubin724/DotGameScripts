@@ -38,7 +38,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
         protected override void OnDraw(bool isShowDesc)
         {
-            isFoldout = EditorGUILayout.Foldout(isFoldout, fieldInfo.Name, true);
+            isFoldout = EditorGUILayout.Foldout(isFoldout, nameContent, true);
             if(isFoldout)
             {
                 EditorGUIUtil.BeginIndent();

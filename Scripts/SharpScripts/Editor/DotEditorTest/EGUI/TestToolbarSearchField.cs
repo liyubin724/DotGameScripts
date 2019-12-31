@@ -19,9 +19,9 @@ namespace DotEditorTest.EGUI
     }
     public class TestData
     {
-        [FieldDesc("Int value")]
+        [FieldDesc("Int value","Str")]
         public int IntValue;
-        [FieldDesc("str value")]
+        [FieldDesc("str value","Str")]
         [FieldReadonly]
         public string StrValue = "Test";
         public float floatValue;

@@ -25,7 +25,7 @@ namespace DotEditor.EGUI.FieldDrawer
                 rList = new ReorderableList(valueList, typeof(float), true, true, true, true);
                 rList.drawHeaderCallback = (rect) =>
                 {
-                    EditorGUI.LabelField(rect, fieldInfo.Name, EditorStyles.boldLabel);
+                    EditorGUI.LabelField(rect, nameContent, EditorStyles.boldLabel);
                 };
                 rList.drawElementCallback = (rect, index, isActive, isFocused) =>
                 {

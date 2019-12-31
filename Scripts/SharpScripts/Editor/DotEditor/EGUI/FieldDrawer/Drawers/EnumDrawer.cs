@@ -17,7 +17,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             EditorGUI.BeginChangeCheck();
             {
-                value = EditorGUILayout.EnumPopup(fieldInfo.Name, (Enum)value);
+                value = EditorGUILayout.EnumPopup(nameContent, (Enum)value);
             }
             if (EditorGUI.EndChangeCheck())
             {

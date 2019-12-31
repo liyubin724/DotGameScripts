@@ -13,12 +13,21 @@ namespace DotEditor.EGUI.FieldDrawer
         private FieldDesc descAttr = null;
         private bool isReadonly = false;
 
+        protected GUIContent nameContent = null;
         protected AFieldDrawer(FieldInfo fieldInfo)
         {
             this.fieldInfo = fieldInfo;
 
             descAttr = this.fieldInfo.GetCustomAttribute<FieldDesc>();
             isReadonly = this.fieldInfo.GetCustomAttribute<FieldReadonly>() != null;
+
+            if(descAttr!=null)
+            {
+                nameContent = new GUIContent(fieldInfo.Name, descAttr.BriefDesc);
+            }else
+            {
+                nameContent = new GUIContent(fieldInfo.Name);
+            }
         }
 
         protected SystemObject data;
@@ -36,7 +45,7 @@ namespace DotEditor.EGUI.FieldDrawer
             {
                 EditorGUILayout.BeginVertical();
 
-                EditorGUILayout.HelpBox(descAttr.Desc, MessageType.Info);
+                EditorGUILayout.HelpBox(descAttr.DetailDesc, MessageType.Info);
             }
 
             if(isShowDescAsTip)
@@ -55,7 +64,13 @@ namespace DotEditor.EGUI.FieldDrawer
             {
                 if(descAttr!=null)
                 {
-                    GUILayout.Label(new GUIContent("?", descAttr.Desc),EditorStyles.miniButton,GUILayout.Width(16),GUILayout.Height(16));
+                    GUIContent askBtn = new GUIContent("?");
+                    Rect rect = GUILayoutUtility.GetRect(askBtn,EditorStyles.miniButton, GUILayout.Width(16), GUILayout.Height(16));
+                    if(GUI.Button(rect,askBtn, EditorStyles.miniButton))
+                    {
+                        Rect position = GUIUtility.GUIToScreenRect(rect);
+                        FieldDescPopWindow.ShowWin(position, fieldInfo.Name, descAttr.DetailDesc);
+                    }
                 }
                 EditorGUILayout.EndHorizontal();
             }

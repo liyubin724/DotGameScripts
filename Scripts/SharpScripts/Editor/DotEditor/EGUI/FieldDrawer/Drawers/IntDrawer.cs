@@ -16,7 +16,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             EditorGUI.BeginChangeCheck();
             {
-                value = EditorGUILayout.IntField(fieldInfo.Name, value);
+                value = EditorGUILayout.IntField(nameContent, value);
             }
             if(EditorGUI.EndChangeCheck())
             {

@@ -28,10 +28,16 @@ namespace DotEditor.EGUI.FieldDrawer
             {
                 if(isMultilineText)
                 {
-                    value = EditorGUILayout.TextArea(fieldInfo.Name, value, GUILayout.Height(multilineHeight));
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        EditorGUILayout.LabelField(nameContent);
+                        value = EditorGUILayout.TextArea(value, GUILayout.Height(multilineHeight));
+                    }
+                    EditorGUILayout.EndHorizontal();
+
                 }else
                 {
-                    value = EditorGUILayout.TextField(fieldInfo.Name, value);
+                    value = EditorGUILayout.TextField(nameContent, value);
                 }
             }
             if (EditorGUI.EndChangeCheck())
