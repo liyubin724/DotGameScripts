@@ -13,11 +13,24 @@ namespace Dot.Asset
     {
         protected override void DoInitUpdate()
         {
+            addressConfig = AssetConst.GetAddressConfig();
+            if (addressConfig == null)
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
+                State = AssetLoaderState.Error;
+            }
+            State = AssetLoaderState.Running;
         }
 
         protected override void OnDataUpdate(AssetLoaderData data)
         {
-            
+            for (int i = 0; i < data.paths.Length; ++i)
+            {
+                string assetPath = data.paths[i];
+                DatabaseAssetNode assetNode = assetNodeDic[assetPath] as DatabaseAssetNode;
+
+
+            }
         }
 
         protected override void OnOperationFinished(AAsyncOperation operation)
@@ -35,7 +48,7 @@ namespace Dot.Asset
             
         }
 
-        protected override bool StartLoadingData(AssetLoaderData data)
+        protected override void StartLoadingData(AssetLoaderData data)
         {
             for(int i =0;i<data.paths.Length;++i)
             {
@@ -44,17 +57,16 @@ namespace Dot.Asset
                 {
                     assetNode = new DatabaseAssetNode();
                     assetNode.InitNode(assetPath);
-                    
-                    operationList.Add(new DatabaseAsyncOperation()
+
+                    operations.AddOrUpdate(assetPath, new DatabaseAsyncOperation()
                     {
-                        AssetPath = assetPath
+                        AssetPath = assetPath,
                     });
                 }
+
                 assetNode.Retain();
                 data.AddAssetNode(i, assetNode);
             }
-
-            return true;
         }
     }
 

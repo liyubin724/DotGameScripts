@@ -1,6 +1,7 @@
 ﻿using Dot.Asset.Datas;
-using Dot.Pool;
+using Dot.Generic;
 using Dot.Log;
+using Dot.Pool;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Dot.Asset
 
         protected StablePriorityQueue<AssetLoaderData> dataWaitingQueue = new StablePriorityQueue<AssetLoaderData>(10);
         protected List<AssetLoaderData> dataLoadingList = new List<AssetLoaderData>();
-        protected List<AAsyncOperation> operationList = new List<AAsyncOperation>();
+        protected ListDictionary<string, AAsyncOperation> operations = new ListDictionary<string, AAsyncOperation>();
 
         protected Dictionary<string, AAssetNode> assetNodeDic = new Dictionary<string, AAssetNode>();
 
@@ -33,18 +34,11 @@ namespace Dot.Asset
         protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
 
-        internal void DoInit(Action<bool> callback,int maxCount,string assetDir)
+        internal void Initialize(Action<bool> callback,int maxCount,string assetDir)
         {
             initCallback = callback;
             maxLoadingCount = maxCount;
             State = AssetLoaderState.Initing;
-
-            addressConfig = AssetConst.GetAddressConfig();
-            if(addressConfig == null)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
-                State = AssetLoaderState.Error;
-            }
         }
         protected abstract void DoInitUpdate();
 
@@ -99,7 +93,7 @@ namespace Dot.Asset
 
         private void DoWaitingDataUpdate()
         {
-           while(dataWaitingQueue.Count>0 && operationList.Count<maxLoadingCount)
+           while(dataWaitingQueue.Count>0 && operations.Count<maxLoadingCount)
             {
                 AssetLoaderData data = dataWaitingQueue.Dequeue();
                 if(!FindPathAndCheckData(data))
@@ -108,16 +102,9 @@ namespace Dot.Asset
                     dataPool.Release(data);
                 }
 
-                if(StartLoadingData(data))
-                {
-                    data.State = DataState.Loading;
-                    dataLoadingList.Add(data);
-                }
-                else
-                {
-                    data.State = DataState.Error;
-                    dataPool.Release(data);
-                }
+                StartLoadingData(data);
+                data.State = DataState.Loading;
+                dataLoadingList.Add(data);
             }
         }
 
@@ -153,21 +140,21 @@ namespace Dot.Asset
             return true;
         }
 
-        protected abstract bool StartLoadingData(AssetLoaderData data);
+        protected abstract void StartLoadingData(AssetLoaderData data);
 
         private void DoAsyncOperationUpdate()
         {
-            if(operationList.Count>0)
+            if(operations.Count>0)
             {
                 int index = 0;
-                while(operationList.Count>index && index<maxLoadingCount)
+                while(operations.Count>index && index<maxLoadingCount)
                 {
-                    AAsyncOperation operation = operationList[index];
+                    AAsyncOperation operation = operations.GetByIndex(index);
                     operation.DoUpdate();
 
                     if(operation.State >= OperationState.Finished)
                     {
-                        operationList.RemoveAt(index);
+                        operations.DeleteByIndex(index);
                         OnOperationFinished(operation);
                     }else
                     {
