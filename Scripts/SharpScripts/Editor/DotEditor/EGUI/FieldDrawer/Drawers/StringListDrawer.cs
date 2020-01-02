@@ -31,7 +31,7 @@ namespace DotEditor.EGUI.FieldDrawer
             valueList = (List<string>)fieldInfo.GetValue(data);
             if (valueList != null)
             {
-                rList = new ReorderableList(valueList, typeof(float), true, true, true, true);
+                rList = new ReorderableList(valueList, typeof(string), true, true, true, true);
                 rList.drawHeaderCallback = (rect) =>
                 {
                     EditorGUI.LabelField(rect, nameContent, EditorStyles.boldLabel);
