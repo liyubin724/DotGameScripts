@@ -8,17 +8,10 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    public enum NodeState
-    {
-        None = 0,
-        Loading,
-        Finished,
-    }
     public abstract class AAssetNode : IObjectPoolItem
     {
         public string AssetPath { get; private set; }
         public bool IsNeverDestroy { get; set; }
-        public NodeState State { get; set; } = NodeState.None;
 
         protected int refCount = 0;
         public void Retain() => ++refCount;
@@ -27,7 +20,6 @@ namespace Dot.Asset
         public void InitNode(string path)
         {
             AssetPath = path;
-            State = NodeState.Loading;
         }
 
         public abstract UnityObject GetAsset();
@@ -41,6 +33,9 @@ namespace Dot.Asset
 
         public virtual void OnRelease()
         {
+            AssetPath = null;
+            IsNeverDestroy = false;
+            refCount = 0;
         }
     }
 }
