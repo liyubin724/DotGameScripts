@@ -24,13 +24,7 @@ namespace Dot.Asset
 
         protected override void OnDataUpdate(AssetLoaderData data)
         {
-            for (int i = 0; i < data.paths.Length; ++i)
-            {
-                string assetPath = data.paths[i];
-                DatabaseAssetNode assetNode = assetNodeDic[assetPath] as DatabaseAssetNode;
-
-
-            }
+            
         }
 
         protected override void OnOperationFinished(AAsyncOperation operation)
@@ -50,7 +44,17 @@ namespace Dot.Asset
 
         protected override void StartLoadingData(AssetLoaderData data)
         {
-            for(int i =0;i<data.paths.Length;++i)
+            for (int i = 0; i < data.Paths.Length; ++i)
+            {
+                string assetPath = data.Paths[i];
+                if (!assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
+                {
+                    assetNode = CreateAssetNode(assetPath);
+                }
+                assetNode.Retain();
+            }
+
+            for (int i =0;i<data.paths.Length;++i)
             {
                 string assetPath = data.paths[i];
                 if (!assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
@@ -65,8 +69,16 @@ namespace Dot.Asset
                 }
 
                 assetNode.Retain();
-                data.AddAssetNode(i, assetNode);
+                data.AddNode(i, assetNode);
             }
+        }
+
+        private DatabaseAssetNode CreateAssetNode(string assetPath)
+        {
+            DatabaseAssetNode assetNode = new DatabaseAssetNode();
+            assetNode.InitNode(assetPath);
+
+            DatabaseAsyncOperation operation = new DatabaseAsyncOperationxcf gff gfffv();
         }
     }
 

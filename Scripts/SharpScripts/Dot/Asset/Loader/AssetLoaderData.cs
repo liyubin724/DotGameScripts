@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Pool;
+﻿using Dot.Pool;
 using Priority_Queue;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
@@ -22,28 +17,87 @@ namespace Dot.Asset
 
     public class AssetLoaderData : StablePriorityQueueNode, IObjectPoolItem
     {
-        internal string[] addresses = new string[0];
-        internal string[] paths = new string[0];
-        internal bool isInstance = false;
-        internal OnAssetLoadComplete complete;
-        internal OnAssetLoadProgress progress;
-        internal OnBatchAssetLoadComplete batchComplete;
-        internal OnBatchAssetsLoadProgress batchProgress;
-        internal SystemObject userData = null;
-                                                                                                       
-        internal AssetHandler handler = null;
+        private string label = string.Empty;
+        private string[] addresses = new string[0];
+        private string[] paths = new string[0];
+        private bool isInstance = false;
+        private OnAssetLoadComplete completeCallback;
+        private OnAssetLoadProgress progressCallback;
+        private OnBatchAssetLoadComplete batchCompleteCallback;
+        private OnBatchAssetsLoadProgress batchProgressCallback;
+        private SystemObject userData = null;
 
+        private AssetHandler handler = null;
+        internal AssetHandler Handler { get => handler; }
         internal DataState State { get; set; }
 
-        private AAssetNode[] assetNodes = null;
-        
-        public void AddAssetNode(int index, AAssetNode node)
+        public string[] Paths { get => paths; }
+
+        public void InitData(string label,string[] addresses,string[] paths,bool isInstance,
+            OnAssetLoadComplete complete,OnAssetLoadProgress progress,
+            OnBatchAssetLoadComplete batchComplete,OnBatchAssetsLoadProgress batchProgress,
+            SystemObject userData)
         {
-            if(assetNodes == null)
+            this.addresses = addresses;
+            this.paths = paths;
+            this.isInstance = isInstance;
+            this.completeCallback = complete;
+            this.progressCallback = progress;
+            this.batchCompleteCallback = batchComplete;
+            this.batchProgressCallback = batchProgress;
+            this.userData = userData;
+
+            handler = new AssetHandler(label, addresses, userData);
+        }
+        
+        internal void DoComplete(int index,AAssetNode assetNode)
+        {
+            string path = paths[index];
+            if(!string.IsNullOrEmpty(path))
             {
-                assetNodes = new AAssetNode[addresses.Length];
+                paths[index] = null;
+
+                UnityObject uObj;
+                if (isInstance)
+                {
+                    uObj = assetNode.GetInstance();
+                }else
+                {
+                    uObj = assetNode.GetAsset();
+                }
+                handler.UObjects[index] = uObj;
+
+                progressCallback?.Invoke(addresses[index], 1.0f, userData);
+                completeCallback?.Invoke(addresses[index], uObj, userData);
             }
-            assetNodes[index] = node;
+        }
+
+        private bool isProgressChanged = false;
+        internal void DoProgress(int index,float progress)
+        {
+            if(progress!=handler.Progresses[index])
+            {
+                isProgressChanged = true;
+
+                handler.Progresses[index] = progress;
+                progressCallback?.Invoke(addresses[index], progress,userData);
+            }
+        }
+
+        internal void DoBatchComplete()
+        {
+            batchProgressCallback?.Invoke(addresses, handler.Progresses, userData);
+            batchCompleteCallback?.Invoke(addresses, handler.UObjects, userData);
+            State = DataState.Finished;
+        }
+
+        internal void DoBatchProgress()
+        {
+            if(isProgressChanged)
+            {
+                batchProgressCallback?.Invoke(addresses, handler.Progresses, userData);
+                isProgressChanged = false;
+            }
         }
 
         public void OnGet()
@@ -53,11 +107,6 @@ namespace Dot.Asset
         public void OnRelease()
         {
             
-        }
-
-        internal void UpdateDataState()
-        {
-
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Dot.Asset
 {
     public class BundleNode : IObjectPoolItem
     {
+        public string BundlePath { get; private set; }
         private int refCount = 0;
         public int RefCount { get => refCount; }
         private bool isDone = false;
@@ -15,6 +16,11 @@ namespace Dot.Asset
         private List<BundleNode> dependNodes = new List<BundleNode>();
 
         public BundleNode() { }
+
+        public void InitNode(string bundlePath)
+        {
+            BundlePath = bundlePath;
+        }
 
         public void SetBundle(AssetBundle bundle)
         {
@@ -24,8 +30,11 @@ namespace Dot.Asset
 
         public void AddDepend(BundleNode node)
         {
-            dependNodes.Add(node);
-            node.RetainRef();
+            if(!dependNodes.Contains(node))
+            {
+                dependNodes.Add(node);
+                node.RetainRef();
+            }
         }
 
         public void RetainRef()

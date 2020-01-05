@@ -1,7 +1,6 @@
 ﻿using Dot.Log;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Dot.Asset.Datas
 {
@@ -10,12 +9,12 @@ namespace Dot.Asset.Datas
     {
         public AssetAddressData[] addressDatas = new AssetAddressData[0];
 
+        private bool isInit = false;
         private Dictionary<string, AssetAddressData> addressToDataDic = new Dictionary<string, AssetAddressData>();
         private Dictionary<string, AssetAddressData> pathToDataDic = new Dictionary<string, AssetAddressData>();
-
         private Dictionary<string, List<string>> labelToAddressDic = new Dictionary<string, List<string>>();
 
-        public void InitConfig()
+        private void InitConfig()
         {
             foreach (var data in addressDatas)
             {
@@ -53,48 +52,76 @@ namespace Dot.Asset.Datas
                     }
                 }
             }
+            isInit = true;
         }
 
         public string GetPathByAddress(string address)
         {
+            if(!isInit)
+            {
+                InitConfig();
+            }
+
             if(addressToDataDic.TryGetValue(address,out AssetAddressData data))
             {
                 return data.assetPath;
             }
+
+            LogUtil.LogError(GetType(), $"Path is not found.address={address}!");
             return null;
         }
 
-        public string[] GetPathsByLabel(string label)
+        private List<string> tempStrList = new List<string>();
+        public string[] GetPathsByAddresses(string[] addresses)
         {
-            if(labelToAddressDic.TryGetValue(label,out List<string> addressList))
+            if (!isInit)
             {
-                string[] paths = new string[addressList.Count];
-                for(int i =0;i<addressList.Count;i++)
-                {
-                    paths[i] = GetPathByAddress(addressList[i]);
-                }
-                return paths;
+                InitConfig();
             }
+
+            tempStrList.Clear();
+            foreach(var address in addresses)
+            {
+                string path = GetPathByAddress(address);
+                if(string.IsNullOrEmpty(path))
+                {
+                    return null;
+                }else
+                {
+                    tempStrList.Add(path);
+                }
+            }
+            return tempStrList.ToArray();
+        }
+
+        public string[] GetAddressesByLabel(string label)
+        {
+            if (!isInit)
+            {
+                InitConfig();
+            }
+
+            if (labelToAddressDic.TryGetValue(label, out List<string> addressList))
+            {
+                return addressList.ToArray();
+            }
+            LogUtil.LogError(GetType(), $"address is not found.label={label}!");
             return null;
         }
 
         public string GetBundleByPath(string path)
         {
-            if(pathToDataDic.TryGetValue(path,out AssetAddressData data))
+            if (!isInit)
+            {
+                InitConfig();
+            }
+
+            if (pathToDataDic.TryGetValue(path,out AssetAddressData data))
             {
                 return data.bundlePath;
             }
+            LogUtil.LogError(GetType(), $"bundle is not found.path={path}!");
             return null;
-        }
-
-        public string[] GetBundlesByPathes(string[] pathes)
-        {
-            string[] result = new string[pathes.Length];
-            for(int i =0;i<pathes.Length;++i)
-            {
-                result[i] = GetBundleByPath(pathes[i]);
-            }
-            return result;
         }
 
         public void Clear()

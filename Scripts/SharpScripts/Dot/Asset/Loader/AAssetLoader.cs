@@ -29,20 +29,24 @@ namespace Dot.Asset
         protected Dictionary<string, AAssetNode> assetNodeDic = new Dictionary<string, AAssetNode>();
 
         protected Action<bool> initCallback = null;
+        protected string assetRootDir = string.Empty;
         private int maxLoadingCount = 5;
 
         protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
 
+
         internal void Initialize(Action<bool> callback,int maxCount,string assetDir)
         {
             initCallback = callback;
             maxLoadingCount = maxCount;
+            assetRootDir = assetDir;
+
             State = AssetLoaderState.Initing;
         }
         protected abstract void DoInitUpdate();
 
-        internal AssetHandler LoadBatchAssetAsync(string[] addresses,
+        private AssetHandler LoadBatchAssetAsync(string label,string[] addresses,
             bool isInstance,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
@@ -51,17 +55,26 @@ namespace Dot.Asset
             AssetLoaderPriority priority,
             SystemObject userData)
         {
-            AssetHandler handler = new AssetHandler();
+            if(!string.IsNullOrEmpty(label) && addresses == null)
+            {
+                addresses = addressConfig.GetAddressesByLabel(label);
+            }
+
+            if (addresses == null || addresses.Length == 0)
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "AAssetLoader::LoadBatchAssetAsync->addresses is null");
+                return null;
+            }
+
+            string[] paths = addressConfig.GetPathsByAddresses(addresses);
+            if(paths == null || paths.Length == 0)
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetLoader::LoadBatchAssetAsync->paths is null");
+                return null;
+            }
 
             AssetLoaderData data = dataPool.Get();
-            data.handler = handler;
-            data.addresses = addresses;
-            data.isInstance = isInstance;
-            data.complete = complete;
-            data.progress = progress;
-            data.batchComplete = batchComplete;
-            data.batchProgress = batchProgress;
-            data.userData = userData;
+            data.InitData(label, addresses, paths, isInstance, complete, progress, batchComplete, batchProgress, userData);
 
             if (dataWaitingQueue.Count >= dataWaitingQueue.MaxSize)
             {
@@ -70,7 +83,7 @@ namespace Dot.Asset
             dataWaitingQueue.Enqueue(data, (float)priority);
             data.State = DataState.Waiting;
 
-            return handler;
+            return data.Handler;
         }
 
         internal void DoUpdate(float deltaTime)
@@ -96,48 +109,10 @@ namespace Dot.Asset
            while(dataWaitingQueue.Count>0 && operations.Count<maxLoadingCount)
             {
                 AssetLoaderData data = dataWaitingQueue.Dequeue();
-                if(!FindPathAndCheckData(data))
-                {
-                    data.State = DataState.Error;
-                    dataPool.Release(data);
-                }
-
                 StartLoadingData(data);
                 data.State = DataState.Loading;
                 dataLoadingList.Add(data);
             }
-        }
-
-        private List<string> tempPathList = new List<string>();
-        private bool FindPathAndCheckData(AssetLoaderData data)
-        {
-            if(data.addresses == null || data.addresses.Length == 0)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Addresses is null");
-                return false;
-            }
-
-            if(addressConfig == null)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "addressConfigs is null");
-                return false;
-            }
-
-            foreach(var address in data.addresses)
-            {
-                string assetPath = addressConfig.GetPathByAddress(address);
-                if(string.IsNullOrEmpty(assetPath))
-                {
-                    tempPathList.Clear();
-                    return false;
-                }else
-                {
-                    tempPathList.Add(assetPath);
-                }
-            }
-            data.paths = tempPathList.ToArray();
-            tempPathList.Clear();
-            return true;
         }
 
         protected abstract void StartLoadingData(AssetLoaderData data);
@@ -174,8 +149,6 @@ namespace Dot.Asset
                 {
                     AssetLoaderData data = dataLoadingList[i];
                     OnDataUpdate(data);
-
-                    data.UpdateDataState();
                     if(data.State>= DataState.Finished)
                     {
                         dataLoadingList.RemoveAt(i);
