@@ -334,10 +334,14 @@ namespace DotEditor.AssetPacker
             {
                 if(GUILayout.Button("Auto Pack Bundle",GUILayout.Height(40)))
                 {
-                    AssetAddressUtil.UpdateAddressConfig();
-                    AssetPackerUtil.ClearBundleNames();
-                    AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
-                    AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+                    EditorApplication.delayCall += () =>
+                    {
+                        AssetAddressUtil.UpdateAddressConfig();
+
+                        AssetPackerUtil.ClearBundleNames();
+                        AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+                        AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+                    };
                 }
             }
             EditorGUIUtil.EndGUIBackgroundColor();

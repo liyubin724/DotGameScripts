@@ -23,7 +23,8 @@ namespace Dot.Asset.Datas
             AssetAddressConfig config = null;
             if (File.Exists(configPath))
             {
-                config = JsonConvert.DeserializeObject<AssetAddressConfig>(configPath);
+                string json = File.ReadAllText(configPath);
+                config = JsonConvert.DeserializeObject<AssetAddressConfig>(json);
             }
 
             return config;

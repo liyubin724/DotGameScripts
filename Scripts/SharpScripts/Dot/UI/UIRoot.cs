@@ -21,6 +21,9 @@ namespace Dot.UI
             }
         }
 
+        public Camera uiCamera = null;
+        public Canvas rootCanvas = null;
+
         private void Awake()
         {
             if(m_root!=null)

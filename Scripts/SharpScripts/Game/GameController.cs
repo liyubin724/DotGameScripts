@@ -1,4 +1,5 @@
 ﻿using Dot;
+using Dot.Asset;
 using Dot.Lua;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace Game
         private void Awake()
         {
             DotProxy.StartUp();
+
 #if UNITY_EDITOR
             if (editorLogConfig != null)
             {
@@ -28,12 +30,22 @@ namespace Game
             }
 #endif
 
-            string[] luaPathFormat = new string[]
+            AssetManager.GetInstance().InitManager(AssetLoaderMode.AssetDatabase, (result) =>
             {
-                LuaConfig.DefaultDiskPathFormat,
-            };
+                if (result)
+                {
+                    string[] luaPathFormat = new string[]
+                    {
+                        LuaConfig.DefaultDiskPathFormat,
+                    };
 
-            LuaManager.GetInstance().NewLuaEnv(luaEnvType, luaPathFormat,preloadLuaAssets, luaMgrName);
+                    LuaManager.GetInstance().NewLuaEnv(luaEnvType, luaPathFormat, preloadLuaAssets, luaMgrName);
+                }else
+                {
+
+                }
+            }, 6, "");
+
         }
     }
 }

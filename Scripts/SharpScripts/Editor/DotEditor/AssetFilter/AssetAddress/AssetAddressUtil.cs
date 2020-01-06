@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-using UnityEngine;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.AssetFilter.AssetAddress
@@ -39,7 +38,7 @@ namespace DotEditor.AssetFilter.AssetAddress
             {
                 Directory.CreateDirectory(dir);
             }
-            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(config,Formatting.Indented);
             File.WriteAllText(configPath, json);
         }
 
