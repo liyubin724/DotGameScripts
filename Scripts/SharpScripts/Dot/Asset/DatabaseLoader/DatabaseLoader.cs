@@ -2,10 +2,7 @@
 
 using Dot.Asset.Datas;
 using Dot.Log;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
@@ -24,7 +21,58 @@ namespace Dot.Asset
 
         protected override void OnDataUpdate(AssetLoaderData data)
         {
-            
+            if (data.State == DataState.Canceled || data.State == DataState.Error)
+            {
+                foreach (var path in data.Paths)
+                {
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        assetNodeDic[path].Release();
+                    }
+                }
+            }
+            else if (data.State == DataState.Loading)
+            {
+                bool isComplete = true;
+                bool isProgressChanged = false;
+                for (int i = 0; i < data.Paths.Length; ++i)
+                {
+                    string path = data.Paths[i];
+                    if (string.IsNullOrEmpty(path))
+                    {
+                        continue;
+                    }
+
+                    AAssetNode assetNode = assetNodeDic[path];
+                    if (assetNode.IsDone())
+                    {
+                        data.DoComplete(i, assetNode);
+                        assetNode.Release();
+                    }
+                    else
+                    {
+                        float progress = GetAssetProgress(path);
+                        data.DoProgress(i, progress);
+
+                        isProgressChanged = true;
+                        isComplete = false;
+                    }
+                }
+                if (isProgressChanged)
+                {
+                    data.DoBatchProgress();
+                }
+                if (isComplete)
+                {
+                    data.DoBatchComplete();
+                }
+            }
+        }
+
+        private float GetAssetProgress(string assetPath)
+        {
+            DatabaseAsyncOperation operation = operations.GetByKey(assetPath) as DatabaseAsyncOperation;
+            return operation.GetProgress();
         }
 
         protected override void OnOperationFinished(AAsyncOperation operation)
@@ -53,24 +101,6 @@ namespace Dot.Asset
                 }
                 assetNode.Retain();
             }
-
-            for (int i =0;i<data.paths.Length;++i)
-            {
-                string assetPath = data.paths[i];
-                if (!assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
-                {
-                    assetNode = new DatabaseAssetNode();
-                    assetNode.InitNode(assetPath);
-
-                    operations.AddOrUpdate(assetPath, new DatabaseAsyncOperation()
-                    {
-                        AssetPath = assetPath,
-                    });
-                }
-
-                assetNode.Retain();
-                data.AddNode(i, assetNode);
-            }
         }
 
         private DatabaseAssetNode CreateAssetNode(string assetPath)
@@ -78,9 +108,22 @@ namespace Dot.Asset
             DatabaseAssetNode assetNode = new DatabaseAssetNode();
             assetNode.InitNode(assetPath);
 
-            DatabaseAsyncOperation operation = new DatabaseAsyncOperationxcf gff gfffv();
+            assetNodeDic.Add(assetPath, assetNode);
+
+            DatabaseAsyncOperation operation = new DatabaseAsyncOperation(assetPath);
+            operations.AddOrUpdate(assetPath, operation);
+
+            return assetNode;
+        }
+
+        protected internal override UnityObject InstantiateAsset(string address, UnityObject asset)
+        {
+            if(asset!=null)
+            {
+                return UnityObject.Instantiate(asset);
+            }
+            return null;
         }
     }
-
 }
 #endif

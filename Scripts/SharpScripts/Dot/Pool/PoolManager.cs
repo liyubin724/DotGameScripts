@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Loader;
-using Dot.Core.Timer;
+using Dot.Timer;
 using Dot.Core.Util;
 using System.Collections.Generic;
 using UnityEngine;

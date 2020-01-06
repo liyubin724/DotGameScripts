@@ -48,6 +48,18 @@ namespace Dot.Asset
             return instance;
         }
 
+        public override UnityObject GetInstance(UnityObject uObj)
+        {
+            if(uObj!=null)
+            {
+                UnityObject instance = UnityObject.Instantiate(uObj);
+                AddAsset(instance);
+
+                return instance;
+            }
+            return null;
+        }
+
         public override bool IsAlive()
         {
             if(IsNeverDestroy)
@@ -112,5 +124,7 @@ namespace Dot.Asset
 
             return false;
         }
+
+        
     }
 }

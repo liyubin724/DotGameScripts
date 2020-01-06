@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Loader.Config;
 using Dot.Pool;
-using Dot.Core.Timer;
+using Dot.Timer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Core.Timer
+namespace Dot.Timer
 {
     internal class TimerTask
     {

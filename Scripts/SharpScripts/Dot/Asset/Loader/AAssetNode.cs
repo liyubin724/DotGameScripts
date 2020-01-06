@@ -24,6 +24,7 @@ namespace Dot.Asset
 
         public abstract UnityObject GetAsset();
         public abstract UnityObject GetInstance();
+        public abstract UnityObject GetInstance(UnityObject uObj);
         public abstract bool IsAlive();
         public abstract bool IsDone();
 

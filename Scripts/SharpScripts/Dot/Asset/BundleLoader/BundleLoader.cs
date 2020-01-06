@@ -4,6 +4,7 @@ using Dot.Pool;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
@@ -203,6 +204,16 @@ namespace Dot.Asset
             filePath = assetPath;
 
             return false;
+        }
+
+        protected internal override UnityObject InstantiateAsset(string address, UnityObject asset)
+        {
+            string assetPath = addressConfig.GetPathByAddress(address);
+            if(assetNodeDic.TryGetValue(assetPath,out AAssetNode assetNode))
+            {
+                return assetNode.GetInstance();
+            }
+            return null;
         }
     }
 }

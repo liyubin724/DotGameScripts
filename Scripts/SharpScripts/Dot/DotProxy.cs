@@ -1,5 +1,5 @@
-﻿using Dot.Core.Loader;
-using Dot.Core.Timer;
+﻿using Dot.Asset;
+using Dot.Timer;
 using Dot.Core.Util;
 using Dot.Log;
 using Dot.Lua;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace Dot.Core.Timer
+namespace Dot.Timer
 {
     public class TimerTaskInfo
     {

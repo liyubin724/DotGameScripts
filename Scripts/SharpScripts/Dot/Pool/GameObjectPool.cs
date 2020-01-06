@@ -1,4 +1,4 @@
-﻿using Dot.Core.Timer;
+﻿using Dot.Timer;
 using Dot.Core.Util;
 using Dot.Log;
 using System;

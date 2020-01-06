@@ -8,27 +8,28 @@ namespace Dot.Asset
     public class DatabaseAssetNode : AAssetNode
     {
         private UnityObject uObject = null;
+        private bool isSetAsset = false;
         public void SetAsset(UnityObject uObj)
         {
             uObject = uObj;
-            State = NodeState.Finished;
+            isSetAsset = true;
         }
 
         public override UnityEngine.Object GetAsset()
         {
-            if(State == NodeState.Finished)
+            if(uObject!=null)
             {
                 return uObject;
             }else
             {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Asset is not loaded");
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "Asset is null");
                 return null;
             }
         }
 
         public override UnityEngine.Object GetInstance()
         {
-            if(State == NodeState.Finished && uObject!=null)
+            if(uObject!=null)
             {
                 return UnityObject.Instantiate(uObject);
             }else
@@ -38,9 +39,18 @@ namespace Dot.Asset
             }
         }
 
+        public override UnityObject GetInstance(UnityObject uObj)
+        {
+            if (uObj != null)
+            {
+                return UnityObject.Instantiate(uObj);
+            }
+            return null;
+        }
+
         public override bool IsAlive()
         {
-            if(IsNeverDestroy)
+            if (IsNeverDestroy)
             {
                 return true;
             }
@@ -49,7 +59,7 @@ namespace Dot.Asset
 
         public override bool IsDone()
         {
-            return State == NodeState.Finished;
+            return isSetAsset;
         }
     }
 }

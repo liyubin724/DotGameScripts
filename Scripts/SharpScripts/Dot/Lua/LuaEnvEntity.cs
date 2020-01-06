@@ -1,5 +1,5 @@
 ﻿using Dot.Log;
-using Dot.Core.Timer;
+using Dot.Timer;
 using Dot.Lua.Loader;
 using System;
 using XLua;

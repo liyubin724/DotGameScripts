@@ -1,5 +1,5 @@
 ﻿using Dot.Pool;
-using Dot.Core.Timer;
+using Dot.Timer;
 using System.Collections.Generic;
 using SystemObject = System.Object;
 

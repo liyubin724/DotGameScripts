@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SystemObject = System.Object;
+using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
@@ -46,7 +47,7 @@ namespace Dot.Asset
         }
         protected abstract void DoInitUpdate();
 
-        private AssetHandler LoadBatchAssetAsync(string label,string[] addresses,
+        internal AssetHandler LoadBatchAssetAsync(string label,string[] addresses,
             bool isInstance,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
@@ -91,6 +92,14 @@ namespace Dot.Asset
             if(State == AssetLoaderState.Initing)
             {
                 DoInitUpdate();
+
+                if(State == AssetLoaderState.Running)
+                {
+                    initCallback?.Invoke(true);
+                }else if(State == AssetLoaderState.Error)
+                {
+                    initCallback?.Invoke(false);
+                }
                 return;
             }else if(State!= AssetLoaderState.Running)
             {
@@ -160,6 +169,13 @@ namespace Dot.Asset
 
         protected abstract void OnDataUpdate(AssetLoaderData data);
 
+        internal void UnloadAssetAsync(AssetHandler handler, bool destroyIfIsInstnace)
+        {
+
+        }
+
+        protected internal abstract UnityObject InstantiateAsset(string address, UnityObject asset);
+
         private Action unloadUnusedCallback = null;
         private AsyncOperation unloadUnusedOperation = null;
         public void UnloadUnusedAsset(Action callback)
@@ -189,6 +205,11 @@ namespace Dot.Asset
                 unloadUnusedCallback?.Invoke();
                 unloadUnusedCallback = null;
             }
+        }
+
+        internal virtual void DoDispose()
+        {
+
         }
     }
 }

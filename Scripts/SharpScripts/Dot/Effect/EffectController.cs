@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Pool;
-using Dot.Core.Timer;
+using Dot.Timer;
 using Dot.Log;
 using UnityEngine;
 using SystemObject = System.Object;

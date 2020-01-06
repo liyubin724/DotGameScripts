@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dot.Core.Timer
+namespace Dot.Timer
 {
     internal delegate void OnTimerWheelTrigger(int index, List<TimerTask> taskList);
     internal delegate void OnTimerWheelOut(int index);

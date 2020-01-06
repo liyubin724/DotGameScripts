@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Util;
 
-namespace Dot.Core.Timer
+namespace Dot.Timer
 {
     public delegate void TimerCallback(object obj);
 
