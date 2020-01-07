@@ -1,69 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.EGUI.FieldDrawer
 {
     [TargetFieldType(typeof(List<int>))]
-    public class IntListDrawer : AFieldDrawer
+    public class IntListDrawer : AListFieldDrawer
     {
-        private ReorderableList rList = null;
-        private List<int> valueList = null;
-
         public IntListDrawer(FieldInfo fieldInfo) : base(fieldInfo)
         {
         }
 
-        public override void SetData(object data)
+        protected override void DrawElement(Rect rect, IList list, int index)
         {
-            base.SetData(data);
-            valueList = (List<int>)fieldInfo.GetValue(data);
-            if (valueList != null)
-            {
-                rList = new ReorderableList(valueList, typeof(int), true, true, true, true);
-                rList.drawHeaderCallback = (rect) =>
-                {
-                    EditorGUI.LabelField(rect, nameContent, EditorStyles.boldLabel);
-                };
-                rList.drawElementCallback = (rect, index, isActive, isFocused) =>
-                {
-                    EditorGUI.LabelField(new Rect(rect.x, rect.y, 40, rect.height), "" + index);
-                    EditorGUI.IntField(new Rect(rect.x + 40, rect.y, rect.width - 40, rect.height), valueList[index]);
-                };
-                rList.onAddCallback = (list) =>
-                {
-                    list.list.Add(0);
-                };
-            }
-            else
-            {
-                rList = null;
-            }
+            list[index]= EditorGUI.IntField(new Rect(rect.x, rect.y, rect.width, rect.height), (int)list[index]);
         }
 
-        protected override void OnDraw(bool isReadonly, bool isShowDesc)
+        protected override Type GetDataType()
         {
-            if (valueList == null)
-            {
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                {
-                    EditorGUILayout.LabelField(fieldInfo.Name, "Data is null");
-                    if (GUILayout.Button("New", GUILayout.Width(40)))
-                    {
-                        valueList = new List<int>();
-                        fieldInfo.SetValue(data, valueList);
+            return typeof(int);
+        }
 
-                        SetData(data);
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                rList.DoLayoutList();
-            }
+        protected override float GetElementHeight()
+        {
+            return EditorGUIUtility.singleLineHeight;
+        }
+
+        protected override object GetNewData()
+        {
+            return 0;
+        }
+
+        protected override IList GetNewList()
+        {
+            return new List<int>();
         }
     }
 }
