@@ -100,15 +100,24 @@ namespace Dot.Asset
             return IsScene ? assetBundle : assetBundle?.LoadAsset(assetPath);
         }
 
+        public void Unload(bool isForce)
+        {
+            if(assetBundle!=null)
+            {
+                assetBundle.Unload(isForce);
+            }
+            assetBundle = null;
+        }
+
         public void OnGet()
         {
         }
 
         public void OnRelease()
         {
+            Unload(true);
+            BundlePath = null;
             isDone = false;
-            assetBundle?.Unload(true);
-            assetBundle = null;
             dependNodes.Clear();
             refCount = 0;
         }

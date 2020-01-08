@@ -1,9 +1,4 @@
 ﻿using Dot.Pool;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
@@ -27,6 +22,7 @@ namespace Dot.Asset
         public abstract UnityObject GetInstance(UnityObject uObj);
         public abstract bool IsAlive();
         public abstract bool IsDone();
+        public abstract void Unload(bool isForce);
 
         public void OnGet()
         {

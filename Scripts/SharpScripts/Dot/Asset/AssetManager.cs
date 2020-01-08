@@ -33,8 +33,7 @@ namespace Dot.Asset
         private AAssetLoader assetLoader = null;
         public void InitManager(AssetLoaderMode loaderMode,
             Action<bool> initCallback,
-            int maxLoadingCount,
-            string assetRootDir)
+            string assetRootDir = "")
         {
             if(loaderMode == AssetLoaderMode.AssetBundle)
             {
@@ -61,7 +60,30 @@ namespace Dot.Asset
                     }
 
                     initCallback?.Invoke(result);
-                }, maxLoadingCount, assetRootDir);
+                },  assetRootDir);
+            }
+        }
+
+        public void ChangeMaxLoadingCount(int count)
+        {
+            if(assetLoader!=null)
+            {
+                assetLoader.MaxLoadingCount = count;
+            }else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::ChangeMaxLoadingCount->assetloader is null");
+            }
+        }
+
+        public void ChangeAutoCleanInterval(float interval)
+        {
+            if (assetLoader != null)
+            {
+                assetLoader.AutoCleanInterval = interval;
+            }
+            else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::ChangeAutoCleanInterval->assetloader is null");
             }
         }
 

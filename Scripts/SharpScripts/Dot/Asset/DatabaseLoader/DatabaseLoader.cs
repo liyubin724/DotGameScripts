@@ -2,12 +2,16 @@
 
 using Dot.Asset.Datas;
 using Dot.Log;
+using Dot.Pool;
+using System.Linq;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
     public class DatabaseLoader : AAssetLoader
     {
+        private ObjectPool<DatabaseAssetNode> assetNodePool = new ObjectPool<DatabaseAssetNode>();
+
         protected override void DoInitUpdate()
         {
             addressConfig = AssetConst.GetAddressConfig();
@@ -87,7 +91,17 @@ namespace Dot.Asset
 
         protected override void OnUnloadUnusedAsset()
         {
-            
+            string[] assetPaths = assetNodeDic.Keys.ToArray();
+            foreach (var assetPath in assetPaths)
+            {
+                if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
+                {
+                    assetNode.Unload(true);
+                    assetNodeDic.Remove(assetPath);
+
+                    assetNodePool.Release(assetNode as DatabaseAssetNode);
+                }
+            }
         }
 
         protected override void StartLoadingData(AssetLoaderData data)
@@ -105,7 +119,7 @@ namespace Dot.Asset
 
         private DatabaseAssetNode CreateAssetNode(string assetPath)
         {
-            DatabaseAssetNode assetNode = new DatabaseAssetNode();
+            DatabaseAssetNode assetNode = assetNodePool.Get();
             assetNode.InitNode(assetPath);
 
             assetNodeDic.Add(assetPath, assetNode);

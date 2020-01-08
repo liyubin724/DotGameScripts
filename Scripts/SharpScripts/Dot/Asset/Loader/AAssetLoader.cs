@@ -2,6 +2,7 @@
 using Dot.Generic;
 using Dot.Log;
 using Dot.Pool;
+using Dot.Timer;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;
@@ -31,16 +32,28 @@ namespace Dot.Asset
 
         protected Action<bool> initCallback = null;
         protected string assetRootDir = string.Empty;
-        private int maxLoadingCount = 5;
+        public int MaxLoadingCount { get; set; } = 6;
+
+        private TimerTaskInfo autoCleanTimer = null;
+        private float autoCleanInterval = 60;
+        public float AutoCleanInterval
+        {
+            set
+            {
+                if(autoCleanInterval != value && value >=0)
+                {
+                    autoCleanInterval = value;
+                    StartAutoCleanTimer();
+                }
+            }
+        }
 
         protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
 
-
-        internal void Initialize(Action<bool> callback,int maxCount,string assetDir)
+        internal void Initialize(Action<bool> callback,string assetDir)
         {
             initCallback = callback;
-            maxLoadingCount = maxCount;
             assetRootDir = assetDir;
 
             State = AssetLoaderState.Initing;
@@ -96,6 +109,9 @@ namespace Dot.Asset
                 if(State == AssetLoaderState.Running)
                 {
                     initCallback?.Invoke(true);
+
+                    StartAutoCleanTimer();
+
                 }else if(State == AssetLoaderState.Error)
                 {
                     initCallback?.Invoke(false);
@@ -115,7 +131,7 @@ namespace Dot.Asset
 
         private void DoWaitingDataUpdate()
         {
-           while(dataWaitingQueue.Count>0 && operations.Count<maxLoadingCount)
+           while(dataWaitingQueue.Count>0 && operations.Count<MaxLoadingCount)
             {
                 AssetLoaderData data = dataWaitingQueue.Dequeue();
                 StartLoadingData(data);
@@ -131,7 +147,7 @@ namespace Dot.Asset
             if(operations.Count>0)
             {
                 int index = 0;
-                while(operations.Count>index && index<maxLoadingCount)
+                while(operations.Count>index && index<MaxLoadingCount)
                 {
                     AAsyncOperation operation = operations.GetByIndex(index);
                     operation.DoUpdate();
@@ -176,6 +192,24 @@ namespace Dot.Asset
 
         protected internal abstract UnityObject InstantiateAsset(string address, UnityObject asset);
 
+        private void StartAutoCleanTimer()
+        {
+            if(autoCleanTimer!=null)
+            {
+                TimerManager.GetInstance().RemoveTimer(autoCleanTimer);
+                autoCleanTimer = null;
+            }
+            if(autoCleanInterval>0)
+            {
+                autoCleanTimer = TimerManager.GetInstance().AddIntervalTimer(autoCleanInterval, AutoCleanUnusedAsset);
+            }
+        }
+
+        private void AutoCleanUnusedAsset(SystemObject userData)
+        {
+            OnUnloadUnusedAsset();
+        }
+
         private Action unloadUnusedCallback = null;
         private AsyncOperation unloadUnusedOperation = null;
         public void UnloadUnusedAsset(Action callback)
@@ -209,7 +243,11 @@ namespace Dot.Asset
 
         internal virtual void DoDispose()
         {
-
+            if (autoCleanTimer != null)
+            {
+                TimerManager.GetInstance().RemoveTimer(autoCleanTimer);
+                autoCleanTimer = null;
+            }
         }
     }
 }

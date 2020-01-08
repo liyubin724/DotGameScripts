@@ -3,6 +3,7 @@ using Dot.Log;
 using Dot.Pool;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -12,6 +13,8 @@ namespace Dot.Asset
     {
         private ObjectPool<BundleNode> bundleNodePool = new ObjectPool<BundleNode>();
         private Dictionary<string, BundleNode> bundleNodeDic = new Dictionary<string, BundleNode>();
+
+        private ObjectPool<BundleAssetNode> assetNodePool = new ObjectPool<BundleAssetNode>();
         private AssetBundleConfig bundleConfig = null;
 
         protected override void DoInitUpdate()
@@ -135,7 +138,29 @@ namespace Dot.Asset
 
         protected override void OnUnloadUnusedAsset()
         {
-            
+            string[] assetPaths = assetNodeDic.Keys.ToArray();
+            foreach (var assetPath in assetPaths)
+            {
+                if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
+                {
+                    assetNode.Unload(true);
+                    assetNodeDic.Remove(assetPath);
+
+                    assetNodePool.Release(assetNode as BundleAssetNode);
+                }
+            }
+
+            string[] bundlePaths = bundleNodeDic.Keys.ToArray();
+            foreach(var bundlePath in bundlePaths)
+            {
+                if(bundleNodeDic.TryGetValue(bundlePath,out BundleNode bundleNode) && bundleNode.RefCount == 0)
+                {
+                    bundleNodeDic.Remove(bundlePath);
+
+                    bundleNode.Unload(true);
+                    bundleNodePool.Release(bundleNode);
+                }
+            }
         }
 
         protected override void StartLoadingData(AssetLoaderData data)
@@ -153,7 +178,8 @@ namespace Dot.Asset
 
         private BundleAssetNode CreateAssetNode(string assetPath)
         {
-            BundleAssetNode assetNode = new BundleAssetNode();
+            BundleAssetNode assetNode = assetNodePool.Get();
+
             string mainBundlePath = addressConfig.GetBundleByPath(assetPath);
             BundleNode bundleNode = GetOrCreateMainBundleNode(mainBundlePath);
             assetNode.InitNode(assetPath, bundleNode);

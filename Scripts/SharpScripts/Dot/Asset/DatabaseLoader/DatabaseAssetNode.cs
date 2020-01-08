@@ -61,6 +61,12 @@ namespace Dot.Asset
         {
             return isSetAsset;
         }
+
+        public override void Unload(bool isForce)
+        {
+            uObject = null;
+            isSetAsset = false;
+        }
     }
 }
 #endif

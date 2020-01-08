@@ -84,16 +84,18 @@ namespace Dot.Asset
 
         public override bool IsDone() => bundleNode.IsDone;
 
-        public override void OnRelease()
+        public override void Unload(bool isForce)
         {
-            bundleNode?.ReleaseRef();
+            if (bundleNode != null)
+            {
+                bundleNode.ReleaseRef();
+            }
             bundleNode = null;
-            foreach(var asset in weakAssets)
+
+            foreach (var asset in weakAssets)
             {
                 asset.Target = null;
             }
-
-            base.OnRelease();
         }
 
         private void AddAsset(UnityObject uObj)
