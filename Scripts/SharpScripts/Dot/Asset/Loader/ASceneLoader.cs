@@ -8,5 +8,21 @@ namespace Dot.Asset
 {
     public abstract class ASceneLoader
     {
+        protected AAssetLoader assetLoader = null;
+
+        protected ASceneLoader(AAssetLoader loader)
+        {
+            assetLoader = loader;
+        }
+
+        internal void LoadScene()
+        {
+
+        }
+
+        internal void UnloadScene()
+        {
+
+        }
     }
 }
