@@ -67,5 +67,27 @@ namespace Dot.Asset
             Progresses = new float[addresses.Length];
             UObjects = new UnityObject[addresses.Length];
         }
+
+        internal void DoCancel(bool isInstance,bool destroyIfIsInstnace)
+        {
+            if(isInstance && destroyIfIsInstnace)
+            {
+                for(int  i = 0;i<UObjects.Length;++i)
+                {
+                    UnityObject uObj = UObjects[i];
+                    if(uObj!=null)
+                    {
+                        UnityObject.Destroy(uObj);
+                        UObjects[i] = null;
+                    }
+                }
+            }
+
+            UObjects = null;
+            Label = null;
+            Addresses = null;
+            Progresses = null;
+            UserData = null;
+        }
     }
 }

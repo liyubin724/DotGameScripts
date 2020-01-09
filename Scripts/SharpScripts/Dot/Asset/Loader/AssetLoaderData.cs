@@ -100,13 +100,39 @@ namespace Dot.Asset
             }
         }
 
+        internal void DoCancel(bool destroyIfIsInstnace)
+        {
+            handler.DoCancel(isInstance, destroyIfIsInstnace);
+            handler = null;
+
+            completeCallback = null;
+            progressCallback = null;
+            batchCompleteCallback = null;
+            batchProgressCallback = null;
+            userData = null;
+
+            State = DataState.Canceled;
+        }
+
         public void OnGet()
         {
         }
 
         public void OnRelease()
         {
-            
+            label = string.Empty;
+            addresses = new string[0];
+            paths = new string[0];
+            isInstance = false;
+            completeCallback = null;
+            progressCallback = null;
+            batchCompleteCallback = null;
+            batchProgressCallback = null;
+            userData = null;
+
+            handler = null;
+
+            State = DataState.None;
         }
     }
 }

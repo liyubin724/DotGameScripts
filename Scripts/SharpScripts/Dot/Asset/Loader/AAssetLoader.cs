@@ -187,7 +187,30 @@ namespace Dot.Asset
 
         internal void UnloadAssetAsync(AssetHandler handler, bool destroyIfIsInstnace)
         {
+            if(dataWaitingQueue.Count>0)
+            {
+                foreach(var data in dataWaitingQueue)
+                {
+                    if(data.Handler == handler)
+                    {
+                        dataWaitingQueue.Remove(data);
+                        dataPool.Release(data);
+                        return;
+                    }
+                }
+            }
 
+            if(dataLoadingList.Count>0)
+            {
+                foreach(var data in dataLoadingList)
+                {
+                    if(data.Handler == handler)
+                    {
+                        data.DoCancel(destroyIfIsInstnace);
+                        return;
+                    }
+                }
+            }
         }
 
         protected internal abstract UnityObject InstantiateAsset(string address, UnityObject asset);
