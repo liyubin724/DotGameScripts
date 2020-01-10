@@ -8,13 +8,6 @@ using SystemObject = System.Object;
 
 namespace Dot.Asset
 {
-
-    public delegate void OnSceneLoadComplete(string address, Scene scene, SystemObject userData);
-    public delegate void OnSceneLoadProgress(string address, float progress, SystemObject userData);
-
-    public delegate void OnSceneUnloadComplete(string address, SystemObject userData);
-    public delegate void OnSceneUnloadProgress(string address, float progress, SystemObject userData);
-
     public enum SceneLoaderStageType
     {
         None = 0,
@@ -23,6 +16,12 @@ namespace Dot.Asset
         Instancing,
         Finished,
     }
+
+    public delegate void OnLoadSceneComplete(string address, Scene scene, SystemObject userData);
+    public delegate void OnLoadSceneProgress(string address, SceneLoaderStageType stageType,float progress, SystemObject userData);
+
+    public delegate void OnUnloadSceneComplete(string address, SystemObject userData);
+    public delegate void OnUnloadSceneProgress(string address, float progress, SystemObject userData);
 
     public partial class AssetManager
     {

@@ -50,6 +50,14 @@ namespace Dot.Asset
 
         protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
+        public string GetAssetPathByAddress(string address)
+        {
+            if(addressConfig!=null)
+            {
+                return addressConfig.GetPathByAddress(address);
+            }
+            return null;
+        }
 
         internal void Initialize(Action<bool> callback,string assetDir)
         {
