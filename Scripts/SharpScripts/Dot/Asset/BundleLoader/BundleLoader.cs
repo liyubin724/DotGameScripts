@@ -132,7 +132,10 @@ namespace Dot.Asset
                 bundleNode.SetBundle(assetbundle);
             }else
             {
-                assetbundle.Unload(true);
+                if(assetbundle!=null)
+                {
+                    assetbundle.Unload(true);
+                }
             }
         }
 
