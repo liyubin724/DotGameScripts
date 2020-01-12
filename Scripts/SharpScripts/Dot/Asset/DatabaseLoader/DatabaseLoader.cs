@@ -25,7 +25,7 @@ namespace Dot.Asset
 
         protected override void OnDataUpdate(AssetLoaderData data)
         {
-            if (data.State == DataState.Canceled || data.State == DataState.Error)
+            if (data.State == AssetLoaderDataState.Canceled || data.State == AssetLoaderDataState.Error)
             {
                 foreach (var path in data.Paths)
                 {
@@ -35,7 +35,7 @@ namespace Dot.Asset
                     }
                 }
             }
-            else if (data.State == DataState.Loading)
+            else if (data.State == AssetLoaderDataState.Loading)
             {
                 bool isComplete = true;
                 bool isProgressChanged = false;

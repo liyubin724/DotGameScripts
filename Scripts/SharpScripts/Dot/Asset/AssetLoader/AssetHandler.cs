@@ -58,6 +58,8 @@ namespace Dot.Asset
 
         public SystemObject UserData { get; private set; }
 
+        public bool IsDone { get; set; } = false;
+
         internal AssetHandler(string label,string[] addresses,SystemObject userData)
         {
             Label = label;

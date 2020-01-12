@@ -1,31 +1,115 @@
-﻿using System;
+﻿using Dot.Asset.Datas;
+using Dot.Log;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using SystemObject = System.Object;
 
 namespace Dot.Asset
 {
     public abstract class ASceneLoader
     {
         protected AAssetLoader assetLoader = null;
-        protected Dictionary<string, Scene> curSceneDic = new Dictionary<string, Scene>();
+        protected List<SceneLoaderData> loaderDatas = new List<SceneLoaderData>();
+        protected SceneLoaderData currentLoaderData = null;
+        protected AsyncOperation asyncOperation = null;
 
-        protected List<SceneLoaderData> loaderDataList = new List<SceneLoaderData>();
         protected ASceneLoader(AAssetLoader loader)
         {
             assetLoader = loader;
         }
 
-        internal void LoadScene()
+        public SceneHandler LoadSceneAsync(string address,
+            OnSceneComplete complete,
+            OnSceneProgress progress,
+            LoadSceneMode mode,
+            bool activateOnLoad,
+            SystemObject userData)
         {
+            if(assetLoader != null)
+            {
+                string scenePath = assetLoader.GetAssetPathByAddress(address);
+                if(string.IsNullOrEmpty(scenePath))
+                {
+                    LogUtil.LogError(AssetConst.LOGGER_NAME, "scenePath is null.address = " + address);
+                    return null;
+                }
+                SceneLoaderData data = new SceneLoaderData();
+                data.InitLoadData(address, scenePath, complete, progress, mode, activateOnLoad, userData);
+                loaderDatas.Add(data);
 
+                return data.handler;
+            }else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "assetloader is not init");
+                return null;
+            }
         }
 
-        internal void UnloadScene()
+        public SceneHandler UnloadSceneAsync(string address,
+            OnSceneComplete complete,
+            OnSceneProgress progress,
+            SystemObject userData)
         {
+            if (assetLoader != null)
+            {
+                string scenePath = assetLoader.GetAssetPathByAddress(address);
+                if (string.IsNullOrEmpty(scenePath))
+                {
+                    LogUtil.LogError(AssetConst.LOGGER_NAME, "scenePath is null.address = " + address);
+                    return null;
+                }
+                SceneLoaderData data = new SceneLoaderData();
+                data.InitUnloadData(address, scenePath, complete, progress, userData);
+                loaderDatas.Add(data);
 
+                return data.handler;
+            }
+            else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "assetloader is not init");
+                return null;
+            }
         }
+
+        internal void DoUpdate(float deltaTime)
+        {
+            if(assetLoader == null)
+            {
+                return;
+            }
+            if(currentLoaderData != null)
+            {
+                UpdateLoaderData();
+            }else if(loaderDatas.Count>0)
+            {
+                SceneLoaderData data = loaderDatas[0];
+                loaderDatas.RemoveAt(0);
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+                string sceneName = currentLoaderData.sceneName;
+                if(data.state == SceneLoaderDataState.Load)
+                {
+                    Scene scene = SceneManager.GetSceneByName(sceneName);
+                    if(scene.isLoaded)
+                    {
+                        LogUtil.LogError(AssetConst.LOGGER_NAME, "scene has been loaded");
+                        return;
+                    }
+                }else if(data.state == SceneLoaderDataState.Unload)
+                {
+                    Scene scene = SceneManager.GetSceneByName(sceneName);
+                    if (!scene.isLoaded)
+                    {
+                        LogUtil.LogError(AssetConst.LOGGER_NAME, "the scene has not been loaded");
+                        return;
+                    }
+                }
+#endif
+                currentLoaderData = data;
+            }
+        }
+
+        protected abstract void UpdateLoaderData();
     }
 }

@@ -2,7 +2,6 @@
 using Dot.Core.Util;
 using Dot.Log;
 using System;
-using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
@@ -32,10 +31,13 @@ namespace Dot.Asset
     public partial class AssetManager : Singleton<AssetManager>
     {
         private AAssetLoader assetLoader = null;
-        public void InitManager(AssetLoaderMode loaderMode,
+        private ASceneLoader sceneLoader = null;
+
+        public void InitManager(AssetLoaderMode mode,
             Action<bool> initCallback,
             string assetRootDir = "")
         {
+            AssetLoaderMode loaderMode = mode;
             if(loaderMode == AssetLoaderMode.AssetBundle)
             {
                 assetLoader = new BundleLoader();
@@ -60,6 +62,16 @@ namespace Dot.Asset
                         LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::InitManager->init failed");
                     }
 
+                    if(loaderMode == AssetLoaderMode.AssetBundle)
+                    {
+                        sceneLoader = new BundleSceneLoader(assetLoader);
+                    }
+#if UNITY_EDITOR
+                    else
+                    {
+                        sceneLoader = new DatabaseSceneLoader(assetLoader);
+                    }
+#endif
                     initCallback?.Invoke(result);
                 },  assetRootDir);
             }
@@ -206,6 +218,7 @@ namespace Dot.Asset
         public void DoUpdate(float deltaTime)
         {
             assetLoader?.DoUpdate(deltaTime);
+            sceneLoader?.DoUpdate(deltaTime);
         }
 
         public override void DoDispose()

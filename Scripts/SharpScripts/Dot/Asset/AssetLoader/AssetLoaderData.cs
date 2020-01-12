@@ -5,7 +5,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    public enum DataState
+    public enum AssetLoaderDataState
     {
         None = 0,
         Waiting,
@@ -29,7 +29,7 @@ namespace Dot.Asset
 
         private AssetHandler handler = null;
         internal AssetHandler Handler { get => handler; }
-        internal DataState State { get; set; }
+        internal AssetLoaderDataState State { get; set; }
 
         public string[] Paths { get => paths; }
 
@@ -67,6 +67,8 @@ namespace Dot.Asset
                 }
                 handler.UObjects[index] = uObj;
 
+                handler.IsDone = true;
+
                 progressCallback?.Invoke(addresses[index], 1.0f, userData);
                 completeCallback?.Invoke(addresses[index], uObj, userData);
             }
@@ -88,7 +90,7 @@ namespace Dot.Asset
         {
             batchProgressCallback?.Invoke(addresses, handler.Progresses, userData);
             batchCompleteCallback?.Invoke(addresses, handler.UObjects, userData);
-            State = DataState.Finished;
+            State = AssetLoaderDataState.Finished;
         }
 
         internal void DoBatchProgress()
@@ -111,7 +113,7 @@ namespace Dot.Asset
             batchProgressCallback = null;
             userData = null;
 
-            State = DataState.Canceled;
+            State = AssetLoaderDataState.Canceled;
         }
 
         public void OnGet()
@@ -132,7 +134,7 @@ namespace Dot.Asset
 
             handler = null;
 
-            State = DataState.None;
+            State = AssetLoaderDataState.None;
         }
     }
 }

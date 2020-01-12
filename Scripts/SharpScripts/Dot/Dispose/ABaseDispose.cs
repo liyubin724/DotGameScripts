@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.Core.Dispose
+namespace Dot.Dispose
 {
     /// <summary>
     /// 需要实现Dispose模式的，可以通过继承实现

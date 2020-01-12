@@ -103,7 +103,7 @@ namespace Dot.Asset
                 dataWaitingQueue.Resize(dataWaitingQueue.MaxSize * 2);
             }
             dataWaitingQueue.Enqueue(data, (float)priority);
-            data.State = DataState.Waiting;
+            data.State = AssetLoaderDataState.Waiting;
 
             return data.Handler;
         }
@@ -143,7 +143,7 @@ namespace Dot.Asset
             {
                 AssetLoaderData data = dataWaitingQueue.Dequeue();
                 StartLoadingData(data);
-                data.State = DataState.Loading;
+                data.State = AssetLoaderDataState.Loading;
                 dataLoadingList.Add(data);
             }
         }
@@ -182,7 +182,7 @@ namespace Dot.Asset
                 {
                     AssetLoaderData data = dataLoadingList[i];
                     OnDataUpdate(data);
-                    if(data.State>= DataState.Finished)
+                    if(data.State>= AssetLoaderDataState.Finished)
                     {
                         dataLoadingList.RemoveAt(i);
                         dataPool.Release(data);
