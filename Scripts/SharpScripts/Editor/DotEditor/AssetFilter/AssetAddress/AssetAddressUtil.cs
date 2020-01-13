@@ -71,11 +71,7 @@ namespace DotEditor.AssetFilter.AssetAddress
                 {
                     foreach(var assetPath in assetPaths)
                     {
-                        AssetAddressData addressData = new AssetAddressData();
-                        addressData.assetAddress = addressGroup.operation.GetAddressName(assetPath);
-                        addressData.assetPath = assetPath;
-                        addressData.bundlePath = addressGroup.operation.GetBundleName(assetPath);
-                        addressData.labels = addressGroup.operation.GetLabels();
+                        AssetAddressData addressData = addressGroup.operation.GetAddressData(assetPath);
 
                         addressData.isPreload = addressGroup.isPreload;
                         addressData.isNeverDestroy = addressGroup.isNeverDestroy;

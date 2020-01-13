@@ -55,6 +55,21 @@ namespace Dot.Asset.Datas
             isInit = true;
         }
 
+        public bool CheckIsSceneByPath(string path)
+        {
+            if (!isInit)
+            {
+                InitConfig();
+            }
+
+            if (pathToDataDic.TryGetValue(path, out AssetAddressData data))
+            {
+                return data.isScene;
+            }
+            LogUtil.LogError(GetType(), $"data is not found.path={path}!");
+            return false;
+        }
+
         public string GetPathByAddress(string address)
         {
             if(!isInit)
@@ -140,6 +155,7 @@ namespace Dot.Asset.Datas
             public string bundlePath;
             public string[] labels = new string[0];
 
+            public bool isScene = false;
             public bool isPreload = false;
             public bool isNeverDestroy = false;
         }

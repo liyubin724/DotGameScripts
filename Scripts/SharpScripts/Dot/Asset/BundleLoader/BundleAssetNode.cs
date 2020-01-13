@@ -70,6 +70,10 @@ namespace Dot.Asset
             {
                 return true;
             }
+            if(IsScene)
+            {
+                return true;
+            }
 
             foreach (var weakAsset in weakAssets)
             {
@@ -84,13 +88,15 @@ namespace Dot.Asset
 
         protected internal override bool IsDone() => bundleNode.IsDone;
 
+        internal bool IsScene { get; set; } = false;
+
         protected internal override void Unload()
         {
             if (bundleNode != null)
             {
                 bundleNode.ReleaseRef();
+                bundleNode = null;
             }
-            bundleNode = null;
 
             foreach (var asset in weakAssets)
             {
@@ -127,6 +133,11 @@ namespace Dot.Asset
             return false;
         }
 
-        
+        public override void OnRelease()
+        {
+            Unload();
+            IsScene = false;
+            base.OnRelease();
+        }
     }
 }

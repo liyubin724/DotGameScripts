@@ -59,6 +59,8 @@ namespace Dot.Asset
         {
             if (asyncOperation.isDone)
             {
+                assetLoader.UnloadAssetByAddress(currentLoaderData.address);
+
                 Scene scene = SceneManager.GetSceneByName(currentLoaderData.sceneName);
                 currentLoaderData.DoComplete(scene);
                 currentLoaderData = null;

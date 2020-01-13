@@ -2,6 +2,7 @@
 using Dot.Util;
 using System;
 using System.IO;
+using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.AssetFilter.AssetAddress
 {
@@ -81,6 +82,27 @@ namespace DotEditor.AssetFilter.AssetAddress
             {
                 return labels.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             }
+        }
+
+        private bool IsScene(string assetPath)
+        {
+            if(Path.GetExtension(assetPath).ToLower() == ".unity")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public AssetAddressData GetAddressData(string assetPath)
+        {
+            AssetAddressData addressData = new AssetAddressData();
+            addressData.assetAddress = GetAddressName(assetPath);
+            addressData.assetPath = assetPath;
+            addressData.bundlePath = GetBundleName(assetPath);
+            addressData.labels = GetLabels();
+            addressData.isScene = IsScene(assetPath);
+
+            return addressData;
         }
     }
 }

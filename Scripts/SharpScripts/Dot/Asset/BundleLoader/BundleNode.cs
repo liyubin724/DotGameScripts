@@ -73,6 +73,8 @@ namespace Dot.Asset
             }
         }
 
+        internal bool IsUsedByScene { get; set; } = false;
+
         internal bool IsScene
         {
             get 
@@ -98,11 +100,11 @@ namespace Dot.Asset
             return IsScene ? assetBundle : assetBundle?.LoadAsset(assetPath);
         }
 
-        internal void Unload(bool isForce)
+        internal void Unload()
         {
             if(assetBundle!=null)
             {
-                assetBundle.Unload(isForce);
+                assetBundle.Unload(!IsUsedByScene);
             }
             assetBundle = null;
         }
@@ -113,7 +115,8 @@ namespace Dot.Asset
 
         public void OnRelease()
         {
-            Unload(true);
+            Unload();
+            IsUsedByScene = false;
             BundlePath = null;
             isDone = false;
             dependNodes.Clear();

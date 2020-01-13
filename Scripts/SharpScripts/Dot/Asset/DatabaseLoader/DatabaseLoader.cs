@@ -94,13 +94,18 @@ namespace Dot.Asset
             string[] assetPaths = assetNodeDic.Keys.ToArray();
             foreach (var assetPath in assetPaths)
             {
-                if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
-                {
-                    assetNode.Unload();
-                    assetNodeDic.Remove(assetPath);
+                UnloadAsset(assetPath);
+            }
+        }
 
-                    assetNodePool.Release(assetNode as DatabaseAssetNode);
-                }
+        protected override void UnloadAsset(string assetPath)
+        {
+            if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
+            {
+                assetNode.Unload();
+                assetNodeDic.Remove(assetPath);
+
+                assetNodePool.Release(assetNode as DatabaseAssetNode);
             }
         }
 

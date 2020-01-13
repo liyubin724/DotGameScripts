@@ -141,6 +141,12 @@ namespace Dot.Asset
 
         protected internal override void UnloadUnusedAsset()
         {
+            UnloadAssetNode();
+            UnloadBundleNode();
+        }
+
+        private void UnloadAssetNode()
+        {
             string[] assetPaths = assetNodeDic.Keys.ToArray();
             foreach (var assetPath in assetPaths)
             {
@@ -148,21 +154,46 @@ namespace Dot.Asset
                 {
                     assetNode.Unload();
                     assetNodeDic.Remove(assetPath);
-
                     assetNodePool.Release(assetNode as BundleAssetNode);
                 }
             }
+        }
 
+        private void UnloadBundleNode()
+        {
             string[] bundlePaths = bundleNodeDic.Keys.ToArray();
-            foreach(var bundlePath in bundlePaths)
+            foreach (var bundlePath in bundlePaths)
             {
-                if(bundleNodeDic.TryGetValue(bundlePath,out BundleNode bundleNode) && bundleNode.RefCount == 0)
+                if (bundleNodeDic.TryGetValue(bundlePath, out BundleNode bundleNode) && bundleNode.RefCount == 0)
                 {
                     bundleNodeDic.Remove(bundlePath);
 
-                    bundleNode.Unload(true);
+                    bundleNode.Unload();
                     bundleNodePool.Release(bundleNode);
                 }
+            }
+        }
+
+        protected override void UnloadAsset(string assetPath)
+        {
+            if(!string.IsNullOrEmpty(assetPath) && assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
+            {
+                BundleAssetNode bundleAssetNode = assetNode as BundleAssetNode;
+                if (!assetNode.IsAlive() || bundleAssetNode.IsScene)
+                {
+                    assetNode.Unload();
+                    assetNodeDic.Remove(assetPath);
+                    assetNodePool.Release(assetNode as BundleAssetNode);
+
+                    if(bundleAssetNode.IsScene)
+                    {
+                        UnloadBundleNode();
+                    }
+                }
+            }
+            else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "BundleLoader::UnloadAsset->asset not found by address,assetPath = " + assetPath);
             }
         }
 
@@ -181,36 +212,56 @@ namespace Dot.Asset
 
         private BundleAssetNode CreateAssetNode(string assetPath)
         {
-            BundleAssetNode assetNode = assetNodePool.Get();
-
             string mainBundlePath = addressConfig.GetBundleByPath(assetPath);
-            BundleNode bundleNode = GetOrCreateMainBundleNode(mainBundlePath);
+            bool isScene = addressConfig.CheckIsSceneByPath(assetPath);
+
+            BundleAssetNode assetNode = assetNodePool.Get();
+            BundleNode bundleNode = GetOrCreateMainBundleNode(mainBundlePath,isScene);
+
             assetNode.InitNode(assetPath, bundleNode);
+            assetNode.IsScene = isScene;
+
             assetNodeDic.Add(assetPath, assetNode);
+
             return assetNode;
         }
 
-        private BundleNode GetOrCreateMainBundleNode(string mainBundlePath)
+        private BundleNode GetOrCreateMainBundleNode(string mainBundlePath,bool isScene)
         {
-            if(bundleNodeDic.TryGetValue(mainBundlePath,out BundleNode bundleNode))
-            {
-                return bundleNode;
-            }
-
-            bundleNode = CreateBundleNode(mainBundlePath);
             string[] depends = bundleConfig.GetDependencies(mainBundlePath);
-            if(depends!=null && depends.Length>0)
+            BundleNode bundleNode = null;
+            if (!bundleNodeDic.TryGetValue(mainBundlePath,out bundleNode))
             {
-                foreach(var depend in depends)
+                bundleNode = CreateBundleNode(mainBundlePath);
+                if (depends != null && depends.Length > 0)
                 {
-                    if(!bundleNodeDic.TryGetValue(depend,out BundleNode dependBundleNode))
+                    foreach (var depend in depends)
                     {
-                        dependBundleNode = CreateBundleNode(depend);
-                    }
+                        if (!bundleNodeDic.TryGetValue(depend, out BundleNode dependBundleNode))
+                        {
+                            dependBundleNode = CreateBundleNode(depend);
+                        }
 
-                    bundleNode.AddDepend(dependBundleNode);
+                        bundleNode.AddDepend(dependBundleNode);
+                    }
                 }
             }
+
+            if(isScene)
+            {
+                bundleNode.IsUsedByScene = true;
+                if (depends != null && depends.Length > 0)
+                {
+                    foreach (var depend in depends)
+                    {
+                        if (bundleNodeDic.TryGetValue(depend, out BundleNode dependBundleNode))
+                        {
+                            dependBundleNode.IsUsedByScene = true;
+                        }
+                    }
+                }
+            }
+            
             return bundleNode;
         }
 

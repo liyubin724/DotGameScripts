@@ -216,10 +216,13 @@ namespace Dot.Asset
             }
         }
 
-        internal void UnloadAsset(string address,bool isForce)
+        internal void UnloadAssetByAddress(string address)
         {
-
+            string assetPath = addressConfig.GetPathByAddress(address);
+            UnloadAsset(assetPath);
         }
+
+        protected abstract void UnloadAsset(string assetPath);
 
         protected internal abstract UnityObject InstantiateAsset(string address, UnityObject asset);
 
