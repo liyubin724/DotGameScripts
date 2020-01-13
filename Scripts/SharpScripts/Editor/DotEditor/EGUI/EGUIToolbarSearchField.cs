@@ -94,6 +94,5 @@ namespace DotEditor.EGUI
             Rect rect = GUILayoutUtility.GetRect(FIELD_WIDTH, FIELD_HEIGHT,"toolbar");
             OnGUI(rect);
         }
-
     }
 }

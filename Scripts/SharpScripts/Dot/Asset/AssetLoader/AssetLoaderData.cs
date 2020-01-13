@@ -136,5 +136,14 @@ namespace Dot.Asset
 
             State = AssetLoaderDataState.None;
         }
+
+        public override string ToString()
+        {
+#if DEBUG
+            return ObjectDumper.Dump(this);
+#else
+            return base.ToString();
+#endif
+        }
     }
 }

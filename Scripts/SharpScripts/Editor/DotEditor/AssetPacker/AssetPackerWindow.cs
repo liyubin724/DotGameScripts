@@ -20,7 +20,7 @@ namespace DotEditor.AssetPacker
 
     public class AssetPackerWindow : EditorWindow
     {
-        [MenuItem("Game/Asset Packer/Packer Window")]
+        [MenuItem("Game/Asset/Asset Packer")]
         public static void ShowWin()
         {
             AssetPackerWindow win = EditorWindow.GetWindow<AssetPackerWindow>();

@@ -38,6 +38,10 @@ namespace Dot.Asset
         private float autoCleanInterval = 60;
         public float AutoCleanInterval
         {
+            get
+            {
+                return autoCleanInterval;
+            }
             set
             {
                 if(autoCleanInterval != value && value >=0)
@@ -80,6 +84,7 @@ namespace Dot.Asset
             if(!string.IsNullOrEmpty(label) && addresses == null)
             {
                 addresses = addressConfig.GetAddressesByLabel(label);
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::LoadBatchAssetAsync->Load asset by label.label = {label},addresses = {string.Join(",",addresses)}");
             }
 
             if (addresses == null || addresses.Length == 0)
@@ -93,6 +98,9 @@ namespace Dot.Asset
             {
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetLoader::LoadBatchAssetAsync->paths is null");
                 return null;
+            }else
+            {
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::LoadBatchAssetAsync->find assetPath by address.addresses = {string.Join(",", addresses)},path = {string.Join(",",paths)}");
             }
 
             AssetLoaderData data = dataPool.Get();
@@ -101,6 +109,7 @@ namespace Dot.Asset
             if (dataWaitingQueue.Count >= dataWaitingQueue.MaxSize)
             {
                 dataWaitingQueue.Resize(dataWaitingQueue.MaxSize * 2);
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::LoadBatchAssetAsync->Reset the queue size.");
             }
             dataWaitingQueue.Enqueue(data, (float)priority);
             data.State = AssetLoaderDataState.Waiting;
@@ -112,22 +121,25 @@ namespace Dot.Asset
         {
             if(State == AssetLoaderState.Initing)
             {
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::DoUpdate->Update to Init Loader.");
+
                 DoInitUpdate();
 
                 if(State == AssetLoaderState.Running)
                 {
+                    LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::DoUpdate->Loader init success.");
+
                     initCallback?.Invoke(true);
-
                     StartAutoCleanTimer();
-
                 }else if(State == AssetLoaderState.Error)
                 {
+                    LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetLoader::DoUpdate->Loader init failed.");
+
                     initCallback?.Invoke(false);
                 }
                 return;
             }else if(State!= AssetLoaderState.Running)
             {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Init Failed");
                 return;
             }
 
@@ -145,6 +157,8 @@ namespace Dot.Asset
                 StartLoadingData(data);
                 data.State = AssetLoaderDataState.Loading;
                 dataLoadingList.Add(data);
+
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::DoWaitingDataUpdate->Start Load Data.data = {data}");
             }
         }
 

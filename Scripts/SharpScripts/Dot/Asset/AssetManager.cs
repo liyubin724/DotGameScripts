@@ -33,11 +33,16 @@ namespace Dot.Asset
         private AAssetLoader assetLoader = null;
         private ASceneLoader sceneLoader = null;
 
+        private AssetLoaderMode loaderMode = AssetLoaderMode.AssetDatabase;
+
         public void InitManager(AssetLoaderMode mode,
             Action<bool> initCallback,
             string assetRootDir = "")
         {
-            AssetLoaderMode loaderMode = mode;
+            loaderMode = mode;
+
+            LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetManager::InitManager->Start init mgr.mode = {mode.ToString()},assetRootDir = {assetRootDir}");
+
             if(loaderMode == AssetLoaderMode.AssetBundle)
             {
                 assetLoader = new BundleLoader();
@@ -62,7 +67,9 @@ namespace Dot.Asset
                         LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::InitManager->init failed");
                     }
 
-                    if(loaderMode == AssetLoaderMode.AssetBundle)
+                    LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetManager::InitManager->init Success");
+
+                    if (loaderMode == AssetLoaderMode.AssetBundle)
                     {
                         sceneLoader = new BundleSceneLoader(assetLoader);
                     }
@@ -81,6 +88,7 @@ namespace Dot.Asset
         {
             if(assetLoader!=null)
             {
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetManager::ChangeMaxLoadingCount->Change Count from {assetLoader.MaxLoadingCount} to {count}");
                 assetLoader.MaxLoadingCount = count;
             }else
             {
@@ -92,6 +100,7 @@ namespace Dot.Asset
         {
             if (assetLoader != null)
             {
+                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetManager::ChangeAutoCleanInterval->Change interval from {assetLoader.AutoCleanInterval} to {interval}");
                 assetLoader.AutoCleanInterval = interval;
             }
             else
