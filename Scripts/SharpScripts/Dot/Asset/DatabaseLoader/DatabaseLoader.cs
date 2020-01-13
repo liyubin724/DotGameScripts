@@ -89,14 +89,14 @@ namespace Dot.Asset
             }
         }
 
-        protected override void OnUnloadUnusedAsset()
+        protected internal override void UnloadUnusedAsset()
         {
             string[] assetPaths = assetNodeDic.Keys.ToArray();
             foreach (var assetPath in assetPaths)
             {
                 if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
                 {
-                    assetNode.Unload(true);
+                    assetNode.Unload();
                     assetNodeDic.Remove(assetPath);
 
                     assetNodePool.Release(assetNode as DatabaseAssetNode);

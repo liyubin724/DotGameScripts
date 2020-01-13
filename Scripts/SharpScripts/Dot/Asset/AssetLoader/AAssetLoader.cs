@@ -34,24 +34,6 @@ namespace Dot.Asset
         protected string assetRootDir = string.Empty;
         public int MaxLoadingCount { get; set; } = 6;
 
-        private TimerTaskInfo autoCleanTimer = null;
-        private float autoCleanInterval = 60;
-        public float AutoCleanInterval
-        {
-            get
-            {
-                return autoCleanInterval;
-            }
-            set
-            {
-                if(autoCleanInterval != value && value >=0)
-                {
-                    autoCleanInterval = value;
-                    StartAutoCleanTimer();
-                }
-            }
-        }
-
         protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
         public string GetAssetPathByAddress(string address)
@@ -130,7 +112,6 @@ namespace Dot.Asset
                     LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::DoUpdate->Loader init success.");
 
                     initCallback?.Invoke(true);
-                    StartAutoCleanTimer();
                 }else if(State == AssetLoaderState.Error)
                 {
                     LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetLoader::DoUpdate->Loader init failed.");
@@ -235,29 +216,16 @@ namespace Dot.Asset
             }
         }
 
+        internal void UnloadAsset(string address,bool isForce)
+        {
+
+        }
+
         protected internal abstract UnityObject InstantiateAsset(string address, UnityObject asset);
-
-        private void StartAutoCleanTimer()
-        {
-            if(autoCleanTimer!=null)
-            {
-                TimerManager.GetInstance().RemoveTimer(autoCleanTimer);
-                autoCleanTimer = null;
-            }
-            if(autoCleanInterval>0)
-            {
-                autoCleanTimer = TimerManager.GetInstance().AddIntervalTimer(autoCleanInterval, AutoCleanUnusedAsset);
-            }
-        }
-
-        private void AutoCleanUnusedAsset(SystemObject userData)
-        {
-            OnUnloadUnusedAsset();
-        }
 
         private Action unloadUnusedCallback = null;
         private AsyncOperation unloadUnusedOperation = null;
-        public void UnloadUnusedAsset(Action callback)
+        internal void DeepUnloadUnusedAsset(Action callback)
         {
             if(unloadUnusedCallback!=null)
             {
@@ -267,14 +235,14 @@ namespace Dot.Asset
 
             unloadUnusedCallback = callback;
 
-            OnUnloadUnusedAsset();
+            UnloadUnusedAsset();
             
             GC.Collect();
             GC.Collect();
             unloadUnusedOperation = Resources.UnloadUnusedAssets();
         }
 
-        protected abstract void OnUnloadUnusedAsset();
+        protected internal abstract void UnloadUnusedAsset();
 
         private void DoUnloadUnsedAssetUpdate()
         {
@@ -288,11 +256,7 @@ namespace Dot.Asset
 
         internal virtual void DoDispose()
         {
-            if (autoCleanTimer != null)
-            {
-                TimerManager.GetInstance().RemoveTimer(autoCleanTimer);
-                autoCleanTimer = null;
-            }
+            
         }
     }
 }

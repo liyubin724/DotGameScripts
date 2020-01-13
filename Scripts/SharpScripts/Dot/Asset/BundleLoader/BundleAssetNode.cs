@@ -7,19 +7,19 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    public class BundleAssetNode : AAssetNode
+    internal class BundleAssetNode : AAssetNode
     {
         private BundleNode bundleNode = null;
         private List<WeakReference> weakAssets = new List<WeakReference>();
 
-        public void InitNode(string assetPath,BundleNode node)
+        internal void InitNode(string assetPath,BundleNode node)
         {
             InitNode(assetPath);
             bundleNode = node;
             bundleNode.RetainRef();
         }
 
-        public override UnityObject GetAsset()
+        protected internal override UnityObject GetAsset()
         {
             UnityObject asset = bundleNode.GetAsset(AssetPath);
             if (!bundleNode.IsScene)
@@ -29,7 +29,7 @@ namespace Dot.Asset
             return asset;
         }
 
-        public override UnityObject GetInstance()
+        protected internal override UnityObject GetInstance()
         {
             UnityObject asset = bundleNode.GetAsset(AssetPath);
             if (asset == null)
@@ -48,7 +48,7 @@ namespace Dot.Asset
             return instance;
         }
 
-        public override UnityObject GetInstance(UnityObject uObj)
+        protected internal override UnityObject GetInstance(UnityObject uObj)
         {
             if(uObj!=null)
             {
@@ -60,7 +60,7 @@ namespace Dot.Asset
             return null;
         }
 
-        public override bool IsAlive()
+        protected internal override bool IsAlive()
         {
             if(IsNeverDestroy)
             {
@@ -82,9 +82,9 @@ namespace Dot.Asset
             return false;
         }
 
-        public override bool IsDone() => bundleNode.IsDone;
+        protected internal override bool IsDone() => bundleNode.IsDone;
 
-        public override void Unload(bool isForce)
+        protected internal override void Unload()
         {
             if (bundleNode != null)
             {

@@ -9,20 +9,20 @@ namespace Dot.Asset
         public bool IsNeverDestroy { get; set; }
 
         protected int refCount = 0;
-        public void Retain() => ++refCount;
-        public void Release() => --refCount;
+        protected internal void Retain() => ++refCount;
+        protected internal void Release() => --refCount;
 
-        public void InitNode(string path)
+        protected internal void InitNode(string path)
         {
             AssetPath = path;
         }
 
-        public abstract UnityObject GetAsset();
-        public abstract UnityObject GetInstance();
-        public abstract UnityObject GetInstance(UnityObject uObj);
-        public abstract bool IsAlive();
-        public abstract bool IsDone();
-        public abstract void Unload(bool isForce);
+        protected internal abstract UnityObject GetAsset();
+        protected internal abstract UnityObject GetInstance();
+        protected internal abstract UnityObject GetInstance(UnityObject uObj);
+        protected internal abstract bool IsAlive();
+        protected internal abstract bool IsDone();
+        protected internal abstract void Unload();
 
         public void OnGet()
         {

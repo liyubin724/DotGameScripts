@@ -6,29 +6,27 @@ using UnityEngine;
 
 namespace Dot.Asset
 {
-    public class BundleNode : IObjectPoolItem
+    internal class BundleNode : IObjectPoolItem
     {
-        public string BundlePath { get; private set; }
+        internal string BundlePath { get; private set; }
         private int refCount = 0;
-        public int RefCount { get => refCount; }
+        internal int RefCount { get => refCount; }
         private bool isDone = false;
         private AssetBundle assetBundle = null;
         private List<BundleNode> dependNodes = new List<BundleNode>();
 
-        public BundleNode() { }
-
-        public void InitNode(string bundlePath)
+        internal void InitNode(string bundlePath)
         {
             BundlePath = bundlePath;
         }
 
-        public void SetBundle(AssetBundle bundle)
+        internal void SetBundle(AssetBundle bundle)
         {
             assetBundle = bundle;
             isDone = true;
         }
 
-        public void AddDepend(BundleNode node)
+        internal void AddDepend(BundleNode node)
         {
             if(!dependNodes.Contains(node))
             {
@@ -37,12 +35,12 @@ namespace Dot.Asset
             }
         }
 
-        public void RetainRef()
+        internal void RetainRef()
         {
             ++refCount;
         }
 
-        public void ReleaseRef()
+        internal void ReleaseRef()
         {
             --refCount;
             if(refCount == 0)
@@ -54,7 +52,7 @@ namespace Dot.Asset
             }
         }
 
-        public bool IsDone
+        internal bool IsDone
         {
             get
             {
@@ -75,7 +73,7 @@ namespace Dot.Asset
             }
         }
 
-        public bool IsScene
+        internal bool IsScene
         {
             get 
             {
@@ -95,12 +93,12 @@ namespace Dot.Asset
             }
         }
 
-        public UnityEngine.Object GetAsset(string assetPath)
+        internal UnityEngine.Object GetAsset(string assetPath)
         {
             return IsScene ? assetBundle : assetBundle?.LoadAsset(assetPath);
         }
 
-        public void Unload(bool isForce)
+        internal void Unload(bool isForce)
         {
             if(assetBundle!=null)
             {

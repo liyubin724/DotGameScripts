@@ -79,6 +79,8 @@ namespace Dot.Asset
                         sceneLoader = new DatabaseSceneLoader(assetLoader);
                     }
 #endif
+                    StartAutoClean();
+
                     initCallback?.Invoke(result);
                 },  assetRootDir);
             }
@@ -93,19 +95,6 @@ namespace Dot.Asset
             }else
             {
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::ChangeMaxLoadingCount->assetloader is null");
-            }
-        }
-
-        public void ChangeAutoCleanInterval(float interval)
-        {
-            if (assetLoader != null)
-            {
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetManager::ChangeAutoCleanInterval->Change interval from {assetLoader.AutoCleanInterval} to {interval}");
-                assetLoader.AutoCleanInterval = interval;
-            }
-            else
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::ChangeAutoCleanInterval->assetloader is null");
             }
         }
 
@@ -213,17 +202,6 @@ namespace Dot.Asset
             return assetLoader.InstantiateAsset(address, asset);
         }
 
-        public void UnloadUnusedAsset(Action callback = null)
-        {
-            if (assetLoader == null)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::UnloadUnusedAsset->assetLoader is Null");
-                return;
-            }
-
-            assetLoader.UnloadUnusedAsset(callback);
-        }
-
         public void DoUpdate(float deltaTime)
         {
             assetLoader?.DoUpdate(deltaTime);
@@ -232,6 +210,8 @@ namespace Dot.Asset
 
         public override void DoDispose()
         {
+            DoDispose_Clean();
+
             assetLoader?.DoDispose();
             base.DoDispose();
         }

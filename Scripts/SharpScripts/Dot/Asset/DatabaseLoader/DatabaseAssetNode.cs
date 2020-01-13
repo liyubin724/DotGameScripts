@@ -5,17 +5,17 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    public class DatabaseAssetNode : AAssetNode
+    internal class DatabaseAssetNode : AAssetNode
     {
         private UnityObject uObject = null;
         private bool isSetAsset = false;
-        public void SetAsset(UnityObject uObj)
+        internal void SetAsset(UnityObject uObj)
         {
             uObject = uObj;
             isSetAsset = true;
         }
 
-        public override UnityEngine.Object GetAsset()
+        protected internal override UnityEngine.Object GetAsset()
         {
             if(uObject!=null)
             {
@@ -27,7 +27,7 @@ namespace Dot.Asset
             }
         }
 
-        public override UnityEngine.Object GetInstance()
+        protected internal override UnityEngine.Object GetInstance()
         {
             if(uObject!=null)
             {
@@ -39,7 +39,7 @@ namespace Dot.Asset
             }
         }
 
-        public override UnityObject GetInstance(UnityObject uObj)
+        protected internal override UnityObject GetInstance(UnityObject uObj)
         {
             if (uObj != null)
             {
@@ -48,7 +48,7 @@ namespace Dot.Asset
             return null;
         }
 
-        public override bool IsAlive()
+        protected internal override bool IsAlive()
         {
             if (IsNeverDestroy)
             {
@@ -57,12 +57,12 @@ namespace Dot.Asset
             return refCount > 0;
         }
 
-        public override bool IsDone()
+        protected internal override bool IsDone()
         {
             return isSetAsset;
         }
 
-        public override void Unload(bool isForce)
+        protected internal override void Unload()
         {
             uObject = null;
             isSetAsset = false;
