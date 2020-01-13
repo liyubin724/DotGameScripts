@@ -20,7 +20,7 @@ namespace Dot.Asset
                 OnStartUnloadScene();
             }else if(currentLoaderData.state == SceneLoaderDataState.Loading)
             {
-                OnUnloadingScene();   
+                OnLoadingScene();   
             }else if(currentLoaderData.state == SceneLoaderDataState.Unloading)
             {
                 OnUnloadingScene();
