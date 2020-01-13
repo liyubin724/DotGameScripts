@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Entity;
-using Dot.Core.Event;
+using Dot.Dispatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;

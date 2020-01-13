@@ -3,7 +3,7 @@ using Dot.Timer;
 using System.Collections.Generic;
 using SystemObject = System.Object;
 
-namespace Dot.Core.Event
+namespace Dot.Dispatch
 {
     public delegate void EventHandler(EventData e);
 

@@ -1,4 +1,4 @@
-﻿using Dot.Core.Event;
+﻿using Dot.Dispatch;
 using Dot.Core.TimeLine;
 
 namespace Dot.Core.Entity.Controller

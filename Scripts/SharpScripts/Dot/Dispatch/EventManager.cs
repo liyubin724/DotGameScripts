@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Util;
 
-namespace Dot.Core.Event
+namespace Dot.Dispatch
 {
     public class EventManager : Singleton<EventManager>
     {

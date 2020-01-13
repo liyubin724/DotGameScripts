@@ -1,4 +1,4 @@
-﻿using Dot.Core.Event;
+﻿using Dot.Dispatch;
 using UnityEngine;
 
 namespace Dot.Core.Entity

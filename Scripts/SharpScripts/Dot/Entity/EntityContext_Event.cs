@@ -1,4 +1,4 @@
-﻿using Dot.Core.Event;
+﻿using Dot.Dispatch;
 using SystemObject = System.Object;
 
 namespace Dot.Core.Entity
