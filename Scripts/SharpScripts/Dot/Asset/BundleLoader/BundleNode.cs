@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Dot.Asset
 {
-    internal class BundleNode : IObjectPoolItem
+    public class BundleNode : IObjectPoolItem
     {
         internal string BundlePath { get; private set; }
         private int refCount = 0;

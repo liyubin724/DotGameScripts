@@ -7,7 +7,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    internal class BundleAssetNode : AAssetNode
+    public class BundleAssetNode : AAssetNode
     {
         private BundleNode bundleNode = null;
         private List<WeakReference> weakAssets = new List<WeakReference>();

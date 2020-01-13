@@ -235,20 +235,18 @@ namespace DotEditor.AssetPacker
             AssetBundleConfig assetBundleConfig = new AssetBundleConfig();
 
             List<AssetBundleDetail> bundleDetails = new List<AssetBundleDetail>();
-            assetPackerConfig.groupDatas.ForEach((groupData) =>
+
+            string[] bundles = manifest.GetAllAssetBundles();
+            foreach(var bundlePath in bundles)
             {
-                groupData.assetFiles.ForEach((addressData) =>
-                {
-                    AssetBundleDetail detail = new AssetBundleDetail();
-                    detail.name = addressData.bundlePath;
-                    detail.hash = manifest.GetAssetBundleHash(addressData.bundlePath).ToString();
-                    detail.crc = manifest.GetAssetBundleCrc(addressData.bundlePath).ToString();
-                    detail.dependencies = manifest.GetAllDependencies(addressData.bundlePath);
+                AssetBundleDetail detail = new AssetBundleDetail();
+                detail.name = bundlePath;
+                detail.hash = manifest.GetAssetBundleHash(bundlePath).ToString();
+                detail.crc = manifest.GetAssetBundleCrc(bundlePath).ToString();
+                detail.dependencies = manifest.GetAllDependencies(bundlePath);
 
-                    bundleDetails.Add(detail);
-                });
-            });
-
+                bundleDetails.Add(detail);
+            }
             assetBundleConfig.details = bundleDetails.ToArray();
 
             var json = JsonConvert.SerializeObject(assetBundleConfig, Formatting.Indented);

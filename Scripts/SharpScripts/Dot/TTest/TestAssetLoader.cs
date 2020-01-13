@@ -7,9 +7,9 @@ public class TestAssetLoader : MonoBehaviour
 {
     void Start()
     {
-        AssetManager.GetInstance().LoadAssetAsync(new string[] { "Capsule","Cube","Plane" }, (address, uObj, userData) =>
+        AssetManager.GetInstance().InstanceAssetAsync(new string[] { "Capsule","Cube","Plane" }, (address, uObj, userData) =>
         {
-            Object.Instantiate(uObj);
+            ((GameObject)uObj).name = address + " instance";
         },null);
     }
 }
