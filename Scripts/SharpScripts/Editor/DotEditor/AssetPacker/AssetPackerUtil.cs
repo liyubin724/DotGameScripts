@@ -75,7 +75,8 @@ namespace DotEditor.AssetPacker
             string configPath = AssetConst.BundlePackConfigPath;
             if(File.Exists(configPath))
             {
-                bundlePackConfig = JsonConvert.DeserializeObject<BundlePackConfig>(configPath);
+                string configContent = File.ReadAllText(configPath);
+                bundlePackConfig = JsonConvert.DeserializeObject<BundlePackConfig>(configContent);
             }
             if(bundlePackConfig == null)
             {
