@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dot.Log;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace Dot.Asset.Datas
@@ -6,6 +7,7 @@ namespace Dot.Asset.Datas
     public static class AssetConst
     {
         public const string LOGGER_NAME = "AssetLoader";
+        public const string LOGGER_DEBUG_NAME = "AssetLoader-Debug";
 
         public static readonly string ASSET_MANIFEST_NAME = "manifest_config";
         public static readonly string ASSET_MANIFEST_EXT = ".json";
@@ -19,15 +21,42 @@ namespace Dot.Asset.Datas
         public static AssetAddressConfig GetAddressConfig()
         {
             string configPath = AssetConst.AssetAddressConfigPath;
-
-            AssetAddressConfig config = null;
-            if (File.Exists(configPath))
+            if (!File.Exists(configPath))
             {
-                string json = File.ReadAllText(configPath);
-                config = JsonConvert.DeserializeObject<AssetAddressConfig>(json);
+                LogUtil.LogError(LOGGER_NAME, $"File not found.path = {configPath}");
+                return null;
             }
 
-            return config;
+            try
+            {
+                string json = File.ReadAllText(configPath);
+                return JsonConvert.DeserializeObject<AssetAddressConfig>(json);
+            }
+            catch
+            {
+                LogUtil.LogError(LOGGER_NAME, $"Deserialize error.path = {configPath}");
+                return null;
+            }
+        }
+
+        public static AssetBundleConfig GetBundleConfig(string bundleDir)
+        {
+            string bundleConfigPath = $"{bundleDir}/{ASSET_MANIFEST_NAME}{ASSET_MANIFEST_EXT}";
+            if(!File.Exists(bundleConfigPath))
+            {
+                LogUtil.LogError(LOGGER_NAME, $"File not found.bundleDir = {bundleDir},path = {bundleConfigPath}");
+                return null;
+            }
+            try
+            {
+                string configContent = File.ReadAllText(bundleConfigPath);
+                return JsonConvert.DeserializeObject<AssetBundleConfig>(configContent);
+            }
+            catch
+            {
+                LogUtil.LogError(LOGGER_NAME, $"Deserialize error.bundleDir = {bundleDir},path = {bundleConfigPath}");
+                return null;
+            }
         }
 
         public static string AssetConfigDir

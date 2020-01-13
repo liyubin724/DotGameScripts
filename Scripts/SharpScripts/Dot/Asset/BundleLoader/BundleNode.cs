@@ -77,7 +77,7 @@ namespace Dot.Asset
 
         public bool IsScene
         {
-            get
+            get 
             {
                 if (assetBundle != null)
                 {

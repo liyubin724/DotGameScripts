@@ -1,7 +1,6 @@
 ﻿using Dot.Asset.Datas;
 using Dot.Log;
 using Dot.Pool;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,14 +24,15 @@ namespace Dot.Asset
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
                 State = AssetLoaderState.Error;
             }
-            string bundleConfigPath = $"{assetRootDir}/{AssetConst.ASSET_MANIFEST_NAME}{AssetConst.ASSET_MANIFEST_EXT}";
-            bundleConfig = JsonConvert.DeserializeObject<AssetBundleConfig>(bundleConfigPath);
+            bundleConfig = AssetConst.GetBundleConfig(assetRootDir);
             if(bundleConfig == null)
             {
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "Bundle Config is Null");
                 State = AssetLoaderState.Error;
+            }else
+            {
+                State = AssetLoaderState.Running;
             }
-            State = AssetLoaderState.Running;
         }
 
         protected override void OnDataUpdate(AssetLoaderData data)
@@ -230,7 +230,7 @@ namespace Dot.Asset
         private bool GetBundleFilePath(string assetPath,out string filePath,out ulong offset)
         {
             offset = 0u;
-            filePath = assetPath;
+            filePath = $"{assetRootDir}/{assetPath}";
 
             return false;
         }

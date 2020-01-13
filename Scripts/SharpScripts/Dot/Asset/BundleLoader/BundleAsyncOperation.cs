@@ -41,6 +41,7 @@ namespace Dot.Asset
             {
                 asyncOperation = AssetBundle.LoadFromFileAsync(bundlePath);
             }
+            State = OperationState.Loading;
         }
 
         protected internal override Object GetAsset()

@@ -30,7 +30,7 @@ namespace Game
             }
 #endif
 
-            AssetManager.GetInstance().InitManager(AssetLoaderMode.AssetDatabase, (result) =>
+            AssetManager.GetInstance().InitManager(AssetLoaderMode.AssetBundle, (result) =>
             {
                 if (result)
                 {
@@ -44,7 +44,7 @@ namespace Game
                 {
 
                 }
-            });
+            }, "E:/WorkSpace/DotGameProject/DotGameClient/AssetConfig/StandaloneWindows64/assetbundles");
 
         }
     }
