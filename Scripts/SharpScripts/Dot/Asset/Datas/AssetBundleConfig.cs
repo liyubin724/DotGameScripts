@@ -41,6 +41,7 @@ namespace Dot.Asset.Datas
         public string name;
         public string hash;
         public string crc;
+        public string md5;
         public string[] dependencies = new string[0];
     }
 }

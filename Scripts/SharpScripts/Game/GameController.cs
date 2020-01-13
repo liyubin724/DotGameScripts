@@ -44,7 +44,7 @@ namespace Game
                 {
 
                 }
-            }, "E:/WorkSpace/DotGameProject/DotGameClient/AssetConfig/StandaloneWindows64/assetbundles");
+            }, "D:/WorkSpace/DotGameProject/DotGameClient/AssetConfig/StandaloneWindows64/assetbundles");
 
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Dot.Asset.Datas;
+using Dot.Util;
 using DotEditor.AssetFilter.AssetAddress;
 using DotEditor.Util;
 using Newtonsoft.Json;
@@ -223,14 +224,14 @@ namespace DotEditor.AssetPacker
             var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputDir, bundlePackConfig.GetBundleOptions(), bundlePackConfig.GetBuildTarget());
             if(manifest!=null)
             {
-                SaveManifestAsJson(assetPackerConfig, manifest,$"{outputDir}/{AssetConst.ASSET_MANIFEST_NAME}{AssetConst.ASSET_MANIFEST_EXT}");
+                SaveManifestAsJson(assetPackerConfig, manifest,outputDir);
             }else
             {
                 Debug.LogError("AssetPackerUtil::PackAssetBundle->Build Failed");
             }
         }
 
-        private static void SaveManifestAsJson(AssetPackerConfig assetPackerConfig, CompatibilityAssetBundleManifest manifest,string filePath)
+        private static void SaveManifestAsJson(AssetPackerConfig assetPackerConfig, CompatibilityAssetBundleManifest manifest,string outputDir)
         {
             AssetBundleConfig assetBundleConfig = new AssetBundleConfig();
 
@@ -245,12 +246,16 @@ namespace DotEditor.AssetPacker
                 detail.crc = manifest.GetAssetBundleCrc(bundlePath).ToString();
                 detail.dependencies = manifest.GetAllDependencies(bundlePath);
 
+                string bundleDiskPath = $"{outputDir}/{bundlePath}";
+                detail.md5 = MD5Util.GetFileMD5(bundleDiskPath);
+
                 bundleDetails.Add(detail);
             }
             assetBundleConfig.details = bundleDetails.ToArray();
 
             var json = JsonConvert.SerializeObject(assetBundleConfig, Formatting.Indented);
-            File.WriteAllText(filePath,json);
+            string jsonFilePath = $"{outputDir}/{AssetConst.ASSET_MANIFEST_NAME}{AssetConst.ASSET_MANIFEST_EXT}";
+            File.WriteAllText(jsonFilePath, json);
         }
     }
 }
