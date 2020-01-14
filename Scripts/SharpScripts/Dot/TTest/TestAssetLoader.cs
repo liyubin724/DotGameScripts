@@ -9,24 +9,24 @@ public class TestAssetLoader : MonoBehaviour
     private string SpawnName = "PrefabPool";
     void Start()
     {
-        AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
-        {
-            AssetManager.GetInstance().InstantiateAsset("Cube",uObj);
-        }, null);
-        AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
-        {
-            AssetManager.GetInstance().InstantiateAsset("Cube", uObj);
-        }, null);
-        AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
-        {
-            AssetManager.GetInstance().InstantiateAsset("Cube", uObj);
-        }, null);
-        //SpawnPool spawn = PoolManager.GetInstance().GetSpawnPool(SpawnName, true);
+        //AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
+        //{
+        //    AssetManager.GetInstance().InstantiateAsset("Cube",uObj);
+        //}, null);
+        //AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
+        //{
+        //    AssetManager.GetInstance().InstantiateAsset("Cube", uObj);
+        //}, null);
+        //AssetManager.GetInstance().LoadAssetAsync("Cube", (address, uObj, userData) =>
+        //{
+        //    AssetManager.GetInstance().InstantiateAsset("Cube", uObj);
+        //}, null);
+        SpawnPool spawn = PoolManager.GetInstance().GetSpawnPool(SpawnName, true);
 
-        //AssetManager.GetInstance().LoadAssetAsync(new string[] { "Capsule", "Cube", "Plane" }, (address, uObj, userData) =>
-        //  {
-        //      spawn.CreateGameObjectPool(address, (GameObject)uObj);
-        //  }, null);
+        AssetManager.GetInstance().LoadAssetAsync(new string[] { "Capsule", "Cube", "Plane" }, (address, uObj, userData) =>
+          {
+              spawn.CreateGameObjectPool(address, (GameObject)uObj);
+          }, null);
     }
 
     private void OnGUI()
@@ -38,14 +38,24 @@ public class TestAssetLoader : MonoBehaviour
                 AssetManager.GetInstance().UnloadUnusedAsset();
             }, null);
         }
-        if(GUILayout.Button("Instance from pool"))
+        if(GUILayout.Button("Get from pool"))
         {
             SpawnPool spawn = PoolManager.GetInstance().GetSpawnPool(SpawnName, true);
             GameObjectPool objectPool = spawn.GetGameObjectPool("Cube");
             GameObject cubeGO = objectPool.GetPoolItem();
             cubeGO.name = "Cube From Pool";
         }
-        if(GUILayout.Button("Unload Unused"))
+        if (GUILayout.Button("Release from pool"))
+        {
+            GameObject gObj = GameObject.Find("Cube From Pool");
+            if(gObj!=null)
+            {
+                SpawnPool spawn = PoolManager.GetInstance().GetSpawnPool(SpawnName);
+                GameObjectPool objectPool = spawn.GetGameObjectPool("Cube");
+                objectPool.ReleasePoolItem(gObj);
+            }
+        }
+        if (GUILayout.Button("Unload Unused"))
         {
             AssetManager.GetInstance().UnloadUnusedAsset();
         }

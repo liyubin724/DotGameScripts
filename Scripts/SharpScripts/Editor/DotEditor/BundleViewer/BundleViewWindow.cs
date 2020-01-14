@@ -1,4 +1,5 @@
-﻿using Dot.Asset;
+﻿using Dot;
+using Dot.Asset;
 using DotEditor.Core.EGUI;
 using DotEditor.EGUI;
 using ReflectionMagic;
@@ -89,26 +90,34 @@ namespace DotEditor.BundleViewer
             }
             else
             {
-                dynamic assetMgr = AssetManager.GetInstance().AsDynamic();
-                AssetLoaderMode loaderMode = assetMgr.loaderMode;
-                if (loaderMode != AssetLoaderMode.AssetBundle)
+                if (DotProxy.proxy == null || !DotProxy.proxy.IsStartup)
                 {
                     isInitSuccess = false;
-                    initErrorContent = Contents.InitFailedForLoaderMode;
+                    initErrorContent = Contents.InitFailedForProxyStartup;
                 }
                 else
                 {
-                    AAssetLoader assetLoader = assetMgr.assetLoader;
-                    BundleLoader bundleLoader = (BundleLoader)assetLoader;
-                    if (bundleLoader == null)
+                    dynamic assetMgr = AssetManager.GetInstance().AsDynamic();
+                    AssetLoaderMode loaderMode = assetMgr.loaderMode;
+                    if (loaderMode != AssetLoaderMode.AssetBundle)
                     {
                         isInitSuccess = false;
-                        initErrorContent = Contents.InitFailedForLoader;
+                        initErrorContent = Contents.InitFailedForLoaderMode;
                     }
                     else
                     {
-                        dynamicBundleLoader = bundleLoader.AsDynamic();
-                        isInitSuccess = true;
+                        AAssetLoader assetLoader = assetMgr.assetLoader;
+                        BundleLoader bundleLoader = (BundleLoader)assetLoader;
+                        if (bundleLoader == null)
+                        {
+                            isInitSuccess = false;
+                            initErrorContent = Contents.InitFailedForLoader;
+                        }
+                        else
+                        {
+                            dynamicBundleLoader = bundleLoader.AsDynamic();
+                            isInitSuccess = true;
+                        }
                     }
                 }
             }
@@ -266,6 +275,7 @@ namespace DotEditor.BundleViewer
         {
             internal static GUIContent InitFailedForPlayMode = new GUIContent("This tool can only be used in Play Mode");
             internal static GUIContent InitFailedForLoaderMode = new GUIContent("This tool can only be used in AssetBundle Mode");
+            internal static GUIContent InitFailedForProxyStartup = new GUIContent("DotProxy has been startup!");
             internal static GUIContent InitFailedForLoader = new GUIContent("BundleLoader is null");
             internal static GUIContent[] ToolbarTitle = new GUIContent[]
             {

@@ -32,6 +32,7 @@ namespace Dot
         }
 
         public static DotProxy proxy = null;
+        public bool IsStartup { get => isStartup; }
 
         private Action<bool> proxyStartupCallback = null;
         private bool isStartup = false;

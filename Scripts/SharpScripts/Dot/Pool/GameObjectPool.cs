@@ -75,7 +75,7 @@ namespace Dot.Pool
         /// <param name="obj"></param>
         private void OnPreloadTimerUpdate(SystemObject obj)
         {
-            int curAmount = usedItemList.Count + unusedItemQueue.Count;
+            int curAmount = unusedItemQueue.Count;
             if (curAmount >= preloadTotalAmount)
             {
                 OnPoolComplete();
@@ -123,9 +123,9 @@ namespace Dot.Pool
         /// <returns></returns>
         public GameObject GetPoolItem(bool isAutoSetActive = true)
         {
-            if (limitMaxAmount != 0 && usedItemList.Count > limitMaxAmount)
+            if (limitMaxAmount != 0 && GetUsedItemCount() > limitMaxAmount)
             {
-                LogUtil.LogWarning(typeof(GameObjectPool), "GameObjectPool::GetItem->Large than Max Amount");
+                LogUtil.LogWarning(PoolConst.LOGGER_NAME, "GameObjectPool::GetItem->Large than Max Amount");
                 return null;
             }
 
@@ -229,7 +229,7 @@ namespace Dot.Pool
         {
             if(item == null)
             {
-                LogUtil.LogError(typeof(GameObjectPool), "GameObjectPool::ReleaseItem->Item is Null");
+                LogUtil.LogError(PoolConst.LOGGER_NAME, "GameObjectPool::ReleaseItem->Item is Null");
                 return;
             }
 
@@ -268,23 +268,11 @@ namespace Dot.Pool
 
         internal void CullPool(float deltaTime)
         {
-            for (int i = usedItemList.Count - 1; i >= 0; i--)
-            {
-                if (usedItemList[i].TryGetTarget(out GameObject target))
-                {
-                    if (!target.IsNull())
-                    {
-                        continue;
-                    }
-                }
-                usedItemList.RemoveAt(i);
-            }
-
+            CleanUsedItem();
             if (!isCull)
             {
                 return;
             }
-
             curTime += deltaTime;
             if(curTime - preCullTime < cullDelayTime)
             {
@@ -343,6 +331,23 @@ namespace Dot.Pool
             uniqueName = null;
             spawnPool = null;
             instanceOrPrefabTemplate = null;
+        }
+
+        private int GetUsedItemCount()
+        {
+            CleanUsedItem();
+            return usedItemList.Count;
+        }
+
+        private void CleanUsedItem()
+        {
+            for(int i = usedItemList.Count -1;i>=0;--i)
+            {
+                if(usedItemList[i].TryGetTarget(out GameObject gObj) && gObj.IsNull())
+                {
+                    usedItemList.RemoveAt(i);
+                }
+            }
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿using Dot.Pool;
-using Dot.Core.Util;
+﻿using Dot;
+using Dot.Pool;
+using Dot.Util;
 using DotEditor.Core.EGUI;
+using DotEditor.EGUI;
 using ReflectionMagic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Dot.Util;
 
 namespace DotEditor.Pool
 {
@@ -21,248 +23,309 @@ namespace DotEditor.Pool
             win.Show();
         }
 
-        public class SpawnPoolFoldoutData
+        private bool isInitSuccess = false;
+        private GUIContent initErrorContent = new GUIContent();
+        private void OnEnable()
         {
-            public bool isFoldout = false;
-            public Dictionary<string, bool> objectPoolFoldout = new Dictionary<string, bool>();
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            InitData();
         }
 
-        private Dictionary<string, SpawnPoolFoldoutData> spawnPoolFoldoutDic = new Dictionary<string, SpawnPoolFoldoutData>();
+        private void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
 
-        private Vector2 scrollPos = Vector2.zero;
+        private void OnPlayModeStateChanged(PlayModeStateChange mode)
+        {
+            InitData();
+            Repaint();
+        }
 
-        private void OnGUI()
+        private void InitData()
         {
             if (!EditorApplication.isPlaying)
             {
-                return;
-            }
-
-            PoolManager poolManager = PoolManager.GetInstance();
-            var dynamicPoolMgr = poolManager.AsDynamic();
-            Dictionary<string, SpawnPool> spawnDic = dynamicPoolMgr.spawnDic;
-            List<object> poolDatas = dynamicPoolMgr.poolDatas;
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.LabelField("Base Info", EditorGUIStyle.GetBoldLabelStyle(20),GUILayout.Height(25));
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.ExpandWidth(true));
+                isInitSuccess = false;
+                initErrorContent = Contents.InitFailedForPlayMode;
+            }else
             {
-                Transform cachedTransform = dynamicPoolMgr.cachedTransform;
-                EditorGUILayout.ObjectField("Root Transform", cachedTransform, typeof(Transform),false);
-                float cullTimeInterval = dynamicPoolMgr.cullTimeInterval;
-                EditorGUILayout.LabelField("Cull Time Interval", ""+cullTimeInterval);
-                EditorGUILayout.LabelField("Loading Count", "" + poolDatas.Count);
-            }
-            EditorGUILayout.EndVertical();
-
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            {
-                EditorGUILayout.LabelField("Spawn Pool List", EditorGUIStyle.GetBoldLabelStyle(20), GUILayout.Height(25));
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                if(DotProxy.proxy == null || !DotProxy.proxy.IsStartup)
                 {
-                    foreach (var kvp in spawnDic)
-                    {
-                        DrawSpawnPool(kvp.Value);
-                    }
+                    isInitSuccess = false;
+                    initErrorContent = Contents.InitFailedForProxyStartup;
+                }else
+                {
+                    isInitSuccess = true;
                 }
-                EditorGUILayout.EndVertical();
+            }
+        }
 
-                EditorGUILayout.LabelField("PoolData List", EditorGUIStyle.GetBoldLabelStyle(20), GUILayout.Height(25));
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        private Dictionary<string, SpawnPoolFoldoutData> spawnPoolFoldoutDic = new Dictionary<string, SpawnPoolFoldoutData>();
+        private Vector2 scrollPos = Vector2.zero;
+
+        //private EGUIToolbarSearchField searchField = null;
+        //private string searchText = string.Empty;
+        //private int searchCategoryIndex = 0;
+        private void OnGUI()
+        {
+            if(!isInitSuccess)
+            {
+                EditorGUILayout.LabelField(initErrorContent, Styles.bigBoldCenterLableStyle,GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
+            }else
+            {
+                DrawToolbar();
+                DrawMgr();
+            }
+        }
+
+        private void DrawToolbar()
+        {
+            EditorGUILayout.BeginHorizontal("toolbar", GUILayout.ExpandWidth(true));
+            {
+                if(GUILayout.Button(Contents.ExpandAllContent, EditorStyles.toolbarButton,GUILayout.Width(60)))
                 {
-                    for (int i = 0; i < poolDatas.Count; ++i)
+                    //foreach(var kvp in spawnPoolFoldoutDic)
+                    //{
+                    //    kvp.Value.isFoldout = true;
+                    //    foreach (var kvp2 in kvp.Value.objectPoolFoldout)
+                    //    {
+                    //        kvp.Value.objectPoolFoldout[kvp2.Key] = false;
+                    //    }
+                    //}
+
+                    Repaint();
+                }
+
+                if (GUILayout.Button(Contents.CollapseAllContent, EditorStyles.toolbarButton, GUILayout.Width(60)))
+                {
+                    //foreach (var kvp in spawnPoolFoldoutDic)
+                    //{
+                    //    kvp.Value.isFoldout = false;
+
+                    //    foreach (var kvp2 in kvp.Value.objectPoolFoldout)
+                    //    {
+                    //        kvp.Value.objectPoolFoldout[kvp2.Key] = false;
+                    //    }
+                    //}
+
+                    Repaint();
+                }
+
+                GUILayout.FlexibleSpace();
+
+                //if (searchField == null)
+                //{
+                //    searchField = new EGUIToolbarSearchField((text) =>
+                //    {
+                //        searchText = text;
+                //    }, null);
+                //    searchField.Text = searchText;
+                //    searchField.Categories = Contents.SearchCategories;
+                //    searchField.CategoryIndex = 0;
+                //}
+                //searchField.OnGUILayout();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawMgr()
+        {
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos,EditorStyles.helpBox);
+            {
+                EditorGUILayout.BeginVertical();
+                {
+                    dynamic dynamicPoolMgr = PoolManager.GetInstance().AsDynamic();
+                    Transform mgrRootTran = dynamicPoolMgr.mgrTransform;
+                    Dictionary<string, SpawnPool> spawnDic = dynamicPoolMgr.spawnDic;
+
+                    EditorGUILayout.ObjectField(Contents.TransformContent, mgrRootTran, typeof(Transform), false);
+                    EditorGUILayout.LabelField(Contents.CullIntervalContent, new GUIContent(dynamicPoolMgr.cullTimeInterval.ToString()));
+                    EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + spawnDic.Count));
+                    EditorGUIUtil.BeginIndent();
                     {
-                        EditorGUILayout.BeginHorizontal();
+                        List<string> spawnNames = spawnDic.Keys.ToList();
+                        spawnNames.Sort();
+                        foreach (var name in spawnNames)
                         {
-                            EditorGUILayout.LabelField("" + i, EditorGUIStyle.MiddleLeftLabelStyle);
-                            DrawPoolData(poolDatas[i]);
+                            SpawnPool spawn = spawnDic[name];
+                            DrawSpawnPool(spawn);
                         }
-                        EditorGUILayout.EndHorizontal();
                     }
+                    EditorGUIUtil.EndIndent();
+
                 }
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawPoolData(dynamic poolData)
-        {
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.BeginVertical();
-                {
-                    string name = poolData.spawnName;
-                    EditorGUILayout.TextField("Name", name);
-                    string assetPath = poolData.assetPath;
-                    EditorGUILayout.TextField("Asset Path", assetPath);
-                    bool isAutoClean = poolData.isAutoClean;
-                    EditorGUILayout.Toggle("Auto Clean", isAutoClean);
-                }
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.BeginVertical();
-                {
-                    string preloadTotalAmount = "" + poolData.preloadTotalAmount;
-                    EditorGUILayout.TextField("Preload Total Amount", preloadTotalAmount);
-                    string preloadOnceAmount = "" + poolData.preloadOnceAmount;
-                    EditorGUILayout.TextField("Preload Once Amount", "" + preloadOnceAmount);
-                    OnPoolComplete completeCallback = poolData.completeCallback;
-                    EditorGUILayout.TextField("Complete Callback", completeCallback == null ? "Null" : completeCallback.ToString());
-                }
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.BeginVertical();
-                {
-                    bool isCull = poolData.isCull;
-                    EditorGUILayout.Toggle("Is Cull", isCull);
-                    string cullOnceAmount = "" + poolData.cullOnceAmount;
-                    EditorGUILayout.TextField("Cull Once Amount", cullOnceAmount);
-                    string cullDelayTime = "" + poolData.cullDelayTime;
-                    EditorGUILayout.TextField("Cull Delay Time", cullDelayTime);
-                }
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.BeginVertical();
-                {
-                    string limitMaxAmount = "" + poolData.limitMaxAmount;
-                    EditorGUILayout.TextField("Limit Max Amount", limitMaxAmount);
-                    string limitMinAmount = "" + poolData.limitMinAmount;
-                    EditorGUILayout.TextField("Limit Min Amount", limitMinAmount);
-                }
-                EditorGUILayout.EndVertical();
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-
         private void DrawSpawnPool(SpawnPool spawnPool)
         {
             var dynamicSpawnPool = spawnPool.AsDynamic();
             string poolName = dynamicSpawnPool.PoolName;
-            if(!spawnPoolFoldoutDic.TryGetValue(poolName,out SpawnPoolFoldoutData foldoutData))
+            if (!spawnPoolFoldoutDic.TryGetValue(poolName, out SpawnPoolFoldoutData foldoutData))
             {
                 foldoutData = new SpawnPoolFoldoutData();
                 spawnPoolFoldoutDic.Add(poolName, foldoutData);
             }
-
-            foldoutData.isFoldout = EditorGUILayout.Foldout(foldoutData.isFoldout, poolName);
-            if(foldoutData.isFoldout)
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
-                EditorGUIUtil.BeginIndent();
+                foldoutData.isFoldout = EditorGUILayout.Foldout(foldoutData.isFoldout, poolName);
+                if (foldoutData.isFoldout)
                 {
-                    Dictionary<string, GameObjectPool> goPools = dynamicSpawnPool.goPools;
-                    foreach (var kvp in goPools)
+                    Transform spawnTransform = dynamicSpawnPool.SpawnTransform;
+                    EditorGUILayout.ObjectField(Contents.TransformContent, spawnTransform, typeof(Transform), false);
+
+                    Dictionary<string, GameObjectPool> gameObjectPools = dynamicSpawnPool.gameObjectPools;
+                    EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + gameObjectPools.Count));
+
+                    EditorGUIUtil.BeginIndent();
                     {
-                        if (!foldoutData.objectPoolFoldout.TryGetValue(kvp.Key, out bool isFoldout))
+                        List<string> poolNames = gameObjectPools.Keys.ToList();
+                        poolNames.Sort();
+                        foreach (var name in poolNames)
                         {
-                            isFoldout = false;
-                            foldoutData.objectPoolFoldout.Add(kvp.Key, isFoldout);
-                        }
-                        foldoutData.objectPoolFoldout[kvp.Key] = EditorGUILayout.Foldout(foldoutData.objectPoolFoldout[kvp.Key], kvp.Key);
-                        if (foldoutData.objectPoolFoldout[kvp.Key])
-                        {
-                            EditorGUIUtil.BeginIndent();
+                            if (!foldoutData.objectPoolFoldout.TryGetValue(name, out bool isFoldout))
                             {
-                                DrawGameObjectPool(kvp.Value);
+                                isFoldout = false;
+                                foldoutData.objectPoolFoldout.Add(name, isFoldout);
                             }
-                            EditorGUIUtil.EndIndent();
+                            foldoutData.objectPoolFoldout[name] = EditorGUILayout.Foldout(foldoutData.objectPoolFoldout[name], name);
+                            if (foldoutData.objectPoolFoldout[name])
+                            {
+                                EditorGUIUtil.BeginIndent();
+                                {
+                                    DrawGameObjectPool(gameObjectPools[name]);
+                                }
+                                EditorGUIUtil.EndIndent();
+                            }
                         }
                     }
+                    EditorGUIUtil.EndIndent();
                 }
-                EditorGUIUtil.EndIndent();
             }
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawGameObjectPool(GameObjectPool gameObjectPool)
         {
-            var dynamicGameObjectPool = gameObjectPool.AsDynamic();
-
-            string assetPath = dynamicGameObjectPool.assetPath;
-            EditorGUILayout.TextField("Asset Path", assetPath);
-
-            GameObject templateGO = dynamicGameObjectPool.instanceOrPrefabTemplate;
-            EditorGUILayout.ObjectField("Template", templateGO, typeof(GameObject), false);
-
-            bool isInstance = dynamicGameObjectPool.isInstance;
-            EditorGUILayout.Toggle("Is Instance", isInstance);
-            bool isRuntimeInstance = dynamicGameObjectPool.isRuntimeInstance;
-            EditorGUILayout.Toggle("Is Runtime Instance", isRuntimeInstance);
-
-            bool isAutoClean = dynamicGameObjectPool.isAutoClean;
-            EditorGUILayout.Toggle("Auto Clean", isAutoClean);
-            string preloadTotalAmount = "" + dynamicGameObjectPool.preloadTotalAmount;
-            EditorGUILayout.TextField("Preload Total Amount", preloadTotalAmount);
-            string preloadOnceAmount = "" + dynamicGameObjectPool.preloadOnceAmount;
-            EditorGUILayout.TextField("Preload Once Amount", "" + preloadOnceAmount);
-
-            bool isCull = dynamicGameObjectPool.isCull;
-            EditorGUILayout.Toggle("Is Cull", isCull);
-            string cullOnceAmount = "" + dynamicGameObjectPool.cullOnceAmount;
-            EditorGUILayout.TextField("Cull Once Amount", cullOnceAmount);
-            string cullDelayTime = "" + dynamicGameObjectPool.cullDelayTime;
-            EditorGUILayout.TextField("Cull Delay Time", cullDelayTime);
-
-            string limitMaxAmount = "" + dynamicGameObjectPool.limitMaxAmount;
-            EditorGUILayout.TextField("Limit Max Amount", limitMaxAmount);
-            string limitMinAmount = "" + dynamicGameObjectPool.limitMinAmount;
-            EditorGUILayout.TextField("Limit Min Amount", limitMinAmount);
-
-            Queue<GameObject> unusedItemQueue = dynamicGameObjectPool.unusedItemQueue;
-            if(unusedItemQueue.Count>0)
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
-                EditorGUILayout.LabelField("Unused Items:");
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                {
-                    EditorGUIUtil.BeginIndent();
-                    {
-                        EditorGUIUtil.BeginLabelWidth(100);
-                        {
-                            int index = 0;
-                            foreach (var gObj in unusedItemQueue)
-                            {
-                                EditorGUILayout.ObjectField("" + index, gObj, typeof(GameObject), false);
-                                index++;
-                            }
-                        }
-                        EditorGUIUtil.EndLableWidth();
+                var dynamicGameObjectPool = gameObjectPool.AsDynamic();
 
-                    }
-                    EditorGUIUtil.EndIndent();
-                }
-                EditorGUILayout.EndVertical();
-            }
-            
-            List<WeakReference<GameObject>> usedItemList = dynamicGameObjectPool.usedItemList;
-            if(usedItemList.Count>0)
-            {
-                EditorGUILayout.LabelField("Used Items:");
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                string uniqueName = dynamicGameObjectPool.uniqueName;
+                EditorGUILayout.LabelField(Contents.UniqueNameContent, new GUIContent(uniqueName));
+
+                PoolTemplateType templateType = dynamicGameObjectPool.templateType;
+                EditorGUILayout.EnumPopup(Contents.TemplateTypeContent, templateType);
+
+                GameObject templateGO = dynamicGameObjectPool.instanceOrPrefabTemplate;
+                EditorGUILayout.ObjectField(Contents.TemplateContent, templateGO, typeof(GameObject), false);
+
+                Queue<GameObject> unusedItemQueue = dynamicGameObjectPool.unusedItemQueue;
+                EditorGUILayout.LabelField(Contents.UnusedItemsContent);
+                if (unusedItemQueue.Count > 0)
                 {
-                    EditorGUIUtil.BeginIndent();
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        EditorGUIUtil.BeginLabelWidth(40);
+                        EditorGUIUtil.BeginIndent();
                         {
-                            int index = 0;
-                            foreach (var weakRef in usedItemList)
+                            EditorGUIUtil.BeginLabelWidth(100);
                             {
-                                if (weakRef.TryGetTarget(out GameObject gObj))
+                                int index = 0;
+                                foreach (var gObj in unusedItemQueue)
                                 {
-                                    if(gObj.IsNull())
-                                    {
-                                        EditorGUILayout.ObjectField("" + index, gObj, typeof(GameObject), false);
-                                        index++;
-                                        continue;
-                                    }
+                                    EditorGUILayout.ObjectField("" + index, gObj, typeof(GameObject), false);
+                                    index++;
                                 }
-                                EditorGUILayout.TextField("" + index, "it has been destroy");
-
-                                index++;
                             }
+                            EditorGUIUtil.EndLableWidth();
                         }
-                        EditorGUIUtil.EndLableWidth();
-
+                        EditorGUIUtil.EndIndent();
                     }
-                    EditorGUIUtil.EndIndent();
+                    EditorGUILayout.EndVertical();
                 }
-                EditorGUILayout.EndVertical();
+
+                List<WeakReference<GameObject>> usedItemList = dynamicGameObjectPool.usedItemList;
+                EditorGUILayout.LabelField(Contents.UsedItemsContent);
+                if (usedItemList.Count > 0)
+                {
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    {
+                        EditorGUIUtil.BeginIndent();
+                        {
+                            EditorGUIUtil.BeginLabelWidth(100);
+                            {
+                                int index = 0;
+                                foreach (var weakRef in usedItemList)
+                                {
+                                    if (weakRef.TryGetTarget(out GameObject gObj))
+                                    {
+                                        if (!gObj.IsNull())
+                                        {
+                                            EditorGUILayout.ObjectField("" + index, gObj, typeof(GameObject), false);
+                                        }else
+                                        {
+                                            EditorGUILayout.TextField("" + index, "it has been destroy");
+                                        }
+                                    }
+
+                                    index++;
+                                }
+                            }
+                            EditorGUIUtil.EndLableWidth();
+                        }
+                        EditorGUIUtil.EndIndent();
+                    }
+                    EditorGUILayout.EndVertical();
+                }
             }
+            EditorGUILayout.EndVertical();
+        }
+
+        class SpawnPoolFoldoutData
+        {
+            public bool isFoldout = false;
+            public Dictionary<string, bool> objectPoolFoldout = new Dictionary<string, bool>();
+        }
+
+        static class Styles
+        {
+            internal static GUIStyle bigBoldCenterLableStyle;
+
+            static Styles()
+            {
+                bigBoldCenterLableStyle = new GUIStyle(EditorStyles.boldLabel);
+                bigBoldCenterLableStyle.alignment = TextAnchor.MiddleCenter;
+                bigBoldCenterLableStyle.fontSize = 20;
+            }
+        }
+
+        static class Contents
+        {
+            internal static GUIContent InitFailedForPlayMode = new GUIContent("This tool can only be used in Play Mode");
+            internal static GUIContent InitFailedForProxyStartup = new GUIContent("DotProxy has been startup!");
+            //internal static string[] SearchCategories = new string[]
+            //{
+            //    "All",
+            //    "Spawn",
+            //    "Pool",
+            //};
+
+            internal static GUIContent TransformContent = new GUIContent("Transform");
+            internal static GUIContent CountContent = new GUIContent("Count");
+            internal static GUIContent CullIntervalContent = new GUIContent("CullInterval");
+
+            internal static GUIContent UniqueNameContent = new GUIContent("UniqueName");
+            internal static GUIContent TemplateTypeContent = new GUIContent("TemplateType");
+            internal static GUIContent TemplateContent = new GUIContent("Template");
+            internal static GUIContent UnusedItemsContent = new GUIContent("UnusedItems");
+            internal static GUIContent UsedItemsContent = new GUIContent("UsedItems");
+
+            internal static GUIContent ExpandAllContent = new GUIContent("Expand", "Expand All");
+            internal static GUIContent CollapseAllContent = new GUIContent("Collapse", "Collapse All");
         }
     }
 }
