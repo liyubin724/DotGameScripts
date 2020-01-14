@@ -1,18 +1,12 @@
 ﻿using UnityObject = UnityEngine.Object;
-using SystemObject = System.Object;
 
-namespace Dot.Core.Util
+namespace Dot.Util
 {
     public static class UnityObjectExtension
     {
         public static bool IsNull(this UnityObject obj)
         {
-            return obj == null;
-        }
-
-        public static bool IsNull(SystemObject sysObj)
-        {
-            if (sysObj == null || sysObj.Equals(null))
+            if (obj == null || obj.Equals(null))
             {
                 return true;
             }

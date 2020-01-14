@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Dot.Util;
 
 namespace DotEditor.Pool
 {
@@ -243,7 +244,7 @@ namespace DotEditor.Pool
                             {
                                 if (weakRef.TryGetTarget(out GameObject gObj))
                                 {
-                                    if (!UnityObjectExtension.IsNull(gObj))
+                                    if(gObj.IsNull())
                                     {
                                         EditorGUILayout.ObjectField("" + index, gObj, typeof(GameObject), false);
                                         index++;

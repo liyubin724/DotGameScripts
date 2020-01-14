@@ -7,6 +7,7 @@ using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 using Dot.Asset;
+using Dot.Util;
 
 namespace Dot.Pool
 {
@@ -246,7 +247,7 @@ namespace Dot.Pool
             {
                 if(usedItemList[i].TryGetTarget(out GameObject target))
                 {
-                    if(!UnityObjectExtension.IsNull(target))
+                    if(!target.IsNull())
                     {
                         if(target!=item)
                         {
@@ -271,7 +272,7 @@ namespace Dot.Pool
             {
                 if (usedItemList[i].TryGetTarget(out GameObject target))
                 {
-                    if (!UnityObjectExtension.IsNull(target))
+                    if (!target.IsNull())
                     {
                         continue;
                     }
