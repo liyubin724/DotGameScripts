@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Loader;
 using Dot.Timer;
-using Dot.Core.Util;
+using Dot.Util;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;

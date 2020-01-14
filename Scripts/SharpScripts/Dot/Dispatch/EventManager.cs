@@ -1,4 +1,4 @@
-﻿using Dot.Core.Util;
+﻿using Dot.Util;
 
 namespace Dot.Dispatch
 {

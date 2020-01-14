@@ -1,5 +1,5 @@
 ﻿using Dot.Pool;
-using Dot.Core.Util;
+using Dot.Util;
 using Dot.Log;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Dot.Core.Effect
         Timline,
     }
 
-    public class EffectManager : Util.Singleton<EffectManager>
+    public class EffectManager : Singleton<EffectManager>
     {
         private readonly static string ROOT_NAME = "Effect Root";
         private readonly static string CONTROLLER_SPAWN_NAME = "EffectControllerSpawn";

@@ -1,5 +1,5 @@
 ﻿using Dot.Log;
-using Dot.Core.Util;
+using Dot.Util;
 using System.Collections.Generic;
 using XLua;
 

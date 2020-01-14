@@ -1,4 +1,4 @@
-﻿using Dot.Core.Util;
+﻿using Dot.Util;
 using System.Collections.Generic;
 using UnityEngine;
 using HeuristicMethod = Dot.UI.Atlas.MaxRectsBinPack.FreeRectChoiceHeuristic;

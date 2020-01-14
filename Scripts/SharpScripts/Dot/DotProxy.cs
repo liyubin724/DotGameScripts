@@ -1,6 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Timer;
-using Dot.Core.Util;
+using Dot.Util;
 using Dot.Log;
 using Dot.Lua;
 using UnityEngine;

@@ -1,5 +1,5 @@
 ﻿using Dot.Asset.Datas;
-using Dot.Core.Util;
+using Dot.Util;
 using Dot.Log;
 using System;
 using SystemObject = System.Object;

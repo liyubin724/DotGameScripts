@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Generic;
-using Dot.Core.Util;
+using Dot.Util;
 using Game.Entity;
 using UnityEngine;
 
