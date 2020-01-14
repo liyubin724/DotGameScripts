@@ -98,7 +98,7 @@ namespace Dot.Asset
             }
         }
 
-        public AssetHandler LoadAssetAsync(string label,
+        public AssetHandler LoadAssetAsyncByLabel(string label,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
             OnAssetLoadProgress progress = null,

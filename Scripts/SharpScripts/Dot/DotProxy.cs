@@ -90,9 +90,9 @@ namespace Dot
 #else
 
 #if DEBUG
-            logConfig = $"{Application.streamingAssetsPath}/{LOG_CONFIG_IN_EDITOR}";
+            logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG_IN_EDITOR}";
 #else
-            logConfig = $"{Application.streamingAssetsPath}/{LOG_CONFIG}";
+            logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG}";
 #endif
 
 #endif

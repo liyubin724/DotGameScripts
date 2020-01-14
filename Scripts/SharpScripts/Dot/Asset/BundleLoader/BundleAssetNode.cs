@@ -10,7 +10,8 @@ namespace Dot.Asset
     public class BundleAssetNode : AAssetNode
     {
         private BundleNode bundleNode = null;
-        private List<WeakReference> weakAssets = new List<WeakReference>();
+        private WeakReference assetWeakRef = null;
+        private List<WeakReference> instanceWeakRefs = new List<WeakReference>();
 
         internal void InitNode(string assetPath,BundleNode node)
         {
@@ -22,9 +23,12 @@ namespace Dot.Asset
         protected internal override UnityObject GetAsset()
         {
             UnityObject asset = bundleNode.GetAsset(AssetPath);
-            if (!bundleNode.IsScene)
+            if(assetWeakRef == null)
             {
-                AddAsset(asset);
+                assetWeakRef = new WeakReference(asset);
+            }else
+            {
+                assetWeakRef.Target = asset;
             }
             return asset;
         }
@@ -43,7 +47,7 @@ namespace Dot.Asset
             }
 
             UnityObject instance = UnityObject.Instantiate(asset);
-            AddAsset(instance);
+            AddInstance(instance);
 
             return instance;
         }
@@ -53,7 +57,7 @@ namespace Dot.Asset
             if(uObj!=null)
             {
                 UnityObject instance = UnityObject.Instantiate(uObj);
-                AddAsset(instance);
+                AddInstance(instance);
 
                 return instance;
             }
@@ -74,10 +78,14 @@ namespace Dot.Asset
             {
                 return true;
             }
-
-            foreach (var weakAsset in weakAssets)
+            if(assetWeakRef!=null && !IsNull(assetWeakRef.Target))
             {
-                if (!IsNull(weakAsset.Target))
+                return true;
+            }
+
+            foreach (var instance in instanceWeakRefs)
+            {
+                if (!IsNull(instance.Target))
                 {
                     return true;
                 }
@@ -98,20 +106,22 @@ namespace Dot.Asset
                 bundleNode = null;
             }
 
-            foreach (var asset in weakAssets)
+            assetWeakRef = null;
+
+            foreach (var asset in instanceWeakRefs)
             {
                 asset.Target = null;
             }
         }
 
-        private void AddAsset(UnityObject uObj)
+        private void AddInstance(UnityObject uObj)
         {
             bool isSet = false;
-            for (int i = 0; i < weakAssets.Count; ++i)
+            for (int i = 0; i < instanceWeakRefs.Count; ++i)
             {
-                if (IsNull(weakAssets[i].Target))
+                if (IsNull(instanceWeakRefs[i].Target))
                 {
-                    weakAssets[i].Target = uObj;
+                    instanceWeakRefs[i].Target = uObj;
                     isSet = true;
                     break;
                 }
@@ -119,7 +129,7 @@ namespace Dot.Asset
 
             if (!isSet)
             {
-                weakAssets.Add(new WeakReference(uObj, false));
+                instanceWeakRefs.Add(new WeakReference(uObj, false));
             }
         }
 

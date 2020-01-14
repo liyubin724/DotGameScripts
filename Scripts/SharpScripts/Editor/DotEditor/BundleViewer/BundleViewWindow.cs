@@ -171,16 +171,27 @@ namespace DotEditor.BundleViewer
                     }
                 }
                 EditorGUIUtil.EndIndent();
-                EditorGUILayout.LabelField(Contents.WeakAssetContent);
+
+                WeakReference assetWeakRef = dynamicNode.assetWeakRef;
+                if(assetWeakRef == null)
+                {
+                    EditorGUILayout.LabelField(Contents.WeakAssetContent, Contents.NULLContent);
+                }else
+                {
+                    EditorGUILayout.ObjectField(Contents.WeakAssetContent, ((UnityObject)assetWeakRef.Target), typeof(UnityObject), false);
+                }
+
+                EditorGUILayout.LabelField(Contents.InstanceAssetContent);
                 EditorGUIUtil.BeginIndent();
                 {
-                    List<WeakReference> weakAssets = dynamicNode.weakAssets;
+                    List<WeakReference> weakAssets = dynamicNode.instanceWeakRefs;
                     int index = 0;
                     foreach(var asset in weakAssets)
                     {
                         if(!IsNull(asset.Target))
                         {
                             EditorGUILayout.ObjectField("" + index.ToString(), ((UnityObject)asset.Target), typeof(UnityObject), false);
+                            ++index;
                         }
                     }
                 }
@@ -275,7 +286,8 @@ namespace DotEditor.BundleViewer
             internal static GUIContent AssetPathContent = new GUIContent("AssetPath");
             internal static GUIContent IsNeverDestroyContent = new GUIContent("IsNeverDestroy");
             internal static GUIContent BundleNodeContent = new GUIContent("BundleNode");
-            internal static GUIContent WeakAssetContent = new GUIContent("WeakAssets");
+            internal static GUIContent WeakAssetContent = new GUIContent("WeakAsset");
+            internal static GUIContent InstanceAssetContent = new GUIContent("Instances");
             internal static GUIContent IsSceneContent = new GUIContent("IsSceneContent");
         }
     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
-using Dot.Core.Loader;
+using Dot.Asset;
 
 namespace Dot.Pool
 {
@@ -27,6 +27,8 @@ namespace Dot.Pool
         private string uniqueName = null;
         private PoolTemplateType templateType = PoolTemplateType.Prefab;
         private GameObject instanceOrPrefabTemplate = null;
+
+        internal GameObject Template { get => instanceOrPrefabTemplate; }
 
         private Queue<GameObject> unusedItemQueue = new Queue<GameObject>();
         private List<WeakReference<GameObject>> usedItemList = new List<WeakReference<GameObject>>();
@@ -197,7 +199,11 @@ namespace Dot.Pool
             }
             else
             {
+#if ASSET_BUNDLE
                 item = (GameObject)AssetManager.GetInstance().InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
+#else
+                item = GameObject.Instantiate(instanceOrPrefabTemplate);
+#endif
             }
 
             if (item != null)
@@ -211,9 +217,9 @@ namespace Dot.Pool
             }
             return item;
         }
-        #endregion
+#endregion
 
-        #region Release Item
+#region Release Item
         /// <summary>
         /// 回收GameObject，如果此GameObject不带有GameObjectPoolItem组件，则无法回收到池中，将会直接删除
         /// </summary>
@@ -256,7 +262,7 @@ namespace Dot.Pool
                 usedItemList.RemoveAt(i);
             }
         }
-        #endregion
+#endregion
 
 
         internal void CullPool(float deltaTime)
