@@ -9,83 +9,86 @@ namespace Dot.Pool
     /// </summary>
     public class SpawnPool
     {
-        private Dictionary<string, GameObjectPool> goPools = new Dictionary<string, GameObjectPool>();
-        internal Transform CachedTransform { get; private set; } = null;
         internal string PoolName { get; private set; } = string.Empty;
+        internal Transform SpawnTransform { get; private set; } = null;
 
-        internal SpawnPool()
-        {
-        }
+        private Dictionary<string, GameObjectPool> gameObjectPools = new Dictionary<string, GameObjectPool>();
 
-        internal void InitSpawn(string pName, Transform parentTran)
+        internal SpawnPool(string pName, Transform parentTran)
         {
             PoolName = pName;
 
-            CachedTransform = new GameObject($"Spawn_{PoolName}").transform;
-            CachedTransform.SetParent(parentTran, false);
+            SpawnTransform = new GameObject($"Spawn_{PoolName}").transform;
+            SpawnTransform.SetParent(parentTran, false);
         }
 
-        public bool HasGameObjectPool(string assetPath)
+        public bool HasGameObjectPool(string uniqueName)
         {
-            return goPools.ContainsKey(assetPath);
+            return gameObjectPools.ContainsKey(uniqueName);
         }
 
         /// <summary>
         /// 缓存池中将默认以资源的路径为唯一标识，通过资源唯一标识可以获致到对应的缓存池
         /// </summary>
-        /// <param name="assetPath"></param>
+        /// <param name="uniqueName"></param>
         /// <returns></returns>
-        public GameObjectPool GetGameObjectPool(string assetPath)
+        public GameObjectPool GetGameObjectPool(string uniqueName)
         {
-            if(goPools.TryGetValue(assetPath,out GameObjectPool goPool))
+            if(gameObjectPools.TryGetValue(uniqueName,out GameObjectPool goPool))
             {
                 return goPool;
             }
+
             return null;
         }
+
         /// <summary>
         /// 使用给定的GameObject创建缓存池
         /// </summary>
-        /// <param name="assetPath">资源唯一标签，一般使用资源路径</param>
+        /// <param name="uniqueName">资源唯一标签，一般使用资源路径</param>
         /// <param name="template">模板GameObject</param>
         /// <returns></returns>
-        public GameObjectPool CreateGameObjectPool(string assetPath,GameObject template, PoolTemplateType templateType = PoolTemplateType.Prefab)
+        public GameObjectPool CreateGameObjectPool(string uniqueName,GameObject template, PoolTemplateType templateType = PoolTemplateType.Prefab)
         {
             if(template == null)
             {
-                LogUtil.LogError(typeof(SpawnPool), "SpawnPool::CreateGameObjectPool->Template Item is Null");
+                LogUtil.LogError(PoolConst.LOGGER_NAME, "SpawnPool::CreateGameObjectPool->Template is Null");
                 return null;
             }
-            if (goPools.TryGetValue(assetPath, out GameObjectPool goPool))
+
+            if (gameObjectPools.TryGetValue(uniqueName, out GameObjectPool goPool))
             {
-                LogUtil.LogWarning(typeof(SpawnPool), "SpawnPool::CreateGameObjectPool->the asset pool has been created.assetPath = " + assetPath);
+                LogUtil.LogWarning(PoolConst.LOGGER_NAME, "SpawnPool::CreateGameObjectPool->The pool has been created.uniqueName = " + uniqueName);
             }
             else
             {
-                goPool = new GameObjectPool();
-                goPool.InitPool(this, assetPath, template, templateType);
+                goPool = new GameObjectPool(this, uniqueName, template, templateType);
 
-                goPools.Add(assetPath, goPool);
+                gameObjectPools.Add(uniqueName, goPool);
             }
-           return goPool;
+
+            return goPool;
         }
         /// <summary>
         /// 删除指定的缓存池
         /// </summary>
-        /// <param name="assetPath">资源唯一标签，一般使用资源路径</param>
-        public void DeleteGameObjectPool(string assetPath)
+        /// <param name="uniqueName">资源唯一标签，一般使用资源路径</param>
+        public void DeleteGameObjectPool(string uniqueName)
         {
-            GameObjectPool gObjPool = GetGameObjectPool(assetPath);
+            LogUtil.LogInfo(PoolConst.LOGGER_NAME, $"SpawnPool::DeleteGameObjectPool->Try to delete pool.uniqueName ={uniqueName}");
+            
+            GameObjectPool gObjPool = GetGameObjectPool(uniqueName);
+
             if(gObjPool!=null)
             {
                 gObjPool.DestroyPool();
-                goPools.Remove(assetPath);
+                gameObjectPools.Remove(uniqueName);
             }
         }
 
         internal void CullSpawn(float deltaTime)
         {
-            foreach(var kvp in goPools)
+            foreach(var kvp in gameObjectPools)
             {
                 if(kvp.Value.isCull)
                 {
@@ -96,12 +99,13 @@ namespace Dot.Pool
 
         internal void DestroySpawn()
         {
-            foreach(var kvp in goPools)
+            foreach(var kvp in gameObjectPools)
             {
                 kvp.Value.DestroyPool();
             }
-            goPools.Clear();
-            Object.Destroy(CachedTransform.gameObject);
+            gameObjectPools.Clear();
+
+            Object.Destroy(SpawnTransform.gameObject);
         }
     }
 }

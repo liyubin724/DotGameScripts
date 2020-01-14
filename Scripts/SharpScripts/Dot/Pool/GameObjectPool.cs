@@ -23,16 +23,15 @@ namespace Dot.Pool
     public class GameObjectPool
     {
         private SpawnPool spawnPool = null;
-        private string assetPath = null;
+
+        private string uniqueName = null;
         private PoolTemplateType templateType = PoolTemplateType.Prefab;
         private GameObject instanceOrPrefabTemplate = null;
-        private Queue<GameObject> unusedItemQueue = new Queue<GameObject>();
 
+        private Queue<GameObject> unusedItemQueue = new Queue<GameObject>();
         private List<WeakReference<GameObject>> usedItemList = new List<WeakReference<GameObject>>();
 
         public OnPoolComplete completeCallback = null;
-
-        public bool isAutoClean = false;
 
         public int preloadTotalAmount = 0;
         public int preloadOnceAmount = 1;
@@ -49,14 +48,10 @@ namespace Dot.Pool
 
         private TimerTaskInfo preloadTimerTask = null;
 
-        internal GameObjectPool()
-        {
-        }
-
-        internal void InitPool(SpawnPool pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
+        internal GameObjectPool(SpawnPool pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
         {
             spawnPool = pool;
-            assetPath = aPath;
+            uniqueName = aPath;
 
             instanceOrPrefabTemplate = templateGObj;
             this.templateType = templateType;
@@ -64,7 +59,7 @@ namespace Dot.Pool
             if(templateType!= PoolTemplateType.Prefab)
             {
                 instanceOrPrefabTemplate.SetActive(false);
-                instanceOrPrefabTemplate.transform.SetParent(pool.CachedTransform, false);
+                instanceOrPrefabTemplate.transform.SetParent(pool.SpawnTransform, false);
             }
 
             preloadTimerTask = TimerManager.GetInstance().AddIntervalTimer(0.05f, OnPreloadTimerUpdate);
@@ -96,7 +91,7 @@ namespace Dot.Pool
                 for (int i = 0; i < poa; ++i)
                 {
                     GameObject instance = CreateNewItem();
-                    instance.transform.SetParent(spawnPool.CachedTransform, false);
+                    instance.transform.SetParent(spawnPool.SpawnTransform, false);
                     instance.SetActive(false);
                     unusedItemQueue.Enqueue(instance);
                 }
@@ -105,7 +100,7 @@ namespace Dot.Pool
 
         private void OnPoolComplete()
         {
-            completeCallback?.Invoke(spawnPool.PoolName, assetPath);
+            completeCallback?.Invoke(spawnPool.PoolName, uniqueName);
             completeCallback = null;
 
             if(preloadTimerTask!=null)
@@ -184,7 +179,7 @@ namespace Dot.Pool
                     if(poolItem!=null)
                     {
                         poolItem.SpawnName = spawnPool.PoolName;
-                        poolItem.AssetPath = assetPath;
+                        poolItem.AssetPath = uniqueName;
                         poolItem.DoSpawned();
                     }
                 }
@@ -202,7 +197,7 @@ namespace Dot.Pool
             }
             else
             {
-                item = (GameObject)AssetManager.GetInstance().InstantiateAsset(assetPath, instanceOrPrefabTemplate);
+                item = (GameObject)AssetManager.GetInstance().InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
             }
 
             if (item != null)
@@ -210,7 +205,7 @@ namespace Dot.Pool
                 GameObjectPoolItem poolItem = item.GetComponent<GameObjectPoolItem>();
                 if (poolItem != null)
                 {
-                    poolItem.AssetPath = assetPath;
+                    poolItem.AssetPath = uniqueName;
                     poolItem.SpawnName = spawnPool.PoolName;
                 }
             }
@@ -237,7 +232,7 @@ namespace Dot.Pool
                 pItem.DoDespawned();
             }
 
-            item.transform.SetParent(spawnPool.CachedTransform, false);
+            item.transform.SetParent(spawnPool.SpawnTransform, false);
             item.SetActive(false);
             unusedItemQueue.Enqueue(item);
 
@@ -338,10 +333,9 @@ namespace Dot.Pool
                 UnityObject.Destroy(instanceOrPrefabTemplate);
             }
 
-            assetPath = null;
+            uniqueName = null;
             spawnPool = null;
             instanceOrPrefabTemplate = null;
-            isAutoClean = false;
         }
     }
 }

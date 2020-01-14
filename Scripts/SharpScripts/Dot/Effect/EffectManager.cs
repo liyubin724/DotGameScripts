@@ -32,7 +32,6 @@ namespace Dot.Core.Effect
             SpawnPool spawnPool = PoolManager.GetInstance().GetSpawnPool(CONTROLLER_SPAWN_NAME,true);
 
             effectControllerPool = spawnPool.CreateGameObjectPool(CONTROLLER_POOL_PATH, GetEffectControllerTemplate(),PoolTemplateType.RuntimeInstance);
-            effectControllerPool.isAutoClean = false;
             effectControllerPool.preloadTotalAmount = 20;
             effectControllerPool.preloadOnceAmount = 2;
             effectControllerPool.completeCallback = OnInitComplete;
@@ -66,21 +65,21 @@ namespace Dot.Core.Effect
         /// 进行特效的预加载，并创建缓存池
         /// </summary>
         /// <param name="poolData"></param>
-        public void PreloadEffect(PoolData poolData)
+        public void PreloadEffect()//(PoolData poolData)
         {
-            PoolManager.GetInstance().LoadAssetToCreateGameObjectPool(poolData);
+            //PoolManager.GetInstance().LoadAssetToCreateGameObjectPool(poolData);
         }
         
         public void PreloadEffect(string spawnName, string assetPath, int preloadCount, OnPoolComplete callback)
         {
-            PoolData poolData = new PoolData()
-            {
-                spawnName = spawnName,
-                assetPath = assetPath,
-                preloadTotalAmount = preloadCount,
-                completeCallback = callback,
-            };
-            PreloadEffect(poolData);
+            //PoolData poolData = new PoolData()
+            //{
+            //    spawnName = spawnName,
+            //    assetPath = assetPath,
+            //    preloadTotalAmount = preloadCount,
+            //    completeCallback = callback,
+            //};
+            //PreloadEffect(poolData);
         }
         /// <summary>
         /// 使用指定的资源的路径（地址）创建特效

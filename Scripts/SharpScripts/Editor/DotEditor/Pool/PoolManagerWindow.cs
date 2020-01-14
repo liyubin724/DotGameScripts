@@ -40,7 +40,7 @@ namespace DotEditor.Pool
             PoolManager poolManager = PoolManager.GetInstance();
             var dynamicPoolMgr = poolManager.AsDynamic();
             Dictionary<string, SpawnPool> spawnDic = dynamicPoolMgr.spawnDic;
-            List<PoolData> poolDatas = dynamicPoolMgr.poolDatas;
+            List<object> poolDatas = dynamicPoolMgr.poolDatas;
 
             EditorGUILayout.Space();
 
@@ -85,7 +85,7 @@ namespace DotEditor.Pool
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawPoolData(PoolData poolData)
+        private void DrawPoolData(dynamic poolData)
         {
             EditorGUILayout.BeginHorizontal();
             {
