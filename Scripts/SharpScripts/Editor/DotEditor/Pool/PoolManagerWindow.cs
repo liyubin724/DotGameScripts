@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.Core.Pool
+namespace DotEditor.Pool
 {
     public class PoolManagerWindow : EditorWindow
     {
-        [MenuItem("Game/Manager/Pool Manager Window")]
+        [MenuItem("Game/Manager/Pool Manager")]
         public static void ShowWin()
         {
             PoolManagerWindow win = GetWindow<PoolManagerWindow>();

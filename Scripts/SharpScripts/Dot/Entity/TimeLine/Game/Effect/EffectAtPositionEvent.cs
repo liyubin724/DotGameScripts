@@ -1,5 +1,4 @@
-﻿using Dot.Config;
-using Dot.Core.Effect;
+﻿using Dot.Core.Effect;
 using Dot.Core.TimeLine;
 using UnityEngine;
 
@@ -19,20 +18,20 @@ namespace Dot.Core.Entity.TimeLine.Game
 
         public override void Trigger()
         {
-            EffectConfigData data = ConfigManager.GetInstance().GetEffectConfig(ConfigID);
-            EffectController effect = EffectManager.GetInstance().GetEffect(data.address,EffectScenarioType.Timline,true);
-            effect.isAutoPlayWhenEnable = data.isAutoPlay;
-            effect.lifeTime = data.lifeTime;
-            effect.stopDelayTime = data.stopDelayTime;
+            //EffectConfigData data = ConfigManager.GetInstance().GetEffectConfig(ConfigID);
+            //EffectController effect = EffectManager.GetInstance().GetEffect(data.address,EffectScenarioType.Timline,true);
+            //effect.isAutoPlayWhenEnable = data.isAutoPlay;
+            //effect.lifeTime = data.lifeTime;
+            //effect.stopDelayTime = data.stopDelayTime;
 
-            if(UseEntityPosition)
-            {
-                effect.CachedTransform.position = entity.EntityData.GetPosition();
-            }
-            else
-            {
-                effect.CachedTransform.position = Position;
-            }
+            //if(UseEntityPosition)
+            //{
+            //    effect.CachedTransform.position = entity.EntityData.GetPosition();
+            //}
+            //else
+            //{
+            //    effect.CachedTransform.position = Position;
+            //}
         }
     }
 }

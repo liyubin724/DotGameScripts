@@ -1,5 +1,4 @@
-﻿using Dot.Config;
-using Dot.Core.Effect;
+﻿using Dot.Core.Effect;
 using System.Collections.Generic;
 
 namespace Dot.Core.Entity.Controller
@@ -51,21 +50,22 @@ namespace Dot.Core.Entity.Controller
 
         private EffectController CreateEffectController(BindNodeData nodeData,int effectConfigID, EffectScenarioType scenarioType, bool isAutoRelease)
         {
-            EffectConfigData data = ConfigManager.GetInstance().GetEffectConfig(effectConfigID);
-            
-            EffectController effect = EffectManager.GetInstance().GetEffect(data.address, scenarioType, isAutoRelease);
-            effect.isAutoPlayWhenEnable = data.isAutoPlay;
-            effect.lifeTime = data.lifeTime;
-            effect.stopDelayTime = data.stopDelayTime;
+            //EffectConfigData data = ConfigManager.GetInstance().GetEffectConfig(effectConfigID);
 
-            if (isAutoRelease)
-            {
-                effect.effectFinished += OnAutoReleaseEffectComplete;
-            }else
-            {
-                effect.effectFinished += OnEffectComplete;
-            }
-            return effect;
+            //EffectController effect = EffectManager.GetInstance().GetEffect(data.address, scenarioType, isAutoRelease);
+            //effect.isAutoPlayWhenEnable = data.isAutoPlay;
+            //effect.lifeTime = data.lifeTime;
+            //effect.stopDelayTime = data.stopDelayTime;
+
+            //if (isAutoRelease)
+            //{
+            //    effect.effectFinished += OnAutoReleaseEffectComplete;
+            //}else
+            //{
+            //    effect.effectFinished += OnEffectComplete;
+            //}
+            //return effect;
+            return null;
         }
 
         private void OnEffectComplete(EffectController effect)
