@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Loader.Config;
-using Dot.Core.Pool;
+using Dot.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;

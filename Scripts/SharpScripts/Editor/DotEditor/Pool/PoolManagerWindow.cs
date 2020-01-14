@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using Dot.Core.Util;
 using DotEditor.Core.EGUI;
 using ReflectionMagic;

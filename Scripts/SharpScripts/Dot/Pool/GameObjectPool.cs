@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
+using Dot.Core.Loader;
 
-namespace Dot.Core.Pool
+namespace Dot.Pool
 {
     /// <summary>
     /// 用于创建缓存池的模板的类型
@@ -201,7 +202,7 @@ namespace Dot.Core.Pool
             }
             else
             {
-                item = (GameObject)Loader.AssetManager.GetInstance().InstantiateAsset(assetPath, instanceOrPrefabTemplate);
+                item = (GameObject)AssetManager.GetInstance().InstantiateAsset(assetPath, instanceOrPrefabTemplate);
             }
 
             if (item != null)

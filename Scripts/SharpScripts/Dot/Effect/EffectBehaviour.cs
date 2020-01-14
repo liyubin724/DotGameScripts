@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using UnityEngine;
 
 namespace Dot.Core.Effect

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Core.Pool
+namespace Dot.Pool
 {
     public delegate void OnPoolComplete(string spawnName, string assetPath);
 
@@ -32,7 +32,7 @@ namespace Dot.Core.Pool
         internal AssetLoaderHandle handle = null;
     }
     
-    public class PoolManager : Util.Singleton<PoolManager>
+    public class PoolManager : Singleton<PoolManager>
     {
         private Transform cachedTransform = null;
         private Dictionary<string, SpawnPool> spawnDic = new Dictionary<string, SpawnPool>();
@@ -132,7 +132,7 @@ namespace Dot.Core.Pool
                 }
             }
 
-            AssetLoaderHandle assetHandle = Loader.AssetManager.GetInstance().LoadAssetAsync(poolData.assetPath, OnLoadComplete, AssetLoaderPriority.Default,null, poolData);
+            AssetLoaderHandle assetHandle = AssetManager.GetInstance().LoadAssetAsync(poolData.assetPath, OnLoadComplete, AssetLoaderPriority.Default,null, poolData);
             poolData.handle = assetHandle;
             poolDatas.Add(poolData);
         }
