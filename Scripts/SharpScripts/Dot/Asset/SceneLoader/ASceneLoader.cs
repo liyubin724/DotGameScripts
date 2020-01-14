@@ -87,7 +87,7 @@ namespace Dot.Asset
                 loaderDatas.RemoveAt(0);
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-                string sceneName = currentLoaderData.sceneName;
+                string sceneName = data.sceneName;
                 if(data.state == SceneLoaderDataState.Load)
                 {
                     Scene scene = SceneManager.GetSceneByName(sceneName);

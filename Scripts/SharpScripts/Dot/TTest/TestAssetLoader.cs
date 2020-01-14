@@ -12,4 +12,15 @@ public class TestAssetLoader : MonoBehaviour
             ((GameObject)uObj).name = address + " instance";
         },null);
     }
+
+    private void OnGUI()
+    {
+        if(GUILayout.Button("Chang scene"))
+        {
+            AssetManager.GetInstance().LoadSceneAsync("test1", (address,scene,userdata)=>
+            {
+                AssetManager.GetInstance().UnloadUnusedAsset();
+            }, null);
+        }
+    }
 }
