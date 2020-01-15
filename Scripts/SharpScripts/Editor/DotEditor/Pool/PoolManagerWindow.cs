@@ -2,7 +2,6 @@
 using Dot.Pool;
 using Dot.Util;
 using DotEditor.Core.EGUI;
-using DotEditor.EGUI;
 using ReflectionMagic;
 using System;
 using System.Collections.Generic;
@@ -168,6 +167,7 @@ namespace DotEditor.Pool
             if (!spawnPoolFoldoutDic.TryGetValue(poolName, out SpawnPoolFoldoutData foldoutData))
             {
                 foldoutData = new SpawnPoolFoldoutData();
+                foldoutData.isFoldout = true;
                 spawnPoolFoldoutDic.Add(poolName, foldoutData);
             }
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -175,35 +175,39 @@ namespace DotEditor.Pool
                 foldoutData.isFoldout = EditorGUILayout.Foldout(foldoutData.isFoldout, poolName);
                 if (foldoutData.isFoldout)
                 {
-                    Transform spawnTransform = dynamicSpawnPool.SpawnTransform;
-                    EditorGUILayout.ObjectField(Contents.TransformContent, spawnTransform, typeof(Transform), false);
-
-                    Dictionary<string, GameObjectPool> gameObjectPools = dynamicSpawnPool.gameObjectPools;
-                    EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + gameObjectPools.Count));
-
                     EditorGUIUtil.BeginIndent();
                     {
-                        List<string> poolNames = gameObjectPools.Keys.ToList();
-                        poolNames.Sort();
-                        foreach (var name in poolNames)
+                        Transform spawnTransform = dynamicSpawnPool.SpawnTransform;
+                        EditorGUILayout.ObjectField(Contents.TransformContent, spawnTransform, typeof(Transform), false);
+
+                        Dictionary<string, GameObjectPool> gameObjectPools = dynamicSpawnPool.gameObjectPools;
+                        EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + gameObjectPools.Count));
+
+                        EditorGUIUtil.BeginIndent();
                         {
-                            if (!foldoutData.objectPoolFoldout.TryGetValue(name, out bool isFoldout))
+                            List<string> poolNames = gameObjectPools.Keys.ToList();
+                            poolNames.Sort();
+                            foreach (var name in poolNames)
                             {
-                                isFoldout = false;
-                                foldoutData.objectPoolFoldout.Add(name, isFoldout);
-                            }
-                            foldoutData.objectPoolFoldout[name] = EditorGUILayout.Foldout(foldoutData.objectPoolFoldout[name], name);
-                            if (foldoutData.objectPoolFoldout[name])
-                            {
-                                EditorGUIUtil.BeginIndent();
+                                if (!foldoutData.objectPoolFoldout.TryGetValue(name, out bool isFoldout))
                                 {
-                                    DrawGameObjectPool(gameObjectPools[name]);
+                                    isFoldout = true;
+                                    foldoutData.objectPoolFoldout.Add(name, isFoldout);
                                 }
-                                EditorGUIUtil.EndIndent();
+                                foldoutData.objectPoolFoldout[name] = EditorGUILayout.Foldout(foldoutData.objectPoolFoldout[name], name);
+                                if (foldoutData.objectPoolFoldout[name])
+                                {
+                                    EditorGUIUtil.BeginIndent();
+                                    {
+                                        DrawGameObjectPool(gameObjectPools[name]);
+                                    }
+                                    EditorGUIUtil.EndIndent();
+                                }
                             }
                         }
+                        EditorGUIUtil.EndIndent();
                     }
-                    EditorGUIUtil.EndIndent();
+                    EditorGUIUtil.EndIndent();   
                 }
             }
             EditorGUILayout.EndVertical();
