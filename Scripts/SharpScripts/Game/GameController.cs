@@ -1,7 +1,9 @@
 ﻿using Dot;
 using Dot.Asset;
+using Dot.Dispatch;
 using Dot.Log;
 using Dot.Lua;
+using Game.Dispatch;
 using UnityEngine;
 
 namespace Game
@@ -15,18 +17,32 @@ namespace Game
 
         private void Awake()
         {
-            DotProxy.Startup((result) => {
+            DotProxy.Startup();
+            EventManager.GetInstance().RegisterEvent(EventConst.PROXY_INIT, OnProxyInitFinish);
+        }
 
-                LogUtil.LogInfo("GameController", "GameController::Awake->DotProxy is inited.result = "+result.ToString());
-                if(result)
-                {
-                    AssetLoaderMode loaderMode = AssetLoaderMode.AssetDatabase;
-                    string assetRootDir = string.Empty;
+        private void OnProxyInitFinish(EventData eventData)
+        {
+            if(!eventData.GetValue<bool>())
+            {
+                Debug.LogError("GameController::OnProxyInitFinish->Proxy Init failed");
+            }else
+            {
+                LogUtil.LogInfo(GetType(), "OnProxyInitFinish->init success");
+
+                InitAssetManager();
+            }
+        }
+
+        private void InitAssetManager()
+        {
+            AssetLoaderMode loaderMode = AssetLoaderMode.AssetDatabase;
+            string assetRootDir = string.Empty;
 #if ASSET_BUNDLE
 
 #if UNITY_EDITOR
-                    loaderMode = AssetLoaderMode.AssetBundle;
-                    assetRootDir = "E:/WorkSpace/DotGameProject/DotGameClient/AssetConfig/StandaloneWindows64/assetbundles";
+            loaderMode = AssetLoaderMode.AssetBundle;
+            assetRootDir = "E:/WorkSpace/DotGameProject/DotGameClient/AssetConfig/StandaloneWindows64/assetbundles";
 #else
 
 #endif
@@ -40,26 +56,27 @@ namespace Game
 #endif
 
 #endif
-                    AssetManager.GetInstance().InitManager(loaderMode, (isInitSuccess) =>
+            AssetManager.GetInstance().InitManager(loaderMode, OnAssetMgrInitFinish, assetRootDir);
+        }
+
+        private void OnAssetMgrInitFinish(bool result)
+        {
+            if(result)
+            {
+                string[] luaPathFormat = new string[]
                     {
-                        if (isInitSuccess)
-                        {
-                            string[] luaPathFormat = new string[]
-                            {
                                 LuaConfig.DefaultDiskPathFormat,
-                            };
+                    };
 
-                            LuaManager.GetInstance().NewLuaEnv(luaEnvType, luaPathFormat, preloadLuaAssets, luaMgrName);
-                        }
-                    }, assetRootDir);
+                LuaManager.GetInstance().NewLuaEnv(luaEnvType, luaPathFormat, preloadLuaAssets, luaMgrName);
 
+                OnControllerInitFinish();
+            }
+        }
 
-
-                }
-            });
-
-            
-
+        private void OnControllerInitFinish()
+        {
+            EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
         }
     }
 }

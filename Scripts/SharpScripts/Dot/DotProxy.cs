@@ -9,6 +9,7 @@ using System;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
+using Dot.Dispatch;
 
 namespace Dot
 {
@@ -17,10 +18,9 @@ namespace Dot
         private static string LOG_CONFIG = "LogConfig/log4net.xml";
         private static string LOG_CONFIG_IN_EDITOR = "LogConfig/log4net-editor.xml";
 
-        public static void Startup(Action<bool> startupCallback)
+        public static void Startup()
         {
-            DotProxy proxy = DontDestroyHandler.CreateComponent<DotProxy>();
-            proxy.proxyStartupCallback = startupCallback;
+            DontDestroyHandler.CreateComponent<DotProxy>();
         }
 
         public static void TearDown()
@@ -32,21 +32,33 @@ namespace Dot
         }
 
         public static DotProxy proxy = null;
+
+        private bool isStartup = false;
         public bool IsStartup { get => isStartup; }
 
-        private Action<bool> proxyStartupCallback = null;
-        private bool isStartup = false;
+        private TimerManager timerMgr = null;
+        private EventManager eventMgr = null;
+        private AssetManager assetMgr = null;
+        private LuaManager luaMgr = null;
+        private LogManager logMgr = null;
 
         private void Awake()
         {
             if(proxy!=null)
             {
                 Destroy(this);
-            }else
-            {
-                proxy = this;
-                InitProxy();
+                return;
             }
+
+            proxy = this;
+
+            timerMgr = TimerManager.GetInstance();
+            eventMgr = EventManager.GetInstance();
+            assetMgr = AssetManager.GetInstance();
+            luaMgr = LuaManager.GetInstance();
+            logMgr = LogManager.GetInstance();
+
+            InitProxy();
         }
 
         private void Update()
@@ -57,18 +69,19 @@ namespace Dot
             }
 
             float deltaTime = Time.deltaTime;
-            TimerManager.GetInstance().DoUpdate(deltaTime);
-            LuaManager.GetInstance().DoUpdate(deltaTime);
-            AssetManager.GetInstance().DoUpdate(deltaTime);
+            timerMgr.DoUpdate(deltaTime);
+            luaMgr.DoUpdate(deltaTime);
+            assetMgr.DoUpdate(deltaTime);
         }
 
         private void OnDestroy()
         {
             if (isStartup)
             {
-                LuaManager.GetInstance().DoDispose();
-                TimerManager.GetInstance().DoDispose();
-                AssetManager.GetInstance().DoDispose();
+                luaMgr.DoDispose();
+                assetMgr.DoDispose();
+                eventMgr.DoDispose();
+                timerMgr.DoDispose();
             }
             proxy = null;
         }
@@ -78,8 +91,9 @@ namespace Dot
             StartCoroutine(InitLog((result) =>
             {
                 isStartup = true;
-                proxyStartupCallback.Invoke(true);
-                proxyStartupCallback = null;
+                eventMgr.TriggerEvent(EventConst.PROXY_LOG_INIT, result);
+
+                eventMgr.TriggerEvent(EventConst.PROXY_INIT, isStartup);
             }));
         }
 
@@ -100,26 +114,21 @@ namespace Dot
             UnityWebRequest webRequest = UnityWebRequest.Get(logConfigPath);
             yield return webRequest.SendWebRequest();
 
+            bool initLogResult = false;
             if(webRequest.isDone)
             {
                 byte[] datas = webRequest.downloadHandler.data;
                 if(datas!=null && datas.Length>0)
                 {
                     string configContent = Encoding.UTF8.GetString(datas);
-                    LogManager.GetInstance().InitLog(configContent);
+                    logMgr.InitLog(configContent);
 
-                    finishCallback.Invoke(true);
+                    initLogResult = true;
                 }
-                else
-                {
-                    Debug.Log("Init log failed");
-                    finishCallback.Invoke(false);
-                }
-            }else
-            {
-                Debug.Log("Load log config failed");
-                finishCallback.Invoke(false);
             }
+            yield return new WaitForEndOfFrame();
+
+            finishCallback.Invoke(initLogResult);
         }
     }
 }
