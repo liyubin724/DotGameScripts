@@ -1,13 +1,13 @@
 require("Dot/Core/Class")
 require("Dot/Utils/TableUtil")
 require("Dot/Event/EventDispatcher")
-require("Dot/Debug/Logger")
+require("Dot/Log/DebugLog")
 require("Dot/Manager/GlobalManager")
 
 if IsDebug then
-    Logger.SetEnable(true, true, true)
+    DebugLog.SetEnable(true, true, true)
 else
-    Logger.SetEnable(true, false, false)
+    DebugLog.SetEnable(true, false, false)
 end
 
 Json = require("rapidjson")

@@ -20,8 +20,6 @@ namespace Dot.Lua.Register
             if (isInited)
                 return;
 
-            isInited = true;
-
             luaEnv = LuaManager.GetInstance()[envType];
             if (luaEnv == null)
             {
@@ -36,6 +34,8 @@ namespace Dot.Lua.Register
                 {
                     ObjTable.Set("gameObject", gameObject);
                     ObjTable.Set("transform", transform);
+
+                    isInited = true;
 
                     OnInitFinished();
                 }

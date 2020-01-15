@@ -14,6 +14,8 @@ function GameManager:DoStart()
     -- local data = pb.encode("SearchRequest",sr)
     -- local msg = pb.decode("SearchRequest",data)
     -- print(msg.query)
+
+    DebugLog.Log("GameMgr","DoStart")
 end
 
 function GameManager:DoUpdate(deltaTime)

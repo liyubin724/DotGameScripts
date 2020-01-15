@@ -17,7 +17,9 @@ namespace Dot.UI
         [SerializeField]
         private Canvas uiCanvas = null;
         public Canvas UICanvas { get => uiCanvas; }
-
+        [SerializeField]
+        private UIManager uiMgr;
+        public UIManager UIMgr { get => uiMgr; }
 
         private void Awake()
         {
@@ -39,6 +41,11 @@ namespace Dot.UI
                 LogUtil.LogError(typeof(UIRoot), "UICanvas is Null");
                 return;
             }
+            if(uiMgr == null)
+            {
+                LogUtil.LogError(typeof(UIRoot), "UIMgr is Null");
+                return;
+            }
 
             uiRoot = this;
             DontDestroyHandler.AddTransform(transform);
@@ -48,7 +55,7 @@ namespace Dot.UI
 
         private void OnControllerInit(EventData eventData)
         {
-            
+            uiMgr.DoInit();
         }
     }
 }

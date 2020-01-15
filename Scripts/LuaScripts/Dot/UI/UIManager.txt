@@ -1,0 +1,4 @@
+UIManager = Class(function(self)
+
+end)
+

@@ -1,0 +1,51 @@
+local LogUtil = CS.Dot.Log.LogUtil
+local table = table
+
+----private----
+DebugLog = {}
+DebugLog.__index = DebugLog
+
+----public----
+--
+--@param isErrorEnable : 是否输出Error类型的日志
+--@param isWarningEnable : 是否输出Warning类型的日志
+--@param isInfoEnable : 是否输出Info类型的日志
+--@return void
+function DebugLog.SetEnable(isErrorEnable,isWarningEnable,isInfoEnable)
+    DebugLog.isErrorEnable = isErrorEnable or true
+    DebugLog.isWarningEnable = isWarningEnable or true
+    DebugLog.isInfoEnable = isInfoEnable or true
+end
+
+----public----
+--
+--@param loggerName
+--@param data
+--@return void
+function DebugLog.Error(loggerName,data)
+    if DebugLog.isErrorEnable then
+        LogUtil.LogError(loggerName,"LUA:"..table.tostring(data))
+    end
+end
+
+----public----
+--
+--@param loggerName
+--@param data
+--@return void
+function DebugLog.Warning(loggerName,data)
+    if DebugLog.isWarningEnable then
+        LogUtil.LogWarning(loggerName,"LUA:"..table.tostring(data))
+    end
+end
+
+----public----
+--
+--@param loggerName
+--@param data
+--@return void
+function DebugLog.Log(loggerName,data)
+    if DebugLog.isInfoEnable then
+        LogUtil.LogInfo(loggerName,"LUA:"..table.tostring(data))
+    end
+end

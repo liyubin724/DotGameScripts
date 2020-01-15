@@ -63,19 +63,17 @@ namespace Game
         {
             if(result)
             {
-                string[] luaPathFormat = new string[]
-                    {
-                                LuaConfig.DefaultDiskPathFormat,
-                    };
-
-                LuaManager.GetInstance().NewLuaEnv(luaEnvType, luaPathFormat, preloadLuaAssets, luaMgrName);
-
                 OnControllerInitFinish();
             }
         }
 
         private void OnControllerInitFinish()
         {
+            LuaManager.GetInstance().NewLuaEnv(luaEnvType, 
+                new string[] { LuaConfig.DefaultDiskPathFormat }, 
+                preloadLuaAssets, 
+                luaMgrName);
+
             EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
         }
     }
