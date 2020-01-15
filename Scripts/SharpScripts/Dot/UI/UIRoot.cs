@@ -1,40 +1,54 @@
 ﻿using Dot.Util;
 using Dot.Log;
 using UnityEngine;
+using Dot.Dispatch;
+using Game.Dispatch;
 
 namespace Dot.UI
 {
-    public enum UIRootLayerType
-    {
-
-    }
-
     public class UIRoot : MonoBehaviour
     {
-        private static UIRoot m_root = null;
+        private static UIRoot uiRoot = null;
+        public static UIRoot Root { get => uiRoot; }
 
-        public static UIRoot Root
-        {
-            get
-            {
-                return m_root;
-            }
-        }
+        [SerializeField]
+        private Camera uiCamera = null;
+        public Camera UICamera { get => uiCamera; }
+        [SerializeField]
+        private Canvas uiCanvas = null;
+        public Canvas UICanvas { get => uiCanvas; }
 
-        public Camera uiCamera = null;
-        public Canvas rootCanvas = null;
 
         private void Awake()
         {
-            if(m_root!=null)
+            if (uiRoot != null)
             {
-                LogUtil.LogError(typeof(UIRoot),"UIRoot has been initized!");
+                LogUtil.LogError(typeof(UIRoot), "UIRoot has been initized!");
                 Destroy(this);
                 return;
             }
 
-            m_root = this;
+            if (uiCamera == null)
+            {
+                LogUtil.LogError(typeof(UIRoot), "UICamera is Null");
+                return;
+            }
+
+            if (uiCanvas == null)
+            {
+                LogUtil.LogError(typeof(UIRoot), "UICanvas is Null");
+                return;
+            }
+
+            uiRoot = this;
             DontDestroyHandler.AddTransform(transform);
+
+            EventManager.GetInstance().RegisterEvent(GameEventConst.CONTROLLER_INIT, OnControllerInit);
+        }
+
+        private void OnControllerInit(EventData eventData)
+        {
+            
         }
     }
 }
