@@ -2,4 +2,6 @@ EventID = {
     AppStart = 1,
     AppUpdate = 2,
     AppDestroy = 3,
+
+    LanguageChanged = 10,
 }

@@ -2,7 +2,7 @@ local LogUtil = CS.Dot.Log.LogUtil
 local table = table
 
 ----private----
-DebugLog = {}
+local DebugLog = {}
 DebugLog.__index = DebugLog
 
 ----public----
@@ -49,3 +49,5 @@ function DebugLog.Log(loggerName,data)
         LogUtil.LogInfo(loggerName,"LUA:"..table.tostring(data))
     end
 end
+
+return DebugLog
