@@ -22,7 +22,7 @@
             "type": "lua",
             "request": "launch",
             "name": "LuaPanda-DebugFile",
-            "luaPath": "",
+            "luaPath": "E:/WorkSpace/DotGameProject/DotGameTools/lua/lua53.exe",
             "packagePath": [],
             "luaFileExtension": "txt",
             "connectionPort": 8818,

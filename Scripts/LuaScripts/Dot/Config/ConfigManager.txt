@@ -1,5 +1,0 @@
-ConfigManager =
-    Class(
-    function(self)
-    end
-)

@@ -1,0 +1,8 @@
+ConfigSummarySheet = {}
+ConfigSummarySheet.__index = function(t,k)
+
+end
+
+ConfigSummarySheet.__newindex = function(t,k,v)
+
+end
