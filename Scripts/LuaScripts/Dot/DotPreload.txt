@@ -1,15 +1,23 @@
 require("Dot/Core/Class")
 require("Dot/Utils/TableUtil")
-require("Dot/Event/EventDispatcher")
 require("Dot/Log/DebugLog")
-require("Dot/Manager/GlobalManager")
+require("Dot/Event/EventDispatcher")
+require("Dot/System/AppEnv")
 
-if IsDebug then
-    DebugLog.SetEnable(true, true, true)
-else
-    DebugLog.SetEnable(true, false, false)
+Dot = {}
+Dot.__index = Dot
+
+Dot.DebugLog = require("Dot/Log/DebugLog")
+Dot.Json = require("rapidjson")
+Dot.GEventDispatcher = EventDispatcher()
+Dot.AppEnv = AppEnv(Dot.GEventDispatcher)
+
+function Dot:OnModeChanged()
+    if self.AppEnv:IsDebug() then
+        self.DebugLog:SetEnable(true,true,true)
+    else
+        self.DebugLog:SetEnable(true,false,false)
+    end
 end
 
-Json = require("rapidjson")
-GlobalMgr = GlobalManager()
-GlobalEvent = GlobalMgr:GetManager(GMgrName.GEvent)
+Dot.GEventDispatcher:Register(EventID.ModeChanged,EventData(Dot,Dot.OnModeChanged,false))

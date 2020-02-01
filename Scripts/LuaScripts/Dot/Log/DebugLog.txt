@@ -11,10 +11,10 @@ DebugLog.__index = DebugLog
 --@param isWarningEnable : 是否输出Warning类型的日志
 --@param isInfoEnable : 是否输出Info类型的日志
 --@return void
-function DebugLog.SetEnable(isErrorEnable,isWarningEnable,isInfoEnable)
-    DebugLog.isErrorEnable = isErrorEnable or true
-    DebugLog.isWarningEnable = isWarningEnable or true
-    DebugLog.isInfoEnable = isInfoEnable or true
+function DebugLog:SetEnable(isErrorEnable,isWarningEnable,isInfoEnable)
+    self.isErrorEnable = isErrorEnable or true
+    self.isWarningEnable = isWarningEnable or true
+    self.isInfoEnable = isInfoEnable or true
 end
 
 ----public----
@@ -22,8 +22,8 @@ end
 --@param loggerName
 --@param data
 --@return void
-function DebugLog.Error(loggerName,data)
-    if DebugLog.isErrorEnable then
+function DebugLog:Error(loggerName,data)
+    if self.isErrorEnable then
         LogUtil.LogError(loggerName,"LUA:"..table.tostring(data))
     end
 end
@@ -33,8 +33,8 @@ end
 --@param loggerName
 --@param data
 --@return void
-function DebugLog.Warning(loggerName,data)
-    if DebugLog.isWarningEnable then
+function DebugLog:Warning(loggerName,data)
+    if self.isWarningEnable then
         LogUtil.LogWarning(loggerName,"LUA:"..table.tostring(data))
     end
 end
@@ -44,8 +44,8 @@ end
 --@param loggerName
 --@param data
 --@return void
-function DebugLog.Log(loggerName,data)
-    if DebugLog.isInfoEnable then
+function DebugLog:Log(loggerName,data)
+    if self.isInfoEnable then
         LogUtil.LogInfo(loggerName,"LUA:"..table.tostring(data))
     end
 end

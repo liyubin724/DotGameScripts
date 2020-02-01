@@ -1,0 +1,3 @@
+AppMode = {}
+AppMode.Debug = 1
+AppMode.Release = 2

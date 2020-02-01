@@ -1,0 +1,3 @@
+AppLanguage = {}
+AppLanguage.SimpleChinese = "zh"
+AppLanguage.English = "en"

@@ -1,0 +1,41 @@
+require("Dot/Core/Class")
+require("Dot/System/AppLanguage")
+require("Dot/System/AppMode")
+require("Dot/Event/EventID")
+
+local EventID = EventID
+local AppMode = AppMode
+
+AppEnv = Class(function(self,dispatcher)
+    self.language = AppLanguage.SimpleChinese
+    self.mode = AppMode.Debug
+    self.dispatcher = dispatcher
+end)
+
+function AppEnv:GetLanguage()
+    return self.language
+end
+
+function AppEnv:SetLanguage(language)
+    self.language = language
+
+    if self.dispatcher then
+        self.dispatcher:Trigger(EventID.LanguageChanged)
+    end
+end
+
+function AppEnv:GetMode()
+    return self.mode
+end
+
+function AppEnv:SetMode(mode)
+    self.mode = mode
+
+    if self.dispatcher then
+        self.dispatcher:Trigger(EventID.ModeChanged)
+    end
+end
+
+function AppEnv:IsDebug()
+    return self.mode == AppMode.Debug
+end

@@ -1,0 +1,15 @@
+ConfigTextSheet = {}
+
+function ConfigTextSheet:GetText(textId)
+  local data = self[textId]
+  if not data then
+    return nil
+  end
+  return data.zh
+end
+
+ConfigTextSheet.__index = ConfigTextSheet
+ConfigTextSheet.__newindex = function(t,k,v)
+  error("Read only,so you can't add new key for it")
+end
+ConfigTextSheet.__metatable = "Locked"

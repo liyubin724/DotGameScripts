@@ -4,4 +4,5 @@ EventID = {
     AppDestroy = 3,
 
     LanguageChanged = 10,
+    ModeChanged = 11,
 }
