@@ -1,0 +1,40 @@
+require("Dot/Event/EventDispatcher")
+require("Dot/System/AppEnv")
+
+Dot = {}
+Dot.__index = Dot
+
+Dot.DebugLog = require("Dot/Log/DebugLog")
+Dot.Json = require("rapidjson")
+Dot.GEventDispatcher = EventDispatcher()
+Dot.AppEnv = AppEnv(Dot.GEventDispatcher)
+
+----private----
+--开始启动
+function Dot:DoStart()
+
+end
+
+----private----
+--响应Update事件，由C#传递到Lua
+function Dot:DoUpdate()
+
+end
+
+----private----
+--响应销毁事件，由C#传递到Lua
+function Dot:DoDestroy()
+
+end
+
+----private----
+--用于侦听运行时Mode改变后修改日志的输出
+function Dot:DoModeChanged()
+    if self.AppEnv:IsDebug() then
+        self.DebugLog:SetEnable(true,true,true)
+    else
+        self.DebugLog:SetEnable(true,false,false)
+    end
+end
+
+Dot.GEventDispatcher:Register(EventID.ModeChanged,EventData(Dot,Dot.DoModeChanged,false))

@@ -1,4 +1,9 @@
 ----public----
+--
+--@param receiver 接收事件的table，可为空
+--@param func 接收事件处理的处理函数
+--@param isOnce 是否只接收一次
+--@param data 自定义参数
 EventData =
     Class(
     function(self, receiver, func, isOnce, data)
@@ -9,10 +14,16 @@ EventData =
     end
 )
 
+----public----
+--
+--@return 返回接收者
 function EventData:GetReceiver()
     return self.receiver
 end
 
+----public----
+--
+--@return 返回接收函数
 function EventData:GetFunc()
     return self.func
 end
@@ -41,7 +52,7 @@ function EventData:Invoke(...)
             end
         end
     else
-        Logger.LogError("EventData::Invoke->func is nil")
+        Dot.DebugLog:LogError("EventData::Invoke->func is nil")
     end
 end
 

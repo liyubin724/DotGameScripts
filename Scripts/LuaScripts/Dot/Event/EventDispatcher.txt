@@ -1,6 +1,8 @@
 require("Dot/Event/EventID")
 require("Dot/Event/EventData")
-----private----
+----public----
+--消息机制
+--
 EventDispatcher =
     Class(
     function(self)
@@ -22,7 +24,7 @@ function EventDispatcher:Register(eventID, eventData)
 
         table.insert(eventList, eventData)
     else
-        Logger.LogWarning("LuaEventDispatcher::Register->data is Nil")
+        Dot.DebugLog:LogWarning("LuaEventDispatcher::Register->data is Nil")
     end
 end
 
@@ -60,7 +62,7 @@ function EventDispatcher:Unregister(eventID, eventData)
             end
         end
     else
-        Logger.LogWarning("EventDispatcher::Unregister->eventData is Nil")
+        Dot.DebugLog:LogWarning("EventDispatcher::Unregister->eventData is Nil")
     end
 end
 

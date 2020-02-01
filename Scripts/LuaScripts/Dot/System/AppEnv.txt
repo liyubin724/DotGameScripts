@@ -5,6 +5,7 @@ require("Dot/Event/EventID")
 
 local EventID = EventID
 local AppMode = AppMode
+local AppLanguage = AppLanguage
 
 AppEnv = Class(function(self,dispatcher)
     self.language = AppLanguage.SimpleChinese
