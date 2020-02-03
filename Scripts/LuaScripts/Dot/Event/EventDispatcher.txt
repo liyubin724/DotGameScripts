@@ -1,5 +1,7 @@
 require("Dot/Event/EventID")
 require("Dot/Event/EventData")
+require("Dot/Utils/TableUtil")
+
 ----public----
 --消息机制
 --
@@ -78,7 +80,7 @@ end
 
 ----public----
 --
-function EventDispatcher:DoDestroy()
+function EventDispatcher:Clear()
     for index = 1, #self.events do
         local eventList = self.events[index]
         if eventList then
