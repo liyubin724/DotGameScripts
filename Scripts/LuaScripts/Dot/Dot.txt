@@ -4,10 +4,14 @@ require("Dot/System/AppEnv")
 Dot = {}
 Dot.__index = Dot
 
-Dot.DebugLog = require("Dot/Log/DebugLog")
-Dot.Json = require("rapidjson")
-Dot.GEventDispatcher = EventDispatcher()
-Dot.AppEnv = AppEnv(Dot.GEventDispatcher)
+----private----
+--初始化
+function Dot:DoAwake()
+    self.DebugLog = require("Dot/Log/DebugLog")
+    self.Json = require("rapidjson")
+    self.GEventDispatcher = EventDispatcher()
+    self.AppEnv = AppEnv(Dot.GEventDispatcher)
+end
 
 ----private----
 --开始启动

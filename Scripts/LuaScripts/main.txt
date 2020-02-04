@@ -1,7 +1,0 @@
-local main = function()
-
-end
-
-main()
-print("SSSS")
-print("SSSS")
