@@ -7,9 +7,7 @@ namespace Dot.Lua.Register
 {
     public class LuaScriptBindBehaviour : MonoBehaviour
     {
-        public LuaEnvType envType = LuaEnvType.Game;
         public LuaAsset luaAsset;
-
         protected LuaEnv luaEnv;
 
         public LuaTable ObjTable { get; private set; }
@@ -20,10 +18,10 @@ namespace Dot.Lua.Register
             if (isInited)
                 return;
 
-            luaEnv = LuaManager.GetInstance()[envType];
+            luaEnv = LuaManager.GetInstance().LuaEnv;
             if (luaEnv == null)
             {
-                LogUtil.LogError(typeof(LuaScriptBindBehaviour), $"LuaRegisterBehaviour::InitLua->LuaEnv is null. envType = {envType}");
+                LogUtil.LogError(typeof(LuaScriptBindBehaviour), $"LuaRegisterBehaviour::InitLua->LuaEnv is null.");
                 return;
             }
 

@@ -1,89 +1,54 @@
 ﻿using Dot.Log;
 using Dot.Util;
-using System.Collections.Generic;
 using XLua;
 
 namespace Dot.Lua
 {
-    public enum LuaEnvType
-    {
-        Update,
-        Game,
-    }
-
     public class LuaManager : Singleton<LuaManager>
     {
-        private Dictionary<LuaEnvType, LuaEnvEntity> envEntityDic = new Dictionary<LuaEnvType, LuaEnvEntity>();
+        internal static readonly string LOGGER_NAME = "LuaEnv";
+        private static readonly string LUA_NAME = "Dot";
 
-        public LuaEnv this[LuaEnvType envType]
-        {
-            get
-            {
-                if(envEntityDic.TryGetValue(envType,out LuaEnvEntity entity))
-                {
-                    return entity.LuaEnv;
-                }else
-                {
-                    LogUtil.LogError(typeof(LuaManager), $"LuaManager::this[LuaEnvType]=>LuaEnv not found.EnvType = {envType}");
-                    return null;
-                }
-            }
-        }
+        private LuaEnvEntity luaEnvEntity = null;
+        public LuaEnv LuaEnv { get => luaEnvEntity?.Lua; }
 
-        public void NewLuaEnv(LuaEnvType envType,string[] scriptPathFormats,LuaAsset[] prerequiredAssets,string mgrNameInLua)
+        public void NewLuaEnv(string[] scriptPathFormats, LuaAsset[] prerequiredAssets)
         {
-            if(HasLuaEnv(envType))
+            if(luaEnvEntity!=null)
             {
-                LogUtil.LogError(typeof(LuaManager), "LuaManager::NewLuaEnv->LuaEnv has been created.");
+                LogUtil.LogError(LOGGER_NAME,"lua env has been started");
                 return;
             }
-
-            LuaEnvEntity envEntity = new LuaEnvEntity(scriptPathFormats);
-            envEntity.DoStart(prerequiredAssets, mgrNameInLua);
-
-            envEntityDic.Add(envType, envEntity);
+            luaEnvEntity = new LuaEnvEntity(scriptPathFormats);
+            luaEnvEntity.DoStart(prerequiredAssets, LUA_NAME);
         }
 
-        public void DeleteLuaEnv(LuaEnvType envType)
+        public void DisposeLuaEnv()
         {
-            if (envEntityDic.TryGetValue(envType, out LuaEnvEntity entity))
+            if(luaEnvEntity != null)
             {
-                envEntityDic.Remove(envType);
-                entity.DoDestroy();
+                luaEnvEntity.DoDestroy();
+                luaEnvEntity = null;
             }
-        }
-
-        public bool HasLuaEnv(LuaEnvType envType)
-        {
-            return envEntityDic.ContainsKey(envType);
         }
 
         public void FullGC()
         {
-            foreach(var kvp in envEntityDic)
+            if(luaEnvEntity!=null)
             {
-                if(kvp.Value!=null)
-                {
-                    kvp.Value.LuaEnv?.FullGc();
-                }
-            }
-        }
-
-        public void FullGC(LuaEnvType envType)
-        {
-            LuaEnv luaEnv = this[envType];
-            if (luaEnv != null)
-            {
-                luaEnv.FullGc();
+                luaEnvEntity.FullGC();
             }
         }
 
         public void DoUpdate(float deltaTime)
         {
-            foreach(var kvp in envEntityDic)
-            {
-                kvp.Value.DoUpdate(deltaTime);
-            }
+            luaEnvEntity?.DoUpdate(deltaTime);
+        }
+
+        public override void DoDispose()
+        {
+            DisposeLuaEnv();
+            base.DoDispose();
         }
     }
 }

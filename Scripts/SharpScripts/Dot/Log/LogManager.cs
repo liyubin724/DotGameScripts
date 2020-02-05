@@ -16,8 +16,9 @@ namespace Dot.Log
                 LogUtil.Initalize(logConfig);
 
                 isInit = true;
-
+#if !UNITY_EDITOR
                 Application.logMessageReceived += OnException;
+#endif
             }
         }
 
@@ -33,7 +34,9 @@ namespace Dot.Log
         {
             if (isInit)
             {
+#if !UNITY_EDITOR
                 Application.logMessageReceived -= OnException;
+#endif
                 isInit = false;
             }
             base.DoDispose();

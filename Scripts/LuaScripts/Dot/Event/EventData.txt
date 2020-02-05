@@ -1,3 +1,5 @@
+require("Dot/Core/Class")
+
 ----public----
 --
 --@param receiver 接收事件的table，可为空

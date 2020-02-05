@@ -1,0 +1,19 @@
+
+Game = {}
+Game.__index = Game
+
+function Game:DoInit()
+    if self.isInit then
+        return
+    end
+
+    self.isInit = true
+
+    Dot.DoStartEvent = Dot.DoStartEvent + {self,Game.DoStart}
+end
+
+function Game:DoStart()
+    Dot.DoStartEvent = Dot.DoStartEvent - {self,Game.DoStart}
+
+    Dot.DebugLog:Info("Game","DoStart")
+end

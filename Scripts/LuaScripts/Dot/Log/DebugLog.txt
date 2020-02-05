@@ -44,7 +44,7 @@ end
 --@param loggerName
 --@param data
 --@return void
-function DebugLog:Log(loggerName,data)
+function DebugLog:Info(loggerName,data)
     if self.isInfoEnable then
         LogUtil.LogInfo(loggerName,"LUA:"..table.tostring(data))
     end

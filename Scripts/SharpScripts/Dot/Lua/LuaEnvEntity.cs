@@ -12,11 +12,10 @@ namespace Dot.Lua
         private static float DEFAULT_ENV_TICK = 60;
 
         private LuaEnv luaEnv = null;
+        internal LuaEnv Lua { get => luaEnv; }
 
         private LuaTable mgrInLua = null;
         private Action<LuaTable,float> updateAction = null;
-
-        public LuaEnv LuaEnv { get => luaEnv; }
 
         private TimerTaskInfo timerInfo = null;
         private float tickInterval = 0;
@@ -109,15 +108,20 @@ namespace Dot.Lua
 
             if(mgrInLua!=null)
             {
-                Action<LuaTable> destroyAction = mgrInLua.Get<Action<LuaTable>>(LuaConfig.DESTROY_FUNCTION_NAME);
-                destroyAction?.Invoke(mgrInLua);
-                destroyAction = null;
+                LuaFunction destroyFunc = mgrInLua.Get<LuaFunction>(LuaConfig.DESTROY_FUNCTION_NAME);
+                destroyFunc?.Action(mgrInLua);
+                destroyFunc.Dispose();
 
                 mgrInLua.Dispose();
                 mgrInLua = null;
             }
-            luaEnv.Dispose();
+            luaEnv?.Dispose();
             luaEnv = null;
+        }
+
+        public void FullGC()
+        {
+            luaEnv?.FullGc();
         }
     }
 }

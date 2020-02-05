@@ -1,6 +1,50 @@
-ConfigManager = {}
-ConfigManager.__index = ConfigManager
+require("Dot/Core/Class")
+require("Dot/Utils/TableUtil")
+require("Dot/Config/ConfigConst")
+require("Dot/Config/ConfigSheetLine")
+require("Dot/Config/ConfigSubSheet")
+require("Dot/Config/ConfigSummarySheet")
+require("Dot/Config/ConfigTextSheet")
 
-function ConfigManager:GetConfig(configName)
+local Class = Class
+ConfigManager = Class(function(self)
+    self.pathFormat = nil
+    self.configDic = {}
+end)
 
+----public----
+--
+--@param format
+function ConfigManager:SetConfigPathFormat(format)
+    self.pathFormat = format
+end
+
+----public----
+--
+--@param configName
+function ConfigManager:LoadConfig(configName)
+    local config = self.configDic[configName]
+
+    if not config then
+        config = require(string.format(self.pathFormat, configName))
+        if config then
+            self.configDic[configName] = config
+        end
+    end
+
+    return config
+end
+
+----public----
+--
+--@param configName
+function ConfigManager:UnloadConfig(configName)
+    local config = self.configDic[configName]
+    if config then
+        self.configDic[configName] = nil
+    end
+end
+
+function ConfigManager:UnloadAll()
+    table.clear(self.configDic)
 end

@@ -1,1 +1,6 @@
-require("Game/GamePreload")
+require("Dot/Dot")
+require("Game/Game")
+
+Dot:DoInit()
+Game:DoInit()
+

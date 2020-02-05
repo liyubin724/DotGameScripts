@@ -12,9 +12,6 @@ namespace Game
     {
         public LuaAsset[] preloadLuaAssets;
 
-        public LuaEnvType luaEnvType = LuaEnvType.Game;
-        public string luaMgrName = "LuaManager";
-
         private void Awake()
         {
             DotProxy.Startup();
@@ -69,11 +66,7 @@ namespace Game
 
         private void OnControllerInitFinish()
         {
-            LuaManager.GetInstance().NewLuaEnv(luaEnvType, 
-                new string[] { LuaConfig.DefaultDiskPathFormat }, 
-                preloadLuaAssets, 
-                luaMgrName);
-
+            LuaManager.GetInstance().NewLuaEnv(new string[] { LuaConfig.DefaultDiskPathFormat }, preloadLuaAssets);
             EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
         }
     }

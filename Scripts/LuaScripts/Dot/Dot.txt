@@ -1,28 +1,42 @@
 require("Dot/Event/EventDispatcher")
 require("Dot/System/AppEnv")
+require("Dot/Config/ConfigManager")
+require("Dot/Core/Delegate")
 
 Dot = {}
 Dot.__index = Dot
 
-----private----
---初始化
-function Dot:DoAwake()
+function Dot:DoInit()
+    if self.isInit then
+        return
+    end
+
+    self.isInit = true
+
     self.DebugLog = require("Dot/Log/DebugLog")
     self.Json = require("rapidjson")
     self.GEventDispatcher = EventDispatcher()
     self.AppEnv = AppEnv(Dot.GEventDispatcher)
+    self.ConfigMgr = ConfigManager()
+    
+    self.DoStartEvent = Delegate()
+    self.DoUpdateEvent = Delegate()
+    
+    self:DoModeChanged()
+    self.GEventDispatcher:Register(EventID.ModeChanged,EventData(self,Dot.DoModeChanged,false))
 end
 
 ----private----
 --开始启动
 function Dot:DoStart()
-    self.GEventDispatcher:Register(EventID.ModeChanged,EventData(self,Dot.DoModeChanged,false))
+    self.DoStartEvent:Invoke()
+    self.DoStartEvent = nil
 end
 
 ----private----
---响应Update事件，由C#传递到Lua
-function Dot:DoUpdate()
-
+--响应Update事件
+function Dot:DoUpdate(deltaTime)
+    self.DoUpdateEvent:Invoke(deltaTime)
 end
 
 ----private----
