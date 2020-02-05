@@ -1,118 +1,144 @@
-require ("Dot/Config/ConfigConst")
+require("Dot/Config/ConfigConst")
 
 local rawget = rawget
 local rawset = rawset
 local ConfigConst = ConfigConst
 local string = string
 
+----internal----
+--数据表中存储的一行数据对应的Table的元表
 ConfigSheetLine = {}
 
+----internal----
+--设置数据依赖数据，所有的依赖数据统一存储在总表中，由子表将总表中的依赖数据传递
+--@param depends
 function ConfigSheetLine:SetDepend(depends)
-  rawset(self,ConfigConst.DEPENDS_NAME,depends)
+    rawset(self, ConfigConst.DEPENDS_NAME, depends)
 end
 
+----internal----
+--获取对应字段的值，为了优化数据表，数据有可能存在于当前数据表中、默认值中、字符串列表中或者国际化文本中
+--所以需要根据情况查找最终的数据
+--@param k 字段名
+--@return data
 function ConfigSheetLine:GetValue(k)
-  local value = rawget(self,k)
-  
-  if value then
-    return value
-  end
-  
-  value = self:GetDefaultValue(k)
-  if value then
-    return value
-  end
-  
-  value = self:GetStrValue(k)
-  if value then
-    return value
-  end
-  
-  value = self:GetTextValue(k)
-  if value then
-    return value
-  end
-  
-  return nil
-  
-end
+    local value = rawget(self, k)
 
+    if value then
+        return value
+    end
+
+    value = self:GetDefaultValue(k)
+    if value then
+        return value
+    end
+
+    value = self:GetStrValue(k)
+    if value then
+        return value
+    end
+
+    value = self:GetTextValue(k)
+    if value then
+        return value
+    end
+
+    return nil
+end
+----internal----
+--从依赖数据的默认值中查找对应的字段值
+--@param k 字段名
+--@return data 查找到对应字段，则返回对应的数据，否则返回nil
 function ConfigSheetLine:GetDefaultValue(k)
-  local depends = rawget(self,ConfigConst.DEPENDS_NAME)
-  if not depends then
+    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+    if not depends then
+        return nil
+    end
+
+    local defaultValues = depends[ConfigConst.DEFAULT_VALUE_NAME]
+    if defaultValues then
+        return defaultValues[k]
+    end
+
     return nil
-  end
-  
-  local defaultValues = depends[ConfigConst.DEFAULT_VALUE_NAME]
-  return defaultValues[k]
 end
 
+----internal----
+--从依赖数据的字符串列表中查找对应的字段值
+--为了简化数据的存储空间及占用的内存，对于非国际化的字符串内容会进行提取并排重处理
+--数据表中存储的是对应的位置，实际使用时需要根据所在的位置获取最终的字符串值
+--@param k 字段名
+--@return data 如果对应的字段k是字符串类型，则会根据存储的位置，获取最终的值，否则返回nil
 function ConfigSheetLine:GetStrValue(k)
-  local depends = rawget(self,ConfigConst.DEPENDS_NAME)
-  if not depends then
+    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+    if not depends then
+        return nil
+    end
+
+    local strFieldNames = depends[ConfigConst.STR_FIELD_NAME]
+    if not strFieldNames then
+        return nil
+    end
+
+    for i = 1, #strFieldNames do
+        local field = strFieldNames[i]
+        if field == k then
+            local strIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT, k))
+            if not strIndex then
+                return nil
+            else
+                local strValues = depends[ConfigConst.STR_VALUE_NAME]
+                if strValues then
+                    return strValues[strIndex]
+                else
+                    return nil
+                end
+            end
+        end
+    end
+
     return nil
-  end
-  
-  local strFieldNames = depends[ConfigConst.STR_FIELD_NAME]
-  if not strFieldNames then
-    return nil
-  end
-  
-  for i=1, #strFieldNames do
-    local field = strFieldNames[i]
-  	if field == k then
-  	 local strIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT,k))
-  	 if not strIndex then
-      return nil
-  	 else
-  	   local strValues = depends[ConfigConst.STR_VALUE_NAME]
-  	   if strValues then
-  	     return strValues[strIndex]
-  	   else
-  	     return nil
-  	   end
-  	 end
-  	end
-  end
-  
-  return nil
 end
 
+----internal----
+--如果字段类型是国际化文本，则会从国际化文本表中根据当前设定的语言查找对应的字符串
+--@param k 字段名
+--@return data
 function ConfigSheetLine:GetTextValue(k)
-  local depends = rawget(self,ConfigConst.DEPENDS_NAME)
-  if not depends then
+    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+    if not depends then
+        return nil
+    end
+
+    local textFieldNames = depends[ConfigConst.TEXT_FIELD_NAME]
+    if not textFieldNames then
+        return nil
+    end
+
+    for i = 1, #textFieldNames do
+        local field = textFieldNames[i]
+        if field == k then
+            local textIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT, k))
+            if not textIndex then
+                return nil
+            else
+                local text = depends[ConfigConst.TEXT_NAME]
+                return text:GetText(textIndex)
+            end
+        end
+    end
     return nil
-  end
-  
-  local textFieldNames = depends[ConfigConst.TEXT_FIELD_NAME]
-  if not textFieldNames then
-    return nil
-  end
-  
-  for i=1, #textFieldNames do
-    local field = textFieldNames[i]
-  	if field == k then
-  	 local textIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT,k))
-  	 if not textIndex then
-  	   return nil
-  	 else
-  	   local text = depends[ConfigConst.TEXT_NAME]
-  	   return text:GetText(textIndex)
-  	 end
-  	end
-  end
-  return nil
 end
 
-ConfigSheetLine.__index = function(t,k)
-  local result = ConfigSheetLine[k]
-  if result then
-    return result
-  end
-  
-  return ConfigSheetLine.GetValue(t,k)
+ConfigSheetLine.__index = function(t, k)
+    local result = ConfigSheetLine[k]
+    if result then
+        return result
+    end
+
+    return ConfigSheetLine.GetValue(t, k)
 end
 
-ConfigSheetLine.__newindex = function(t,k,v)
-  error("Read only,so you can't add new key for it")
+ConfigSheetLine.__newindex = function(t, k, v)
+    error("Read only,so you can't add new key for it")
 end

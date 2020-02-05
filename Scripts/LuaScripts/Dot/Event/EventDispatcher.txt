@@ -1,3 +1,4 @@
+require("Dot/Core/Class")
 require("Dot/Event/EventID")
 require("Dot/Event/EventData")
 require("Dot/Utils/TableUtil")

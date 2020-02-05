@@ -1,15 +1,27 @@
 ConfigTextSheet = {}
 
+----internal----
+--根据设置的语言，自动查找对应的文本内容
+--@param textId 对应的文本字段号
 function ConfigTextSheet:GetText(textId)
-  local data = self[textId]
-  if not data then
-    return nil
-  end
-  return data.zh
+    local data = self[textId]
+    if not data then
+        return nil
+    end
+
+    --检查是否存在着语言的设置
+    if Dot and Dot.AppEnv then
+        local language = Dot.AppEnv:GetLanguage()
+        if language then
+            return data[language]
+        end
+    end
+
+    return data.zh
 end
 
 ConfigTextSheet.__index = ConfigTextSheet
-ConfigTextSheet.__newindex = function(t,k,v)
-  error("Read only,so you can't add new key for it")
+ConfigTextSheet.__newindex = function(t, k, v)
+    error("Read only,so you can't add new key for it")
 end
 ConfigTextSheet.__metatable = "Locked"

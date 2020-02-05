@@ -18,12 +18,12 @@ function Dot:DoInit()
     self.GEventDispatcher = EventDispatcher()
     self.AppEnv = AppEnv(Dot.GEventDispatcher)
     self.ConfigMgr = ConfigManager()
-    
+
     self.DoStartEvent = Delegate()
     self.DoUpdateEvent = Delegate()
-    
+
     self:DoModeChanged()
-    self.GEventDispatcher:Register(EventID.ModeChanged,EventData(self,Dot.DoModeChanged,false))
+    self.GEventDispatcher:Register(EventID.ModeChanged, EventData(self, Dot.DoModeChanged, false))
 end
 
 ----private----
@@ -53,8 +53,8 @@ end
 --用于侦听运行时Mode改变后修改日志的输出
 function Dot:DoModeChanged()
     if self.AppEnv:IsDebug() then
-        self.DebugLog:SetEnable(true,true,true)
+        self.DebugLog:SetEnable(true, true, true)
     else
-        self.DebugLog:SetEnable(true,false,false)
+        self.DebugLog:SetEnable(true, false, false)
     end
 end

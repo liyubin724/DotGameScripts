@@ -7,21 +7,28 @@ require("Dot/Config/ConfigSummarySheet")
 require("Dot/Config/ConfigTextSheet")
 
 local Class = Class
-ConfigManager = Class(function(self)
-    self.pathFormat = nil
-    self.configDic = {}
-end)
 
 ----public----
---
+--数据配置的管理器，由Dot表进行管理
+----
+ConfigManager =
+    Class(
+    function(self)
+        self.pathFormat = "Game/Config/%s"
+        self.configDic = {}
+    end
+)
+
+----public----
+--设置配置文件存储的路径格式化文本，格式如：Game/Config/%s
 --@param format
 function ConfigManager:SetConfigPathFormat(format)
     self.pathFormat = format
 end
 
 ----public----
---
---@param configName
+--加载配置文件数据
+--@param configName 文件名
 function ConfigManager:LoadConfig(configName)
     local config = self.configDic[configName]
 
@@ -36,8 +43,8 @@ function ConfigManager:LoadConfig(configName)
 end
 
 ----public----
---
---@param configName
+--卸载加载的数据
+--@param configName 文件名
 function ConfigManager:UnloadConfig(configName)
     local config = self.configDic[configName]
     if config then
@@ -45,6 +52,8 @@ function ConfigManager:UnloadConfig(configName)
     end
 end
 
+----public----
+--卸载所有已加载的数据
 function ConfigManager:UnloadAll()
     table.clear(self.configDic)
 end

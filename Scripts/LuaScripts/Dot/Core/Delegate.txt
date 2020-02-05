@@ -1,11 +1,14 @@
 require("Dot/Core/Class")
 
-Delegate = Class(function(self)
-    self.receivers = {}
-    self.funcs = {}
-end)
+Delegate =
+    Class(
+    function(self)
+        self.receivers = {}
+        self.funcs = {}
+    end
+)
 
-Delegate.__sub = function(self,delegate)
+Delegate.__sub = function(self, delegate)
     if type(delegate) ~= "table" then
         error("argument is not a table")
     end
@@ -14,7 +17,7 @@ Delegate.__sub = function(self,delegate)
         error("the length is not 2")
     end
 
-    for i=#(self.receivers), 1,-1 do
+    for i = #(self.receivers), 1, -1 do
         if self.receivers[i] == delegate[1] and self.funcs[i] == delegate[2] then
             table.remove(self.receivers, i)
             table.remove(self, i)
@@ -25,7 +28,7 @@ Delegate.__sub = function(self,delegate)
     return self
 end
 
-Delegate.__add = function(self,delegate)
+Delegate.__add = function(self, delegate)
     if type(delegate) ~= "table" then
         error("argument is not a table")
     end
@@ -34,7 +37,7 @@ Delegate.__add = function(self,delegate)
         error("the length is not 2")
     end
 
-    table.insert(self.receivers,delegate[1])
+    table.insert(self.receivers, delegate[1])
     table.insert(self.funcs, delegate[2])
 
     return self
@@ -42,6 +45,6 @@ end
 
 function Delegate:Invoke(...)
     for i, v in ipairs(self.receivers) do
-        self.funcs[i](v,...)
+        self.funcs[i](v, ...)
     end
 end
