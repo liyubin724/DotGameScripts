@@ -1,4 +1,3 @@
-
 Game = {}
 Game.__index = Game
 
@@ -9,11 +8,14 @@ function Game:DoInit()
 
     self.isInit = true
 
-    Dot.DoStartEvent = Dot.DoStartEvent + {self,Game.DoStart}
+    Dot.DoStartEvent = Dot.DoStartEvent + {self, Game.DoStart}
 end
 
 function Game:DoStart()
-    Dot.DoStartEvent = Dot.DoStartEvent - {self,Game.DoStart}
+    Dot.DoStartEvent = Dot.DoStartEvent - {self, Game.DoStart}
 
-    Dot.DebugLog:Info("Game","DoStart")
+    local sheet = Dot.ConfigMgr:LoadConfig("cofing_TestSheet")
+    local data = sheet:GetData(4)
+
+    Dot.DebugLog:Info("Game", "DoStart.long = " .. tostring(data.ResValue))
 end
