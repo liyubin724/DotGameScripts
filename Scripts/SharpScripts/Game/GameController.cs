@@ -14,21 +14,18 @@ namespace Game
 
         private void Awake()
         {
-            DotProxy.Startup();
-            EventManager.GetInstance().RegisterEvent(EventConst.PROXY_INIT, OnProxyInitFinish);
-        }
-
-        private void OnProxyInitFinish(EventData eventData)
-        {
-            if(!eventData.GetValue<bool>())
+            DotProxy.Startup((result) =>
             {
-                Debug.LogError("GameController::OnProxyInitFinish->Proxy Init failed");
-            }else
-            {
-                LogUtil.LogInfo(GetType(), "OnProxyInitFinish->init success");
-
-                InitAssetManager();
-            }
+                if (!result)
+                {
+                    Debug.LogError("GameController::OnProxyInitFinish->Proxy Init failed");
+                }
+                else
+                {
+                    LogUtil.LogInfo(GetType(), "OnProxyInitFinish->init success");
+                    InitAssetManager();
+                }
+            });
         }
 
         private void InitAssetManager()
@@ -53,21 +50,18 @@ namespace Game
 #endif
 
 #endif
-            AssetManager.GetInstance().InitManager(loaderMode, OnAssetMgrInitFinish, assetRootDir);
-        }
-
-        private void OnAssetMgrInitFinish(bool result)
-        {
-            if(result)
+            AssetManager.GetInstance().InitManager(loaderMode, (result)=>
             {
-                OnControllerInitFinish();
-            }
-        }
+                if (result)
+                {
+                    LuaManager.GetInstance().NewLuaEnv(new string[] { LuaConfig.DefaultDiskPathFormat }, preloadLuaAssets);
 
-        private void OnControllerInitFinish()
-        {
-            LuaManager.GetInstance().NewLuaEnv(new string[] { LuaConfig.DefaultDiskPathFormat }, preloadLuaAssets);
-            EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
+                    EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
+                }else
+                {
+                    LogUtil.LogError(GetType(), "AssetManager::InitManager->init Failed");
+                }
+            }, assetRootDir);
         }
     }
 }

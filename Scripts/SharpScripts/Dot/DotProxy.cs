@@ -15,12 +15,22 @@ namespace Dot
 {
     public class DotProxy : MonoBehaviour
     {
-        private static string LOG_CONFIG = "LogConfig/log4net.xml";
-        private static string LOG_CONFIG_IN_EDITOR = "LogConfig/log4net-editor.xml";
+#if UNITY_EDITOR
+        private static string LOG_CONFIG = "LogConfig/log4net-editor.xml";
+#else
 
-        public static void Startup()
+#if DEBUG
+            private static string LOG_CONFIG = "LogConfig/log4net-editor.xml";
+#else
+            private static string LOG_CONFIG = "LogConfig/log4net.xml";
+#endif
+
+#endif
+
+        public static void Startup(Action<bool> finishCallback)
         {
-            DontDestroyHandler.CreateComponent<DotProxy>();
+            DotProxy proxy = DontDestroyHandler.CreateComponent<DotProxy>();
+            proxy.finishCallback = finishCallback;
         }
 
         public static void TearDown()
@@ -35,6 +45,8 @@ namespace Dot
 
         private bool isStartup = false;
         public bool IsStartup { get => isStartup; }
+
+        private Action<bool> finishCallback = null;
 
         private TimerManager timerMgr = null;
         private EventManager eventMgr = null;
@@ -69,6 +81,7 @@ namespace Dot
             }
 
             float deltaTime = Time.deltaTime;
+
             timerMgr.DoUpdate(deltaTime);
             luaMgr.DoUpdate(deltaTime);
             assetMgr.DoUpdate(deltaTime);
@@ -91,26 +104,15 @@ namespace Dot
             StartCoroutine(InitLog((result) =>
             {
                 isStartup = true;
-                eventMgr.TriggerEvent(EventConst.PROXY_LOG_INIT, result);
 
-                eventMgr.TriggerEvent(EventConst.PROXY_INIT, isStartup);
+                finishCallback?.Invoke(result);
             }));
         }
 
         private IEnumerator InitLog(Action<bool> finishCallback)
         {
-            string logConfigPath;
-#if UNITY_EDITOR
-            logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG_IN_EDITOR}";
-#else
+            string logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG}";
 
-#if DEBUG
-            logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG_IN_EDITOR}";
-#else
-            logConfigPath = $"{Application.streamingAssetsPath}/{LOG_CONFIG}";
-#endif
-
-#endif
             UnityWebRequest webRequest = UnityWebRequest.Get(logConfigPath);
             yield return webRequest.SendWebRequest();
 

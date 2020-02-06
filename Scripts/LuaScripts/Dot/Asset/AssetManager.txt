@@ -1,0 +1,11 @@
+require("Dot/Core/Class")
+
+AssetManager =
+    Class(
+    function(self)
+    end
+)
+
+function AssetManager:LoadAsset()
+
+end

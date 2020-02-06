@@ -1,5 +1,4 @@
-﻿using Dot.Core.Loader;
-using Dot.UI.Atlas;
+﻿using Dot.UI.Atlas;
 using UnityEngine;
 using UnityEngine.UI;
 using SystemObject = System.Object;
@@ -9,7 +8,7 @@ namespace Dot.UI
 {
     public class DynamicAtlasImage : Image
     {
-        private AssetLoaderHandle imageLoaderHandle = null;
+        //private AssetLoaderHandle imageLoaderHandle = null;
 
         [SerializeField]
         private string m_AtlasName = "";
@@ -67,14 +66,14 @@ namespace Dot.UI
         {
             if(!string.IsNullOrEmpty(m_RawImagePath))
             {
-                if(imageLoaderHandle!=null)
-                {
-                    AssetManager.GetInstance().UnloadAssetLoader(imageLoaderHandle);
-                    imageLoaderHandle = null;
-                }else if(sprite!=null)
-                {
-                    DynamicAtlasManager.GetInstance().ReleaseSprite(AtlasName, RawImagePath);
-                }
+                //if(imageLoaderHandle!=null)
+                //{
+                //    AssetManager.GetInstance().UnloadAssetLoader(imageLoaderHandle);
+                //    imageLoaderHandle = null;
+                //}else if(sprite!=null)
+                //{
+                //    DynamicAtlasManager.GetInstance().ReleaseSprite(AtlasName, RawImagePath);
+                //}
             }
         }
 
@@ -88,14 +87,14 @@ namespace Dot.UI
                 }
                 else
                 {
-                    imageLoaderHandle = AssetManager.GetInstance().LoadAssetAsync(m_RawImagePath, OnLoadImageComplete);
+                   // imageLoaderHandle = AssetManager.GetInstance().LoadAssetAsync(m_RawImagePath, OnLoadImageComplete);
                 }
             }
         }
 
         private void OnLoadImageComplete(string pathOrAddress, UnityObject uObj, SystemObject userData)
         {
-            imageLoaderHandle = null;
+           // imageLoaderHandle = null;
             if(pathOrAddress == RawImagePath)
             {
                 Texture2D texture = uObj as Texture2D;

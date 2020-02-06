@@ -1,7 +1,8 @@
+require("Dot/Core/Delegate")
 require("Dot/Event/EventDispatcher")
 require("Dot/System/AppEnv")
 require("Dot/Config/ConfigManager")
-require("Dot/Core/Delegate")
+require("Dot/Asset/AssetManager")
 
 Dot = {}
 Dot.__index = Dot
@@ -15,9 +16,12 @@ function Dot:DoInit()
 
     self.DebugLog = require("Dot/Log/DebugLog")
     self.Json = require("rapidjson")
+
     self.GEventDispatcher = EventDispatcher()
     self.AppEnv = AppEnv(Dot.GEventDispatcher)
+
     self.ConfigMgr = ConfigManager()
+    self.AssetMgr = AssetManager()
 
     self.DoStartEvent = Delegate()
     self.DoUpdateEvent = Delegate()
