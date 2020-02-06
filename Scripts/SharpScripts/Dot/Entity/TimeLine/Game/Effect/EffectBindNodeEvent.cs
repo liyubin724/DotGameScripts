@@ -8,7 +8,7 @@ namespace Dot.Core.Entity.TimeLine.Game
     public class EffectBindNodeEvent : AEventItem
     {
         public int ConfigID { get; set; }
-        public BindNodeType NodeType { get; set; } = BindNodeType.Main;
+        //public BindNodeType NodeType { get; set; } = BindNodeType.Main;
         public bool IsAllNode { get; set; } = false;
         public int NodeIndex { get; set; }
 
@@ -24,10 +24,10 @@ namespace Dot.Core.Entity.TimeLine.Game
 
             if(IsAllNode)
             {
-                effectController.BindEffect(NodeType, ConfigID, EffectScenarioType.Timline,true);
+                //effectController.BindEffect(NodeType, ConfigID, EffectScenarioType.Timline,true);
             }else
             {
-                effectController.BindEffect(NodeType,NodeIndex, ConfigID, EffectScenarioType.Timline, true);
+                //effectController.BindEffect(NodeType,NodeIndex, ConfigID, EffectScenarioType.Timline, true);
             }
         }
     }

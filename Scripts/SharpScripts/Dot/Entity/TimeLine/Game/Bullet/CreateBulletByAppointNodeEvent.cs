@@ -1,6 +1,7 @@
 ﻿using Dot.Core.Entity.Controller;
 using Dot.Core.Entity.Data;
 using Dot.Core.TimeLine;
+using Dot.Entity.Node;
 
 namespace Dot.Core.Entity.TimeLine.Game
 {
@@ -8,7 +9,7 @@ namespace Dot.Core.Entity.TimeLine.Game
     public class CreateBulletByAppointNodeEvent : AEventItem
     {
         public int BulletConfigID { get; set; }
-        public BindNodeType NodeType { get; set; } = BindNodeType.Main;
+        public NodeType NodeType { get; set; } = NodeType.None;
         public int NodeIndex { get; set; }
         public bool UseEntitySpeed { get; set; } = false;
 
@@ -22,11 +23,11 @@ namespace Dot.Core.Entity.TimeLine.Game
             EntitySkeletonController skeletonController = entity.GetController<EntitySkeletonController>(EntityControllerConst.SKELETON_INDEX);
             if (skeletonController == null) return;
 
-            BindNodeData nodeData = skeletonController.GetBindNodeData(NodeType, NodeIndex);
-            if (nodeData != null)
-            {
-                EntityFactroy.CreateBullet(entity, nodeData, BulletConfigID, UseEntitySpeed);
-            }
+            //BindNodeData nodeData = skeletonController.GetBindNodeData(NodeType, NodeIndex);
+            //if (nodeData != null)
+            //{
+            //    EntityFactroy.CreateBullet(entity, nodeData, BulletConfigID, UseEntitySpeed);
+            //}
         }
     }
 }

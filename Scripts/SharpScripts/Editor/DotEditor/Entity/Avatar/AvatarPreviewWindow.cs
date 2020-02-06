@@ -1,5 +1,6 @@
-﻿using Dot.Core.Avatar;
+﻿using Dot.Avatar;
 using Dot.Core.Entity;
+using Dot.Entity.Node;
 using UnityEditor;
 
 namespace DotEditor.Core.Avatar

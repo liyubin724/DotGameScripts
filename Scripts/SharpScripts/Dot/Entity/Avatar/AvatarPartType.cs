@@ -1,4 +1,4 @@
-﻿namespace Dot.Core.Avatar
+﻿namespace Dot.Avatar
 {
     public enum AvatarPartType
     {

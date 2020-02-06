@@ -1,4 +1,5 @@
 ﻿using Dot.Dispatch;
+using Dot.Entity.Node;
 using Dot.Log;
 using UnityEngine;
 using SystemObject = System.Object;
@@ -96,23 +97,23 @@ namespace Dot.Core.Entity.Controller
             RemoveSkeleton();
         }
 
-        public BindNodeData GetBindNodeData(BindNodeType nodeType,int nodeIndex)
+        public NodeData GetBindNodeData(NodeType nodeType,int nodeIndex)
         {
-            BindNodeData[] nodes = GetBindNodes(nodeType);
-            if (nodes != null && nodeIndex >= 0 && nodeIndex < nodes.Length)
-            {
-                return nodes[nodeIndex];
-            }
+            //BindNodeData[] nodes = GetBindNodes(nodeType);
+            //if (nodes != null && nodeIndex >= 0 && nodeIndex < nodes.Length)
+            //{
+            //    return nodes[nodeIndex];
+            //}
             return null;
         }
 
-        public BindNodeData[] GetBindNodes(BindNodeType nodeType)
+        public NodeData[] GetBindNodes(NodeType nodeType)
         {
-            NodeBehaviour nodeBeh = GetNodeBehaviour();
-            if (nodeBeh != null)
-            {
-                return nodeBeh.GetBindNodes(nodeType);
-            }
+            //NodeBehaviour nodeBeh = GetNodeBehaviour();
+            //if (nodeBeh != null)
+            //{
+            //    return nodeBeh.GetBindNodes(nodeType);
+            //}
             return null;
         }
 

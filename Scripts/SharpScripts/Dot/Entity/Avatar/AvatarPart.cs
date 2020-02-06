@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Dot.Core.Avatar
+namespace Dot.Avatar
 {
     [Serializable]
     public class AvatarPrefabPart

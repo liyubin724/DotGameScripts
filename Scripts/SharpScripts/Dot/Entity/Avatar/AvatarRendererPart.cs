@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Core.Avatar
+namespace Dot.Avatar
 {
     public class AvatarRendererPart : ScriptableObject
     {

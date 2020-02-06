@@ -1,0 +1,14 @@
+require("Dot/Core/Class")
+
+local csPoolManager = CS.Dot.Pool.PoolManager
+
+PoolManager =
+    Class(
+    function(self)
+
+    end
+)
+
+function PoolManager:CreateObjectPool()
+
+end

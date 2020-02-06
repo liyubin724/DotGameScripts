@@ -1,12 +1,13 @@
 ﻿using Dot.Core.Entity.Controller;
 using Dot.Core.Entity.Data;
+using Dot.Entity.Node;
 using UnityEngine;
 
 namespace Dot.Core.Entity
 {
     public static class EntityFactroy
     {
-        public static EntityObject CreateBullet(EntityObject creatorEntity,BindNodeData nodeData,int bulletConfigID,bool isUsedCreatorSpeed)
+        public static EntityObject CreateBullet(EntityObject creatorEntity,NodeData nodeData,int bulletConfigID,bool isUsedCreatorSpeed)
         {
             //EntityObject bulletEntity = CreateDefaultBullet(bulletConfigID);
             //bulletEntity.EntityData.OwnerUniqueID = creatorEntity.UniqueID;
