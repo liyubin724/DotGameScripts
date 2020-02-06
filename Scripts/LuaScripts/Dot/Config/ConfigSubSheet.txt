@@ -36,6 +36,18 @@ function ConfigSubSheet:GetDataById(dataId)
     return data
 end
 
+function ConfigSubSheet:GetTextById(textId)
+    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+    if depends then
+        local text = rawget(depends,ConfigConst.TEXT_NAME)
+        if text then
+            return text:GetText(textId)
+        end
+    end
+
+    return nil
+end
+
 ConfigSubSheet.__index = ConfigSubSheet
 ConfigSubSheet.__newindex = function(t, k, v)
     error("Read only,so you can't add new key for it")

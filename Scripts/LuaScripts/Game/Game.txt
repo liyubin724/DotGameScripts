@@ -16,6 +16,7 @@ function Game:DoStart()
 
     local sheet = Dot.ConfigMgr:LoadConfig("cofing_TestSheet")
     local data = sheet:GetData(4)
+    local text = data:GetTextByField("TextValue")
 
-    Dot.DebugLog:Info("Game", "DoStart.long = " .. tostring(data.ResValue))
+    Dot.DebugLog:Info("Game", "DoStart.long = " .. tostring(text))
 end

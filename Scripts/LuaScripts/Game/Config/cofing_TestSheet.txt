@@ -1,4 +1,5 @@
 require ("Dot/Config/ConfigSummarySheet")
+require ("Dot/Config/ConfigTextSheet")
 local cofing_TestSheet = {}
 cofing_TestSheet.__index = cofing_TestSheet
 cofing_TestSheet.depends={
@@ -41,4 +42,5 @@ cofing_TestSheet.subSheets = {
     },
 }
 setmetatable(cofing_TestSheet,ConfigSummarySheet)
+setmetatable(cofing_TestSheet.depends.text,ConfigTextSheet)
 return cofing_TestSheet

@@ -65,6 +65,18 @@ function ConfigSummarySheet:GetData(dataId)
     return nil
 end
 
+function ConfigSummarySheet:GetTextById(textId)
+    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+    if depends then
+        local text = rawget(depends,ConfigConst.TEXT_NAME)
+        if text then
+            return text:GetText(textId)
+        end
+    end
+
+    return nil
+end
+
 function ConfigSummarySheet:GetAllId()
     if not self or type(self) ~= "table" then
         return nil

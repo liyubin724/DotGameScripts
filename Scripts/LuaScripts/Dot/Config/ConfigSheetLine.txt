@@ -38,10 +38,11 @@ function ConfigSheetLine:GetValue(k)
         return value
     end
 
-    value = self:GetTextValue(k)
-    if value then
-        return value
-    end
+    --暂时未处理将Text也做为直接返回
+    -- value = self:GetTextValue(k)
+    -- if value then
+    --     return value
+    -- end
 
     return nil
 end
@@ -100,30 +101,44 @@ function ConfigSheetLine:GetStrValue(k)
     return nil
 end
 
-----internal----
---如果字段类型是国际化文本，则会从国际化文本表中根据当前设定的语言查找对应的字符串
---@param k 字段名
---@return data
-function ConfigSheetLine:GetTextValue(k)
-    local depends = rawget(self, ConfigConst.DEPENDS_NAME)
-    if not depends then
-        return nil
-    end
+-- ----internal----
+-- --如果字段类型是国际化文本，则会从国际化文本表中根据当前设定的语言查找对应的字符串
+-- --@param k 字段名
+-- --@return data
+-- function ConfigSheetLine:GetTextValue(k)
+--     local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+--     if not depends then
+--         return nil
+--     end
 
-    local textFieldNames = depends[ConfigConst.TEXT_FIELD_NAME]
-    if not textFieldNames then
-        return nil
-    end
+--     local textFieldNames = depends[ConfigConst.TEXT_FIELD_NAME]
+--     if not textFieldNames then
+--         return nil
+--     end
 
-    for i = 1, #textFieldNames do
-        local field = textFieldNames[i]
-        if field == k then
-            local textIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT, k))
-            if not textIndex then
-                return nil
-            else
-                local text = depends[ConfigConst.TEXT_NAME]
-                return text:GetText(textIndex)
+--     for i = 1, #textFieldNames do
+--         local field = textFieldNames[i]
+--         if field == k then
+--             local textIndex = self:GetValue(string.format(ConfigConst.FIELD_INDEX_FORMAT, k))
+--             if not textIndex then
+--                 return nil
+--             else
+--                 local text = depends[ConfigConst.TEXT_NAME]
+--                 return text:GetText(textIndex)
+--             end
+--         end
+--     end
+--     return nil
+-- end
+
+function ConfigSheetLine:GetTextByField(fieldName)
+    local textId = self:GetValue(fieldName)
+    if textId > 0 then
+        local depends = rawget(self, ConfigConst.DEPENDS_NAME)
+        if depends then
+            local text = rawget(depends, ConfigConst.TEXT_NAME)
+            if text then
+                return text:GetText(textId)
             end
         end
     end
