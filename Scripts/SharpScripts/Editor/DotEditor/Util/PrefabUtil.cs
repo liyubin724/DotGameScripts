@@ -1,46 +1,13 @@
-﻿using System;
-using System.Reflection;
+﻿using ReflectionMagic;
+using System;
+using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
-using SystemObject = System.Object;
 
 namespace DotEditor.Util
 {
     public static class PrefabUtil
     {
-        private static MethodInfo openPrefabMethod = null;
-        private static MethodInfo GetOpenPrefabMethod()
-        {
-            if (openPrefabMethod != null)
-                return openPrefabMethod;
-
-            MethodInfo[] mInfos = typeof(PrefabStageUtility).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
-            foreach (var mi in mInfos)
-            {
-                if (mi.Name == "OpenPrefab")
-                {
-                    if (mi.GetParameters().Length == 1)
-                    {
-                        openPrefabMethod = mi;
-                        break;
-                    }
-                }
-            }
-            return openPrefabMethod;
-        }
-
-        public static void OpenPrefabStage(string assetPath)
-        {
-            if (!string.IsNullOrEmpty(assetPath) && assetPath.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
-            {
-                MethodInfo methodInfo = GetOpenPrefabMethod();
-                if (methodInfo != null)
-                {
-                    methodInfo.Invoke(null, new SystemObject[] { assetPath });
-                }
-            }
-        }
-
         public static bool IsPrefab(string assetPath)
         {
             if (!string.IsNullOrEmpty(assetPath) && assetPath.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
@@ -50,16 +17,6 @@ namespace DotEditor.Util
             return false;
         }
 
-        public static void ClosePrefabStage()
-        {
-            //Type managerType = Assembly.Load("UnityEditor.dll").GetType("UnityEditor.SceneManagement.StageNavigationManager");
-            //PropertyInfo pInfo = managerType.GetProperty("instance", BindingFlags.Static);
-
-            //var instance = pInfo.GetValue(null);
-            //MethodInfo mInfo = managerType.GetMethod("NavigateBack", BindingFlags.Instance | BindingFlags.NonPublic);
-            //mInfo.Invoke(instance, new SystemObject[] { 7 });
-        }
-
         public static bool IsMissingNestPrefab(string assetPath)
         {
             if(!IsPrefab(assetPath))
@@ -67,7 +24,7 @@ namespace DotEditor.Util
                 return false;
             }
 
-            PrefabUtil.OpenPrefabStage(assetPath);
+            OpenPrefabStage(assetPath);
 
             PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
             GameObject rootGO = stage.prefabContentsRoot;
@@ -79,7 +36,47 @@ namespace DotEditor.Util
                     return true;
                 }
             }
+
+            ClosePrefabStage();
+
             return false;
+        }
+
+        public static bool IsInPrefabStage()
+        {
+#if UNITY_2018_3_OR_NEWER
+            var stage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            return stage != null;
+#else
+    return false;
+#endif
+        }
+
+        public static void OpenPrefabStage(string prefabPath)
+        {
+            if(IsPrefab(prefabPath))
+            {
+                GameObject prefabGO = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                if(prefabGO!=null)
+                {
+                    dynamic utilityDynamic = typeof(PrefabStageUtility).AsDynamicType();
+                    utilityDynamic.OpenPrefab(prefabPath);
+                }
+            }
+        }
+
+        public static void ClosePrefabStage()
+        {
+            if(IsInPrefabStage())
+            {
+                Type changeType = AssemblyUtil.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager+Analytics+ChangeType");
+                var changeTypeValue = Enum.Parse(changeType, "NavigateBackViaHierarchyHeaderLeftArrow");
+
+                Type type = AssemblyUtil.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager");
+                dynamic typeDynamic = type.AsDynamicType();
+                var snMgr = typeDynamic.instance;
+                snMgr.NavigateBack(changeTypeValue);
+            }
         }
     }
 }

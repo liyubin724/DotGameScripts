@@ -20,7 +20,7 @@ namespace DotEditor.Entity.Node
         private SerializedProperty boneNodes;
         private SerializedProperty smRendererNodes;
 
-        private bool isBindNodeVisible = true;
+        private bool isBindNodeVisible = false;
         private bool isBoneNodeVisible = false;
         private bool isRendererNodeVisible = false;
 
@@ -39,7 +39,7 @@ namespace DotEditor.Entity.Node
             boneNodes = serializedObject.FindProperty("boneNodes");
             smRendererNodes = serializedObject.FindProperty("smRendererNodes");
 
-            rlBindNodeList = new ReorderableList(serializedObject, bindNodes, true, true, true, true);
+            rlBindNodeList = new ReorderableList(serializedObject, bindNodes, false, true, false, false);
             rlBindNodeList.elementHeight = EditorGUIUtility.singleLineHeight * 5;
             rlBindNodeList.drawHeaderCallback = (rect) =>
             {
@@ -49,12 +49,6 @@ namespace DotEditor.Entity.Node
             {
                SerializedProperty nodeData =  bindNodes.GetArrayElementAtIndex(index);
                 DrawNodeData(rect, nodeData);
-            };
-            rlBindNodeList.onAddCallback = (list) =>
-            {
-                bindNodes.InsertArrayElementAtIndex(bindNodes.arraySize);
-                SerializedProperty nodeData = bindNodes.GetArrayElementAtIndex(bindNodes.arraySize - 1);
-                nodeData.FindPropertyRelative("nodeType").intValue = (int)NodeType.BindNode;
             };
 
             rlBoneNodeList = new ReorderableList(serializedObject, boneNodes, false, true, false, false);
@@ -146,6 +140,11 @@ namespace DotEditor.Entity.Node
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            if(GUILayout.Button("Editor",GUILayout.Height(40)))
+            {
+                NodeBehaviourEditorWindow.ShowWin(target as NodeBehaviour);
+            }
         }
 
         private NodeErrorType CheckNodeProperty(SerializedProperty nodeProperty,out string errMsg)
