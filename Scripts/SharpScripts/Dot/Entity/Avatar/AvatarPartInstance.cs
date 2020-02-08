@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Avatar
+namespace Dot.Entity.Avatar
 {
     public class AvatarPartInstance
     {

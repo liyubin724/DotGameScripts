@@ -22,15 +22,13 @@ namespace Dot.Entity.Node
         public Vector3 positionOffset = Vector3.zero;
         public Vector3 rotationOffset = Vector3.zero;
     }
-    
+
+    [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private NodeData[] bindNodes = new NodeData[0];
-        [SerializeField]
-        private NodeData[] boneNodes = new NodeData[0];
-        [SerializeField]
-        private NodeData[] smRendererNodes = new NodeData[0];
+        public NodeData[] bindNodes = new NodeData[0];
+        public NodeData[] boneNodes = new NodeData[0];
+        public NodeData[] smRendererNodes = new NodeData[0];
 
         private Dictionary<NodeType, Dictionary<string, NodeData>> nodeDic = new Dictionary<NodeType, Dictionary<string, NodeData>>();
 
@@ -80,6 +78,28 @@ namespace Dot.Entity.Node
                 transforms[i] = GetNode(NodeType.BoneNode,names[i])?.transform;
             }
             return transforms;
+        }
+
+        [NonSerialized]
+        public bool isShowBindNodeGizmos = false;
+        [NonSerialized]
+        public bool isShowBoneNodeGizmos = false;
+        [NonSerialized]
+        public bool isShowRendererNodeGizmos = false;
+        private void OnDrawGizmos()
+        {
+            if(isShowBindNodeGizmos)
+            {
+
+            }
+            if(isShowBoneNodeGizmos)
+            {
+
+            }
+            if(isShowRendererNodeGizmos)
+            {
+
+            }
         }
     }
 }

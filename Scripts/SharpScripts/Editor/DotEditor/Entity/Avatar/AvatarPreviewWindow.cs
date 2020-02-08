@@ -1,4 +1,4 @@
-﻿using Dot.Avatar;
+﻿using Dot.Entity.Avatar;
 using Dot.Core.Entity;
 using Dot.Entity.Node;
 using UnityEditor;
@@ -14,7 +14,7 @@ namespace DotEditor.Core.Avatar
         }
 
         public NodeBehaviour skeletonNode = null;
-        public AvatarPart[] aParts = new AvatarPart[0];
+        public AvatarPartData[] aParts = new AvatarPartData[0];
 
         private void OnGUI()
         {
