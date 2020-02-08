@@ -21,13 +21,20 @@ namespace DotEditor.Entity.Avatar
             win.Show();
         }
 
-        private List<AvatarSkeletonCreatorData> creatorDatas = new List<AvatarSkeletonCreatorData>();
+        private List<AvatarSkeletonCreatorData> creatorDatas = null;
 
         AvatarSkeletonCreatorData selectedData = null;
         private ReorderableList dataRList = null;
         private void OnEnable()
         {
             LoadDatas();
+        }
+
+        private void LoadDatas()
+        {
+            creatorDatas = AvatarSkeletonCreatorUtil.FindAllData();
+            dataRList = null;
+            selectedData = null;
         }
 
         private Rect dataTotalRect = Rect.zero;
@@ -78,10 +85,16 @@ namespace DotEditor.Entity.Avatar
                 {
                     foreach (var data in creatorDatas)
                     {
+                        Color color = GUI.backgroundColor;
+                        if(selectedData!=null && data == selectedData)
+                        {
+                            GUI.backgroundColor = Color.blue;
+                        }
                         if (GUILayout.Button(data.creatorName, GUILayout.ExpandWidth(true), GUILayout.Height(40)))
                         {
                             OnDataSelected(data);
                         }
+                        GUI.backgroundColor = color;
                     }
                 }
                 GUILayout.EndScrollView();
@@ -112,23 +125,6 @@ namespace DotEditor.Entity.Avatar
                 GUILayout.EndScrollView();
             }
             GUILayout.EndArea();
-        }
-
-        private void LoadDatas()
-        {
-            selectedData = null;
-            dataRList = null;
-
-            creatorDatas.Clear();
-            string[] dataPaths = AssetDatabaseUtil.FindAssetInFolder<AvatarSkeletonCreatorData>(SKELETON_CONFIG_DIR);
-            if(dataPaths!=null && dataPaths.Length>0)
-            {
-                foreach(var dataPath in dataPaths)
-                {
-                    AvatarSkeletonCreatorData data = AssetDatabase.LoadAssetAtPath<AvatarSkeletonCreatorData>(dataPath);
-                    creatorDatas.Add(data);
-                }
-            }
         }
 
         private void CreateData()

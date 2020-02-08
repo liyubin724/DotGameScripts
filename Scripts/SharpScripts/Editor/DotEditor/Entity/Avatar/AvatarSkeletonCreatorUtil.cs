@@ -1,4 +1,5 @@
 ﻿using Dot.Entity.Node;
+using DotEditor.Entity.Node;
 using DotEditor.Util;
 using System;
 using System.Collections.Generic;
@@ -87,12 +88,35 @@ namespace DotEditor.Entity.Avatar
         private static void CreateSkeleton(string savedAssetDir,GameObject fbxGO)
         {
             string skeletonName = string.Format(SKELETON_NAME_FORMAT, fbxGO.name);
+            string skeletonPath = $"{savedAssetDir}/{skeletonName}";
+
+            NodeBehaviour prefabNodeBehaviour = AssetDatabase.LoadAssetAtPath<NodeBehaviour>(skeletonPath);
 
             GameObject instanceGO = GameObject.Instantiate<GameObject>(fbxGO);
             instanceGO.name = Path.GetFileNameWithoutExtension(skeletonName);
 
             NodeBehaviour nodeBehaviour = instanceGO.AddComponent<NodeBehaviour>();
+            NodeBehaviourEditorUtil.AutoFindBoneNode(nodeBehaviour);
+            NodeBehaviourEditorUtil.AutoFindRendererNode(nodeBehaviour);
+            if(prefabNodeBehaviour!=null)
+            {
+                NodeBehaviourEditorUtil.CopyBindNodeFrom(prefabNodeBehaviour, nodeBehaviour);
+            }
+            SkinnedMeshRenderer[] renderers = instanceGO.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            if (renderers != null && renderers.Length > 0)
+            {
+                for (int i = 0; i < renderers.Length; ++i)
+                {
+                    SkinnedMeshRenderer smr = renderers[i];
+                    smr.sharedMaterials = new Material[0];
+                    smr.rootBone = null;
+                    smr.sharedMesh = null;
+                    smr.bones = new Transform[0];
+                }
+            }
+            PrefabUtility.SaveAsPrefabAsset(instanceGO, skeletonPath);
 
+            GameObject.DestroyImmediate(instanceGO);
         }
 
         public static bool IsFBX(GameObject fbxGO)

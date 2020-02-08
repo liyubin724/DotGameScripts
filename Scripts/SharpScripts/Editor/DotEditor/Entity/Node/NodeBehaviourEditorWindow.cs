@@ -1,4 +1,5 @@
 ﻿using Dot.Entity.Node;
+using DotEditor.Util;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
@@ -27,6 +28,7 @@ namespace DotEditor.Entity.Node
         internal void SetNodeBehaviour(NodeBehaviour nodeBehaviour)
         {
             this.nodeBehaviour = nodeBehaviour;
+
             bindNodeList = new List<NodeData>(nodeBehaviour.bindNodes);
             boneNodeList = new List<NodeData>(nodeBehaviour.boneNodes);
             smRendererNodeList = new List<NodeData>(nodeBehaviour.smRendererNodes);
@@ -115,6 +117,10 @@ namespace DotEditor.Entity.Node
             Repaint();
         }
 
+        private void OnDestroy()
+        {
+        }
+
         private int nodeDeleteIndex = -1;
         private void DrawNodeData(Rect rect,int index,NodeData nodeData)
         {
@@ -149,7 +155,7 @@ namespace DotEditor.Entity.Node
             if (nodeType == NodeType.BindNode || nodeType == NodeType.BoneNode)
             {
                 drawRect.y += drawRect.height;
-                nodeData.transform = (Transform)EditorGUI.ObjectField(drawRect, Contents.TransformContent, nodeData.transform, typeof(Transform), false);
+                nodeData.transform = (Transform)EditorGUI.ObjectField(drawRect, Contents.TransformContent, nodeData.transform, typeof(Transform), true);
                 if (nodeType == NodeType.BindNode)
                 {
                     drawRect.y += drawRect.height;
@@ -162,7 +168,7 @@ namespace DotEditor.Entity.Node
             else if (nodeType == NodeType.SMRendererNode)
             {
                 drawRect.y += drawRect.height;
-                nodeData.renderer = (SkinnedMeshRenderer)EditorGUI.ObjectField(drawRect, Contents.RendererContent, nodeData.renderer, typeof(SkinnedMeshRenderer), false);
+                nodeData.renderer = (SkinnedMeshRenderer)EditorGUI.ObjectField(drawRect, Contents.RendererContent, nodeData.renderer, typeof(SkinnedMeshRenderer), true);
             }
         }
 
@@ -177,7 +183,7 @@ namespace DotEditor.Entity.Node
             }
             EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
             {
-                EditorGUILayout.ObjectField(Contents.NodeBehaviourContent, nodeBehaviour, typeof(NodeBehaviour), false);
+                EditorGUILayout.ObjectField(Contents.NodeBehaviourContent, nodeBehaviour, typeof(NodeBehaviour), true);
 
                 int selectedIndex = GUILayout.Toolbar(toolbarSelectIndex, Contents.ToolbarTitle, GUILayout.ExpandWidth(true), GUILayout.Height(40));
                 if (selectedIndex != toolbarSelectIndex)
