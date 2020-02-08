@@ -1,18 +1,14 @@
 ﻿using Dot.Entity.Node;
 using DotEditor.Entity.Node;
 using DotEditor.Util;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.Entity.Avatar
 {
-    public static class AvatarSkeletonCreatorUtil
+    public static class AvatarCreatorUtil
     {
         private static readonly string SKELETON_CONFIG_DIR = "Assets/Tools/Entity/Avatar";
         private static readonly string SKELETON_NAME_FORMAT = "{0}_skeleton.prefab";

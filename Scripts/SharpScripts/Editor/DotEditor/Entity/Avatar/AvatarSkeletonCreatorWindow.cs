@@ -32,7 +32,7 @@ namespace DotEditor.Entity.Avatar
 
         private void LoadDatas()
         {
-            creatorDatas = AvatarSkeletonCreatorUtil.FindAllData();
+            creatorDatas = AvatarCreatorUtil.FindAllData();
             dataRList = null;
             selectedData = null;
         }
@@ -118,7 +118,7 @@ namespace DotEditor.Entity.Avatar
                         EditorGUILayout.Space();
                         if (GUILayout.Button(Contents.CreateSkeletonContent, GUILayout.Height(40)))
                         {
-                            AvatarSkeletonCreatorUtil.CreateSkeleton(selectedData);
+                            AvatarCreatorUtil.CreateSkeleton(selectedData);
                         }
                     }
                 }

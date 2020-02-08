@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DotEditor.Entity.Avatar
 {
-    public class AvatarPartCreator
+    public class AvatarCreator
     {
         [MenuItem("Game/Entity/Avatar/Create Part",priority =0)]
         public static void CreatePartData()
