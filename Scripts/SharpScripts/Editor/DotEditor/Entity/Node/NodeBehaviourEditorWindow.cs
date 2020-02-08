@@ -1,5 +1,5 @@
 ﻿using Dot.Entity.Node;
-using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -17,46 +17,40 @@ namespace DotEditor.Entity.Node
         }
         private NodeBehaviour nodeBehaviour = null;
 
-        private SerializedObject serializedObject = null;
-        private SerializedProperty bindNodes;
-        private SerializedProperty boneNodes;
-        private SerializedProperty smRendererNodes;
+        private ReorderableList bindNodeRList = null;
+        private ReorderableList boneNodeRList = null;
+        private ReorderableList smRendererNodeRList = null;
 
-        private ReorderableList rlBindNodeList = null;
-        private ReorderableList rlBoneNodeList = null;
-        private ReorderableList rlSMRendererNodeList = null;
-
+        List<NodeData> bindNodeList = null;
+        List<NodeData> boneNodeList = null;
+        List<NodeData> smRendererNodeList = null;
         internal void SetNodeBehaviour(NodeBehaviour nodeBehaviour)
         {
             this.nodeBehaviour = nodeBehaviour;
+            bindNodeList = new List<NodeData>(nodeBehaviour.bindNodes);
+            boneNodeList = new List<NodeData>(nodeBehaviour.boneNodes);
+            smRendererNodeList = new List<NodeData>(nodeBehaviour.smRendererNodes);
 
-            serializedObject = new SerializedObject(nodeBehaviour);
-            bindNodes = serializedObject.FindProperty("bindNodes");
-            boneNodes = serializedObject.FindProperty("boneNodes");
-            smRendererNodes = serializedObject.FindProperty("smRendererNodes");
-
-            rlBindNodeList = new ReorderableList(serializedObject, bindNodes, true, true, true, true);
-            rlBindNodeList.elementHeight = EditorGUIUtility.singleLineHeight * 8;
-            rlBindNodeList.drawHeaderCallback = (rect) =>
+            bindNodeRList = new ReorderableList(bindNodeList, typeof(NodeData), true, true, true, true);
+            bindNodeRList.elementHeight = EditorGUIUtility.singleLineHeight * 8;
+            bindNodeRList.drawHeaderCallback = (rect) =>
             {
                 EditorGUI.LabelField(rect, Contents.BindNodeTitle);
             };
-            rlBindNodeList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            bindNodeRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                DrawNodeData(rect,index, bindNodes);
+                DrawNodeData(rect,index, nodeBehaviour.bindNodes[index]);
             };
-            rlBindNodeList.onAddCallback = (list) =>
+            bindNodeRList.onAddCallback = (list) =>
             {
-                bindNodes.InsertArrayElementAtIndex(bindNodes.arraySize);
-                SerializedProperty nodeData = bindNodes.GetArrayElementAtIndex(bindNodes.arraySize - 1);
-                SerializedProperty nodeType = nodeData.FindPropertyRelative("nodeType");
-                string[] names = nodeType.enumNames;
-                nodeType.enumValueIndex = Array.IndexOf(names, NodeType.BindNode.ToString());
+                NodeData data = new NodeData();
+                data.nodeType = NodeType.BindNode;
+                list.list.Add(data);
             };
 
-            rlBoneNodeList = new ReorderableList(serializedObject, boneNodes, true, true, true, true);
-            rlBoneNodeList.elementHeight = EditorGUIUtility.singleLineHeight * 4;
-            rlBoneNodeList.drawHeaderCallback = (rect) =>
+            boneNodeRList = new ReorderableList(boneNodeList, typeof(NodeData), true, true, true, true);
+            boneNodeRList.elementHeight = EditorGUIUtility.singleLineHeight * 4;
+            boneNodeRList.drawHeaderCallback = (rect) =>
             {
                 EditorGUI.LabelField(rect, Contents.BoneNodeTitle);
                 Rect btnRect = rect;
@@ -64,52 +58,31 @@ namespace DotEditor.Entity.Node
                 btnRect.width = 20;
                 if(GUI.Button(btnRect,Contents.AutoFindNodeBtnContent))
                 {
-                    boneNodes.ClearArray();
-                    GameObject go = nodeBehaviour.gameObject;
-                    for (int i = 0; i < go.transform.childCount; ++i)
-                    {
-                        Transform tran = go.transform.GetChild(i);
-                        if(tran.GetComponent<Renderer>() == null)
-                        {
-                            Transform[] childs = go.GetComponentsInChildren<Transform>();
-                            foreach(var child in childs)
-                            {
-                                if(child.GetComponent<Renderer>() == null)
-                                {
-                                    boneNodes.InsertArrayElementAtIndex(boneNodes.arraySize);
-                                    SerializedProperty nodeData = boneNodes.GetArrayElementAtIndex(boneNodes.arraySize - 1);
-                                    SerializedProperty nodeType = nodeData.FindPropertyRelative("nodeType");
-                                    string[] names = nodeType.enumNames;
-                                    nodeType.enumValueIndex = Array.IndexOf(names, NodeType.BoneNode.ToString());
-                                    nodeData.FindPropertyRelative("transform").objectReferenceValue = child;
-                                    nodeData.FindPropertyRelative("name").stringValue = child.name;
-                                }
-                            }
-                        }
-                    }
+                    NodeBehaviourEditorUtil.AutoFindBoneNode(nodeBehaviour);
+                    boneNodeList.Clear();
+                    boneNodeList.AddRange(nodeBehaviour.boneNodes);
                 }
                 btnRect.x += btnRect.width;
                 if(GUI.Button(btnRect,Contents.ClearNodeBtnContent))
                 {
-                    boneNodes.ClearArray();
+                    nodeBehaviour.boneNodes = new NodeData[0];
+                    boneNodeList.Clear();
                 }
             };
-            rlBoneNodeList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            boneNodeRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                DrawNodeData(rect, index, boneNodes);
+                DrawNodeData(rect, index, nodeBehaviour.boneNodes[index]);
             };
-            rlBoneNodeList.onAddCallback = (list) =>
+            boneNodeRList.onAddCallback = (list) =>
             {
-                boneNodes.InsertArrayElementAtIndex(boneNodes.arraySize);
-                SerializedProperty nodeData = boneNodes.GetArrayElementAtIndex(boneNodes.arraySize - 1);
-                SerializedProperty nodeType = nodeData.FindPropertyRelative("nodeType");
-                string[] names = nodeType.enumNames;
-                nodeType.enumValueIndex = Array.IndexOf(names, NodeType.BoneNode.ToString());
+                NodeData data = new NodeData();
+                data.nodeType = NodeType.BoneNode;
+                list.list.Add(data);
             };
 
-            rlSMRendererNodeList = new ReorderableList(serializedObject, smRendererNodes, true, true, true, true);
-            rlSMRendererNodeList.elementHeight = EditorGUIUtility.singleLineHeight * 4;
-            rlSMRendererNodeList.drawHeaderCallback = (rect) =>
+            smRendererNodeRList = new ReorderableList(smRendererNodeList, typeof(NodeData), true, true, true, true);
+            smRendererNodeRList.elementHeight = EditorGUIUtility.singleLineHeight * 4;
+            smRendererNodeRList.drawHeaderCallback = (rect) =>
             {
                 EditorGUI.LabelField(rect, Contents.RendererNodeTitle);
                 Rect btnRect = rect;
@@ -117,47 +90,33 @@ namespace DotEditor.Entity.Node
                 btnRect.width = 20;
                 if (GUI.Button(btnRect, Contents.AutoFindNodeBtnContent))
                 {
-                    smRendererNodes.ClearArray();
-                    GameObject go = nodeBehaviour.gameObject;
-                    SkinnedMeshRenderer[] renderers = go.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-                    if(renderers!=null && renderers.Length>0)
-                    {
-                        for(int i =0;i<renderers.Length;++i)
-                        {
-                            smRendererNodes.InsertArrayElementAtIndex(i);
-                            SerializedProperty nodeData = smRendererNodes.GetArrayElementAtIndex(i);
-                            SerializedProperty nodeType = nodeData.FindPropertyRelative("nodeType");
-                            string[] names = nodeType.enumNames;
-                            nodeType.enumValueIndex = Array.IndexOf(names, NodeType.SMRendererNode.ToString());
-                            nodeData.FindPropertyRelative("renderer").objectReferenceValue = renderers[i];
-                            nodeData.FindPropertyRelative("name").stringValue = renderers[i].name;
-                        }
-                    }
+                    NodeBehaviourEditorUtil.AutoFindRendererNode(nodeBehaviour);
+                    smRendererNodeList.Clear();
+                    smRendererNodeList.AddRange(nodeBehaviour.smRendererNodes);
                 }
                 btnRect.x += btnRect.width;
                 if (GUI.Button(btnRect, Contents.ClearNodeBtnContent))
                 {
-                    smRendererNodes.ClearArray();
+                    nodeBehaviour.smRendererNodes = new NodeData[0];
+                    smRendererNodeList.Clear();
                 }
             };
-            rlSMRendererNodeList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            smRendererNodeRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                DrawNodeData(rect, index, smRendererNodes);
+                DrawNodeData(rect, index, nodeBehaviour.smRendererNodes[index]);
             };
-            rlSMRendererNodeList.onAddCallback = (list) =>
+            smRendererNodeRList.onAddCallback = (list) =>
             {
-                smRendererNodes.InsertArrayElementAtIndex(smRendererNodes.arraySize);
-                SerializedProperty nodeData = smRendererNodes.GetArrayElementAtIndex(smRendererNodes.arraySize - 1);
-                SerializedProperty nodeType = nodeData.FindPropertyRelative("nodeType");
-                string[] names = nodeType.enumNames;
-                nodeType.enumValueIndex = Array.IndexOf(names, NodeType.SMRendererNode.ToString());
+                NodeData data = new NodeData();
+                data.nodeType = NodeType.SMRendererNode;
+                list.list.Add(data);
             };
 
             Repaint();
         }
 
         private int nodeDeleteIndex = -1;
-        private void DrawNodeData(Rect rect,int index,SerializedProperty property)
+        private void DrawNodeData(Rect rect,int index,NodeData nodeData)
         {
             EditorGUI.LabelField(rect, GUIContent.none, EditorStyles.helpBox);
 
@@ -177,36 +136,33 @@ namespace DotEditor.Entity.Node
                 nodeDeleteIndex = index;
             }
 
-            SerializedProperty nodeData = property.GetArrayElementAtIndex(index);
-
-            SerializedProperty nodeTypeProperty = nodeData.FindPropertyRelative("nodeType");
+            NodeType nodeType = nodeData.nodeType;
             EditorGUI.BeginDisabledGroup(true);
             {
-                EditorGUI.PropertyField(drawRect, nodeTypeProperty);
+                EditorGUI.EnumPopup(drawRect, Contents.NodeTypeContent,nodeType);
             }
             EditorGUI.EndDisabledGroup();
 
             drawRect.y += drawRect.height;
-            EditorGUI.PropertyField(drawRect, nodeData.FindPropertyRelative("name"));
+            nodeData.name = EditorGUI.TextField(drawRect, Contents.NameContent, nodeData.name);
 
-            NodeType nodeType = (NodeType)nodeTypeProperty.intValue;
             if (nodeType == NodeType.BindNode || nodeType == NodeType.BoneNode)
             {
                 drawRect.y += drawRect.height;
-                EditorGUI.PropertyField(drawRect, nodeData.FindPropertyRelative("transform"));
+                nodeData.transform = (Transform)EditorGUI.ObjectField(drawRect, Contents.TransformContent, nodeData.transform, typeof(Transform), false);
                 if (nodeType == NodeType.BindNode)
                 {
                     drawRect.y += drawRect.height;
                     drawRect.height *= 2;
-                    EditorGUI.PropertyField(drawRect, nodeData.FindPropertyRelative("positionOffset"));
+                    nodeData.positionOffset = EditorGUI.Vector3Field(drawRect, Contents.PositionOffsetContent, nodeData.positionOffset);
                     drawRect.y += drawRect.height;
-                    EditorGUI.PropertyField(drawRect, nodeData.FindPropertyRelative("rotationOffset"));
+                    nodeData.rotationOffset = EditorGUI.Vector3Field(drawRect, Contents.RotationOffsetContent, nodeData.rotationOffset);
                 }
             }
             else if (nodeType == NodeType.SMRendererNode)
             {
                 drawRect.y += drawRect.height;
-                EditorGUI.PropertyField(drawRect, nodeData.FindPropertyRelative("renderer"));
+                nodeData.renderer = (SkinnedMeshRenderer)EditorGUI.ObjectField(drawRect, Contents.RendererContent, nodeData.renderer, typeof(SkinnedMeshRenderer), false);
             }
         }
 
@@ -234,62 +190,90 @@ namespace DotEditor.Entity.Node
                 {
                     if (toolbarSelectIndex == 0)
                     {
+                        if(nodeDeleteIndex>=0)
+                        {
+                            bindNodeRList.list.RemoveAt(nodeDeleteIndex);
+                            nodeDeleteIndex = -1;
+                        }
                         DrawBindNodes();
                     }
                     else if (toolbarSelectIndex == 1)
                     {
+                        if (nodeDeleteIndex >= 0)
+                        {
+                            boneNodeRList.list.RemoveAt(nodeDeleteIndex);
+                            nodeDeleteIndex = -1;
+                        }
                         DrawBoneNodes();
                     }
                     else if (toolbarSelectIndex == 2)
                     {
+                        if (nodeDeleteIndex >= 0)
+                        {
+                            smRendererNodeRList.list.RemoveAt(nodeDeleteIndex);
+                            nodeDeleteIndex = -1;
+                        }
                         DrawRendererNodes();
                     }
                 }
                 EditorGUILayout.EndScrollView();
             }
             EditorGUILayout.EndVertical();
+
+            
+
+            if(GUI.changed)
+            {
+                nodeBehaviour.bindNodes = bindNodeList.ToArray();
+                nodeBehaviour.boneNodes = boneNodeList.ToArray();
+                nodeBehaviour.smRendererNodes = smRendererNodeList.ToArray();
+                EditorUtility.SetDirty(nodeBehaviour);
+            }
         }
 
         private void DrawBindNodes()
         {
-            serializedObject.Update();
-            
             if (nodeDeleteIndex >= 0)
             {
-                bindNodes.DeleteArrayElementAtIndex(nodeDeleteIndex);
+                List<NodeData> list = new List<NodeData>(nodeBehaviour.bindNodes);
+                list.RemoveAt(nodeDeleteIndex);
+                nodeBehaviour.bindNodes = list.ToArray();
                 nodeDeleteIndex = -1;
+
+                Repaint();
             }
 
-            rlBindNodeList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
+            bindNodeRList.DoLayoutList();
         }
 
         private void DrawBoneNodes()
         {
-            serializedObject.Update();
-            
             if (nodeDeleteIndex >= 0)
             {
-                boneNodes.DeleteArrayElementAtIndex(nodeDeleteIndex);
+                List<NodeData> list = new List<NodeData>(nodeBehaviour.bindNodes);
+                list.RemoveAt(nodeDeleteIndex);
+                nodeBehaviour.boneNodes = list.ToArray();
                 nodeDeleteIndex = -1;
+
+                Repaint();
             }
 
-            rlBoneNodeList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
+            boneNodeRList.DoLayoutList();
         }
 
         private void DrawRendererNodes()
         {
-            serializedObject.Update();
-
             if (nodeDeleteIndex >= 0)
             {
-                smRendererNodes.DeleteArrayElementAtIndex(nodeDeleteIndex);
+                List<NodeData> list = new List<NodeData>(nodeBehaviour.bindNodes);
+                list.RemoveAt(nodeDeleteIndex);
+                nodeBehaviour.smRendererNodes = list.ToArray();
                 nodeDeleteIndex = -1;
+
+                Repaint();
             }
 
-            rlSMRendererNodeList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
+            smRendererNodeRList.DoLayoutList();
         }
 
 
@@ -314,6 +298,13 @@ namespace DotEditor.Entity.Node
                 new GUIContent("Bone Node"),
                 new GUIContent("Renderer Node"),
             };
+
+            internal static GUIContent NodeTypeContent = new GUIContent("Node Type");
+            internal static GUIContent NameContent = new GUIContent("Name");
+            internal static GUIContent TransformContent = new GUIContent("Transform");
+            internal static GUIContent RendererContent = new GUIContent("Renderer");
+            internal static GUIContent PositionOffsetContent = new GUIContent("Position Offset");
+            internal static GUIContent RotationOffsetContent = new GUIContent("Rotation Offset");
 
             internal static GUIContent BindNodeTitle = new GUIContent("Bind Nodes");
             internal static GUIContent BoneNodeTitle = new GUIContent("Bone Nodes");
