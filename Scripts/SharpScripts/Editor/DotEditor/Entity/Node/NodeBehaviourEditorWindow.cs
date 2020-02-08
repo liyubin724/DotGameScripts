@@ -2,6 +2,7 @@
 using DotEditor.Util;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace DotEditor.Entity.Node
             win.Show();
         }
         private NodeBehaviour nodeBehaviour = null;
+        private bool isPrefabAsset = false;
 
         private ReorderableList bindNodeRList = null;
         private ReorderableList boneNodeRList = null;
@@ -25,9 +27,21 @@ namespace DotEditor.Entity.Node
         List<NodeData> bindNodeList = null;
         List<NodeData> boneNodeList = null;
         List<NodeData> smRendererNodeList = null;
-        internal void SetNodeBehaviour(NodeBehaviour nodeBehaviour)
+        internal void SetNodeBehaviour(NodeBehaviour nodeBeh)
         {
-            this.nodeBehaviour = nodeBehaviour;
+            nodeBehaviour = nodeBeh;
+            if (PrefabUtility.IsPartOfAnyPrefab(nodeBehaviour.gameObject))
+            {
+                isPrefabAsset = true;
+                string assetPath = AssetDatabase.GetAssetPath(nodeBehaviour.gameObject);
+                if(PrefabUtility.IsPartOfPrefabInstance(nodeBehaviour.gameObject))
+                {
+                    assetPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(nodeBehaviour.gameObject);
+                }
+
+                PrefabStage stage = PrefabUtil.OpenPrefabStage(assetPath);
+                nodeBehaviour = stage.prefabContentsRoot.GetComponent<NodeBehaviour>();
+            }
 
             bindNodeList = new List<NodeData>(nodeBehaviour.bindNodes);
             boneNodeList = new List<NodeData>(nodeBehaviour.boneNodes);
@@ -119,6 +133,10 @@ namespace DotEditor.Entity.Node
 
         private void OnDestroy()
         {
+            if(isPrefabAsset)
+            {
+                PrefabUtil.ClosePrefabStage();
+            }
         }
 
         private int nodeDeleteIndex = -1;

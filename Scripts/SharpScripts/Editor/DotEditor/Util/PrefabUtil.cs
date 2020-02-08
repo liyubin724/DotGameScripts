@@ -52,7 +52,7 @@ namespace DotEditor.Util
 #endif
         }
 
-        public static void OpenPrefabStage(string prefabPath)
+        public static PrefabStage OpenPrefabStage(string prefabPath)
         {
             if(IsPrefab(prefabPath))
             {
@@ -61,8 +61,12 @@ namespace DotEditor.Util
                 {
                     dynamic utilityDynamic = typeof(PrefabStageUtility).AsDynamicType();
                     utilityDynamic.OpenPrefab(prefabPath);
+
+                    return PrefabStageUtility.GetCurrentPrefabStage();
                 }
             }
+
+            return null;
         }
 
         public static void ClosePrefabStage()
