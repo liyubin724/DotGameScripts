@@ -65,10 +65,7 @@ namespace Dot.Lua
             {
                 foreach(var asset in assets)
                 {
-                    if(asset.IsValid())
-                    {
-                        asset.DoRequire(luaEnv);
-                    }else
+                    if(!asset.Require(luaEnv))
                     {
                         LogUtil.LogError(typeof(LuaEnvEntity), "LuaEnvEntity::DoStart->param is an unvalid asset");
                     }

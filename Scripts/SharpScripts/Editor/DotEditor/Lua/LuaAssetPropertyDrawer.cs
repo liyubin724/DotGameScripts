@@ -1,6 +1,5 @@
 ﻿using Dot.Lua;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,7 +22,6 @@ namespace DotEditor.Lua
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             SerializedProperty scriptPathProperty = property.FindPropertyRelative("scriptFilePath");
-            SerializedProperty scriptNameProperty = property.FindPropertyRelative("scriptFileName");
 
             string pPath = scriptPathProperty.propertyPath;
             TextAsset textAsset = null;
@@ -46,7 +44,6 @@ namespace DotEditor.Lua
             {
                 if (newAsset == null)
                 {
-                    scriptNameProperty.stringValue = "";
                     scriptPathProperty.stringValue = "";
                 }
                 else
@@ -56,13 +53,11 @@ namespace DotEditor.Lua
                     {
                         assetPath = assetPath.Replace(LuaConfig.DEFAULT_ASSET_DIR+"/", "");
                         assetPath = assetPath.Substring(0, assetPath.LastIndexOf(LuaConfig.DEFAULT_SCRIPT_EXTENSION));
-                        scriptNameProperty.stringValue = Path.GetFileNameWithoutExtension(assetPath);
                         scriptPathProperty.stringValue = assetPath;
                     }
                     else
                     {
                         newAsset = null;
-                        scriptNameProperty.stringValue = "";
                         scriptPathProperty.stringValue = "";
                     }
                 }

@@ -25,9 +25,9 @@ namespace Dot.Lua.Register
                 return;
             }
 
-            if (luaAsset != null && luaAsset.IsValid())
+            if (luaAsset != null)
             {
-                ObjTable = luaAsset.DoRequireAndInstance(luaEnv);
+                ObjTable = luaAsset.Instance(luaEnv);
                 if (ObjTable != null)
                 {
                     ObjTable.Set("gameObject", gameObject);

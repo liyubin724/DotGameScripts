@@ -9,7 +9,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Entity.Controller
 {
-    public class EntityAvatarController : EntityControllerBase
+    public class EntityAvatarController : EntityController
     {
         private static readonly string SKELETON_LOAD_COMPLETE_NAME = "OnSkeletonComplete";
         private static readonly string PART_LOAD_COMPLETE_NAME = "OnPartComplete";
@@ -21,7 +21,7 @@ namespace Dot.Entity.Controller
             {
                 if(rootTransform==null)
                 {
-                    EntityVirtualViewController vvc = Entity.GetController<EntityVirtualViewController>(EntityControllerType.VirtualView);
+                    EntityVirtualViewController vvc = entityObj.GetController<EntityVirtualViewController>(EntityControllerType.VirtualView);
                     rootTransform = vvc.RootTransfrom;
                 }
                 return rootTransform;

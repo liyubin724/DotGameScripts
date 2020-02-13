@@ -1,0 +1,35 @@
+require("Dot/Core/Class")
+
+local class = Class
+
+EntityControllerBase = class(function(self)
+
+end)
+
+----protect----
+--
+--
+function EntityControllerBase:OnInit()
+
+end
+
+----protect----
+--
+--
+function EntityControllerBase:OnUpdate(deltaTime)
+
+end
+
+----protect----
+--
+--
+function EntityControllerBase:OnReset()
+    
+end
+
+----protect----
+--
+--
+function EntityControllerBase:OnDestroy()
+
+end

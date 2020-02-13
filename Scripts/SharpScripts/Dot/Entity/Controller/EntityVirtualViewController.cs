@@ -2,8 +2,11 @@
 
 namespace Dot.Entity.Controller
 {
-    public class EntityVirtualViewController : EntityControllerBase
+    public class EntityVirtualViewController : EntityController
     {
+        private static readonly string GAMEOBJECT_REGISTER_NAME = "gameObject";
+        private static readonly string TRANSFORM_REGISTER_NAME = "transform";
+
         private EntityBehaviour entityBehaviour = null;
         private Transform rootTransfrom = null;
         public Transform RootTransfrom
@@ -33,17 +36,22 @@ namespace Dot.Entity.Controller
 
         protected override void DoInit()
         {
-            GameObject gObj = new GameObject("Entity");
+            GameObject gObj = new GameObject("Entity Virtual View");
             entityBehaviour = gObj.AddComponent<EntityBehaviour>();
+
+            rootTransfrom = entityBehaviour.transform;
+            rootGameObject = entityBehaviour.gameObject;
+
+            objTable.Set(GAMEOBJECT_REGISTER_NAME, rootGameObject);
+            objTable.Set(TRANSFORM_REGISTER_NAME, rootTransfrom);
         }
 
         protected override void DoReset()
         {
-            GameObject.Destroy(RootGameObject);
-
             rootGameObject = null;
             rootTransfrom = null;
             entityBehaviour = null;
+            GameObject.Destroy(RootGameObject);
         }
     }
 }

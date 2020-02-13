@@ -29,8 +29,6 @@ namespace DotEditor.Entity.Node
                     NodeData data = new NodeData();
                     data.name = node.name;
                     data.nodeType = NodeType.BindNode;
-                    data.positionOffset = node.positionOffset;
-                    data.rotationOffset = node.rotationOffset;
                     data.transform = targetTran;
                     toBindNodes.Add(data);
                 }

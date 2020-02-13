@@ -4,6 +4,8 @@ namespace Dot.Lua
 {
     public static class LuaConfig
     {
+        public const string LOGGER_NAME = "Lua";
+
         public const string AWAKE_FUNCTION_NAME = "DoAwake";
         public const string ENABLE_FUNCTION_NAME = "DoEnable";
         public const string START_FUNCTION_NAME = "DoStart";

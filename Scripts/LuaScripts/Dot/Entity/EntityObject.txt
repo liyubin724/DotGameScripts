@@ -1,0 +1,22 @@
+require("Dot/Core/Class")
+
+local class = Class
+
+EntityObject = class(function(self)
+    self.uniqueID = nil
+    self.category = nil
+    self.name = nil
+end)
+
+-- function EntityObject:DoInit()
+-- end
+
+-- function EntityObject:DoReset()
+-- end
+
+-- function EntityObject:DoDestroy()
+-- end
+
+-- function EntityObject:DoUpdate(deltaTime)
+-- end
+

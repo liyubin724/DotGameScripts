@@ -1,6 +1,9 @@
 ﻿using Dot.Dispatch;
 using Dot.Log;
+using Dot.Lua;
+using System;
 using System.Collections.Generic;
+using XLua;
 using EventHandler = Dot.Dispatch.EventHandler;
 
 namespace Dot.Entity
@@ -9,17 +12,43 @@ namespace Dot.Entity
     {
         private static readonly string LOGGER_NAME = "EntityObject";
 
-        public long UniqueID { get; set; }
-        public int Category { get; set; }
-        public string Name { get; set; }
+        public long UniqueID { get; private set; }
+        public int Category { get; private set; }
+        public string Name { get; private set; }
+
+        private LuaTable objTable = null;
+        public LuaTable ObjTable { get => objTable; }
+
+        private Action<LuaTable,float> updateAction = null;
 
         public EntityObject()
         {
             eventDispatcher = new EventDispatcher();
         }
 
+        public LuaTable InitEntity(long id,int category,string name,string script)
+        {
+            UniqueID = id;
+            Category = category;
+            Name = name;
+
+            LuaEnv luaEnv = LuaManager.GetInstance().LuaEnv;
+            objTable = LuaRequire.Instance(luaEnv, script);
+
+            objTable.Set(EntityConst.UNIQUEID_REGISTER_NAME, id);
+            objTable.Set(EntityConst.CATEGORY_REGISTER_NAME, category);
+            objTable.Set(EntityConst.NAME_REGISTER_NAME, name);
+
+            objTable.Get<Action<LuaTable>>(EntityConst.DO_INIT_NAME)?.Invoke(objTable);
+            updateAction = objTable.Get<Action<LuaTable, float>>(EntityConst.DO_UPDATE_NAME);
+
+            return objTable;
+        }
+
         public void DoUpdate(float deltaTime)
         {
+            updateAction?.Invoke(objTable, deltaTime);
+
             foreach(var kvp in controllerDic)
             {
                 if(kvp.Value.Enable)
@@ -31,11 +60,10 @@ namespace Dot.Entity
 
         public void DoReset()
         {
-            foreach(var kvp in controllerDic)
-            {
-                kvp.Value.ResetController();
-            }
-            RemoveAllController();
+        }
+
+        public void DoDestroy()
+        {
         }
 
         #region operation for event
@@ -47,10 +75,10 @@ namespace Dot.Entity
         #endregion
 
         #region operation for controller
-        private Dictionary<EntityControllerType, EntityControllerBase> controllerDic = new Dictionary<EntityControllerType, EntityControllerBase>();
-        public T GetController<T>(EntityControllerType controllerType) where T:EntityControllerBase
+        private Dictionary<EntityControllerType, EntityController> controllerDic = new Dictionary<EntityControllerType, EntityController>();
+        public T GetController<T>(EntityControllerType controllerType) where T:EntityController
         {
-            if(controllerDic.TryGetValue(controllerType,out EntityControllerBase controller))
+            if(controllerDic.TryGetValue(controllerType,out EntityController controller))
             {
                 return (T)controller;
             }
@@ -62,7 +90,7 @@ namespace Dot.Entity
             return controllerDic.ContainsKey(controllerType);
         }
 
-        public void AddController(EntityControllerType controllerType, EntityControllerBase controller)
+        public void AddController(EntityControllerType controllerType, EntityController controller)
         {
             if (controller == null)
             {
@@ -71,7 +99,7 @@ namespace Dot.Entity
             }
             if (!controllerDic.ContainsKey(controllerType))
             {
-                controller.InitController(this);
+                //controller.InitController(this);
 
                 controllerDic.Add(controllerType, controller);
             }
@@ -81,7 +109,7 @@ namespace Dot.Entity
             }
         }
 
-        public void ReplaceController(EntityControllerType controllerType, EntityControllerBase controller)
+        public void ReplaceController(EntityControllerType controllerType, EntityController controller)
         {
             RemoveController(controllerType);
             AddController(controllerType, controller);
