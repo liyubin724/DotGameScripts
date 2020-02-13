@@ -19,8 +19,6 @@ namespace Dot.Entity.Node
         public string name = string.Empty;
         public Transform transform = null;
         public SkinnedMeshRenderer renderer = null;
-        public Vector3 positionOffset = Vector3.zero;
-        public Vector3 rotationOffset = Vector3.zero;
     }
 
     [ExecuteInEditMode]

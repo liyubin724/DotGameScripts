@@ -1,4 +1,5 @@
 ﻿using Dot.Dispatch;
+using Dot.Entity.Controller;
 using Dot.Log;
 using Dot.Lua;
 using System;
@@ -7,31 +8,44 @@ using EventHandler = Dot.Dispatch.EventHandler;
 
 namespace Dot.Entity
 {
-    [Flags]
     public enum EntityControllerType
     {
-        VirtualView = 1<<0,
-        Avatar = 1<<1,
-        Move = 1<<2,
-        Animator = 1<<3,
+        VirtualView = 0,
+        Avatar,
+        Move,
+        Animator,
     }
 
     public abstract class EntityControllerBase
     {
-        internal static readonly string LOGGER_NAME = "EntityController";
-        private static readonly string LUA_CONTROLLER_NAME = "controller";
+        protected internal static readonly string LOGGER_NAME = "EntityController";
+
+        private static readonly string CONTROLLER_REGISTER_NAME = "controller";
+        
+        private static readonly string BIND_LUA_COMPLETE_NAME = "OnBindComplete";
+        private static readonly string INIT_COMPLETE_NAME = "OnInitComplete";
 
         public bool Enable { get; set; } = true;
 
-        #region
         private EntityObject entityObj = null;
         protected EntityObject Entity { get => entityObj; }
-        public void InitController(EntityObject entity)
+        
+        #region
+        internal void InitController(EntityObject entity)
         {
+            if(objTable == null)
+            {
+                LogUtil.LogError(LOGGER_NAME, "EntityControllerBase::InitController->Lua Script has not binded!");
+                return;
+            }
+
             entityObj = entity;
+            eventDispatcher = entity.Dispatcher;
 
             DoInit();
             RegisterEvents();
+
+            CallAction(INIT_COMPLETE_NAME);
         }
 
         public void ResetController()
@@ -91,7 +105,7 @@ namespace Dot.Entity
             LuaFunction callFun = classTable.Get<LuaFunction>("__call");
             objTable = callFun.Func<LuaTable, LuaTable>(classTable);
 
-            objTable.Set(LUA_CONTROLLER_NAME, this);
+            objTable.Set(CONTROLLER_REGISTER_NAME, this);
             OnLuaBinded();
 
             callFun.Dispose();
@@ -100,6 +114,10 @@ namespace Dot.Entity
 
         protected virtual void OnLuaBinded()
         {
+            if(ObjTable!=null)
+            {
+                CallAction(BIND_LUA_COMPLETE_NAME);
+            }
         }
 
         protected void CallAction(string funcName)
@@ -193,5 +211,6 @@ namespace Dot.Entity
         protected virtual void RegisterEvents() { }
         protected virtual void UnregisterEvents() { }
         #endregion
+
     }
 }

@@ -40,6 +40,7 @@ namespace Dot.Entity
 
         #region operation for event
         private EventDispatcher eventDispatcher = null;
+        internal EventDispatcher Dispatcher { get => eventDispatcher; }
         public void SendEvent(int eventID, params object[] values) => eventDispatcher.TriggerEvent(eventID, 0, values);
         public void RegisterEvent(int eventID, EventHandler handler) => eventDispatcher.RegisterEvent(eventID, handler);
         public void UnregisterEvent(int eventID, EventHandler handler) => eventDispatcher.UnregisterEvent(eventID, handler);
@@ -70,6 +71,8 @@ namespace Dot.Entity
             }
             if (!controllerDic.ContainsKey(controllerType))
             {
+                controller.InitController(this);
+
                 controllerDic.Add(controllerType, controller);
             }
             else

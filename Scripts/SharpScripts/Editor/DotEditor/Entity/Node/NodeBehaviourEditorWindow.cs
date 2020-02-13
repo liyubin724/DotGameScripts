@@ -174,14 +174,6 @@ namespace DotEditor.Entity.Node
             {
                 drawRect.y += drawRect.height;
                 nodeData.transform = (Transform)EditorGUI.ObjectField(drawRect, Contents.TransformContent, nodeData.transform, typeof(Transform), true);
-                if (nodeType == NodeType.BindNode)
-                {
-                    drawRect.y += drawRect.height;
-                    drawRect.height *= 2;
-                    nodeData.positionOffset = EditorGUI.Vector3Field(drawRect, Contents.PositionOffsetContent, nodeData.positionOffset);
-                    drawRect.y += drawRect.height;
-                    nodeData.rotationOffset = EditorGUI.Vector3Field(drawRect, Contents.RotationOffsetContent, nodeData.rotationOffset);
-                }
             }
             else if (nodeType == NodeType.SMRendererNode)
             {

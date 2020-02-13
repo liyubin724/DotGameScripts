@@ -73,13 +73,6 @@ namespace DotEditor.Entity.Node
                     drawRect.y += drawRect.height;
                     EditorGUI.ObjectField(drawRect, Contents.RendererContent, nodeData.renderer, typeof(SkinnedMeshRenderer), false);
                 }
-                if(nodeType == NodeType.BindNode)
-                {
-                    drawRect.y += drawRect.height;
-                    EditorGUI.Vector3Field(drawRect,Contents.PositionOffsetContent, nodeData.positionOffset);
-                    drawRect.y += drawRect.height;
-                    EditorGUI.Vector3Field(drawRect, Contents.RotationOffsetContent, nodeData.rotationOffset);
-                }
             }
             EditorGUI.EndDisabledGroup();
         }
