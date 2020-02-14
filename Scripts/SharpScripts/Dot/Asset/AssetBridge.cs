@@ -7,9 +7,11 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
-    internal class AssetBridgeData : IObjectPoolItem
+    public class AssetBridgeData : IObjectPoolItem
     {
         public long uniqueID = -1;
+        public string address = null;
+        public string[] addresses = null;
         public AssetHandler handler = null;
         public OnAssetLoadComplete complete = null;
         public OnBatchAssetLoadComplete batchComplete = null;
@@ -47,6 +49,7 @@ namespace Dot.Asset
         public long LoadAsset(string address,OnAssetLoadComplete complete,SystemObject userData = null)
         {
             AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.address = address;
             bridgeData.uniqueID = idCreator.Next();
             bridgeData.complete = complete;
             bridgeData.userData = userData;
@@ -62,6 +65,7 @@ namespace Dot.Asset
         public long InstanceAsset(string address,OnAssetLoadComplete complete, SystemObject userData = null)
         {
             AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.address = address;
             bridgeData.uniqueID = idCreator.Next();
             bridgeData.complete = complete;
             bridgeData.userData = userData;
@@ -77,6 +81,7 @@ namespace Dot.Asset
         public long LoadAsset(string[] addresses, OnBatchAssetLoadComplete complete,SystemObject userData = null)
         {
             AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.addresses = addresses;
             bridgeData.uniqueID = idCreator.Next();
             bridgeData.batchComplete = complete;
             bridgeData.userData = userData;
@@ -123,6 +128,18 @@ namespace Dot.Asset
                     return;
                 }
             }
+        }
+
+        public AssetBridgeData GetBridgeData(long id)
+        {
+            foreach(var data in bridgeDatas)
+            {
+                if(data.uniqueID == id)
+                {
+                    return data;
+                }
+            }
+            return null;
         }
 
         protected override void DisposeManagedResource()

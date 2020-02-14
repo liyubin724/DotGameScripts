@@ -10,8 +10,6 @@ namespace Dot.Entity
 {
     public class EntityObject
     {
-        private static readonly string LOGGER_NAME = "EntityObject";
-
         public long UniqueID { get; private set; }
         public int Category { get; private set; }
         public string Name { get; private set; }
@@ -60,6 +58,7 @@ namespace Dot.Entity
 
         public void DoReset()
         {
+            eventDispatcher.DoReset();
         }
 
         public void DoDestroy()
@@ -90,7 +89,7 @@ namespace Dot.Entity
             return controllerDic.ContainsKey(controllerType);
         }
 
-        public void AddController(EntityControllerType controllerType, EntityController controller)
+        public void AddController(EntityControllerType controllerType, string registerName,EntityController controller)
         {
             if (controller == null)
             {
@@ -99,9 +98,8 @@ namespace Dot.Entity
             }
             if (!controllerDic.ContainsKey(controllerType))
             {
-                //controller.InitController(this);
-
                 controllerDic.Add(controllerType, controller);
+
             }
             else
             {

@@ -5,7 +5,10 @@
         internal const string OBJECT_LOGGER_NAME = "Entity-Object";
         internal const string CONTROLLER_LOGGER_NAME = "Entity-Controller";
 
-        internal const string ENTITY_REGISTER_NAME = "entityObject";
+        internal const string ENTITY_REGISTER_NAME = "entity";
+        internal const string CONTROLLER_REGISTER_NAME = "controller";
+
+        internal const string ENTITYOBJECT_REGISTER_NAME = "entityObject";
         internal const string GAMEOBJECT_REGISTER_NAME = "gameObject";
         internal const string TRANSFORM_REGISTER_NAME = "transform";
 

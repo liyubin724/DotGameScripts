@@ -1,0 +1,38 @@
+require("Dot/Core/Class")
+require("Dot/Entity/EntityController")
+
+local class = Class
+local ControllerBase = EntityController
+
+EntityAvatarController = class(ControllerBase,function(self)
+    self.avatarController = nil
+
+    self.skeletonGameObject = nil
+    self.skeletonTransform = nil
+end)
+
+function EntityAvatarController:DoLoadSkeletonComplete()
+
+end
+
+function EntityAvatarController:DoLoadSkeletonCancel(address)
+
+end
+
+function EntityAvatarController:DoUnloadSkeletonComplete()
+
+end
+
+function EntityAvatarController:DoLoadPartComplete()
+
+end
+
+function EntityAvatarController:DoLoadPartCancel()
+
+end
+
+function EntityAvatarController:DoUnloadPartComplete()
+
+end
+
+

@@ -2,8 +2,11 @@
 using Dot.Entity.Avatar;
 using Dot.Entity.Node;
 using Dot.Log;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using XLua;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
@@ -11,26 +14,42 @@ namespace Dot.Entity.Controller
 {
     public class EntityAvatarController : EntityController
     {
-        private static readonly string SKELETON_LOAD_COMPLETE_NAME = "OnSkeletonComplete";
-        private static readonly string PART_LOAD_COMPLETE_NAME = "OnPartComplete";
+        private static readonly string SKELETON_LOAD_NAME = "DoLoadSkeletonComplete";
+        private static readonly string SKELETON_LOAD_CANCEL_NAME = "DoLoadSkeletonCancel";
+        private static readonly string SKELETON_UNLOAD_NAME = "DoUnloadSkeletonComplete";
 
-        private Transform rootTransform = null;
+        private static readonly string PART_LOAD_NAME = "DoLoadPartComplete";
+        private static readonly string PART_LOAD_CANCEL_NAME = "DoLoadPartCancel";
+        private static readonly string PART_UNLOAD_NAME = "DoUnloadPartComplete";
+
+        private static readonly string SKELETON_GAMEOBJECT_REGISTER_NAME = "skeletonGameObject";
+        private static readonly string SKELETON_TRANSFORM_REGISTER_NAME = "skeletonTransfrom";
+
         private Transform RootTransform
         {
             get
             {
-                if(rootTransform==null)
-                {
-                    EntityVirtualViewController vvc = entityObj.GetController<EntityVirtualViewController>(EntityControllerType.VirtualView);
-                    rootTransform = vvc.RootTransfrom;
-                }
-                return rootTransform;
+                EntityViewController vvc = entityObj.GetController<EntityViewController>(EntityControllerType.View);
+                return vvc.RootTransfrom;
             }
         }
 
+        public override EntityControllerType ControllerType
+        {
+            get => EntityControllerType.Avatar;
+        }
+
+        public override string RegisterName
+        {
+            get => "avatarController";
+        }
+
         private AssetBridge assetBridge = null;
-        
+
+        private GameObject skeletonGameObject = null;
+        private Transform skeletonTransform = null;
         private NodeBehaviour nodeBehaviour = null;
+
         private long skeletonLoadingID = -1;
 
         private Dictionary<AvatarPartType, AvatarPartInstance> partInstanceDic = new Dictionary<AvatarPartType, AvatarPartInstance>();
@@ -41,112 +60,214 @@ namespace Dot.Entity.Controller
             assetBridge = new AssetBridge();
         }
 
-        protected override void DoReset()
-        {
-            UnloadAllPart();
-            UnloadSkeleton();
-            assetBridge.Dispose();
-            assetBridge = null;
-        }
-
         public NodeData GetBindNodeData(string nodeName)
         {
             if(nodeBehaviour == null)
             {
-                LogUtil.LogError(LOGGER_NAME, "EntityAvatarController::GetBindNode->nodeBehaviour is not been loaded");
+                LogUtil.LogError(EntityConst.CONTROLLER_LOGGER_NAME, "EntityAvatarController::GetBindNode->nodeBehaviour is not been loaded");
                 return null;
             }
 
             return nodeBehaviour.GetNode(NodeType.BindNode, nodeName);
         }
 
-        private void BindTransfrom(string nodeName,Transform transform,
+        public Transform BindTransfrom(string nodeName,Transform transform,
             Vector3 positionOffset,Vector3 rotationOffset)
         {
             NodeData bindNodeData = GetBindNodeData(nodeName);
-            if(bindNodeData!=null)
-            {
-                transform.SetParent(bindNodeData.transform, false);
-                transform.localPosition = positionOffset;
-                transform.localRotation = Quaternion.Euler(rotationOffset);
-            }
+            transform.SetParent(bindNodeData.transform, false);
+            transform.localPosition = positionOffset;
+            transform.localRotation = Quaternion.Euler(rotationOffset);
+
+            return bindNodeData.transform;
         }
 
         public void LoadSkeleton(string skeletonAddress)
         {
             if(skeletonLoadingID>=0)
             {
+                CancelLoadSkeleton();
+            }
+            skeletonLoadingID = assetBridge.InstanceAsset(skeletonAddress, OnSkeletonComplete);
+        }
+
+        private void OnSkeletonComplete(string address,UnityObject uObj,SystemObject userData)
+        {
+            if(skeletonGameObject !=null)
+            {
+                UnloadSkeleton();
+            }
+            skeletonLoadingID = -1;
+
+            skeletonGameObject = uObj as GameObject;
+            skeletonTransform = skeletonGameObject.transform;
+            nodeBehaviour = skeletonGameObject.GetComponent<NodeBehaviour>();
+
+            if(nodeBehaviour == null)
+            {
+                LogUtil.LogError(GetType(), "EntityAvatarController::OnSkeletonComplete->nodeBehaviour is null");
+                return;
+            }
+
+            skeletonTransform.SetParent(RootTransform, false);
+
+            objTable.Set(SKELETON_GAMEOBJECT_REGISTER_NAME, skeletonGameObject);
+            objTable.Set(SKELETON_TRANSFORM_REGISTER_NAME, skeletonTransform);
+
+            objTable.Get<Action<LuaTable>>(SKELETON_LOAD_NAME)?.Invoke(objTable);
+        }
+
+        private void CancelLoadSkeleton()
+        {
+            if (skeletonLoadingID >= 0)
+            {
+                AssetBridgeData bridgeData = assetBridge.GetBridgeData(skeletonLoadingID);
+                objTable.Get<Action<LuaTable, string>>(SKELETON_LOAD_CANCEL_NAME)?.Invoke(objTable, bridgeData.address);
+
                 assetBridge.CancelLoadAsset(skeletonLoadingID);
                 skeletonLoadingID = -1;
             }
-            skeletonLoadingID = assetBridge.InstanceAsset(skeletonAddress, OnSkeletonAssetComplete);
-        }
-
-        private void OnSkeletonAssetComplete(string address,UnityObject uObj,SystemObject userData)
-        {
-            if(nodeBehaviour!=null)
-            {
-                UnloadAllPart();
-                UnloadSkeleton();
-            }
-
-            GameObject gObj = uObj as GameObject;
-            nodeBehaviour = gObj.GetComponent<NodeBehaviour>();
-
-        }
-
-        private void OnPartAssetComplete(string address,UnityObject uObj,SystemObject userData)
-        {
-
         }
 
         public void UnloadSkeleton()
         {
-            if(nodeBehaviour!=null)
+            UnloadAllPart();
+
+            if(skeletonLoadingID>0)
             {
-                UnloadAllPart();
+                assetBridge.CancelLoadAsset(skeletonLoadingID);
+                skeletonLoadingID = -1;
+            }else if(skeletonGameObject!=null)
+            {
+                objTable.Set<string,GameObject>(SKELETON_GAMEOBJECT_REGISTER_NAME, null);
+                objTable.Set<string,Transform>(SKELETON_TRANSFORM_REGISTER_NAME, null);
 
-
+                GameObject.Destroy(skeletonGameObject);
             }
+
+            objTable.Get<Action<LuaTable>>(SKELETON_UNLOAD_NAME)?.Invoke(objTable);
         }
 
-        public void UnloadAllPart()
-        {
-            foreach(var kvp in partLoadingDic)
-            {
-                assetBridge.CancelLoadAsset(kvp.Value);
-            }
-            partLoadingDic.Clear();
-
-            foreach(var kvp in partInstanceDic)
-            {
-                UnloadPart(kvp.Value);
-            }
-            partInstanceDic.Clear();
-        }
-
-        public void UnloadPart(AvatarPartType partType)
+        public void LoadPart(AvatarPartType partType,string partAddress)
         {
             if(partLoadingDic.TryGetValue(partType,out long loadingID))
             {
-                assetBridge.CancelLoadAsset(loadingID);
-                partLoadingDic.Remove(partType);
+                CancelLoadPart(partType, loadingID);
+            }
+
+            loadingID = assetBridge.LoadAsset(partAddress, OnPartComplete,partType);
+            partLoadingDic.Add(partType, loadingID);
+        }
+
+        private void OnPartComplete(string address,UnityObject uObj,SystemObject userData)
+        {
+            AvatarPartType partType = (AvatarPartType)userData;
+            partLoadingDic.Remove(partType);
+
+            AvatarPartData partData = uObj as AvatarPartData;
+            if(partData.partType != partType)
+            {
+                LogUtil.LogError(GetType(), "EntityAvatarController::OnPartAssetComplete->part not same");
+                return;
             }
             if(partInstanceDic.TryGetValue(partType,out AvatarPartInstance partInstance))
             {
                 UnloadPart(partInstance);
-                partInstanceDic.Remove(partType);
+            }
+
+            partInstance = AddPartData(partData);
+            partInstanceDic.Add(partType, partInstance);
+
+            objTable.Get<Action<LuaTable, AvatarPartType>>(PART_LOAD_NAME)?.Invoke(objTable, partType);
+        }
+
+        private void CancelLoadPart(AvatarPartType partType,long loadingID)
+        {
+            AssetBridgeData bridgeData = assetBridge.GetBridgeData(loadingID);
+            objTable.Get<Action<LuaTable, string,AvatarPartType>>(PART_LOAD_CANCEL_NAME)?.Invoke(objTable, bridgeData.address,partType);
+
+            assetBridge.CancelLoadAsset(loadingID);
+
+            partLoadingDic.Remove(partType);
+        }
+
+        public void UnloadPart(AvatarPartType partType)
+        {
+            if (partLoadingDic.TryGetValue(partType, out long loadingID))
+            {
+                assetBridge.CancelLoadAsset(loadingID);
+                partLoadingDic.Remove(partType);
+            }
+            if (partInstanceDic.TryGetValue(partType, out AvatarPartInstance partInstance))
+            {
+                UnloadPart(partInstance);
             }
         }
 
         public void UnloadPart(AvatarPartInstance partInstance)
         {
+            foreach(var go in partInstance.gameObjects)
+            {
+                GameObject.Destroy(go);
+            }
+            foreach(var smr in partInstance.renderers)
+            {
+                smr.sharedMaterials = new Material[0];
+                smr.rootBone = null;
+                smr.sharedMesh = null;
+                smr.bones = new Transform[0];
+            }
 
+            partInstanceDic.Remove(partInstance.partType);
         }
 
-        public void LoadPart(string partAssetPath)
+        private AvatarPartInstance AddPartData(AvatarPartData partData)
         {
+            AvatarPartInstance partInstance = new AvatarPartInstance();
+            partInstance.partType = partData.partType;
+            partInstance.gameObjects = new GameObject[partData.prefabParts.Length];
+            for(int i =0;i<partData.prefabParts.Length;++i)
+            {
+                var prefabData = partData.prefabParts[i];
+                GameObject bindGameObject = GameObject.Instantiate(prefabData.prefabGO);
+                BindTransfrom(prefabData.bindNodeName, bindGameObject.transform, Vector3.zero, Vector3.zero);
 
+                partInstance.gameObjects[i] = bindGameObject;
+            }
+
+            partInstance.renderers = new SkinnedMeshRenderer[partData.rendererParts.Length];
+            for(int i =0;i<partData.rendererParts.Length;++i)
+            {
+                var rendererData = partData.rendererParts[i];
+                SkinnedMeshRenderer smRenderer = nodeBehaviour.GetNode(NodeType.SMRendererNode, rendererData.rendererNodeName).renderer;
+                smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
+                smRenderer.bones = nodeBehaviour.GetBoneByNames(rendererData.boneNames);
+                smRenderer.sharedMesh = rendererData.mesh;
+                smRenderer.sharedMaterials = rendererData.materials;
+
+                partInstance.renderers[i] = smRenderer;
+            }
+
+            return partInstance;
+        }
+        
+
+        public void UnloadAllPart()
+        {
+            var keys = partLoadingDic.Keys.ToArray();
+            foreach(var key in keys)
+            {
+                CancelLoadPart(key, partLoadingDic[key]);
+            }
+            keys = partInstanceDic.Keys.ToArray();
+            foreach(var key in keys)
+            {
+                UnloadPart(partInstanceDic[key]);
+            }
+        }
+
+        protected override void DoDestroy()
+        {
         }
     }
 }
