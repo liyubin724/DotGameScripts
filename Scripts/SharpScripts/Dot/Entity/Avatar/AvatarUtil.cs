@@ -38,11 +38,17 @@ namespace Dot.Entity.Avatar
             return partInstance;
         }
 
-        public static void DisassembleAvatarPart(AvatarPartInstance partInstance)
+        public static void DisassembleAvatarPart(AvatarPartInstance partInstance, bool isInEditorMode = false)
         {
             foreach (var go in partInstance.gameObjects)
             {
-                GameObject.Destroy(go);
+                if(isInEditorMode)
+                {
+                    GameObject.DestroyImmediate(go);
+                }else
+                {
+                    GameObject.Destroy(go);
+                }
             }
             foreach (var smr in partInstance.renderers)
             {

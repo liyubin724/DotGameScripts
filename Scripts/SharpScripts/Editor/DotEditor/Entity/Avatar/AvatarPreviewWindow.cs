@@ -275,7 +275,7 @@ namespace DotEditor.Entity.Avatar
             {
                 if (nodeBehaviour != null)
                 {
-                    AvatarUtil.DisassembleAvatarPart(pInstance);
+                    AvatarUtil.DisassembleAvatarPart(pInstance,true);
                 }
 
                 partInstanceDic.Remove(partType);

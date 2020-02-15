@@ -10,6 +10,7 @@ namespace Dot.Entity.Avatar
         Shen,
         Shou,
         Tou,
+        Weapon,
 
         Max,
     }
