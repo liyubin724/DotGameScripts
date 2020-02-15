@@ -1,4 +1,5 @@
 ﻿using Dot.Entity.Node;
+using Dot.Log;
 using UnityEngine;
 
 namespace Dot.Entity.Avatar
@@ -26,13 +27,20 @@ namespace Dot.Entity.Avatar
             {
                 var rendererData = partData.rendererParts[i];
 
-                SkinnedMeshRenderer smRenderer = nodeBehaviour.GetNode(NodeType.SMRendererNode, rendererData.rendererNodeName).renderer;
-                smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
-                smRenderer.bones = nodeBehaviour.GetBoneByNames(rendererData.boneNames);
-                smRenderer.sharedMesh = rendererData.mesh;
-                smRenderer.sharedMaterials = rendererData.materials;
+                NodeData nodeData = nodeBehaviour.GetNode(NodeType.SMRendererNode, rendererData.rendererNodeName);
+                if(nodeData != null)
+                {
+                    SkinnedMeshRenderer smRenderer = nodeData.renderer;
+                    smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
+                    smRenderer.bones = nodeBehaviour.GetBoneByNames(rendererData.boneNames);
+                    smRenderer.sharedMesh = rendererData.mesh;
+                    smRenderer.sharedMaterials = rendererData.materials;
 
-                partInstance.renderers[i] = smRenderer;
+                    partInstance.renderers[i] = smRenderer;
+                }else
+                {
+                    LogUtil.LogError(typeof(AvatarUtil), $"AvatarUtil::AssembleAvatarPart->nodeData not found.rendererNodeName={rendererData.rendererNodeName}");
+                }
             }
 
             return partInstance;
@@ -52,10 +60,13 @@ namespace Dot.Entity.Avatar
             }
             foreach (var smr in partInstance.renderers)
             {
-                smr.sharedMaterials = new Material[0];
-                smr.rootBone = null;
-                smr.sharedMesh = null;
-                smr.bones = new Transform[0];
+                if(smr!=null)
+                {
+                    smr.sharedMaterials = new Material[0];
+                    smr.rootBone = null;
+                    smr.sharedMesh = null;
+                    smr.bones = new Transform[0];
+                }
             }
         }
     }
