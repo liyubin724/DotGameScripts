@@ -1,0 +1,46 @@
+require("Dot/Core/Class")
+require("Dot/Entity/EntityController")
+
+local class = Class
+
+EntityObjectHandler =
+    class(
+    function(self)
+        self.entityObject = nil
+
+        self.uniqueID = nil
+        self.category = nil
+        self.name = nil
+
+        self.controllers = {}
+    end
+)
+
+function EntityObjectHandler:GetEntityObject()
+    return self.entityObject
+end
+
+function EntityObjectHandler:DoInit()
+end
+
+function EntityObjectHandler:DoDestroy()
+end
+
+function EntityObjectHandler:GetController(controllerType)
+    return self.controllers[controllerType]
+end
+
+function EntityObjectHandler:HasController(controllerType)
+    return self.controllers[controllerType] ~= nil
+end
+
+function EntityObjectHandler:AddController(controllerType, controller)
+    self.controllers[controllerType] = controller
+end
+
+function EntityObjectHandler:ReplaceController(controllerType, controller)
+end
+
+function EntityObjectHandler:RemoveController(controllerType)
+    self.controllers[controllerType] = nil
+end

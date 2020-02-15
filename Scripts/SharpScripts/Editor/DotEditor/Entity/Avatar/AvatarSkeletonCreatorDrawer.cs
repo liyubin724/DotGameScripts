@@ -177,7 +177,7 @@ namespace DotEditor.Entity.Avatar
                 EditorUtility.DisplayDialog(Contents.ErrorTitleStr, Contents.SavedDirNotExitStr, Contents.OKBtnStr);
             }else
             {
-                GameObject prefab = AvatarCreatorUtil.CreateSkeleton(data);
+                GameObject prefab = AvatarEditorUtil.CreateSkeleton(data);
                 SelectionUtil.ActiveObject(prefab);
             }
         }

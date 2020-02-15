@@ -64,7 +64,7 @@ namespace Dot.Entity.Controller
         {
             if(nodeBehaviour == null)
             {
-                LogUtil.LogError(EntityConst.CONTROLLER_LOGGER_NAME, "EntityAvatarController::GetBindNode->nodeBehaviour is not been loaded");
+                LogUtil.LogError(GetType(), "EntityAvatarController::GetBindNode->nodeBehaviour is not been loaded");
                 return null;
             }
 
@@ -172,10 +172,11 @@ namespace Dot.Entity.Controller
             }
             if(partInstanceDic.TryGetValue(partType,out AvatarPartInstance partInstance))
             {
-                UnloadPart(partInstance);
+                AvatarUtil.DisassembleAvatarPart(partInstance);
+                partInstanceDic.Remove(partType);
             }
 
-            partInstance = AddPartData(partData);
+            partInstance = AvatarUtil.AssembleAvatarPart(nodeBehaviour,partData);
             partInstanceDic.Add(partType, partInstance);
 
             objTable.Get<Action<LuaTable, AvatarPartType>>(PART_LOAD_NAME)?.Invoke(objTable, partType);
@@ -200,57 +201,10 @@ namespace Dot.Entity.Controller
             }
             if (partInstanceDic.TryGetValue(partType, out AvatarPartInstance partInstance))
             {
-                UnloadPart(partInstance);
+                AvatarUtil.DisassembleAvatarPart(partInstance);
+                partInstanceDic.Remove(partType);
             }
         }
-
-        public void UnloadPart(AvatarPartInstance partInstance)
-        {
-            foreach(var go in partInstance.gameObjects)
-            {
-                GameObject.Destroy(go);
-            }
-            foreach(var smr in partInstance.renderers)
-            {
-                smr.sharedMaterials = new Material[0];
-                smr.rootBone = null;
-                smr.sharedMesh = null;
-                smr.bones = new Transform[0];
-            }
-
-            partInstanceDic.Remove(partInstance.partType);
-        }
-
-        private AvatarPartInstance AddPartData(AvatarPartData partData)
-        {
-            AvatarPartInstance partInstance = new AvatarPartInstance();
-            partInstance.partType = partData.partType;
-            partInstance.gameObjects = new GameObject[partData.prefabParts.Length];
-            for(int i =0;i<partData.prefabParts.Length;++i)
-            {
-                var prefabData = partData.prefabParts[i];
-                GameObject bindGameObject = GameObject.Instantiate(prefabData.prefabGO);
-                BindTransfrom(prefabData.bindNodeName, bindGameObject.transform, Vector3.zero, Vector3.zero);
-
-                partInstance.gameObjects[i] = bindGameObject;
-            }
-
-            partInstance.renderers = new SkinnedMeshRenderer[partData.rendererParts.Length];
-            for(int i =0;i<partData.rendererParts.Length;++i)
-            {
-                var rendererData = partData.rendererParts[i];
-                SkinnedMeshRenderer smRenderer = nodeBehaviour.GetNode(NodeType.SMRendererNode, rendererData.rendererNodeName).renderer;
-                smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
-                smRenderer.bones = nodeBehaviour.GetBoneByNames(rendererData.boneNames);
-                smRenderer.sharedMesh = rendererData.mesh;
-                smRenderer.sharedMaterials = rendererData.materials;
-
-                partInstance.renderers[i] = smRenderer;
-            }
-
-            return partInstance;
-        }
-        
 
         public void UnloadAllPart()
         {
@@ -262,7 +216,8 @@ namespace Dot.Entity.Controller
             keys = partInstanceDic.Keys.ToArray();
             foreach(var key in keys)
             {
-                UnloadPart(partInstanceDic[key]);
+                AvatarUtil.DisassembleAvatarPart(partInstanceDic[key]);
+                partInstanceDic.Remove(key);
             }
         }
 

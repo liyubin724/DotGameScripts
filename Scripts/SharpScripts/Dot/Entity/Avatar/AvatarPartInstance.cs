@@ -2,6 +2,18 @@
 
 namespace Dot.Entity.Avatar
 {
+    public enum AvatarPartType
+    {
+        None = 0,
+
+        Jiao,
+        Shen,
+        Shou,
+        Tou,
+
+        Max,
+    }
+
     public class AvatarPartInstance
     {
         public AvatarPartType partType = AvatarPartType.None;

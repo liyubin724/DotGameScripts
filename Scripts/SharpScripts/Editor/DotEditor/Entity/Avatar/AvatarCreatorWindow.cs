@@ -111,7 +111,22 @@ namespace DotEditor.Entity.Avatar
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button(Contents.ExportAllBtnContent, EditorStyles.toolbarButton, GUILayout.Width(60)))
                 {
-                    ExportAllData();
+                    if (creatorDatas != null && creatorDatas.Count > 0)
+                    {
+                        foreach (var data in creatorDatas)
+                        {
+                            AvatarEditorUtil.CreateAvatar(data);
+                        }
+
+                        EditorUtility.DisplayDialog(Contents.FinishedStr, Contents.ExportAllFinishedStr, Contents.OkBtnStr);
+                    }
+                }
+                if (GUILayout.Button(Contents.PreviewBtnContent, EditorStyles.toolbarButton, GUILayout.Width(120)))
+                {
+                    if(selectedData!=null)
+                    {
+                        AvatarEditorUtil.CreatePreview(selectedData);
+                    }
                 }
             }
             GUILayout.EndHorizontal();
@@ -152,7 +167,7 @@ namespace DotEditor.Entity.Avatar
 
         private void LoadDatas()
         {
-            creatorDatas = AvatarCreatorUtil.FindCreatorDatas();
+            creatorDatas = AvatarEditorUtil.FindCreatorDatas();
             selectedData = null;
 
             if(creatorDatas.Count>0)
@@ -164,8 +179,8 @@ namespace DotEditor.Entity.Avatar
         private void CreateData()
         {
             string assetPath = EditorUtility.SaveFilePanel(Contents.SaveStr,
-                AvatarCreatorUtil.CREATOR_DATA_DIR,
-                AvatarCreatorUtil.CREATOR_DATA_DEFAULT_NAME, "asset");
+                AvatarEditorUtil.CREATOR_DATA_DIR,
+                AvatarEditorUtil.CREATOR_DATA_DEFAULT_NAME, "asset");
             if(!string.IsNullOrEmpty(assetPath))
             {
                 assetPath = PathUtil.GetAssetPath(assetPath);
@@ -178,19 +193,6 @@ namespace DotEditor.Entity.Avatar
 
                 creatorDatas.Add(data);
                 ChangeSelected(data);
-            }
-        }
-
-        private void ExportAllData()
-        {
-            if(creatorDatas!=null && creatorDatas.Count>0)
-            {
-                foreach(var data in creatorDatas)
-                {
-                    AvatarCreatorUtil.CreateAvatar(data);
-                }
-
-                EditorUtility.DisplayDialog(Contents.FinishedStr, Contents.ExportAllFinishedStr, Contents.OkBtnStr);
             }
         }
 
@@ -260,6 +262,7 @@ namespace DotEditor.Entity.Avatar
             internal static GUIContent NewBtnContent = new GUIContent("New");
             internal static GUIContent DeleteBtnContent = new GUIContent("Delete");
             internal static GUIContent ExportAllBtnContent = new GUIContent("Export All");
+            internal static GUIContent PreviewBtnContent = new GUIContent("Create Preview");
 
             internal static GUIContent[] ToolbarContents = new GUIContent[]
             {

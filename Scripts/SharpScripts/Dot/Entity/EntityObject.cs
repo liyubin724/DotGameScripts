@@ -10,6 +10,9 @@ namespace Dot.Entity
 {
     public class EntityObject
     {
+        private static readonly string DO_INIT_NAME = "DoInit";
+        private static readonly string DO_DESTROY_NAME = "DoDestroy";
+
         public long UniqueID { get; private set; }
         public int Category { get; private set; }
         public string Name { get; private set; }
@@ -17,7 +20,7 @@ namespace Dot.Entity
         private LuaTable objTable = null;
         public LuaTable ObjTable { get => objTable; }
 
-        private Action<LuaTable,float> updateAction = null;
+        private LuaTable controllerTable = null;
 
         public EntityObject()
         {
@@ -33,20 +36,12 @@ namespace Dot.Entity
             LuaEnv luaEnv = LuaManager.GetInstance().LuaEnv;
             objTable = LuaRequire.Instance(luaEnv, script);
 
-            objTable.Set(EntityConst.UNIQUEID_REGISTER_NAME, id);
-            objTable.Set(EntityConst.CATEGORY_REGISTER_NAME, category);
-            objTable.Set(EntityConst.NAME_REGISTER_NAME, name);
-
-            objTable.Get<Action<LuaTable>>(EntityConst.DO_INIT_NAME)?.Invoke(objTable);
-            updateAction = objTable.Get<Action<LuaTable, float>>(EntityConst.DO_UPDATE_NAME);
-
+            objTable.Get<Action<LuaTable>>(DO_INIT_NAME)?.Invoke(objTable);
             return objTable;
         }
 
         public void DoUpdate(float deltaTime)
         {
-            updateAction?.Invoke(objTable, deltaTime);
-
             foreach(var kvp in controllerDic)
             {
                 if(kvp.Value.Enable)
@@ -56,13 +51,9 @@ namespace Dot.Entity
             }
         }
 
-        public void DoReset()
-        {
-            eventDispatcher.DoReset();
-        }
-
         public void DoDestroy()
         {
+
         }
 
         #region operation for event
@@ -89,7 +80,7 @@ namespace Dot.Entity
             return controllerDic.ContainsKey(controllerType);
         }
 
-        public void AddController(EntityControllerType controllerType, string registerName,EntityController controller)
+        public void AddController(EntityControllerType controllerType, EntityController controller)
         {
             if (controller == null)
             {
@@ -99,7 +90,6 @@ namespace Dot.Entity
             if (!controllerDic.ContainsKey(controllerType))
             {
                 controllerDic.Add(controllerType, controller);
-
             }
             else
             {
@@ -125,7 +115,7 @@ namespace Dot.Entity
         {
             foreach(var kvp in controllerDic)
             {
-                kvp.Value.ResetController();
+                //kvp.Value.ResetController();
             }
             controllerDic.Clear();
         }

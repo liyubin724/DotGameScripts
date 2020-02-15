@@ -257,7 +257,7 @@ namespace DotEditor.Entity.Avatar
             }
             else
             {
-                AvatarPartData partData = AvatarCreatorUtil.CreatePart(data);
+                AvatarPartData partData = AvatarEditorUtil.CreatePart(data);
                 SelectionUtil.ActiveObject(partData);
             }
         }

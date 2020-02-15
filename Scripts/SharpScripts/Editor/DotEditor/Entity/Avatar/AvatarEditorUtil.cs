@@ -11,9 +11,11 @@ using static DotEditor.Entity.Avatar.AvatarCreatorData;
 
 namespace DotEditor.Entity.Avatar
 {
-    public static class AvatarCreatorUtil
+    public static class AvatarEditorUtil
     {
-        internal static readonly string CREATOR_DATA_DIR = "Assets/Tools/Entity/Avatar";
+        internal static readonly string CREATOR_DATA_DIR = "Assets/Tools/Entity/Avatar/Creator";
+        internal static readonly string PREVIEW_DATA_DIR = "Assets/Tools/Entity/Avatar/Preview";
+
         internal static readonly string CREATOR_DATA_DEFAULT_NAME = "avatar_creator";
 
         private static readonly string SKELETON_NAME_FORMAT = "{0}_skeleton.prefab";
@@ -31,6 +33,21 @@ namespace DotEditor.Entity.Avatar
                 foreach (var dataPath in dataPaths)
                 {
                     AvatarCreatorData data = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(dataPath);
+                    datas.Add(data);
+                }
+            }
+            return datas;
+        }
+
+        public static List<AvatarPreviewData> FindPreviewDatas()
+        {
+            List<AvatarPreviewData> datas = new List<AvatarPreviewData>();
+            string[] dataPaths = AssetDatabaseUtil.FindAssetInFolder<AvatarPreviewData>(PREVIEW_DATA_DIR);
+            if (dataPaths != null && dataPaths.Length > 0)
+            {
+                foreach (var dataPath in dataPaths)
+                {
+                    AvatarPreviewData data = AssetDatabase.LoadAssetAtPath<AvatarPreviewData>(dataPath);
                     datas.Add(data);
                 }
             }
@@ -233,6 +250,48 @@ namespace DotEditor.Entity.Avatar
             MeshUtility.Optimize(savedMesh);
             AssetDatabase.CreateAsset(savedMesh, assetPath);
             return savedMesh;
+        }
+
+        public static AvatarPreviewData CreatePreview(AvatarCreatorData data)
+        {
+            string previewAssetName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(data)) +"_preview";
+            string previewAssetPath = $"{PREVIEW_DATA_DIR}/{previewAssetName}.asset";
+            AvatarPreviewData previewData = AssetDatabase.LoadAssetAtPath<AvatarPreviewData>(previewAssetPath);
+            if(previewData == null)
+            {
+                previewData = ScriptableObject.CreateInstance<AvatarPreviewData>();
+                AssetDatabase.CreateAsset(previewData, previewAssetPath);
+                AssetDatabase.ImportAsset(previewAssetPath);
+            }
+            previewData.dataName = data.name;
+            previewData.skeletonPefabs.Clear();
+            previewData.partDatas.Clear();
+
+            foreach (var d in data.skeletonCreatorDatas)
+            {
+                string skeletonPath = $"{d.savedDir}/{string.Format(SKELETON_NAME_FORMAT, d.fbxPrefab.name)}";
+
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(skeletonPath);
+                if(prefab!=null)
+                {
+                    previewData.skeletonPefabs.Add(prefab);
+                }
+            }
+
+            foreach (var d in data.partCreatorDatas)
+            {
+                string assetPath = $"{d.savedDir}/{string.Format(PART_NAME_FORMAT, d.dataName)}";
+
+                AvatarPartData partData = AssetDatabase.LoadAssetAtPath<AvatarPartData>(assetPath);
+                if(partData!=null)
+                {
+                    previewData.partDatas.Add(partData);
+                }
+            }
+
+            EditorUtility.SetDirty(previewData);
+
+            return previewData;
         }
     }
 }

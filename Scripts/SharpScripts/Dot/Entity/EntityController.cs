@@ -16,7 +16,12 @@ namespace Dot.Entity
 
     public abstract class EntityController
     {
-        private static readonly string INIT_COMPLETE_NAME = "DoInit";
+        private static readonly string INIT_NAME = "DoInit";
+        private static readonly string DESTROY_NAME = "DoDestroy";
+        private static readonly string UPDATE_NAME = "DoUpdate";
+
+        private static readonly string CONTROLLER_REGISTER_NAME = "controller";
+        private static readonly string ENTITY_REGISTER_NAME = "entityObject";
 
         public bool Enable { get; set; } = true;
 
@@ -32,12 +37,12 @@ namespace Dot.Entity
 
             if (objTable == null)
             {
-                LogUtil.LogError(EntityConst.CONTROLLER_LOGGER_NAME, "EntityControllerBase::InitController->Lua Script has not binded!");
+                LogUtil.LogError(GetType(), "EntityControllerBase::InitController->Lua Script has not binded!");
                 return;
             }
 
-            objTable.Set(EntityConst.CONTROLLER_REGISTER_NAME, this);
-            objTable.Set(EntityConst.ENTITYOBJECT_REGISTER_NAME, entity.ObjTable);
+            objTable.Set(CONTROLLER_REGISTER_NAME, this);
+            objTable.Set(ENTITY_REGISTER_NAME, entity.ObjTable);
 
             DoInit();
             RegisterEvents();
