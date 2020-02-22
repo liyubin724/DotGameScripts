@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
-namespace Dot.Entity.Controller
+namespace Dot.Entity.Factory
 {
-    public class EntityBehaviour : MonoBehaviour
+    public class EntityControllerFactory
     {
     }
 }

@@ -8,5 +8,6 @@ namespace Dot.Entity.Factory
 {
     public class EntityObjectFactory
     {
+        private List<EntityObject> entityObjects = new List<EntityObject>();
     }
 }

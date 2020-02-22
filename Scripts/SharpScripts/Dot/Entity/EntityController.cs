@@ -18,9 +18,9 @@ namespace Dot.Entity
     {
         private static readonly string INIT_NAME = "DoInit";
         private static readonly string DESTROY_NAME = "DoDestroy";
-        private static readonly string UPDATE_NAME = "DoUpdate";
+        protected static readonly string UPDATE_NAME = "DoUpdate";
 
-        private static readonly string CONTROLLER_REGISTER_NAME = "controller";
+        private static readonly string CONTROLLER_REGISTER_NAME = "csController";
         private static readonly string ENTITY_REGISTER_NAME = "entityObject";
 
         public bool Enable { get; set; } = true;
@@ -47,24 +47,35 @@ namespace Dot.Entity
             DoInit();
             RegisterEvents();
 
-            objTable.Get<Action<LuaTable>>(EntityConst.DO_INIT_NAME)?.Invoke(objTable);
+            objTable.Get<Action<LuaTable>>(INIT_NAME)?.Invoke(objTable);
+        }
+
+        public void ResetController()
+        {
+            UnregisterEvents();
+
+            DoReset();
+
+            entityObj = null;
+            if(objTable!=null)
+            {
+                objTable.Dispose();
+                objTable = null;
+            }
         }
 
         public void DestroyController()
         {
-
+            ResetController();
+            DoDestroy();
         }
 
         protected abstract void DoInit();
-
-        protected internal virtual void DoUpdate(float deltaTime) { }
-
+        protected abstract void DoReset();
         protected abstract void DoDestroy();
 
         protected virtual void RegisterEvents() { }
         protected virtual void UnregisterEvents() { }
-
-        public abstract EntityControllerType ControllerType { get; }
-        public abstract string RegisterName { get; }
+        protected internal virtual void DoUpdate(float deltaTime) { }
     }
 }

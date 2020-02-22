@@ -2,27 +2,29 @@ require("Dot/Core/Class")
 
 local class = Class
 
-EntityControllerHandler = class(function(self)
-    self.entityObject = nil
-    self.controller = nil
-end)
+EntityControllerHandler =
+    class(
+    function(self)
+        self.csController = nil
 
-function EntityControllerHandler:GetController()
-    return self.controller
+        self.entityObject = nil
+    end
+)
+
+function EntityControllerHandler:GetCSController()
+    return self.csController
 end
 
 function EntityControllerHandler:GetEntityObject()
     return self.entityObject
 end
 
--- ----protect----
--- function EntityController:DoInit()
--- end
+function EntityObjectHandler:DoInit()
+end
+
+function EntityObjectHandler:DoDestroy()
+end
 
 -- ----protect----
--- function EntityController:DoUpdate(deltaTime)
--- end
-
--- ----protect----
--- function EntityController:DoDestroy()
+-- function EntityObjectHandler:DoUpdate(deltaTime)
 -- end

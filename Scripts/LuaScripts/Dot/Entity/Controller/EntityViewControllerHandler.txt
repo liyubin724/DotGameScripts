@@ -1,0 +1,18 @@
+require("Dot/Core/Class")
+require("Dot/Entity/EntityControllerHandler")
+
+local class = Class
+local ControllerBase = EntityControllerHandler
+
+EntityViewControllerHandler = class(ControllerBase,function(self)
+    self.csGameObject = nil
+    self.csTransform = nil
+end)
+
+function EntityViewControllerHandler:GetCSGameObject()
+    return self.csGameObject
+end
+
+function EntityViewControllerHandler:GetCSTransform()
+    return self.csTransform
+end

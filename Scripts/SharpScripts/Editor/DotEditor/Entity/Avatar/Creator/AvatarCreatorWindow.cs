@@ -34,9 +34,6 @@ namespace DotEditor.Entity.Avatar
         private AvatarPartCreatorDrawer partDrawer = null;
         private void OnEnable()
         {
-            skeletonDrawer = new AvatarSkeletonCreatorDrawer(Repaint);
-            partDrawer = new AvatarPartCreatorDrawer(Repaint);
-
             LoadDatas();
         }
 
@@ -226,7 +223,10 @@ namespace DotEditor.Entity.Avatar
         {
             selectedData = data;
 
-            if(selectedData!=null)
+            skeletonDrawer = new AvatarSkeletonCreatorDrawer(Repaint);
+            partDrawer = new AvatarPartCreatorDrawer(Repaint);
+
+            if (selectedData!=null)
             {
                 partDrawer.SetData(data.partCreatorDatas);
                 skeletonDrawer.SetData(data.skeletonCreatorDatas);

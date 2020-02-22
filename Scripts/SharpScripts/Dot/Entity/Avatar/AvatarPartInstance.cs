@@ -6,10 +6,10 @@ namespace Dot.Entity.Avatar
     {
         None = 0,
 
-        Jiao,
-        Shen,
-        Shou,
-        Tou,
+        Feet,
+        Body,
+        Hand,
+        Head,
         Weapon,
 
         Max,

@@ -29,19 +29,9 @@ namespace Dot.Entity.Controller
         {
             get
             {
-                EntityViewController vvc = entityObj.GetController<EntityViewController>(EntityControllerType.View);
+                ViewController vvc = entityObj.GetController<ViewController>(EntityControllerType.View);
                 return vvc.RootTransfrom;
             }
-        }
-
-        public override EntityControllerType ControllerType
-        {
-            get => EntityControllerType.Avatar;
-        }
-
-        public override string RegisterName
-        {
-            get => "avatarController";
         }
 
         private AssetBridge assetBridge = null;
@@ -223,6 +213,11 @@ namespace Dot.Entity.Controller
 
         protected override void DoDestroy()
         {
+        }
+
+        protected override void DoReset()
+        {
+            throw new NotImplementedException();
         }
     }
 }

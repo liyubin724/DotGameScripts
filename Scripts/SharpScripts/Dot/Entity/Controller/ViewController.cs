@@ -2,10 +2,10 @@
 
 namespace Dot.Entity.Controller
 {
-    public class EntityViewController : EntityController
+    public class ViewController : EntityController
     {
-        private static readonly string GAMEOBJECT_REGISTER_NAME = "gameObject";
-        private static readonly string TRANSFORM_REGISTER_NAME = "transform";
+        private static readonly string GAMEOBJECT_REGISTER_NAME = "csGameObject";
+        private static readonly string TRANSFORM_REGISTER_NAME = "csTransform";
 
         private EntityBehaviour entityBehaviour = null;
         private Transform rootTransfrom = null;
@@ -20,16 +20,6 @@ namespace Dot.Entity.Controller
             get => rootGameObject;
         }
 
-        public override EntityControllerType ControllerType
-        {
-            get => EntityControllerType.View;
-        }
-
-        public override string RegisterName
-        {
-            get => "viewController";
-        }
-
         protected override void DoInit()
         {
             GameObject gObj = new GameObject($"Entity_{entityObj.Name}");
@@ -38,13 +28,17 @@ namespace Dot.Entity.Controller
             rootTransfrom = entityBehaviour.transform;
             rootGameObject = entityBehaviour.gameObject;
 
-            objTable.Set(EntityConst.GAMEOBJECT_REGISTER_NAME, rootGameObject);
-            objTable.Set(EntityConst.TRANSFORM_REGISTER_NAME, rootTransfrom);
+            objTable.Set(GAMEOBJECT_REGISTER_NAME, rootGameObject);
+            objTable.Set(TRANSFORM_REGISTER_NAME, rootTransfrom);
         }
 
         protected override void DoDestroy()
         {
             
+        }
+
+        protected override void DoReset()
+        {
         }
     }
 }

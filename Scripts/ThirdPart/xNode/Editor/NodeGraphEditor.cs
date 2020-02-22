@@ -18,6 +18,8 @@ namespace XNodeEditor {
         /// <summary> Called when opened by NodeEditorWindow </summary>
         public virtual void OnOpen() { }
 
+        public virtual void OnClose() { }
+
         public virtual Texture2D GetGridTexture() {
             return NodeEditorPreferences.GetSettings().gridTexture;
         }
