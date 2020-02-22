@@ -1,30 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
+﻿using Dot.Entity.Avatar;
+using DotEditor.XNodeEx;
 using UnityEngine;
-using XNodeEditor;
 
 namespace DotEditor.Entity.Avatar.Preview
 {
     [CustomNodeEditor(typeof(AvatarPreviewNode))]
-    public class AvatarPreviewNodeEditor : NodeEditor
+    public class AvatarPreviewNodeEditor : DotNodeEditor
     {
-        public override void OnHeaderGUI()
+        AvatarPreviewNode previewNode = null;
+        AvatarPreviewGraph previewGraph = null;
+
+        public override void OnEnable()
         {
-            base.OnHeaderGUI();  
+            previewNode = GetNode<AvatarPreviewNode>();
+            previewGraph = previewNode.GetGraph<AvatarPreviewGraph>();
         }
 
         public override void OnBodyGUI()
         {
             base.OnBodyGUI();
+
+            bool isPreview = previewGraph.isPreviewing;
+            if(GUILayout.Button(isPreview?"Destroy Preview":"Show Preview",GUILayout.Height(25)))
+            {
+                if(isPreview)
+                {
+                    previewGraph.DestroyPreview();
+                }else
+                {
+                    previewGraph.CreatePreview(
+                        previewNode.GetInputValue<GameObject>("skeletonPrefab"),
+                        previewNode.GetInputValue<AvatarPartData>("headPart"),
+                        previewNode.GetInputValue<AvatarPartData>("bodyPart"),
+                        previewNode.GetInputValue<AvatarPartData>("handPart"),
+                        previewNode.GetInputValue<AvatarPartData>("feetPart"),
+                        previewNode.GetInputValue<AvatarPartData>("weaponPart"));
+                }
+            }
         }
 
         public override int GetWidth()
         {
             return 300;
+        }
+
+        public override Color GetTint()
+        {
+            if(previewGraph.isPreviewing)
+            {
+                return Color.blue;
+            }
+            else
+            {
+                return base.GetTint();
+            }
         }
     }
 }

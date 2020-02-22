@@ -1,5 +1,6 @@
 ﻿using Dot.Entity.Avatar;
 using Dot.Entity.Node;
+using DotEditor.Entity.Avatar.Preview;
 using DotEditor.Entity.Node;
 using DotEditor.Util;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace DotEditor.Entity.Avatar
     {
         internal static readonly string CREATOR_DATA_DIR = "Assets/Tools/Entity/Avatar/Creator";
         internal static readonly string PREVIEW_DATA_DIR = "Assets/Tools/Entity/Avatar/Preview";
+        internal static readonly string TEMPLATE_PREVIEW_DATA_PAT = "Assets/Tools/Entity/Avatar/Preview/preview_graph.asset";
 
         internal static readonly string CREATOR_DATA_DEFAULT_NAME = "avatar_creator";
 
@@ -33,21 +35,6 @@ namespace DotEditor.Entity.Avatar
                 foreach (var dataPath in dataPaths)
                 {
                     AvatarCreatorData data = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(dataPath);
-                    datas.Add(data);
-                }
-            }
-            return datas;
-        }
-
-        public static List<AvatarPreviewData> FindPreviewDatas()
-        {
-            List<AvatarPreviewData> datas = new List<AvatarPreviewData>();
-            string[] dataPaths = AssetDatabaseUtil.FindAssetInFolder<AvatarPreviewData>(PREVIEW_DATA_DIR);
-            if (dataPaths != null && dataPaths.Length > 0)
-            {
-                foreach (var dataPath in dataPaths)
-                {
-                    AvatarPreviewData data = AssetDatabase.LoadAssetAtPath<AvatarPreviewData>(dataPath);
                     datas.Add(data);
                 }
             }
@@ -252,20 +239,30 @@ namespace DotEditor.Entity.Avatar
             return savedMesh;
         }
 
-        public static AvatarPreviewData CreatePreview(AvatarCreatorData data)
+        public static AvatarPreviewGraph CreatePreview(AvatarCreatorData data)
         {
-            string previewAssetName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(data)) +"_preview";
-            string previewAssetPath = $"{PREVIEW_DATA_DIR}/{previewAssetName}.asset";
-            AvatarPreviewData previewData = AssetDatabase.LoadAssetAtPath<AvatarPreviewData>(previewAssetPath);
-            if(previewData == null)
+            string newPreviewGraphPath = $"{PREVIEW_DATA_DIR}/{data.dataName}_preview_graph.asset";
+            AvatarPreviewGraph newPreviewGraph = AssetDatabase.LoadAssetAtPath<AvatarPreviewGraph>(newPreviewGraphPath);
+            if(newPreviewGraph ==null)
             {
-                previewData = ScriptableObject.CreateInstance<AvatarPreviewData>();
-                AssetDatabase.CreateAsset(previewData, previewAssetPath);
-                AssetDatabase.ImportAsset(previewAssetPath);
+                AvatarPreviewGraph previewGraph = AssetDatabase.LoadAssetAtPath<AvatarPreviewGraph>(TEMPLATE_PREVIEW_DATA_PAT);
+                if (previewGraph == null)
+                {
+                    return null;
+                } 
+                newPreviewGraph = (AvatarPreviewGraph)previewGraph.Copy();
+                AssetDatabase.CreateAsset(newPreviewGraph, newPreviewGraphPath);
+
+                foreach (var node in newPreviewGraph.nodes)
+                {
+                    node.name = node.name.Replace("(Clone)", "");
+                    AssetDatabase.AddObjectToAsset(node,newPreviewGraph);
+                }
+
+                AssetDatabase.ImportAsset(newPreviewGraphPath);
             }
-            previewData.dataName = data.name;
-            previewData.skeletonPefabs.Clear();
-            previewData.partDatas.Clear();
+            newPreviewGraph.skeletonList.Clear();
+            newPreviewGraph.partList.Clear();
 
             foreach (var d in data.skeletonCreatorDatas)
             {
@@ -274,7 +271,7 @@ namespace DotEditor.Entity.Avatar
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(skeletonPath);
                 if(prefab!=null)
                 {
-                    previewData.skeletonPefabs.Add(prefab);
+                    newPreviewGraph.skeletonList.Add(prefab);
                 }
             }
 
@@ -285,13 +282,12 @@ namespace DotEditor.Entity.Avatar
                 AvatarPartData partData = AssetDatabase.LoadAssetAtPath<AvatarPartData>(assetPath);
                 if(partData!=null)
                 {
-                    previewData.partDatas.Add(partData);
+                    newPreviewGraph.partList.Add(partData);
                 }
             }
 
-            EditorUtility.SetDirty(previewData);
-
-            return previewData;
+            EditorUtility.SetDirty(newPreviewGraph);
+            return newPreviewGraph;
         }
     }
 }

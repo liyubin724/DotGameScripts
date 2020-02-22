@@ -53,7 +53,7 @@ namespace XNode {
             InheritedInverse,
         }
 
-#region Obsolete
+        #region Obsolete
         [Obsolete("Use DynamicPorts instead")]
         public IEnumerable<NodePort> InstancePorts { get { return DynamicPorts; } }
 
@@ -92,7 +92,7 @@ namespace XNode {
         public void ClearInstancePorts() {
             ClearDynamicPorts();
         }
-#endregion
+        #endregion
 
         /// <summary> Iterate over all ports on this node. </summary>
         public IEnumerable<NodePort> Ports { get { foreach (NodePort port in ports.Values) yield return port; } }
@@ -136,7 +136,7 @@ namespace XNode {
             foreach (NodePort port in Ports) port.VerifyConnections();
         }
 
-#region Dynamic Ports
+        #region Dynamic Ports
         /// <summary> Convenience function. </summary>
         /// <seealso cref="AddInstancePort"/>
         /// <seealso cref="AddInstanceOutput"/>
@@ -191,9 +191,9 @@ namespace XNode {
                 RemoveDynamicPort(port);
             }
         }
-#endregion
+        #endregion
 
-#region Ports
+        #region Ports
         /// <summary> Returns output port which matches fieldName </summary>
         public NodePort GetOutputPort(string fieldName) {
             NodePort port = GetPort(fieldName);
@@ -218,9 +218,9 @@ namespace XNode {
         public bool HasPort(string fieldName) {
             return ports.ContainsKey(fieldName);
         }
-#endregion
+        #endregion
 
-#region Inputs/Outputs
+        #region Inputs/Outputs
         /// <summary> Return input value for a specified port. Returns fallback value if no ports are connected </summary>
         /// <param name="fieldName">Field name of requested input port</param>
         /// <param name="fallback">If no ports are connected, this value will be returned</param>
@@ -245,7 +245,7 @@ namespace XNode {
             Debug.LogWarning("No GetValue(NodePort port) override defined for " + GetType());
             return null;
         }
-#endregion
+        #endregion
 
         /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
         /// <param name="from">Output</param> <param name="to">Input</param>
@@ -254,6 +254,7 @@ namespace XNode {
         /// <summary> Called after a connection is removed from this port </summary>
         /// <param name="port">Output or Input</param>
         public virtual void OnRemoveConnection(NodePort port) { }
+        public virtual void OnRemoveConnection(NodePort from, NodePort to) { }
 
         /// <summary> Disconnect everything from this node </summary>
         public void ClearConnections() {

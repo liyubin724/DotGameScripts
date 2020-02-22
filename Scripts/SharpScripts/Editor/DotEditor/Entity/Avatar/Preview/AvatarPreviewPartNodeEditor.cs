@@ -1,4 +1,5 @@
-﻿using DotEditor.XNodeEx;
+﻿using Dot.Entity.Avatar;
+using DotEditor.XNodeEx;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -11,10 +12,49 @@ namespace DotEditor.Entity.Avatar.Preview
     {
         AvatarPreviewPartNode partNode = null;
         private string[] partNames = null;
-        public override void OnCreate()
+
+        public override void OnEnable()
         {
-            base.OnCreate();
-            partNode = target as AvatarPreviewPartNode;
+            partNode = GetNode<AvatarPreviewPartNode>();
+            FindPartData();
+        }
+
+        public override int GetWidth()
+        {
+            return 300;
+        }
+
+        public override void OnBodyGUI()
+        {
+            AvatarPartType newPartType = (AvatarPartType)EditorGUILayout.EnumPopup("Part Type", partNode.partType);
+            if (newPartType != partNode.partType)
+            {
+                partNode.partType = newPartType;
+                FindPartData();
+            }
+            int newSelectedIndex = EditorGUILayout.Popup("Parts", partNode.selectedIndex, partNames);
+            if (newSelectedIndex != partNode.selectedIndex)
+            {
+                partNode.selectedIndex = newSelectedIndex;
+            }
+            
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
+
+            serializedObject.Update();
+
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("part"));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void FindPartData()
+        {
+            serializedObject.Update();
+
+            partNode.parts = partNode.GetGraph<AvatarPreviewGraph>().GetParts(partNode.partType);
             partNames = (from part in partNode.parts select part.name).ToArray();
             if (partNames != null && partNames.Length > 0)
             {
@@ -27,25 +67,8 @@ namespace DotEditor.Entity.Avatar.Preview
             {
                 partNode.selectedIndex = -1;
             }
-        }
 
-        public override int GetWidth()
-        {
-            return 300;
-        }
-
-        public override void OnBodyGUI()
-        {
-            base.OnBodyGUI();
-            int newSelectedIndex = EditorGUILayout.Popup("Parts", partNode.selectedIndex, partNames);
-            if (newSelectedIndex != partNode.selectedIndex)
-            {
-                partNode.selectedIndex = newSelectedIndex;
-            }
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(target);
-            }
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

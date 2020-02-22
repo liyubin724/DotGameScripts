@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using DotEditor.XNodeEx;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
@@ -6,15 +7,15 @@ using XNodeEditor;
 namespace DotEditor.Entity.Avatar.Preview
 {
     [CustomNodeEditor(typeof(AvatarPreviewSkeletonNode))]
-    public class AvatarPreviewSkeletonNodeEditor : NodeEditor
+    public class AvatarPreviewSkeletonNodeEditor : DotNodeEditor
     {
         private string[] names = null;
 
         AvatarPreviewSkeletonNode skeletonNode = null;
-        public override void OnCreate()
+        public override void OnEnable()
         {
-            base.OnCreate();
             skeletonNode = target as AvatarPreviewSkeletonNode;
+            skeletonNode.skeletons = skeletonNode.GetGraph<AvatarPreviewGraph>().GetSkeletons();
             names = (from skeleton in skeletonNode.skeletons select skeleton.name).ToArray();
             if(names!=null && names.Length>0)
             {
@@ -30,8 +31,6 @@ namespace DotEditor.Entity.Avatar.Preview
 
         public override void OnBodyGUI()
         {
-            base.OnBodyGUI();
-
             int newSelectedIndex = EditorGUILayout.Popup("Skeleton", skeletonNode.selectedIndex, names);
             if(newSelectedIndex!=skeletonNode.selectedIndex)
             {
@@ -41,6 +40,12 @@ namespace DotEditor.Entity.Avatar.Preview
             {
                 EditorUtility.SetDirty(target);
             }
+
+            serializedObject.Update();
+
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("skeletonPrefab"));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         public override int GetWidth()

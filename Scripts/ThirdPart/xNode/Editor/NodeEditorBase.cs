@@ -55,6 +55,9 @@ namespace XNodeEditor.Internal {
 			if (editor.target == null) editor.target = target;
 			if (editor.window != window) editor.window = window;
 			if (editor.serializedObject == null) editor.serializedObject = new SerializedObject(target);
+
+            editor.OnEnable();
+
 			return editor;
 		}
 
@@ -83,6 +86,8 @@ namespace XNodeEditor.Internal {
 
 		/// <summary> Called on creation, after references have been set </summary>
 		public virtual void OnCreate() { }
+
+        public virtual void OnEnable() { }
 
 		public interface INodeEditorAttrib {
 			Type GetInspectedType();

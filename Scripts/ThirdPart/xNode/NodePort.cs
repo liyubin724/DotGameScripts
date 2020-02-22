@@ -112,6 +112,12 @@ namespace XNode {
             return node.GetValue(this);
         }
 
+        public T GetOutputValue<T>()
+        {
+            object obj = GetOutputValue();
+            return obj is T ? (T)obj : default(T);
+        }
+
         /// <summary> Return the output value of the first connected port. Returns null if none found or invalid.</summary>
         /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
         public object GetInputValue() {
@@ -290,7 +296,12 @@ namespace XNode {
             }
             // Trigger OnRemoveConnection
             node.OnRemoveConnection(this);
-            if (port != null) port.node.OnRemoveConnection(port);
+            node.OnRemoveConnection(port, this);
+            if (port != null)
+            {
+                port.node.OnRemoveConnection(port);
+                port.node.OnRemoveConnection(port,this);
+            }
         }
 
         /// <summary> Disconnect this port from another port </summary>
@@ -309,7 +320,12 @@ namespace XNode {
 
             // Trigger OnRemoveConnection
             node.OnRemoveConnection(this);
-            if (otherPort != null) otherPort.node.OnRemoveConnection(otherPort);
+            node.OnRemoveConnection(otherPort, this);
+            if (otherPort != null) 
+            {
+                otherPort.node.OnRemoveConnection(otherPort);
+                otherPort.node.OnRemoveConnection(otherPort,this);
+            }
         }
 
         public void ClearConnections() {

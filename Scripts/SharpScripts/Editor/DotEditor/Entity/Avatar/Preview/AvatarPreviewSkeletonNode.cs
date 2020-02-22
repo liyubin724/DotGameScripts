@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Dot.XNodeEx;
+using System;
 using UnityEngine;
 using XNode;
 
 namespace DotEditor.Entity.Avatar.Preview
 {
-    public class AvatarPreviewSkeletonNode : XNode.Node {
+    public class AvatarPreviewSkeletonNode : DotNode {
 
         [Output]
         public GameObject skeletonPrefab = null;
@@ -16,12 +17,7 @@ namespace DotEditor.Entity.Avatar.Preview
         [NonSerialized]
         public GameObject[] skeletons = null;
 
-	    protected override void Init() {
-		    base.Init();
-            skeletons = (graph as AvatarPreviewGraph).GetSkeletons();
-	    }
-
-	    public override object GetValue(NodePort port) 
+        public override object GetValue(NodePort port) 
         {
             if(port.fieldName == "skeletonPrefab")
             {
