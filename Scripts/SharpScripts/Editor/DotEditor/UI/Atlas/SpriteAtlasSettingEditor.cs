@@ -102,7 +102,7 @@ namespace DotEditor.UI.Atlas
 
             EditorGUILayout.BeginVertical();
             {
-                atlasDirPath.stringValue = EditorGUILayoutUtil.DrawAssetFolderSelection("Atlas Save Dir", atlasDirPath.stringValue, true);
+                atlasDirPath.stringValue = DotEditorGUILayout.DrawAssetFolderSelection("Atlas Save Dir", atlasDirPath.stringValue, true);
                 EditorGUILayout.Space();
                 EditorGUILayout.PropertyField(pixelsPerUnit);
                 EditorGUILayout.PropertyField(isRotation);
@@ -115,10 +115,10 @@ namespace DotEditor.UI.Atlas
                 EditorGUILayout.PropertyField(filterMode);
                 EditorGUILayout.Space();
 
-                maxSize.intValue = EditorGUILayoutUtil.DrawPopup<int>("Max Size", atlasMaxSizeContents, atlasMaxSizes, maxSize.intValue);
-                winTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("Win Format", winAtlasFormatContents, winAtlasFormats, winTextureFormat.intValue);
-                androidTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("Android Format", androidAtlasFormatContents, androidAtlasFormats, androidTextureFormat.intValue);
-                iosTextureFormat.intValue = EditorGUILayoutUtil.DrawPopup<int>("iOS Format", iosAtlasFormatContents, iosAtlasFormats, iosTextureFormat.intValue);
+                maxSize.intValue = DotEditorGUILayout.DrawPopup<int>("Max Size", atlasMaxSizeContents, atlasMaxSizes, maxSize.intValue);
+                winTextureFormat.intValue = DotEditorGUILayout.DrawPopup<int>("Win Format", winAtlasFormatContents, winAtlasFormats, winTextureFormat.intValue);
+                androidTextureFormat.intValue = DotEditorGUILayout.DrawPopup<int>("Android Format", androidAtlasFormatContents, androidAtlasFormats, androidTextureFormat.intValue);
+                iosTextureFormat.intValue = DotEditorGUILayout.DrawPopup<int>("iOS Format", iosAtlasFormatContents, iosAtlasFormats, iosTextureFormat.intValue);
             }
             EditorGUILayout.EndVertical();
 

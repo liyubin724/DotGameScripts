@@ -119,7 +119,7 @@ namespace DotEditor.Lua.Gen.Tabs
             bData.isFoldout = EditorGUILayout.Foldout(bData.isFoldout, bData.typeFullName, true);
             if (bData.isFoldout)
             {
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
                 {
                     foreach (var mData in bData.datas)
                     {
@@ -129,7 +129,7 @@ namespace DotEditor.Lua.Gen.Tabs
                         }
                     }
                 }
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
             }
         }
 

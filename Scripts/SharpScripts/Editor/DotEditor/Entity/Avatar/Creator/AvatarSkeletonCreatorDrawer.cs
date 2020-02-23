@@ -151,7 +151,7 @@ namespace DotEditor.Entity.Avatar
             {
                 EditorGUILayout.HelpBox(Contents.SavedDirNotExitStr, MessageType.Error);
             }
-            selectedData.savedDir = EditorGUILayoutUtil.DrawAssetFolderSelection(Contents.SavedDirStr, selectedData.savedDir, false);
+            selectedData.savedDir = DotEditorGUILayout.DrawAssetFolderSelection(Contents.SavedDirStr, selectedData.savedDir, false);
             if(selectedData.fbxPrefab == null)
             {
                 EditorGUILayout.HelpBox(Contents.FBXPrefabNullStr, MessageType.Error);

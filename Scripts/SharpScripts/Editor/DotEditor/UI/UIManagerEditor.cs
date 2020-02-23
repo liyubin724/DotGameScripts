@@ -21,11 +21,11 @@ namespace DotEditor.UI
             uiLayerRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 SerializedProperty element = uiLayers.GetArrayElementAtIndex(index);
-                EditorGUIUtil.BeginLabelWidth(40);
+                DotEditorGUI.BeginLabelWidth(40);
                 {
                     EditorGUI.PropertyField(rect, element,new GUIContent(""+index));
                 }
-                EditorGUIUtil.EndLableWidth();
+                DotEditorGUI.EndLableWidth();
             };
         }
 

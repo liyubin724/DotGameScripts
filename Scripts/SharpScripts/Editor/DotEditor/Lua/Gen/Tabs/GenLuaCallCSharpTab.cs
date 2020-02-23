@@ -29,7 +29,7 @@ namespace DotEditor.Lua.Gen.Tabs
             {
                 if(tabAssemblies == null || genConfig == null)
                 {
-                    EditorGUILayout.LabelField("Data Is Null",EditorGUIStyle.BoldLabelStyle);
+                    EditorGUILayout.LabelField("Data Is Null",DotEditorStyles.BoldLabelStyle);
                 }else
                 {
                     scrollPos = EditorGUILayout.BeginScrollView(scrollPos, EditorStyles.helpBox, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
@@ -47,7 +47,7 @@ namespace DotEditor.Lua.Gen.Tabs
                         }
 
                         EditorGUILayout.Space();
-                        EditorGUILayout.LabelField("Generic Type List", EditorGUIStyle.BoldLabelStyle);
+                        EditorGUILayout.LabelField("Generic Type List", DotEditorStyles.BoldLabelStyle);
                         EditorGUILayout.LabelField("Example:List<int> == System.Collections.Generic.List`1@System.Int32");
                         genericDrawer.DoGUILayout();
                     }
@@ -80,7 +80,7 @@ namespace DotEditor.Lua.Gen.Tabs
 
         private void DrawTabAssembly(GenTabAssemblyData aData)
         {
-            EditorGUIUtil.BeginIndent();
+            DotEditorGUI.BeginIndent();
             {
                 foreach (var tData in aData.typeDatas)
                 {
@@ -90,7 +90,7 @@ namespace DotEditor.Lua.Gen.Tabs
                     }
                 }
             }
-            EditorGUIUtil.EndIndent();
+            DotEditorGUI.EndIndent();
         }
 
         private void DrawTabTypeData(GenTabTypeData tData)

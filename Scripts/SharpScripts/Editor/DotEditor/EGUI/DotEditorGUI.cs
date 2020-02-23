@@ -6,7 +6,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Core.EGUI
 {
-    public static class EditorGUIUtil
+    public static class DotEditorGUI
     {
         public static Color BorderColor
         {
@@ -136,7 +136,7 @@ namespace DotEditor.Core.EGUI
             }
             EditorGUI.EndDisabledGroup();
 
-            if (GUI.Button(new Rect(rect.x+rect.width - 40, rect.y, 20, rect.height), new GUIContent(EditorGUIUtil.FolderIcon)))
+            if (GUI.Button(new Rect(rect.x+rect.width - 40, rect.y, 20, rect.height), new GUIContent(DotEditorGUI.FolderIcon)))
             {
                 string folderPath = EditorUtility.OpenFolderPanel("folder", folder, "");
                 if (!string.IsNullOrEmpty(folderPath))

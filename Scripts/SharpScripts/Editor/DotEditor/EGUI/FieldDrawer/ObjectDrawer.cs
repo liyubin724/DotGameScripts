@@ -38,7 +38,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             if(isNeedIndent)
             {
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
             }
 
             if (data == null)
@@ -62,7 +62,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             if (isNeedIndent)
             {
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
             }
         }
     }

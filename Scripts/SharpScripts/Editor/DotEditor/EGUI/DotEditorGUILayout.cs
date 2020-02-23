@@ -7,7 +7,7 @@ using SystemObject = System.Object;
 
 namespace DotEditor.Core.EGUI
 {
-    public static class EditorGUILayoutUtil
+    public static class DotEditorGUILayout
     {
         public static void PropertyField(SerializedObject sObj, string propertyName)
         {
@@ -67,7 +67,7 @@ namespace DotEditor.Core.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(EditorGUIUtil.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DotEditorGUI.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     string folderPath = EditorUtility.OpenFolderPanel("folder", property.stringValue, "");
                     if (!string.IsNullOrEmpty(folderPath))
@@ -94,7 +94,7 @@ namespace DotEditor.Core.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(EditorGUIUtil.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DotEditorGUI.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     string folderPath = EditorUtility.OpenFolderPanel("folder", folder, "");
                     if (!string.IsNullOrEmpty(folderPath))
@@ -121,7 +121,7 @@ namespace DotEditor.Core.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(EditorGUIUtil.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DotEditorGUI.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     diskFolder = EditorUtility.OpenFolderPanel("folder", diskFolder, "");
                 }

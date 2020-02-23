@@ -185,7 +185,7 @@ namespace DotEditor.Entity.Avatar
                 drawRect.y += drawRect.height;
                 partData.isEnable = EditorGUI.Toggle(drawRect,Contents.IsEnableContent, partData.isEnable);
                 drawRect.y += drawRect.height;
-                partData.savedDir = EditorGUIUtil.DrawAssetFolderSelection(drawRect, Contents.SavedDirStr, partData.savedDir, false);
+                partData.savedDir = DotEditorGUI.DrawAssetFolderSelection(drawRect, Contents.SavedDirStr, partData.savedDir, false);
                 drawRect.y += drawRect.height;
                 partData.bindNodeName = EditorGUI.TextField(drawRect, Contents.BindNodeNameContent, partData.bindNodeName);
                 drawRect.y += drawRect.height;
@@ -215,7 +215,7 @@ namespace DotEditor.Entity.Avatar
                 drawRect.y += drawRect.height;
                 partData.isEnable = EditorGUI.Toggle(drawRect, Contents.IsEnableContent, partData.isEnable);
                 drawRect.y += drawRect.height;
-                partData.savedDir = EditorGUIUtil.DrawAssetFolderSelection(drawRect, Contents.SavedDirStr, partData.savedDir, false);
+                partData.savedDir = DotEditorGUI.DrawAssetFolderSelection(drawRect, Contents.SavedDirStr, partData.savedDir, false);
                 drawRect.y += drawRect.height;
                 partData.fbxPrefab = (GameObject)EditorGUI.ObjectField(drawRect, Contents.BindPrefabContent, partData.fbxPrefab, typeof(GameObject), false);
             };
@@ -241,7 +241,7 @@ namespace DotEditor.Entity.Avatar
             {
                 EditorGUILayout.HelpBox(Contents.SavedDirNotExitStr, MessageType.Error);
             }
-            selectedData.savedDir = EditorGUILayoutUtil.DrawAssetFolderSelection(Contents.SavedDirStr, selectedData.savedDir, false);
+            selectedData.savedDir = DotEditorGUILayout.DrawAssetFolderSelection(Contents.SavedDirStr, selectedData.savedDir, false);
             selectedData.partType = (AvatarPartType)EditorGUILayout.EnumPopup(Contents.PartTypeContent, selectedData.partType);
         }
 

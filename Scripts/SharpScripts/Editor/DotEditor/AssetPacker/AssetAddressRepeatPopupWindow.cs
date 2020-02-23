@@ -40,11 +40,11 @@ namespace DotEditor.AssetPacker
                         EditorGUILayout.BeginHorizontal();
                         {
                             EditorGUILayout.LabelField("" + index, GUILayout.Width(20));
-                            EditorGUIUtil.BeginLabelWidth(60);
+                            DotEditorGUI.BeginLabelWidth(60);
                             {
                                 EditorGUILayout.TextField("Path : ", data.assetPath);
                             }
-                            EditorGUIUtil.EndLableWidth();
+                            DotEditorGUI.EndLableWidth();
                             UnityObject uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(data.assetPath);
                             EditorGUILayout.ObjectField(uObj, typeof(UnityObject), true, GUILayout.Width(160));
                         }

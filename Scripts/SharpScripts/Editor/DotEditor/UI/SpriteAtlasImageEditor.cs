@@ -51,11 +51,11 @@ namespace DotEditor.UI
         protected void DrawSpriteAtlas()
         {
             DrawAtlasPopupLayout(new GUIContent("Sprite Atlas"), new GUIContent("----"), m_SpriteAtlas);
-            EditorGUIUtil.BeginIndent();
+            DotEditorGUI.BeginIndent();
             {
                 DrawSpritePopup(m_SpriteAtlas.objectReferenceValue as SpriteAtlas, m_SpriteName);
             }
-            EditorGUIUtil.EndIndent();
+            DotEditorGUI.EndIndent();
         }
 
         protected void DrawTypeGUI()

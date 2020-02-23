@@ -156,13 +156,13 @@ namespace DotEditor.Core.TimeLine
                 }
             }
 
-            EditorGUIUtil.DrawAreaLine(groupOperRect,Color.gray);
-            EditorGUIUtil.DrawAreaLine(trackOperRect, Color.gray);
-            EditorGUIUtil.DrawAreaLine(timeRect, Color.gray);
-            EditorGUIUtil.DrawAreaLine(ItemClipRect, Color.yellow);
-            EditorGUIUtil.DrawAreaLine(groupRect, Color.gray);
-            EditorGUIUtil.DrawAreaLine(trackRect, Color.gray);
-            EditorGUIUtil.DrawAreaLine(propertyRect, Color.gray);
+            DotEditorGUI.DrawAreaLine(groupOperRect,Color.gray);
+            DotEditorGUI.DrawAreaLine(trackOperRect, Color.gray);
+            DotEditorGUI.DrawAreaLine(timeRect, Color.gray);
+            DotEditorGUI.DrawAreaLine(ItemClipRect, Color.yellow);
+            DotEditorGUI.DrawAreaLine(groupRect, Color.gray);
+            DotEditorGUI.DrawAreaLine(trackRect, Color.gray);
+            DotEditorGUI.DrawAreaLine(propertyRect, Color.gray);
         }
 
         private void UpdateScrollPos()

@@ -137,11 +137,11 @@ namespace DotEditor.AssetPacker
                 }
                 EditorGUI.BeginChangeCheck();
                 {
-                    EditorGUIUtil.BeginLabelWidth(70);
+                    DotEditorGUI.BeginLabelWidth(70);
                     {
                         runMode = (RunMode)EditorGUILayout.EnumPopup("Run Mode:", runMode, EditorStyles.toolbarPopup, GUILayout.Width(170));
                     }
-                    EditorGUIUtil.EndLableWidth();
+                    DotEditorGUI.EndLableWidth();
                 }
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -297,7 +297,7 @@ namespace DotEditor.AssetPacker
 
             EditorGUI.BeginChangeCheck();
             {
-                bundlePackConfig.bundleOutputDir = EditorGUILayoutUtil.DrawDiskFolderSelection("Bundle Output Dir", bundlePackConfig.bundleOutputDir);
+                bundlePackConfig.bundleOutputDir = DotEditorGUILayout.DrawDiskFolderSelection("Bundle Output Dir", bundlePackConfig.bundleOutputDir);
                 bundlePackConfig.cleanupBeforeBuild = EditorGUILayout.Toggle("Cleanup", bundlePackConfig.cleanupBeforeBuild);
                 bundlePackConfig.buildTarget = (ValidBuildTarget)EditorGUILayout.EnumPopup("Build Target", bundlePackConfig.buildTarget);
                 bundlePackConfig.compression = (CompressOption)EditorGUILayout.EnumPopup("Compression", bundlePackConfig.compression);
@@ -330,7 +330,7 @@ namespace DotEditor.AssetPacker
 
         private void DrawBundleAutoOperation()
         {
-            EditorGUIUtil.BeginGUIBackgroundColor(Color.red);
+            DotEditorGUI.BeginGUIBackgroundColor(Color.red);
             {
                 if(GUILayout.Button("Auto Pack Bundle",GUILayout.Height(40)))
                 {
@@ -344,7 +344,7 @@ namespace DotEditor.AssetPacker
                     };
                 }
             }
-            EditorGUIUtil.EndGUIBackgroundColor();
+            DotEditorGUI.EndGUIBackgroundColor();
         }
     }
 }

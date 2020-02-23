@@ -93,7 +93,7 @@ namespace DotEditor.Core.TimeLine
                                 EditorGUIPropertyInfoLayout.PropertyInfoIntPopField(Item, pi, dependItems);
                             }else
                             {
-                                EditorGUILayoutUtil.PropertyInfoField(Item, pi);
+                                DotEditorGUILayout.PropertyInfoField(Item, pi);
                             }
                         }
 

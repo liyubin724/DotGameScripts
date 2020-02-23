@@ -24,7 +24,7 @@ namespace DotEditor.AssetFilter
             Rect curRect = position;
             curRect.height = ReorderableListGUI.DefaultItemHeight;
 
-            assetFolder.stringValue = EditorGUIUtil.DrawAssetFolderSelection(curRect, "Asset Folder", assetFolder.stringValue);
+            assetFolder.stringValue = DotEditorGUI.DrawAssetFolderSelection(curRect, "Asset Folder", assetFolder.stringValue);
             
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, isIncludeSubfolder);

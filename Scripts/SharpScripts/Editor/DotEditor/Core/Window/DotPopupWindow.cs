@@ -31,10 +31,10 @@ namespace DotEditor.Core.Window
         protected virtual void DrawBackground()
         {
             Rect winRect = new Rect(Vector2.zero, position.size);
-            EditorGUI.DrawRect(winRect, EditorGUIUtil.BorderColor);
+            EditorGUI.DrawRect(winRect, DotEditorGUI.BorderColor);
 
             Rect backgroundRect = new Rect(Vector2.one, position.size - new Vector2(2f, 2f));
-            EditorGUI.DrawRect(backgroundRect, EditorGUIUtil.BackgroundColor);
+            EditorGUI.DrawRect(backgroundRect, DotEditorGUI.BackgroundColor);
         }
 
 

@@ -121,7 +121,7 @@ namespace DotEditor.AssetPacker
                                 AssetAddressRepeatPopupWindow.ShowWin(groupTreeData.repeatAddressDatas, pos);
                             }
                         }
-                        EditorGUIUtil.BeginLabelWidth(80);
+                        DotEditorGUI.BeginLabelWidth(80);
                         {
                             AssetPackerAddressData assetData = groupData.assetFiles[groupTreeData.dataIndex];
                             EditorGUILayout.TextField("address:", assetData.assetAddress);
@@ -139,7 +139,7 @@ namespace DotEditor.AssetPacker
                                 SelectionUtil.ActiveObject(assetData.assetPath);
                             }
                         }
-                        EditorGUIUtil.EndLableWidth();
+                        DotEditorGUI.EndLableWidth();
                     }
                     GUILayout.EndHorizontal();
                 }

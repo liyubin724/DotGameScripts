@@ -46,7 +46,7 @@ namespace DotEditor.EGUI.FieldDrawer
 
             if(isFoldout)
             {
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
                 {
                     if (valueObject == null)
                     {
@@ -83,7 +83,7 @@ namespace DotEditor.EGUI.FieldDrawer
                     }
 
                 }
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
             }
 
         }

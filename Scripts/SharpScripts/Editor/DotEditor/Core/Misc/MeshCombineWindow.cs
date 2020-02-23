@@ -30,7 +30,7 @@ namespace DotEditor.Core.Misc
         public void OnGUI()
         {
             EditorGUILayout.LabelField("Mesh Combine Tool", centerLabelTitleStyle, GUILayout.ExpandWidth(true));
-            meshSavedAssetDir = EditorGUILayoutUtil.DrawAssetFolderSelection("Saved Dir", meshSavedAssetDir, true);
+            meshSavedAssetDir = DotEditorGUILayout.DrawAssetFolderSelection("Saved Dir", meshSavedAssetDir, true);
             isCombineAsChild = EditorGUILayout.Toggle("Combine As Child", isCombineAsChild);
             isDeleteAfterCombined = EditorGUILayout.Toggle("Delete After Combined", isDeleteAfterCombined);
             isAddMeshCollider = EditorGUILayout.Toggle("Add Mesh Collider", isAddMeshCollider);

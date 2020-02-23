@@ -154,12 +154,12 @@ namespace DotEditor.Entity.Avatar
 
         private void DrawCreatorData()
         {
-            EditorGUIUtil.BeginLabelWidth(80);
+            DotEditorGUI.BeginLabelWidth(80);
             {
                 selectedData.dataName = EditorGUILayout.TextField(Contents.DataNameContent, selectedData.dataName);
                 selectedData.isEnable = EditorGUILayout.Toggle(Contents.IsEnableContent, selectedData.isEnable);
             }
-            EditorGUIUtil.EndLableWidth();
+            DotEditorGUI.EndLableWidth();
         }
 
         private void LoadDatas()

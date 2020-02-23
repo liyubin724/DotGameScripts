@@ -142,7 +142,7 @@ namespace DotEditor.Pool
                     EditorGUILayout.ObjectField(Contents.TransformContent, mgrRootTran, typeof(Transform), false);
                     EditorGUILayout.LabelField(Contents.CullIntervalContent, new GUIContent(dynamicPoolMgr.cullTimeInterval.ToString()));
                     EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + spawnDic.Count));
-                    EditorGUIUtil.BeginIndent();
+                    DotEditorGUI.BeginIndent();
                     {
                         List<string> spawnNames = spawnDic.Keys.ToList();
                         spawnNames.Sort();
@@ -152,7 +152,7 @@ namespace DotEditor.Pool
                             DrawSpawnPool(spawn);
                         }
                     }
-                    EditorGUIUtil.EndIndent();
+                    DotEditorGUI.EndIndent();
 
                 }
                 EditorGUILayout.EndVertical();
@@ -175,7 +175,7 @@ namespace DotEditor.Pool
                 foldoutData.isFoldout = EditorGUILayout.Foldout(foldoutData.isFoldout, poolName);
                 if (foldoutData.isFoldout)
                 {
-                    EditorGUIUtil.BeginIndent();
+                    DotEditorGUI.BeginIndent();
                     {
                         Transform spawnTransform = dynamicSpawnPool.SpawnTransform;
                         EditorGUILayout.ObjectField(Contents.TransformContent, spawnTransform, typeof(Transform), false);
@@ -183,7 +183,7 @@ namespace DotEditor.Pool
                         Dictionary<string, GameObjectPool> gameObjectPools = dynamicSpawnPool.gameObjectPools;
                         EditorGUILayout.LabelField(Contents.CountContent, new GUIContent("" + gameObjectPools.Count));
 
-                        EditorGUIUtil.BeginIndent();
+                        DotEditorGUI.BeginIndent();
                         {
                             List<string> poolNames = gameObjectPools.Keys.ToList();
                             poolNames.Sort();
@@ -197,17 +197,17 @@ namespace DotEditor.Pool
                                 foldoutData.objectPoolFoldout[name] = EditorGUILayout.Foldout(foldoutData.objectPoolFoldout[name], name);
                                 if (foldoutData.objectPoolFoldout[name])
                                 {
-                                    EditorGUIUtil.BeginIndent();
+                                    DotEditorGUI.BeginIndent();
                                     {
                                         DrawGameObjectPool(gameObjectPools[name]);
                                     }
-                                    EditorGUIUtil.EndIndent();
+                                    DotEditorGUI.EndIndent();
                                 }
                             }
                         }
-                        EditorGUIUtil.EndIndent();
+                        DotEditorGUI.EndIndent();
                     }
-                    EditorGUIUtil.EndIndent();   
+                    DotEditorGUI.EndIndent();   
                 }
             }
             EditorGUILayout.EndVertical();
@@ -234,9 +234,9 @@ namespace DotEditor.Pool
                 {
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        EditorGUIUtil.BeginIndent();
+                        DotEditorGUI.BeginIndent();
                         {
-                            EditorGUIUtil.BeginLabelWidth(100);
+                            DotEditorGUI.BeginLabelWidth(100);
                             {
                                 int index = 0;
                                 foreach (var gObj in unusedItemQueue)
@@ -245,9 +245,9 @@ namespace DotEditor.Pool
                                     index++;
                                 }
                             }
-                            EditorGUIUtil.EndLableWidth();
+                            DotEditorGUI.EndLableWidth();
                         }
-                        EditorGUIUtil.EndIndent();
+                        DotEditorGUI.EndIndent();
                     }
                     EditorGUILayout.EndVertical();
                 }
@@ -258,9 +258,9 @@ namespace DotEditor.Pool
                 {
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        EditorGUIUtil.BeginIndent();
+                        DotEditorGUI.BeginIndent();
                         {
-                            EditorGUIUtil.BeginLabelWidth(100);
+                            DotEditorGUI.BeginLabelWidth(100);
                             {
                                 int index = 0;
                                 foreach (var weakRef in usedItemList)
@@ -279,9 +279,9 @@ namespace DotEditor.Pool
                                     index++;
                                 }
                             }
-                            EditorGUIUtil.EndLableWidth();
+                            DotEditorGUI.EndLableWidth();
                         }
-                        EditorGUIUtil.EndIndent();
+                        DotEditorGUI.EndIndent();
                     }
                     EditorGUILayout.EndVertical();
                 }

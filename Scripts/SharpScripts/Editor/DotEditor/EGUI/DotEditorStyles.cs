@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DotEditor.Core.EGUI
 {
-    public static class EditorGUIStyle
+    public static class DotEditorStyles
     {
         private static GUIStyle boldLabelStyle = null;
         public static GUIStyle BoldLabelStyle

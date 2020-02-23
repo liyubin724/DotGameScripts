@@ -169,7 +169,7 @@ namespace DotEditor.BundleViewer
                 EditorGUILayout.LabelField(Contents.RefCountContent, new GUIContent(""+dynamicNode.refCount));
                 EditorGUILayout.LabelField(Contents.BundleNodeContent);
                 BundleNode bNode = dynamicNode.bundleNode;
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
                 {
                     if(bNode == null)
                     {
@@ -179,7 +179,7 @@ namespace DotEditor.BundleViewer
                         DrawBundleNode(bNode);
                     }
                 }
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
 
                 WeakReference assetWeakRef = dynamicNode.assetWeakRef;
                 if(assetWeakRef == null)
@@ -191,7 +191,7 @@ namespace DotEditor.BundleViewer
                 }
 
                 EditorGUILayout.LabelField(Contents.InstanceAssetContent);
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
                 {
                     List<WeakReference> weakAssets = dynamicNode.instanceWeakRefs;
                     int index = 0;
@@ -204,7 +204,7 @@ namespace DotEditor.BundleViewer
                         }
                     }
                 }
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
             }
             EditorGUILayout.EndVertical();
         }
@@ -240,7 +240,7 @@ namespace DotEditor.BundleViewer
                 EditorGUILayout.LabelField(Contents.AssetBundleContent, ab == null ? Contents.NULLContent : new GUIContent(ab.name));
                 EditorGUILayout.Toggle(Contents.IsUsedBySceneContent, dynamicNode.IsUsedByScene);
                 EditorGUILayout.LabelField(Contents.DependNodesContent);
-                EditorGUIUtil.BeginIndent();
+                DotEditorGUI.BeginIndent();
                 {
                     List<BundleNode> nodes = dynamicNode.dependNodes;
                     if(nodes.Count == 0)
@@ -254,7 +254,7 @@ namespace DotEditor.BundleViewer
                         }
                     }
                 }
-                EditorGUIUtil.EndIndent();
+                DotEditorGUI.EndIndent();
             }
             EditorGUILayout.EndVertical();
         }
