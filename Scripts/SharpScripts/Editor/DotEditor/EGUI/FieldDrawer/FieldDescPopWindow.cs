@@ -1,4 +1,4 @@
-﻿using DotEditor.Core.Window;
+﻿using DotEditor.EGUI.Window;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,10 +8,9 @@ namespace DotEditor.EGUI.FieldDrawer
     {
         public static void ShowWin(Rect position,string fieldName,string fieldDesc)
         {
-            var win = GetPopupWindow<FieldDescPopWindow>();
+            var win = ShowPopupWin<FieldDescPopWindow>(new Rect(position.x - 100, position.y + position.height, 200, 100),true);
             win.fieldName = fieldName;
             win.fieldDesc = fieldDesc;
-            win.Show<FieldDescPopWindow>(new Rect(position.x-100, position.y+position.height, 200, 100), true, true);
         }
 
         private string fieldName = "";
@@ -19,10 +18,8 @@ namespace DotEditor.EGUI.FieldDrawer
 
         private GUIStyle boldLabelCenterStyle = null;
         private GUIStyle labelWrapStyle = null;
-        protected override void OnGUI()
+        protected override void DrawElement()
         {
-            base.OnGUI();
-
             if(boldLabelCenterStyle == null)
             {
                 boldLabelCenterStyle = new GUIStyle(EditorStyles.boldLabel);
@@ -38,7 +35,6 @@ namespace DotEditor.EGUI.FieldDrawer
             EditorGUILayout.LabelField(fieldName, boldLabelCenterStyle);
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(fieldDesc, labelWrapStyle, GUILayout.ExpandHeight(true));
-
         }
     }
 }

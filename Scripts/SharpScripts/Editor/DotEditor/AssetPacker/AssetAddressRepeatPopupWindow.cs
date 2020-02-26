@@ -1,5 +1,5 @@
 ﻿using DotEditor.Core.EGUI;
-using DotEditor.Core.Window;
+using DotEditor.EGUI.Window;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -16,15 +16,12 @@ namespace DotEditor.AssetPacker
 
         public static void ShowWin(AssetPackerAddressData[] datas, Vector2 position)
         {
-            var win = GetPopupWindow<AssetAddressRepeatPopupWindow>();
+            var win = ShowPopupWin<AssetAddressRepeatPopupWindow>(new Rect(position + new Vector2(10, 20), new Vector2(WIN_WIDTH, WIN_Height)),false);
             win.repeatAddressDatas = datas;
-            win.Show<AssetAddressRepeatPopupWindow>(new Rect(position + new Vector2(10, 20), new Vector2(WIN_WIDTH, WIN_Height)), true, true);
         }
 
-        protected override void OnGUI()
+        protected override void DrawElement()
         {
-            base.OnGUI();
-
             GUIStyle boldCenterStyle = new GUIStyle(EditorStyles.label);
             boldCenterStyle.alignment = TextAnchor.MiddleCenter;
             boldCenterStyle.fontStyle = FontStyle.Bold;

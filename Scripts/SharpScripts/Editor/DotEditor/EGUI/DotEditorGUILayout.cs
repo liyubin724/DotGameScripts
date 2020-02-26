@@ -134,5 +134,39 @@ namespace DotEditor.Core.EGUI
 
             return diskFolder;
         }
+
+        public static string StringPopup(string label,string selected,string[] optionValues)
+        {
+            if(optionValues == null)
+            {
+                optionValues = new string[0];
+            }
+
+            int selectedIndex = Array.IndexOf(optionValues, selected);
+
+            int newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, optionValues);
+            if(newSelectedIndex>=0 && newSelectedIndex<optionValues.Length)
+            {
+                return optionValues[newSelectedIndex];
+            }
+            return selected;
+        }
+
+        public static string StringPopup(GUIContent label, string selected, string[] optionValues)
+        {
+            if (optionValues == null)
+            {
+                optionValues = new string[0];
+            }
+
+            int selectedIndex = Array.IndexOf(optionValues, selected);
+
+            int newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, optionValues);
+            if (newSelectedIndex >= 0 && newSelectedIndex < optionValues.Length)
+            {
+                return optionValues[newSelectedIndex];
+            }
+            return selected;
+        }
     }
 }

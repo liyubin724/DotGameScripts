@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Dot.Ini;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,12 +13,31 @@ public class PrefabTest : EditorWindow
     {
         var win = GetWindow<PrefabTest>();
         win.Show();
+
+        string v = "A[A,B,C,]";
+        string pattern = @"(?<key>\w+)\[(?<option>[(\w+,?)]+)\]$";
+        Match match = new Regex(pattern).Match(v);
+        if (match.Success)
+        {
+            Debug.LogError($"Key = {match.Groups["key"].Value}  Vlaues = {match.Groups["option"].Value}");
+        }
     }
 
     GameObject gObj = null;
     StringBuilder sb = new StringBuilder();
+
+    private TextAsset ta = null;
     private void OnGUI()
     {
+        ta = (TextAsset)EditorGUILayout.ObjectField("Text:", ta, typeof(TextAsset), false);
+        if(GUILayout.Button("Init"))
+        {
+            IniConfig config = new IniConfig(ta.text, false);
+            Debug.Log("Ini===>" + config.GetValueInGroup("Default", "email"));
+            Debug.Log("Ini===>" + config.GetValue("defaultLanguage"));
+        }
+
+
         gObj = (GameObject)EditorGUILayout.ObjectField("Obj:", gObj, typeof(GameObject), true);
         if(GUILayout.Button("Check"))
         {

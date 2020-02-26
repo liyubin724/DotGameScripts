@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace DotEditor.Core.Window
+namespace DotEditor.EGUI.Window
 {
     /// <summary>
     /// 通过继承DraggablePopupWindow可以生成一个可拖动的弹框
     /// </summary>
-    public abstract class DraggablePopupWindow : DotPopupWindow
+    public abstract class DotDraggablePopupWindow : DotPopupWindow
     {
         private Vector2 offset;
 
@@ -26,7 +26,7 @@ namespace DotEditor.Core.Window
 
         protected override void OnGUI()
         {
-            DrawBackground();
+            base.OnGUI();
 
             OnGUIDrag();
         }
