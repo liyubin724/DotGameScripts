@@ -100,10 +100,20 @@ namespace DotEditor.Ini
 
                 if(deleteData!=null)
                 {
-                    if(groupDic.TryGetValue(deleteData.groupName,out IniGroup g))
+                    if(string.IsNullOrEmpty(deleteData.dataKey))
                     {
-                        g.DeleteData(deleteData.dataKey);
+                        if(groupDic.ContainsKey(deleteData.groupName))
+                        {
+                            groupDic.Remove(deleteData.groupName);
+                        }
+                    }else
+                    {
+                        if(groupDic.TryGetValue(deleteData.groupName,out IniGroup g))
+                        {
+                            g.DeleteData(deleteData.dataKey);
+                        }
                     }
+
                     deleteData = null;
                 }
 
@@ -140,7 +150,7 @@ namespace DotEditor.Ini
                 GUILayout.FlexibleSpace();
                 if(iniConfig!=null)
                 {
-                    if (GUILayout.Button(Contents.AddGroupContent, EditorStyles.toolbarButton, GUILayout.Width(20)))
+                    if (GUILayout.Button(Contents.AddGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
                     {
                         Vector2 size = new Vector2(300, 150);
                         Rect rect = new Rect(position.position + 0.5f * position.size - size * 0.5f, size);
@@ -168,7 +178,13 @@ namespace DotEditor.Ini
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 {
                     EditorGUILayout.LabelField(new GUIContent(group.Name, group.Comment));
-                    if(GUILayout.Button(Contents.AddDataContent,EditorStyles.toolbarButton,GUILayout.Width(20)))
+
+                    if (GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
+                    {
+                        deleteData = new DeleteData() { groupName = group.Name };
+                    }
+
+                    if (GUILayout.Button(Contents.AddDataContent,EditorStyles.toolbarButton,GUILayout.Width(80)))
                     {
                         Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
                         Vector2 size = new Vector2(300, 200);
@@ -239,8 +255,9 @@ namespace DotEditor.Ini
 
             internal static string NewStr = "New";
 
-            internal static GUIContent AddGroupContent = new GUIContent("+", "Add a new group");
-            internal static GUIContent AddDataContent = new GUIContent("+", "Add a new data");
+            internal static GUIContent AddGroupContent = new GUIContent("Add Group", "Add a new group");
+            internal static GUIContent DeleteGroupContent = new GUIContent("Delete Group", "Delete the group");
+            internal static GUIContent AddDataContent = new GUIContent("Add Data", "Add a new data");
             internal static GUIContent DeleteContent = new GUIContent("-");
         }
     }
