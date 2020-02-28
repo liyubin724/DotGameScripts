@@ -1,26 +1,24 @@
-﻿using Dot.Util;
+﻿using Dot.Manager;
 
 namespace Dot.Timer
 {
     public delegate void TimerCallback(object obj);
 
-    public class TimerManager : Singleton<TimerManager>
+    public class TimerManager : BaseSingletonManager<TimerManager>
     {
         private HierarchicalTimerWheel hTimerWheel = null;
         private bool isPause = false;
 
-        protected override void DoInit()
+        public override void DoInit()
         {
+            base.DoInit();
+
             hTimerWheel = new HierarchicalTimerWheel();
+
+            BindUpdate(true, false, false);
         }
 
-        public override void DoReset()
-        {
-            hTimerWheel?.Clear();
-            isPause = false;
-        }
-        
-        public void DoUpdate(float deltaTime)
+        protected override void DoUpdate(float deltaTime)
         {
             if (!isPause && hTimerWheel != null)
             {
@@ -82,7 +80,8 @@ namespace Dot.Timer
 
         public override void DoDispose()
         {
-            DoReset();
+            hTimerWheel?.Clear();
+            isPause = false;
             hTimerWheel = null;
         }
     }

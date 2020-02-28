@@ -1,6 +1,6 @@
 ﻿using Dot.Asset.Datas;
-using Dot.Util;
 using Dot.Log;
+using Dot.Manager;
 using System;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
@@ -28,7 +28,7 @@ namespace Dot.Asset
         VeryHigh = 500,
     }
 
-    public partial class AssetManager : Singleton<AssetManager>
+    public partial class AssetManager : BaseSingletonManager<AssetManager>
     {
         private AAssetLoader assetLoader = null;
         private ASceneLoader sceneLoader = null;
@@ -202,7 +202,13 @@ namespace Dot.Asset
             return assetLoader.InstantiateAsset(address, asset);
         }
 
-        public void DoUpdate(float deltaTime)
+        public override void DoInit()
+        {
+            base.DoInit();
+            BindUpdate(true, false, false);
+        }
+
+        protected override void DoUpdate(float deltaTime)
         {
             assetLoader?.DoUpdate(deltaTime);
             sceneLoader?.DoUpdate(deltaTime);

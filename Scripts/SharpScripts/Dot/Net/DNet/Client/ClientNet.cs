@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Dot.Net.Client
 {
-    public class ClientNet 
+    public class ClientNet : IClientNetStateListener
     {
         private IMessageWriter messageWriter = null;
         private IClientNetDataReceiver dataReceiver = null;
@@ -16,9 +16,28 @@ namespace Dot.Net.Client
         {
             messageWriter = writer;
             dataReceiver = receiver;
+
+            netSession = new ClientNetSession(receiver, this);
         }
 
+        public void Connect(string ip,int port)
+        {
+            netSession.Connect(ip, port);
+        }
 
+        public void Reconnect()
+        {
+            netSession.Reconnect();
+        }
 
+        public void Disconnect()
+        {
+            netSession.Disconnect();
+        }
+
+        public void OnStateChanged(ClientNetSessionState oldState, ClientNetSessionState newState)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Dot.Log;
-using Dot.Util;
+using Dot.Manager;
 using XLua;
 
 namespace Dot.Lua
 {
-    public class LuaManager : Singleton<LuaManager>
+    public class LuaManager : BaseSingletonManager<LuaManager>
     {
         internal static readonly string LOGGER_NAME = "LuaEnv";
         private static readonly string LUA_NAME = "Dot";
@@ -40,7 +40,13 @@ namespace Dot.Lua
             }
         }
 
-        public void DoUpdate(float deltaTime)
+        public override void DoInit()
+        {
+            base.DoInit();
+            BindUpdate(true, false, false);
+        }
+
+        protected override void DoUpdate(float deltaTime)
         {
             luaEnvEntity?.DoUpdate(deltaTime);
         }

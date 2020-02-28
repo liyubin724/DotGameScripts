@@ -1,15 +1,17 @@
-﻿using Dot.Util;
+﻿using Dot.Manager;
 
 namespace Dot.Dispatch
 {
-    public class EventManager : Singleton<EventManager>
+    public class EventManager : BaseSingletonManager<EventManager>
     {
         private EventDispatcher eventDispatcher = null;
 
-        protected override void DoInit()=> eventDispatcher = new EventDispatcher();
+        public override void DoInit()
+        {
+            base.DoInit();
+            eventDispatcher = new EventDispatcher();
+        }
     
-        public override void DoReset() => eventDispatcher.DoReset();   
-
         public override void DoDispose()
         {
             eventDispatcher.DoDispose();

@@ -1,18 +1,20 @@
 ﻿using Dot.Asset;
-using Dot.Timer;
-using Dot.Util;
+using Dot.Dispatch;
 using Dot.Log;
 using Dot.Lua;
-using UnityEngine;
-using UnityObject = UnityEngine.Object;
+using Dot.Manager;
+using Dot.Timer;
+using Dot.Util;
 using System;
-using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
-using Dot.Dispatch;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityObject = UnityEngine.Object;
 
 namespace Dot
 {
+
     public class DotProxy : MonoBehaviour
     {
 #if UNITY_EDITOR
@@ -27,10 +29,10 @@ namespace Dot
 
 #endif
 
-        public static void Startup(Action<bool> finishCallback)
+        public static void Startup(Action<bool> initCallback)
         {
             DotProxy proxy = DontDestroyHandler.CreateComponent<DotProxy>();
-            proxy.finishCallback = finishCallback;
+            proxy.initFinishedCallback = initCallback;
         }
 
         public static void TearDown()
@@ -43,16 +45,13 @@ namespace Dot
 
         public static DotProxy proxy = null;
 
+        private ManagerProxy mgrProxy = null;
+        
         private bool isStartup = false;
         public bool IsStartup { get => isStartup; }
 
-        private Action<bool> finishCallback = null;
 
-        private TimerManager timerMgr = null;
-        private EventManager eventMgr = null;
-        private AssetManager assetMgr = null;
-        private LuaManager luaMgr = null;
-        private LogManager logMgr = null;
+        private Action<bool> initFinishedCallback = null;
 
         private void Awake()
         {
@@ -63,12 +62,12 @@ namespace Dot
             }
 
             proxy = this;
-
-            timerMgr = TimerManager.GetInstance();
-            eventMgr = EventManager.GetInstance();
-            assetMgr = AssetManager.GetInstance();
-            luaMgr = LuaManager.GetInstance();
-            logMgr = LogManager.GetInstance();
+            mgrProxy = ManagerProxy.GetInstance();
+            TimerManager.GetInstance();
+            EventManager.GetInstance();
+            AssetManager.GetInstance();
+            LuaManager.GetInstance();
+            LogManager.GetInstance();
 
             InitProxy();
         }
@@ -80,22 +79,18 @@ namespace Dot
                 return;
             }
 
-            float deltaTime = Time.deltaTime;
+            mgrProxy.DoUpdate(Time.deltaTime, Time.unscaledDeltaTime);
+        }
 
-            timerMgr.DoUpdate(deltaTime);
-            luaMgr.DoUpdate(deltaTime);
-            assetMgr.DoUpdate(deltaTime);
+        private void LateUpdate()
+        {
+            mgrProxy.DoLateUpdate();
         }
 
         private void OnDestroy()
         {
-            if (isStartup)
-            {
-                luaMgr.DoDispose();
-                assetMgr.DoDispose();
-                eventMgr.DoDispose();
-                timerMgr.DoDispose();
-            }
+            mgrProxy.DoDispose();
+            mgrProxy = null;
             proxy = null;
         }
 
@@ -105,7 +100,7 @@ namespace Dot
             {
                 isStartup = true;
 
-                finishCallback?.Invoke(result);
+                initFinishedCallback?.Invoke(result);
             }));
         }
 
@@ -123,7 +118,7 @@ namespace Dot
                 if(datas!=null && datas.Length>0)
                 {
                     string configContent = Encoding.UTF8.GetString(datas);
-                    logMgr.InitLog(configContent);
+                    LogManager.GetInstance().InitLog(configContent);
 
                     initLogResult = true;
                 }
