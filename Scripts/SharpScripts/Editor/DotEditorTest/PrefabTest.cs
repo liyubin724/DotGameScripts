@@ -1,4 +1,5 @@
-﻿using Dot.Ini;
+﻿using Dot.Crypto.AES;
+using Dot.Ini;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,22 @@ using UnityEngine;
 
 public class PrefabTest : EditorWindow
 {
+    [MenuItem("Test/TestCrypto")]
+    public static void TestCrypto()
+    {
+        var key = AESCrypto.CreateKey();
+
+        string testValue = "Test for it";
+
+        string e = AESCrypto.Encrypt(testValue, key.Key,key.IV);
+        Debug.LogError(e);
+
+        string result = AESCrypto.Decrypt(e, key.Key, key.IV);
+
+        Debug.LogError(result);
+
+    }
+
     [MenuItem("Test/TestPrefab")]
     static void ShowWin()
     {
