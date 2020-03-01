@@ -1,59 +1,163 @@
 ﻿using Dot.Log;
-using Dot.Manager;
+using Dot.Lua.Loader;
+using Dot.Timer;
+using Dot.Util;
+using System;
 using XLua;
+using SystemObject = System.Object;
 
 namespace Dot.Lua
 {
-    public class LuaManager : BaseSingletonManager<LuaManager>
+    public class LuaManager : Singleton<LuaManager>
     {
-        internal static readonly string LOGGER_NAME = "LuaEnv";
-        private static readonly string LUA_NAME = "Dot";
+        private static readonly string LUA_PACKAGE_NAME = "Dot";
+        private static readonly float DEFAULT_ENV_TICK = 60;
 
-        private LuaEnvEntity luaEnvEntity = null;
-        public LuaEnv LuaEnv { get => luaEnvEntity?.Lua; }
-
-        public void NewLuaEnv(string[] scriptPathFormats, LuaAsset[] prerequiredAssets)
+        private LuaEnv luaEnv = null;
+        public LuaEnv Env 
         {
-            if(luaEnvEntity!=null)
+            get
             {
-                LogUtil.LogError(LOGGER_NAME,"lua env has been started");
-                return;
-            }
-            luaEnvEntity = new LuaEnvEntity(scriptPathFormats);
-            luaEnvEntity.DoStart(prerequiredAssets, LUA_NAME);
+                if( luaEnv == null || !luaEnv.IsValid())
+                {
+                    return null;
+                }
+                return luaEnv;
+            } 
+         }
+
+        public bool IsValid()
+        {
+            return luaEnv != null && luaEnv.IsValid();
         }
 
-        public void DisposeLuaEnv()
+        private LuaTable mgrTable = null;
+        private Action<LuaTable, float> updateAction = null;
+
+        private TimerTaskInfo timerInfo = null;
+        private float tickInterval = 0;
+        public float TickInterval
         {
-            if(luaEnvEntity != null)
+            set
             {
-                luaEnvEntity.DoDestroy();
-                luaEnvEntity = null;
+                tickInterval = value;
+
+                if (timerInfo != null)
+                {
+                    TimerManager.GetInstance().RemoveTimer(timerInfo);
+                    timerInfo = null;
+                }
+
+                if (tickInterval > 0)
+                {
+                    timerInfo = TimerManager.GetInstance().AddIntervalTimer(tickInterval, OnTimerTick);
+                }
+            }
+        }
+
+        private void OnTimerTick(SystemObject sysObj)
+        {
+            if(IsValid())
+            {
+                luaEnv.Tick();
+            }
+        }
+
+        public void CreateLuaEnv(string[] scriptPathFormats, LuaAsset[] prerequiredAssets)
+        {
+            luaEnv = new LuaEnv();
+#if DEBUG
+            luaEnv.Global.Set("IsDebug", true);
+#endif
+            luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidjson);
+            luaEnv.AddBuildin("pb", XLua.LuaDLL.Lua.LoadProtobuf);
+
+            LuaScriptFileLoader.ScriptLoadFromFile(luaEnv, scriptPathFormats);
+
+            TickInterval = DEFAULT_ENV_TICK;
+
+            if(prerequiredAssets!=null && prerequiredAssets.Length>0)
+            {
+                foreach(var asset in prerequiredAssets)
+                {
+                    RequiredAsset(asset);
+                }
+            }
+
+            InitManager(LUA_PACKAGE_NAME);
+        }
+
+        public void RequiredAsset(LuaAsset luaAsset)
+        {
+            if(luaAsset!=null && IsValid())
+            {
+                if (!luaAsset.Require(luaEnv))
+                {
+                    LogUtil.LogError(typeof(LuaManager), "LuaManager::RequiredAsset->param is an unvalid asset");
+                }
+            }
+        }
+
+        private void InitManager(string mgrName)
+        {
+            if (!string.IsNullOrEmpty(mgrName))
+            {
+                mgrTable = luaEnv.Global.Get<LuaTable>(mgrName);
+
+                if (mgrTable != null)
+                {
+                    Action<LuaTable> luaMgrStartAction = mgrTable.Get<Action<LuaTable>>(LuaConfig.START_FUNCTION_NAME);
+                    luaMgrStartAction?.Invoke(mgrTable);
+
+                    updateAction = mgrTable.Get<Action<LuaTable, float>>(LuaConfig.UPDATE_FUNCTION_NAME);
+                }
+                else
+                {
+                    LogUtil.LogError(typeof(LuaManager), "LuaManager:InitManager->Bridge Not found.please require it at first");
+                }
             }
         }
 
         public void FullGC()
         {
-            if(luaEnvEntity!=null)
+            if(IsValid())
             {
-                luaEnvEntity.FullGC();
+                luaEnv.FullGc();
             }
         }
 
-        public override void DoInit()
+        protected override void DoInit()
         {
             base.DoInit();
-            BindUpdate(true, false, false);
+            UpdateProxy.GetInstance().DoUpdateHandle += DoUpdate;
         }
 
-        protected override void DoUpdate(float deltaTime)
+        private void DoUpdate(float deltaTime)
         {
-            luaEnvEntity?.DoUpdate(deltaTime);
+            if(IsValid() && mgrTable != null) 
+            {
+                updateAction?.Invoke(mgrTable,deltaTime);
+            }
         }
 
         public override void DoDispose()
         {
-            DisposeLuaEnv();
+            UpdateProxy.GetInstance().DoUpdateHandle -= DoUpdate;
+
+            if (IsValid())
+            {
+                updateAction = null;
+                System.GC.Collect();
+                if(mgrTable!=null)
+                {
+                    mgrTable.Dispose();
+                    mgrTable = null;
+                }
+
+                luaEnv.Dispose();
+                luaEnv = null;
+            }
+
             base.DoDispose();
         }
     }

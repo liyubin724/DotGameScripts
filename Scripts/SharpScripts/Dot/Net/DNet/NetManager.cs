@@ -11,7 +11,7 @@ namespace Dot.Net
     {
         protected override void DoInit()
         {
-            DotProxy.proxy.DoUpdate += DoUpdate;
+            
         }
 
         private void DoUpdate(float deltaTime)
@@ -20,8 +20,6 @@ namespace Dot.Net
 
         public override void DoDispose()
         {
-            DotProxy.proxy.DoUpdate -= DoUpdate;
-
             base.DoDispose();
         }
     }

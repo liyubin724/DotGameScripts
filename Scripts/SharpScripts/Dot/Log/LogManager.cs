@@ -1,9 +1,9 @@
-﻿using Dot.Manager;
+﻿using Dot.Util;
 using UnityEngine;
 
 namespace Dot.Log
 {
-    public class LogManager : BaseSingletonManager<LogManager>
+    public class LogManager : Singleton<LogManager>
     {
         private const string OUTPUT_DIR_TAG = "#OUTPUT_DIR#";
 

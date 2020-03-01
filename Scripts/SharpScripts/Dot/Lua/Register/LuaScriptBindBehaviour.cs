@@ -18,8 +18,8 @@ namespace Dot.Lua.Register
             if (isInited)
                 return;
 
-            luaEnv = LuaManager.GetInstance().LuaEnv;
-            if (luaEnv == null)
+            LuaEnv luaEnv = LuaManager.GetInstance().Env;
+            if (!luaEnv.IsValid())
             {
                 LogUtil.LogError(typeof(LuaScriptBindBehaviour), $"LuaRegisterBehaviour::InitLua->LuaEnv is null.");
                 return;
@@ -73,15 +73,13 @@ namespace Dot.Lua.Register
 
         protected virtual void OnDestroy()
         {
-            if (luaEnv == null || ObjTable == null)
+            if (!LuaManager.GetInstance().IsValid() || ObjTable == null)
             {
                 return;
             }
             CallAction(LuaConfig.DESTROY_FUNCTION_NAME);
-
             ObjTable.Dispose();
             ObjTable = null;
-            luaEnv = null;
         }
 
         public void CallAction(string funcName)

@@ -33,7 +33,7 @@ namespace Dot.Entity
             Category = category;
             Name = name;
 
-            LuaEnv luaEnv = LuaManager.GetInstance().LuaEnv;
+            LuaEnv luaEnv = LuaManager.GetInstance().Env;
             objTable = LuaRequire.Instance(luaEnv, script);
 
             objTable.Get<Action<LuaTable>>(DO_INIT_NAME)?.Invoke(objTable);

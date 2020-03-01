@@ -18,11 +18,6 @@ namespace Dot.Util
         {
         }
 
-        public virtual void DoReset()
-        {
-
-        }
-
         public virtual void DoDispose()
         {
             instance = null;

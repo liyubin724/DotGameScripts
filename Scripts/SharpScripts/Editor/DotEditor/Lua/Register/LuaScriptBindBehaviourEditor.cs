@@ -6,12 +6,10 @@ namespace DotEditor.Lua.Register
     [CustomEditor(typeof(LuaScriptBindBehaviour), true)]
     public class LuaScriptBindBehaviourEditor : Editor
     {
-        SerializedProperty envType = null;
         SerializedProperty luaAsset = null;
 
         protected virtual void OnEnable()
         {
-            envType = serializedObject.FindProperty("envType");
             luaAsset = serializedObject.FindProperty("luaAsset");
         }
 
@@ -26,7 +24,6 @@ namespace DotEditor.Lua.Register
 
         protected void DrawScriptInfo()
         {
-            EditorGUILayout.PropertyField(envType);
             EditorGUILayout.PropertyField(luaAsset);
         }
     }

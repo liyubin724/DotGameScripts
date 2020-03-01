@@ -2,7 +2,6 @@
 using Dot.Dispatch;
 using Dot.Log;
 using Dot.Lua;
-using Dot.Manager;
 using Dot.Timer;
 using Dot.Util;
 using System;
@@ -17,16 +16,10 @@ namespace Dot
 
     public class DotProxy : MonoBehaviour
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEBUG
         private static string LOG_CONFIG = "LogConfig/log4net-editor.xml";
 #else
-
-#if DEBUG
-            private static string LOG_CONFIG = "LogConfig/log4net-editor.xml";
-#else
-            private static string LOG_CONFIG = "LogConfig/log4net.xml";
-#endif
-
+        private static string LOG_CONFIG = "LogConfig/log4net.xml";
 #endif
 
         public static void Startup(Action<bool> initCallback)
@@ -45,8 +38,7 @@ namespace Dot
 
         public static DotProxy proxy = null;
 
-        private ManagerProxy mgrProxy = null;
-        
+        private UpdateProxy updateProxy = null;
         private bool isStartup = false;
         public bool IsStartup { get => isStartup; }
 
@@ -62,7 +54,9 @@ namespace Dot
             }
 
             proxy = this;
-            mgrProxy = ManagerProxy.GetInstance();
+
+            updateProxy = UpdateProxy.GetInstance();
+
             TimerManager.GetInstance();
             EventManager.GetInstance();
             AssetManager.GetInstance();
@@ -79,18 +73,26 @@ namespace Dot
                 return;
             }
 
-            mgrProxy.DoUpdate(Time.deltaTime, Time.unscaledDeltaTime);
+            updateProxy.DoUpdate(Time.deltaTime);
+            updateProxy.DoUnscaleUpdate(Time.unscaledDeltaTime);
         }
 
         private void LateUpdate()
         {
-            mgrProxy.DoLateUpdate();
+            updateProxy.DoLateUpdate();
         }
 
         private void OnDestroy()
         {
-            mgrProxy.DoDispose();
-            mgrProxy = null;
+            TimerManager.GetInstance().DoDispose();
+            EventManager.GetInstance().DoDispose();
+            AssetManager.GetInstance().DoDispose();
+            LuaManager.GetInstance().DoDispose();
+            LogManager.GetInstance().DoDispose();
+
+            updateProxy.DoDispose();
+            updateProxy = null;
+
             proxy = null;
         }
 

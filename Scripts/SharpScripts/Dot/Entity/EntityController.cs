@@ -32,7 +32,7 @@ namespace Dot.Entity
         {
             entityObj = entity;
 
-            LuaEnv luaEnv = LuaManager.GetInstance().LuaEnv;
+            LuaEnv luaEnv = LuaManager.GetInstance().Env;
             objTable = LuaRequire.Instance(luaEnv, luaScript);
 
             if (objTable == null)

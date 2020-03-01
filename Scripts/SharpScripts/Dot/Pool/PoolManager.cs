@@ -93,19 +93,15 @@ namespace Dot.Pool
             }
         }
         
-        public override void DoReset()
+        public override void DoDispose()
         {
             foreach (var kvp in spawnDic)
             {
                 kvp.Value.DestroySpawn();
             }
             spawnDic.Clear();
-        }
 
-        public override void DoDispose()
-        {
-            DoReset();
-            if(cullTimerTask != null)
+            if (cullTimerTask != null)
             {
                 TimerManager.GetInstance().RemoveTimer(cullTimerTask);
             }

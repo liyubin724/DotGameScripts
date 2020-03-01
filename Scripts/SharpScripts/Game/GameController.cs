@@ -54,7 +54,7 @@ namespace Game
             {
                 if (result)
                 {
-                    LuaManager.GetInstance().NewLuaEnv(new string[] { LuaConfig.DefaultDiskPathFormat }, preloadLuaAssets);
+                    LuaManager.GetInstance().CreateLuaEnv(new string[] { LuaConfig.DefaultDiskPathFormat }, preloadLuaAssets);
 
                     EventManager.GetInstance().TriggerEvent(GameEventConst.CONTROLLER_INIT);
                 }else
