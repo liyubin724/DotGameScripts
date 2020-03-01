@@ -1,4 +1,4 @@
-﻿using Dot.Crypto.AES;
+﻿using Dot.Crypto;
 using Dot.Ini;
 using System.Collections;
 using System.Collections.Generic;

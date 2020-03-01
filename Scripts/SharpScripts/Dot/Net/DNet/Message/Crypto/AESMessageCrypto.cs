@@ -1,4 +1,4 @@
-﻿using Dot.Crypto.AES;
+﻿using Dot.Crypto;
 
 namespace Dot.Net.Message.Crypto
 {
