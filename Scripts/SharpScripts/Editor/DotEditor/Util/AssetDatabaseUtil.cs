@@ -2,9 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
@@ -12,22 +14,25 @@ namespace DotEditor.Util
 {
     public static class AssetDatabaseUtil
     {
+        #region FindAssets
+
         /// <summary>
         /// 查找所有的场景资源
         /// </summary>
         /// <returns></returns>
         public static string[] FindScenes()
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets("t:scene"));
+            return FindAssets(null, null, typeof(Scene), null, null);
         }
 
         /// <summary>
-        /// 查找所有设置过BundleName的所有资源
+        /// 在指定的目标中筛选场景资源
         /// </summary>
+        /// <param name="searchFolders">设定筛选的目录</param>
         /// <returns></returns>
-        public static string[] FindAssetWithBundleName()
+        public static string[] FindScenesInFolders(string name,string[] searchFolders)
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets("b:"));
+            return FindAssets(name, null, typeof(Scene), null, searchFolders);
         }
 
         /// <summary>
@@ -38,7 +43,7 @@ namespace DotEditor.Util
         /// <returns></returns>
         public static string[] FindAssetInFolder<T>(string folderPath)
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets($"t:{typeof(T).Name}", new string[] { folderPath }));
+            return FindAssets(null, null, typeof(T), null,string.IsNullOrEmpty(folderPath) ? null : new string[] { folderPath });
         }
 
         /// <summary>
@@ -48,28 +53,53 @@ namespace DotEditor.Util
         /// <returns></returns>
         public static string[] FindAssets<T>() where T : UnityEngine.Object
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets($"t:{typeof(T).FullName} "));
+            return FindAssets(null, null, typeof(T), null,null);
         }
 
         /// <summary>
-        /// 查找指定标签的资源(label)
+        /// 对Project中的资源按指定的规则进行筛选
         /// </summary>
-        /// <param name="label"></param>
-        /// <returns></returns>
-        public static string[] FindAssets(string label)
+        /// <param name="name">根据资源的名称进行资源的筛选</param>
+        /// <param name="label">根据设定的标签label进行资源的筛选</param>
+        /// <param name="type">根据设定的资源类型进行资源的筛选</param>
+        /// <param name="bundleName">根据设定的Bundle的名称进行资源筛选</param>
+        /// <param name="searchFolders">设定筛选的目录</param>
+        /// <returns>返回资源的路径</returns>
+        private static string[] FindAssets(string name, string label, Type type, string bundleName,string[] searchFolders)
         {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets($"l:{label} "));
-        }
+            StringBuilder searchPattern = new StringBuilder();
+            if (!string.IsNullOrEmpty(name))
+            {
+                searchPattern.Append(name);
+            }
+            if (!string.IsNullOrEmpty(label))
+            {
+                if (searchPattern.Length > 0)
+                {
+                    searchPattern.Append(" ");
+                }
+                searchPattern.Append($"l:{label}");
+            }
+            if (type != null)
+            {
+                if (searchPattern.Length > 0)
+                {
+                    searchPattern.Append(" ");
+                }
+                searchPattern.Append($"t:{type.Name}");
+            }
 
-        /// <summary>
-        /// 根据资源的T及设置的标签label查找符合的资源
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="label"></param>
-        /// <returns>符合条件的资源地址的数组</returns>
-        public static string[] FindAssets<T>(string label) where T : UnityEngine.Object
-        {
-            return GetAssetPathByGUID(AssetDatabase.FindAssets($"t:{typeof(T).Name} l:{label}"));
+            if(!string.IsNullOrEmpty(bundleName))
+            {
+                if(searchPattern.Length>0)
+                {
+                    searchPattern.Append(" ");
+                }
+                searchPattern.Append($"b:{bundleName}");
+            }
+
+            string[] guids = AssetDatabase.FindAssets(searchPattern.ToString(), searchFolders);
+            return GetAssetPathByGUID(guids);
         }
 
         /// <summary>
@@ -92,6 +122,10 @@ namespace DotEditor.Util
             }
             return paths;
         }
+
+        #endregion
+
+
 
         /// <summary>
         /// 在Project中创建指定类型的资源
@@ -120,7 +154,8 @@ namespace DotEditor.Util
                     Directory.CreateDirectory(diskFolderPath);
                 }
                 folderPath = assetFolder;
-            } else
+            }
+            else
             {
                 folderPath = AssetDatabase.GetAssetPath(Selection.activeObject);
 
@@ -167,7 +202,7 @@ namespace DotEditor.Util
             return GetAssetDependencies(assetPath, false, ignoreExt);
         }
 
-        private static string[] GetAssetDependencies(string assetPath,bool isRecursive,string[] ignoreExt)
+        private static string[] GetAssetDependencies(string assetPath, bool isRecursive, string[] ignoreExt)
         {
             string[] assetPaths = AssetDatabase.GetDependencies(assetPath, isRecursive);
             if (ignoreExt == null || ignoreExt.Length == 0)
