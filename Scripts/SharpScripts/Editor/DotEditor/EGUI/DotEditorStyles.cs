@@ -6,41 +6,51 @@ namespace DotEditor.Core.EGUI
     public static class DotEditorStyles
     {
         private static GUIStyle middleCenterLabel = null;
-        private static GUIStyle boldLabelStyle = null;
-        private static GUIStyle middleLeftLabelStyle = null;
-
-        static DotEditorStyles()
-        {
-            middleCenterLabel = new GUIStyle(EditorStyles.label)
-            {
-                alignment = TextAnchor.MiddleCenter
-            };
-
-            boldLabelStyle = new GUIStyle(EditorStyles.label)
-            {
-                fontStyle = FontStyle.Bold
-            };
-
-            middleLeftLabelStyle = new GUIStyle(EditorStyles.label)
-            {
-                alignment = TextAnchor.MiddleLeft
-            };
-        }
-
         public static GUIStyle MiddleCenterLabel
         {
-            get => middleCenterLabel;
+            get
+            {
+                if(middleCenterLabel == null)
+                {
+                    middleCenterLabel = new GUIStyle(EditorStyles.label)
+                    {
+                        alignment = TextAnchor.MiddleCenter
+                    };
+                }
+                return middleCenterLabel;
+            }
         }
 
+        private static GUIStyle boldLabelStyle = null;
         public static GUIStyle BoldLabelStyle
         {
-            get => boldLabelStyle;
+            get
+            {
+                if(boldLabelStyle == null)
+                {
+                    boldLabelStyle = new GUIStyle(EditorStyles.label)
+                    {
+                        fontStyle = FontStyle.Bold,
+                        fixedHeight = 20,
+                    };
+                }
+                return boldLabelStyle;
+            }
         }
-
-        
+        private static GUIStyle middleLeftLabelStyle = null;
         public static GUIStyle MiddleLeftLabelStyle
         {
-            get => middleLeftLabelStyle;
+            get
+            {
+                if(middleLeftLabelStyle == null)
+                {
+                    middleLeftLabelStyle = new GUIStyle(EditorStyles.label)
+                    {
+                        alignment = TextAnchor.MiddleLeft
+                    };
+                }
+                return middleLeftLabelStyle;
+            }
         }
     }
 }

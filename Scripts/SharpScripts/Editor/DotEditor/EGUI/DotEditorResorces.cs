@@ -4,6 +4,35 @@ namespace DotEditor.EGUI
 {
     public static class DotEditorResorces
     {
+        private static Color32 gridLineColor = new Color(0.45f, 0.45f, 0.45f);
+        private static Color32 gridBgColor = new Color(0.18f, 0.18f, 0.18f);
+
+        private static Texture2D gridTexture = null;
+        public static Texture2D GridTexture
+        {
+            get
+            {
+                if(gridTexture == null)
+                {
+                    gridTexture = GenerateGridTexture(gridLineColor, gridBgColor);
+                }
+                return gridTexture;
+            }
+        }
+
+        private static Texture2D crossTexture = null;
+        public static Texture2D CrossTexture
+        {
+            get
+            {
+                if(crossTexture == null)
+                {
+                    crossTexture = GenerateCrossTexture(gridLineColor);
+                }
+                return crossTexture;
+            }
+        }
+
         public static Texture2D GenerateGridTexture(Color line, Color bg)
         {
             Texture2D tex = new Texture2D(64, 64);
