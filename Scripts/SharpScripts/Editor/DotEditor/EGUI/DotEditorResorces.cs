@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.EGUI
 {
@@ -74,6 +75,19 @@ namespace DotEditor.EGUI
             tex.name = "Grid";
             tex.Apply();
             return tex;
+        }
+
+        private static Texture2D scriptIconTexture = null;
+        public static Texture2D ScriptIconTexture
+        {
+            get
+            {
+                if(scriptIconTexture == null)
+                {
+                    scriptIconTexture = (EditorGUIUtility.IconContent("cs Script Icon").image as Texture2D);
+                }
+                return scriptIconTexture;
+            }
         }
     }
 }
