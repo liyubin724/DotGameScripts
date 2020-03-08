@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace DotEditor.Util
 {
@@ -83,6 +84,16 @@ namespace DotEditor.Util
             {
                 missingPaths = null;
                 return false;
+            }
+        }
+
+        public static void TriggerOnValidate(this UnityEngine.Object target)
+        {
+            System.Reflection.MethodInfo onValidate = null;
+            if (target != null)
+            {
+                onValidate = target.GetType().GetMethod("OnValidate", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (onValidate != null) onValidate.Invoke(target, null);
             }
         }
     }

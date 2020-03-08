@@ -1,5 +1,7 @@
 ﻿using Dot.Log;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace DotEditor.Util
@@ -57,6 +59,26 @@ namespace DotEditor.Util
 
             Type result = genericType.MakeGenericType(types);
             return result;
+        }
+
+        /// <summary>
+        /// 查找所有继承自指定类型的子类，如果子类是abstract将会被忽略
+        /// </summary>
+        /// <param name="baseType"></param>
+        /// <returns></returns>
+        public static Type[] GetDerivedTypes(Type baseType)
+        {
+            List<Type> types = new List<Type>();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+            {
+                try
+                {
+                    types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+                }
+                catch (ReflectionTypeLoadException) { }
+            }
+            return types.ToArray();
         }
     }
 }
