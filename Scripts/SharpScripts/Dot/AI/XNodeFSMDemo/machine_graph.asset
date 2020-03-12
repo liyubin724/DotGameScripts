@@ -1,0 +1,331 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8339718792565979524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133aeed015166af4ab28a873a98ac677, type: 3}
+  m_Name: Eat State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 40, y: 8}
+  ports:
+    keys:
+    - prev
+    - conditions
+    - conditions 0
+    - conditions 1
+    values:
+    - _fieldName: prev
+      _node: {fileID: -8339718792565979524}
+      _typeQualifiedName: Dot.AI.XNodeFSM.StateBase, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: conditions 1
+        node: {fileID: -186104923476350950}
+        reroutePoints: []
+      - fieldName: conditions 0
+        node: {fileID: -3916883402351444019}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions
+      _node: {fileID: -8339718792565979524}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Dot.AI.XNodeFSM.AgentState+StateCondition,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions 0
+      _node: {fileID: -8339718792565979524}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -3916883402351444019}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: conditions 1
+      _node: {fileID: -8339718792565979524}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -186104923476350950}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  prev: {fileID: 0}
+  handler: EatStateHandler
+  conditions:
+  - method: IsEatToSleep
+    arg: 
+  - method: IsEatToWork
+    arg: 
+--- !u!114 &-5656620506284173535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5806682a881b15f4dbef463776fe968c, type: 3}
+  m_Name: Entry State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -584, y: -280}
+  ports:
+    keys:
+    - next
+    values:
+    - _fieldName: next
+      _node: {fileID: -5656620506284173535}
+      _typeQualifiedName: Dot.AI.XNodeFSM.StateBase, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -3916883402351444019}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  next: {fileID: 0}
+--- !u!114 &-3916883402351444019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133aeed015166af4ab28a873a98ac677, type: 3}
+  m_Name: Sleep State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -424, y: 24}
+  ports:
+    keys:
+    - prev
+    - conditions
+    - conditions 0
+    - conditions 1
+    values:
+    - _fieldName: prev
+      _node: {fileID: -3916883402351444019}
+      _typeQualifiedName: Dot.AI.XNodeFSM.StateBase, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: next
+        node: {fileID: -5656620506284173535}
+        reroutePoints: []
+      - fieldName: conditions 0
+        node: {fileID: -8339718792565979524}
+        reroutePoints: []
+      - fieldName: conditions 0
+        node: {fileID: -186104923476350950}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions
+      _node: {fileID: -3916883402351444019}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Dot.AI.XNodeFSM.AgentState+StateCondition,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions 0
+      _node: {fileID: -3916883402351444019}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -8339718792565979524}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: conditions 1
+      _node: {fileID: -3916883402351444019}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -186104923476350950}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  prev: {fileID: 0}
+  handler: SleepStateHandler
+  conditions:
+  - method: IsSleepToEat
+    arg: 
+  - method: IsSleepToWork
+    arg: 
+--- !u!114 &-2383549628211766638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57cb4a8840d4e84e92d50854fc1bdca, type: 3}
+  m_Name: Exit State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 456, y: -184}
+  ports:
+    keys:
+    - prev
+    values:
+    - _fieldName: prev
+      _node: {fileID: -2383549628211766638}
+      _typeQualifiedName: Dot.AI.XNodeFSM.StateBase, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: conditions 2
+        node: {fileID: -186104923476350950}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  prev: {fileID: 0}
+--- !u!114 &-186104923476350950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133aeed015166af4ab28a873a98ac677, type: 3}
+  m_Name: Work State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -120, y: -376}
+  ports:
+    keys:
+    - prev
+    - conditions
+    - conditions 0
+    - conditions 1
+    - conditions 2
+    values:
+    - _fieldName: prev
+      _node: {fileID: -186104923476350950}
+      _typeQualifiedName: Dot.AI.XNodeFSM.StateBase, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: conditions 1
+        node: {fileID: -3916883402351444019}
+        reroutePoints: []
+      - fieldName: conditions 1
+        node: {fileID: -8339718792565979524}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions
+      _node: {fileID: -186104923476350950}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Dot.AI.XNodeFSM.AgentState+StateCondition,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: conditions 0
+      _node: {fileID: -186104923476350950}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -3916883402351444019}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: conditions 1
+      _node: {fileID: -186104923476350950}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -8339718792565979524}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: conditions 2
+      _node: {fileID: -186104923476350950}
+      _typeQualifiedName: Dot.AI.FSM.AgentState+StateCondition, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: prev
+        node: {fileID: -2383549628211766638}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  prev: {fileID: 0}
+  handler: WorkStateHandler
+  conditions:
+  - method: IsWorkToSleep
+    arg: 
+  - method: IsWorkToEat
+    arg: 
+  - method: IsWealthEnough
+    arg: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92c6f043c1e7564b98e3b4e5d176a0e, type: 3}
+  m_Name: machine_graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -5656620506284173535}
+  - {fileID: -2383549628211766638}
+  - {fileID: -3916883402351444019}
+  - {fileID: -186104923476350950}
+  - {fileID: -8339718792565979524}
