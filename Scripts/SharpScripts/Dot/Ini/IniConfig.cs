@@ -80,11 +80,15 @@ namespace Dot.Ini
             foreach(var line in lines)
             {
                 string trimLine = line.Trim();
-                if(trimLine.StartsWith("//") || trimLine.StartsWith("**"))
+
+                //配置文件中注释使用//,首行使用**表示文件类型，均将会被忽略
+                if (trimLine.StartsWith("//") || trimLine.StartsWith("**"))
                 {
                     continue;
                 }
-                if(trimLine.StartsWith("#"))
+
+                //#号开头表示分组
+                if (trimLine.StartsWith("#"))
                 {
                     group = new IniGroup();
                     group.Name = trimLine.Substring(1);
@@ -97,8 +101,9 @@ namespace Dot.Ini
                     groupDic.Add(group.Name,group);
                     continue;
                 }
-               
-                if(trimLine.StartsWith("--"))
+
+                //--开头表示对字段或者分组的注释
+                if (trimLine.StartsWith("--"))
                 {
                     if(!isReadonly)
                     {
@@ -112,6 +117,7 @@ namespace Dot.Ini
                     continue;
                 }
 
+                //使用 []包围并以,做为分割符，表示可供选择的列表。在编辑器中将会以下拉列表展示
                 if (trimLine.StartsWith("[") && trimLine.EndsWith("]"))
                 {
                     if(!isReadonly)
