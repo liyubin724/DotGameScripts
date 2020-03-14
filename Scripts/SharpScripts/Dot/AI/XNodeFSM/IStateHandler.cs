@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 using SystemObject = System.Object;
 
 namespace Dot.AI.XNodeFSM
@@ -17,10 +16,6 @@ namespace Dot.AI.XNodeFSM
     public static class StateHanlderCache
     {
         private static Dictionary<string, Type> handlerTypeDic = new Dictionary<string, Type>();
-        private static string[] excludeAssemblyNames = new string[]
-        {
-
-        };
 
         public static IStateHandler GetStateHandler(string handlerClassName)
         {
