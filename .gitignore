@@ -1,0 +1,12 @@
+.vs
+*.bak
+*.temp
+bin/
+obj/
+temp/
+
+# Office »º´æÎÄ¼þ
+~'$'*.docx
+~'$'*.ppt
+~'$'*.pptx 
+~'$'*.xls
