@@ -9,7 +9,14 @@ namespace Dot.Log
         protected override void Append(LoggingEvent loggingEvent)
         {
             string message = RenderLoggingEvent(loggingEvent);
-            if (Level.Compare(loggingEvent.Level, Level.Error) >= 0)
+            if(Level.Compare(loggingEvent.Level,Level.Fatal)>=0)
+            {
+#if UNITY_EDITOR
+                return;
+#else
+                Debug.LogError(message);
+#endif
+            }else  if (Level.Compare(loggingEvent.Level, Level.Error) >= 0)
             {
                 Debug.LogError(message);
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace Dot.Log
 {
@@ -16,18 +15,6 @@ namespace Dot.Log
             {
                 logger = null;
                 throw new Exception("LogUtil::Initalize->logger initalized failded");
-            }
-
-#if !UNITY_EDITOR
-            Application.logMessageReceived += OnMessageReceived;
-#endif
-        }
-
-        private static void OnMessageReceived(string condition, string stackTrace, LogType type)
-        {
-            if(type == LogType.Exception)
-            {
-                LogFatal("Exception",$"{condition}\r\n{stackTrace}");
             }
         }
 
