@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Util
+namespace Dot.Core.Util
 {
     public static class DontDestroyHandler
     {

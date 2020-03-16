@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Dot.Core.Util;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Util
+namespace Dot.Core
 {
     public abstract class SingletonBehaviour<T> : MonoBehaviour where T:SingletonBehaviour<T>
     {
