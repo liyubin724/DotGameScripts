@@ -31,11 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotCore">
-      <HintPath>..\libs\DotCore.dll</HintPath>
+    <Reference Include="DotCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
     </Reference>
-    <Reference Include="DotPool-Framework">
-      <HintPath>..\libs\DotPool-Framework.dll</HintPath>
+    <Reference Include="DotPool">
+      <HintPath>..\..\DotLibs\DotPool.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
