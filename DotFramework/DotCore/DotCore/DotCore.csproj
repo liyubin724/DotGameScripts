@@ -45,6 +45,7 @@
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\UpdateProxy.cs" />
     <Compile Include="Singleton.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
