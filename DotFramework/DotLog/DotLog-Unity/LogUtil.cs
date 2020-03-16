@@ -18,9 +18,7 @@ namespace Dot.Log
                 throw new Exception("LogUtil::Initalize->logger initalized failded");
             }
 
-#if !UNITY_EDITOR
             Application.logMessageReceived += OnMessageReceived;
-#endif
         }
 
         private static void OnMessageReceived(string condition, string stackTrace, LogType type)

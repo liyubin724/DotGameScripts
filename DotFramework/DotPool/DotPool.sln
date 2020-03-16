@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotPool", "DotPool\DotPool.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotPool-Framework", "DotPool-Framework\DotPool-Framework.csproj", "{43637514-F011-4E90-A028-DF5F9E6EF3ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotPool-Unity", "DotPool-Unity\DotPool-Unity.csproj", "{2E28D523-F601-4339-B5C3-91717AD54D60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{43637514-F011-4E90-A028-DF5F9E6EF3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43637514-F011-4E90-A028-DF5F9E6EF3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43637514-F011-4E90-A028-DF5F9E6EF3ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E28D523-F601-4339-B5C3-91717AD54D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E28D523-F601-4339-B5C3-91717AD54D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E28D523-F601-4339-B5C3-91717AD54D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E28D523-F601-4339-B5C3-91717AD54D60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
