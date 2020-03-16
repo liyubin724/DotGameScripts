@@ -56,6 +56,9 @@
     <Compile Include="..\DotCore\Singleton.cs">
       <Link>Singleton.cs</Link>
     </Compile>
+    <Compile Include="..\DotCore\Util\MathUtil.cs">
+      <Link>Util\MathUtil.cs</Link>
+    </Compile>
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\DontDestoryBehaviour.cs" />

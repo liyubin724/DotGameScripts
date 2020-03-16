@@ -1,52 +1,59 @@
 ﻿using Dot.Core.Generic;
+using Dot.Core.Util;
 using Dot.Pool;
+using System;
 using System.Collections.Generic;
 
 
 namespace Dot.Timer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TimerTaskInfo
     {
-        internal int index = -1;
+        internal long taskID = -1;
         internal int wheelIndex = -1;
         internal int wheelSlotIndex = -1;
-        internal int taskListIndex = -1;
 
         internal TimerTaskInfo()
         {
         }
 
-        internal void OnClear()
+        internal bool IsValid()
         {
-            index = -1;
-            wheelIndex = -1;
-            wheelSlotIndex = -1;
-            taskListIndex = -1;
+            return taskID > 0 && wheelIndex > 0 && wheelSlotIndex > 0;
         }
 
-        internal bool IsClear()
+        internal void Clear()
         {
-            return index == -1;
+            taskID = -1;
+            wheelIndex = -1;
+            wheelSlotIndex = -1;
         }
 
         public override string ToString()
         {
-            return string.Format("TimerTaskInfo:{{index = {0},wheelIndex = {1},wheelSlotIndex = {2},taskListIndex = {3}, }}", index, wheelIndex, wheelSlotIndex, taskListIndex);
+            return $"TimerTaskInfo:{{taskID = {taskID},wheelIndex = {wheelIndex},wheelSlotIndex = {wheelSlotIndex}}}";
         }
     }
 
+    /// <summary>
+    /// 多层时间轮
+    /// </summary>
     internal sealed class HierarchicalTimerWheel
     {
-        private UniqueID indexCreator = new UniqueID();
+        private UniqueID idCreator = new UniqueID();
         private ObjectPool<TimerTask> taskPool = new ObjectPool<TimerTask>();
 
         private TimerWheel[] wheelArr = null;
+        private Dictionary<long, TimerTaskInfo> taskInfoDic = new Dictionary<long, TimerTaskInfo>();
 
-        private int taskIndex = 0;
-        private Dictionary<int, TimerTaskInfo> taskInfoDic = new Dictionary<int, TimerTaskInfo>();
-        private List<TimerTask> idleTimerTaskList = new List<TimerTask>();
+        private int lapseTimeInMS = 0;
 
-        private float lapseTime = 0; //seconds
+       /// <summary>
+       /// 初始化多层时间轮，目前默认生成5层
+       /// </summary>
         internal HierarchicalTimerWheel()
         {
             wheelArr = new TimerWheel[5];
@@ -58,172 +65,135 @@ namespace Dot.Timer
 
             for (int i = 0; i < wheelArr.Length; i++)
             {
-                wheelArr[i].wheelTriggerEvent = OnTimerWheelTrigger;
-                wheelArr[i].wheelOutEvent = OnTimerWheelOut;
+                wheelArr[i].slotTriggerEvent = OnWheelSlotTrigger;
+                wheelArr[i].turnOnceEvent = OnWheelTurnOnce;
             }
-        }
-
-        internal void OnUpdate(float deltaTime)
-        {
-            lapseTime += deltaTime ;
-            int lTime = (int)(lapseTime * 1000);
-            int turnNum = lTime / wheelArr[0].TickInMS;
-            if (wheelArr[0] != null && taskInfoDic.Count > 0)
-            {
-                if (turnNum > 0)
-                {
-                    wheelArr[0].DoTimerTurn(turnNum);
-                }
-            }
-            lapseTime -= turnNum * wheelArr[0].TickInMS * 0.001f;
         }
 
         internal TimerTaskInfo AddTimerTask(float intervalInSec,
                                                 float totalInSec,
-                                                TimerCallback startCallback,
                                                 TimerCallback intervalCallback,
                                                 TimerCallback endCallback,
                                                 object callbackData)
         {
-            TimerTask task = GetIdleTimerTask();
-            task.OnReused(intervalInSec, totalInSec, startCallback, intervalCallback, endCallback, callbackData);
-            return AddTimerTask(task);
-        }
+            TimerTask task = taskPool.Get();
+            task.SetData(idCreator.NextID, intervalInSec, totalInSec, intervalCallback, endCallback, callbackData);
 
-        internal TimerTaskInfo AddTimerTask(TimerTask task)
-        {
             TimerTaskInfo taskInfo = new TimerTaskInfo();
-            if (AddTimerTask(task, taskInfo))
+            taskInfo.taskID = task.ID;
+
+            if(AddTimerTask(task,taskInfo))
             {
-                task.OnTaskStart();
                 return taskInfo;
             }
-            else
-            {
-                return null;
-            }
+            throw new Exception($"HierarchicalTimerWheel::AddTimerTask->Add Failed");
         }
 
         private bool AddTimerTask(TimerTask task, TimerTaskInfo taskInfo)
         {
-            if (!task.IsValidTask())
-            {
-                return false;
-            }
-
             for (int i = 0; i < wheelArr.Length; i++)
             {
-                if (wheelArr[i].AddTimerTask(task, ref taskInfo.wheelSlotIndex, ref taskInfo.taskListIndex))
+                if(wheelArr[i].TotalTickInMS>task.RemainingInMS)
                 {
+                    int slotIndex = wheelArr[i].AddTimerTask(task);
                     taskInfo.wheelIndex = i;
-                    break;
+                    taskInfo.wheelSlotIndex = slotIndex;
+                    return true;
                 }
             }
-            if (taskInfo.wheelIndex < 0 || taskInfo.wheelSlotIndex < 0 || taskInfo.taskListIndex < 0)
-            {
-                return false;
-            }
-            taskIndex++;
-            task.index = taskIndex;
-            taskInfo.index = taskIndex;
-            taskInfoDic.Add(taskInfo.index, taskInfo);
-            return true;
+            
+            return false;
         }
 
         internal bool RemoveTimerTask(TimerTaskInfo taskInfo)
         {
-            if (taskInfo == null || taskInfo.wheelIndex < 0 || taskInfo.wheelSlotIndex < 0 || taskInfo.taskListIndex < 0)
-            {
-                return false;
-            }
-            if (!taskInfoDic.ContainsKey(taskInfo.index))
+            if(taskInfo == null|| !taskInfo.IsValid())
             {
                 return false;
             }
 
-            if (taskInfo.wheelIndex < 0 || taskInfo.wheelIndex >= wheelArr.Length || wheelArr[taskInfo.wheelIndex] == null)
+            if(!taskInfoDic.ContainsKey(taskInfo.taskID))
             {
                 return false;
             }
 
-            taskInfoDic.Remove(taskInfo.index);
+            if (taskInfo == null || taskInfo.wheelIndex < 0 || taskInfo.wheelSlotIndex < 0 || taskInfo.taskID < 0)
+            {
+                return false;
+            }
 
+            taskInfoDic.Remove(taskInfo.taskID);
+
+            long taskID = taskInfo.taskID;
             int wheelIndex = taskInfo.wheelIndex;
             int wheelSlotIndex = taskInfo.wheelSlotIndex;
-            int taskListIndex = taskInfo.taskListIndex;
-            taskInfo.OnClear();
+            taskInfo.Clear();
 
-            return wheelArr[wheelIndex].RemoveTimerTask(wheelSlotIndex, taskListIndex);
+            return wheelArr[wheelIndex].RemoveTimerTask(wheelSlotIndex, taskID);
         }
 
-        private void OnTimerWheelOut(int index)
+        internal void OnUpdate(float deltaTime)
         {
-            if (index >= 0 && index < wheelArr.Length - 1)
+            if(taskInfoDic.Count == 0)
+            {
+                return;
+            }
+            lapseTimeInMS += MathUtil.CeilToInt (deltaTime * 1000);
+
+            TimerWheel wheel = wheelArr[0];
+            int turnNum = lapseTimeInMS / wheel.TickInMS;
+            if(turnNum>0)
+            {
+                wheel.DoTimerTurn(turnNum);
+                lapseTimeInMS = lapseTimeInMS % wheel.TickInMS;
+            }
+        }
+
+        private void OnWheelTurnOnce(int index)
+        {
+            if (index >= 0 && index < wheelArr.Length)
             {
                 wheelArr[index + 1].DoTimerTurn(1);
             }
         }
 
-        private void OnTimerWheelTrigger(int index, List<TimerTask> taskList)
+        private void OnWheelSlotTrigger(int index, TimerTask[] tasks)
         {
-            for (int i = 0; i < taskList.Count; i++)
+            if(tasks == null || tasks.Length>0)
             {
-                TimerTask task = taskList[i];
-                if (task == null)
-                {
-                    continue;
-                }
-                TimerTaskInfo taskInfo = null;
-                if (!taskInfoDic.TryGetValue(task.index, out taskInfo))
-                {
-                    continue;
-                }
-                if (task.remainingInMS == 0)
-                {
-                    task.OnTrigger();
-                }
+                return;
+            }
 
-                if (taskInfo.IsClear())
+            for(int i =0;i<tasks.Length;++i)
+            {
+                TimerTask task = tasks[i];
+                if(task == null)
                 {
-                    RecycleTimerTask(task);
+                    continue;
                 }
-                else
+                if (!taskInfoDic.TryGetValue(task.ID, out TimerTaskInfo taskInfo))
                 {
-                    taskInfoDic.Remove(task.index);
-                    taskInfo.OnClear();
-                    if (task.IsValidTask())
+                    continue;
+                }
+                if(index == 0)
+                {
+                    task.OnTaskInterval();
+                    if(task.IsEnd())
                     {
+                        taskInfoDic.Remove(task.ID);
+                        taskInfo.Clear();
+
+                        taskPool.Release(task);
+                        task.OnTaskEnd();
+                    }else
+                    {
+                        task.ResetTask();
                         AddTimerTask(task, taskInfo);
                     }
-                    else
-                    {
-                        RecycleTimerTask(task);
-                    }
+                }else
+                {
+                    AddTimerTask(task, taskInfo);
                 }
-            }
-        }
-
-        internal TimerTask GetIdleTimerTask()
-        {
-            TimerTask task = null;
-            if (idleTimerTaskList.Count == 0)
-            {
-                task = new TimerTask();
-            }
-            else
-            {
-                task = idleTimerTaskList[0];
-                idleTimerTaskList.RemoveAt(0);
-            }
-            return task;
-        }
-
-        private void RecycleTimerTask(TimerTask task)
-        {
-            if (task != null)
-            {
-                task.OnClear();
-                idleTimerTaskList.Add(task);
             }
         }
 
@@ -231,12 +201,13 @@ namespace Dot.Timer
         {
             if (taskInfoDic.Count > 0)
             {
-                List<int> keys = new List<int>(taskInfoDic.Keys);
-                for (int i = 0, imax = keys.Count; i < imax; ++i)
+                List<long> keys = new List<long>(taskInfoDic.Keys);
+                foreach(var key in keys)
                 {
-                    RemoveTimerTask(taskInfoDic[keys[i]]);
+                    RemoveTimerTask(taskInfoDic[key]);
                 }
-            }    
+            }
+            lapseTimeInMS = 0;
         }
     }
 }

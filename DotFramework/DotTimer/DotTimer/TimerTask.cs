@@ -1,5 +1,5 @@
-﻿using Dot.Pool;
-using System;
+﻿using Dot.Core.Util;
+using Dot.Pool;
 
 namespace Dot.Timer
 {
@@ -8,16 +8,13 @@ namespace Dot.Timer
         private long id = -1;
         public long ID { get => id; }
         
-        internal int index = -1;
-
-        internal int intervalInMS = 0;
+        private int intervalInMS = 0;
         private int totalInMS = 0;
-        private TimerCallback onStartEvent = null;
         private TimerCallback onIntervalEvent = null;
         private TimerCallback onEndEvent = null;
         private object userData = null;
 
-        internal int remainingInMS = 0;
+        internal int RemainingInMS { get; set; } = 0;
         private int leftInMS = 0;
 
         public TimerTask()
@@ -26,62 +23,51 @@ namespace Dot.Timer
 
         public void SetData(long id, float intervalInSec,
                                                 float totalInSec,
-                                                TimerCallback startCallback,
                                                 TimerCallback intervalCallback,
                                                 TimerCallback endCallback,
                                                 object callbackData)
         {
             this.id = id;
-            intervalInMS = CeilToInt(intervalInSec * 1000);
+            intervalInMS = MathUtil.CeilToInt(intervalInSec * 1000);
             if (totalInSec <= 0)
             {
                 totalInMS = 0;
             }
             else
             {
-                totalInMS = CeilToInt(totalInSec * 1000);
+                totalInMS = MathUtil.CeilToInt(totalInSec * 1000);
             }
-            onStartEvent = startCallback;
             onIntervalEvent = intervalCallback;
             onEndEvent = endCallback;
             userData = callbackData;
 
-            remainingInMS = intervalInMS;
+            RemainingInMS = intervalInMS;
             leftInMS = totalInMS;
         }
 
-        internal void OnReused(float intervalInSec,
-                                                float totalInSec,
-                                                TimerCallback startCallback,
-                                                TimerCallback intervalCallback,
-                                                TimerCallback endCallback,
-                                                object callbackData)
+        internal bool IsEnd()
         {
-            intervalInMS = CeilToInt(intervalInSec * 1000);
-            if (totalInSec <= 0)
+            if (intervalInMS <= 0)
             {
-                totalInMS = 0;
+                return true;
             }
-            else
+            if(totalInMS <= 0)
             {
-                totalInMS = CeilToInt(totalInSec * 1000);
+                return false;
+            }else
+            {
+                return leftInMS > 0;
             }
-            onStartEvent = startCallback;
-            onIntervalEvent = intervalCallback;
-            onEndEvent = endCallback;
-            userData = callbackData;
-
-            remainingInMS = intervalInMS;
-            leftInMS = totalInMS;
         }
 
-        internal void OnTaskStart()
+        internal void ResetTask()
         {
-            onStartEvent?.Invoke(userData);
+            RemainingInMS = intervalInMS;
         }
 
         internal void OnTaskInterval()
         {
+            leftInMS -= intervalInMS;
             onIntervalEvent?.Invoke(userData);
         }
 
@@ -89,40 +75,6 @@ namespace Dot.Timer
         {
             onEndEvent?.Invoke(userData);
         }
-
-        internal void OnTaskTrigger()
-        {
-            if (totalInMS > 0)
-            {
-                leftInMS -= intervalInMS;
-            }
-
-            if (onIntervalEvent != null)
-            {
-                onIntervalEvent(userData);
-            }
-
-            if (totalInMS == 0 || leftInMS > 0)
-            {
-                if (totalInMS == 0 || leftInMS >= intervalInMS)
-                {
-                    remainingInMS = intervalInMS;
-                }
-                else
-                {
-                    remainingInMS = leftInMS;
-                }
-            }
-            else
-            {
-                if (onEndEvent != null)
-                {
-                    onEndEvent(userData);
-                }
-            }
-        }
-
-        private int CeilToInt(float f) { return (int)Math.Ceiling(f); }
 
         public void OnNew()
         {
@@ -134,82 +86,14 @@ namespace Dot.Timer
 
         public void OnRelease()
         {
-            index = -1;
+            id = -1;
             intervalInMS = 0; ;
             totalInMS = 0;
-            remainingInMS = 0;
+            RemainingInMS = 0;
             leftInMS = 0;
-            onStartEvent = null;
             onIntervalEvent = null;
             onEndEvent = null;
             userData = null;
         }
-
-        //----------------------------------------
-
-        internal bool IsValidTask()
-        {
-            if (intervalInMS <= 0)
-            {
-                return false;
-            }
-            if (totalInMS == 0)
-            {
-                return true;
-            }
-            else if (totalInMS > 0)
-            {
-                return leftInMS > 0;
-            }
-            return false;
-        }
-
-        
-
-        internal void OnTrigger()
-        {
-            if (totalInMS > 0)
-            {
-                leftInMS -= intervalInMS;
-            }
-
-            if (onIntervalEvent != null)
-            {
-                onIntervalEvent(userData);
-            }
-
-            if (totalInMS == 0 || leftInMS > 0)
-            {
-                if (totalInMS == 0 || leftInMS >= intervalInMS)
-                {
-                    remainingInMS = intervalInMS;
-                }
-                else
-                {
-                    remainingInMS = leftInMS;
-                }
-            }
-            else
-            {
-                if (onEndEvent != null)
-                {
-                    onEndEvent(userData);
-                }
-            }
-        }
-
-        internal void OnClear()
-        {
-            intervalInMS = 0; ;
-            totalInMS = 0;
-            remainingInMS = 0;
-            leftInMS = 0;
-            onStartEvent = null;
-            onIntervalEvent = null;
-            onEndEvent = null;
-            userData = null;
-        }
-
-        
     }
 }
