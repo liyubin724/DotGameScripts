@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Dot.Pool;
+using System;
 
 namespace Dot.Timer
 {
-    internal class TimerTask
+    public class TimerTask : IObjectPoolItem
     {
+        private long id = -1;
+        public long ID { get => id; }
+        
         internal int index = -1;
+
         internal int intervalInMS = 0;
         private int totalInMS = 0;
         private TimerCallback onStartEvent = null;
@@ -12,12 +17,37 @@ namespace Dot.Timer
         private TimerCallback onEndEvent = null;
         private object userData = null;
 
-        internal int remainingWheelInMS = 0;
+        internal int remainingInMS = 0;
         private int leftInMS = 0;
 
-        internal TimerTask()
+        public TimerTask()
         {
+        }
 
+        public void SetData(long id, float intervalInSec,
+                                                float totalInSec,
+                                                TimerCallback startCallback,
+                                                TimerCallback intervalCallback,
+                                                TimerCallback endCallback,
+                                                object callbackData)
+        {
+            this.id = id;
+            intervalInMS = CeilToInt(intervalInSec * 1000);
+            if (totalInSec <= 0)
+            {
+                totalInMS = 0;
+            }
+            else
+            {
+                totalInMS = CeilToInt(totalInSec * 1000);
+            }
+            onStartEvent = startCallback;
+            onIntervalEvent = intervalCallback;
+            onEndEvent = endCallback;
+            userData = callbackData;
+
+            remainingInMS = intervalInMS;
+            leftInMS = totalInMS;
         }
 
         internal void OnReused(float intervalInSec,
@@ -27,23 +57,95 @@ namespace Dot.Timer
                                                 TimerCallback endCallback,
                                                 object callbackData)
         {
-            this.intervalInMS = CeilToInt(intervalInSec * 1000);
+            intervalInMS = CeilToInt(intervalInSec * 1000);
             if (totalInSec <= 0)
             {
                 totalInMS = 0;
             }
             else
             {
-                this.totalInMS = CeilToInt(totalInSec * 1000);
+                totalInMS = CeilToInt(totalInSec * 1000);
             }
             onStartEvent = startCallback;
             onIntervalEvent = intervalCallback;
             onEndEvent = endCallback;
             userData = callbackData;
 
-            remainingWheelInMS = intervalInMS;
+            remainingInMS = intervalInMS;
             leftInMS = totalInMS;
         }
+
+        internal void OnTaskStart()
+        {
+            onStartEvent?.Invoke(userData);
+        }
+
+        internal void OnTaskInterval()
+        {
+            onIntervalEvent?.Invoke(userData);
+        }
+
+        internal void OnTaskEnd()
+        {
+            onEndEvent?.Invoke(userData);
+        }
+
+        internal void OnTaskTrigger()
+        {
+            if (totalInMS > 0)
+            {
+                leftInMS -= intervalInMS;
+            }
+
+            if (onIntervalEvent != null)
+            {
+                onIntervalEvent(userData);
+            }
+
+            if (totalInMS == 0 || leftInMS > 0)
+            {
+                if (totalInMS == 0 || leftInMS >= intervalInMS)
+                {
+                    remainingInMS = intervalInMS;
+                }
+                else
+                {
+                    remainingInMS = leftInMS;
+                }
+            }
+            else
+            {
+                if (onEndEvent != null)
+                {
+                    onEndEvent(userData);
+                }
+            }
+        }
+
+        private int CeilToInt(float f) { return (int)Math.Ceiling(f); }
+
+        public void OnNew()
+        {
+        }
+
+        public void OnGet()
+        {
+        }
+
+        public void OnRelease()
+        {
+            index = -1;
+            intervalInMS = 0; ;
+            totalInMS = 0;
+            remainingInMS = 0;
+            leftInMS = 0;
+            onStartEvent = null;
+            onIntervalEvent = null;
+            onEndEvent = null;
+            userData = null;
+        }
+
+        //----------------------------------------
 
         internal bool IsValidTask()
         {
@@ -62,13 +164,7 @@ namespace Dot.Timer
             return false;
         }
 
-        internal void OnTaskStart()
-        {
-            if (onStartEvent != null)
-            {
-                onStartEvent(userData);
-            }
-        }
+        
 
         internal void OnTrigger()
         {
@@ -86,11 +182,11 @@ namespace Dot.Timer
             {
                 if (totalInMS == 0 || leftInMS >= intervalInMS)
                 {
-                    remainingWheelInMS = intervalInMS;
+                    remainingInMS = intervalInMS;
                 }
                 else
                 {
-                    remainingWheelInMS = leftInMS;
+                    remainingInMS = leftInMS;
                 }
             }
             else
@@ -106,7 +202,7 @@ namespace Dot.Timer
         {
             intervalInMS = 0; ;
             totalInMS = 0;
-            remainingWheelInMS = 0;
+            remainingInMS = 0;
             leftInMS = 0;
             onStartEvent = null;
             onIntervalEvent = null;
@@ -114,6 +210,6 @@ namespace Dot.Timer
             userData = null;
         }
 
-        private int CeilToInt(float f) { return (int)Math.Ceiling(f); }
+        
     }
 }

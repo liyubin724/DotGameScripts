@@ -39,32 +39,29 @@ namespace Dot.Timer
                                                 TimerCallback startCallback,
                                                 TimerCallback intervalCallback,
                                                 TimerCallback endCallback,
-                                                object callbackData)
+                                                object userData)
         {
             if (hTimerWheel == null) return null;
-
-            TimerTask task = hTimerWheel.GetIdleTimerTask();
-            task.OnReused(intervalInSec, totalInSec, startCallback, intervalCallback, endCallback, callbackData);
-            return hTimerWheel.AddTimerTask(task);
+            return hTimerWheel.AddTimerTask(intervalInSec, totalInSec, startCallback, intervalCallback, endCallback, userData);
         }
 
         public TimerTaskInfo AddTimer(float intervalInSec,
                                                 float totalInSec,
                                                 TimerCallback intervalCallback,
                                                 TimerCallback endCallback,
-                                                object callbackData = null)
+                                                object userData = null)
         {
-            return AddTimer(intervalInSec, totalInSec, null, intervalCallback, endCallback, callbackData);
+            return AddTimer(intervalInSec, totalInSec, null, intervalCallback, endCallback, userData);
         }
 
-        public TimerTaskInfo AddIntervalTimer(float intervalInSec, TimerCallback intervalCallback, object callbackData = null)
+        public TimerTaskInfo AddIntervalTimer(float intervalInSec, TimerCallback intervalCallback, object userData = null)
         {
-            return AddTimer(intervalInSec, 0f, null, intervalCallback, null, callbackData);
+            return AddTimer(intervalInSec, 0f, null, intervalCallback, null, userData);
         }
 
-        public TimerTaskInfo AddEndTimer(float totalInSec, TimerCallback endCallback,object callbackData = null)
+        public TimerTaskInfo AddEndTimer(float totalInSec, TimerCallback endCallback,object userData = null)
         {
-            return AddTimer(totalInSec, totalInSec, null, null, endCallback, callbackData);
+            return AddTimer(totalInSec, totalInSec, null, null, endCallback, userData);
         }
 
         public bool RemoveTimer(TimerTaskInfo taskInfo)

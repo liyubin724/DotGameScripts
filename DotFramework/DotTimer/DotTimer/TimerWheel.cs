@@ -5,23 +5,32 @@ namespace Dot.Timer
     internal delegate void OnTimerWheelTrigger(int index, List<TimerTask> taskList);
     internal delegate void OnTimerWheelOut(int index);
 
+    /// <summary>
+    /// 时间轮定时器
+    /// </summary>
     internal sealed class TimerWheel
     {
+        //用于多层时间轮层次索引
         private int index = 0;
         private int tickInMS = 0;
         private int slotSize = 0;
 
+        internal int TickInMS { get => tickInMS; }
+        internal int TotalTickInMS{ get => tickInMS * slotSize; }
+
         private int currentSlotIndex = 0;
         private List<TimerTask>[] slotArr = null;
         private List<TimerTask> willTriggerTaskList = new List<TimerTask>();
+
         internal OnTimerWheelTrigger wheelTriggerEvent = null;
         internal OnTimerWheelOut wheelOutEvent = null;
 
-        internal int TickInMS
-        {
-            get { return tickInMS; }
-        }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="index">时间轮序号</param>
+        /// <param name="tickInMS">一刻度的时长，以毫秒计</param>
+        /// <param name="slotSize">总的刻度数</param>
         internal TimerWheel(int index, int tickInMS, int slotSize)
         {
             this.index = index;
@@ -33,22 +42,22 @@ namespace Dot.Timer
 
         internal bool AddTimerTask(TimerTask task, ref int slotIndex, ref int taskListIndex)
         {
-            if (task.remainingWheelInMS >= slotSize * tickInMS)
+            if (task.remainingInMS >= slotSize * tickInMS)
             {
                 slotIndex = -1;
                 taskListIndex = -1;
                 return false;
             }
 
-            int targetSlot = task.remainingWheelInMS / tickInMS;
+            int targetSlot = task.remainingInMS / tickInMS;
             if (targetSlot == 0)
             {
                 targetSlot = 1;
-                task.remainingWheelInMS = 0;
+                task.remainingInMS = 0;
             }
             else
             {
-                task.remainingWheelInMS = task.remainingWheelInMS % tickInMS;
+                task.remainingInMS = task.remainingInMS % tickInMS;
             }
 
             slotIndex = currentSlotIndex + targetSlot;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Dot.Core.Generic;
+using Dot.Pool;
+using System.Collections.Generic;
 
 
 namespace Dot.Timer
@@ -35,7 +37,11 @@ namespace Dot.Timer
 
     internal sealed class HierarchicalTimerWheel
     {
-        private TimerWheel[] wheelArr = new TimerWheel[4];
+        private UniqueID indexCreator = new UniqueID();
+        private ObjectPool<TimerTask> taskPool = new ObjectPool<TimerTask>();
+
+        private TimerWheel[] wheelArr = null;
+
         private int taskIndex = 0;
         private Dictionary<int, TimerTaskInfo> taskInfoDic = new Dictionary<int, TimerTaskInfo>();
         private List<TimerTask> idleTimerTaskList = new List<TimerTask>();
@@ -43,10 +49,13 @@ namespace Dot.Timer
         private float lapseTime = 0; //seconds
         internal HierarchicalTimerWheel()
         {
+            wheelArr = new TimerWheel[5];
             wheelArr[0] = new TimerWheel(0, 50, 20);
-            wheelArr[1] = new TimerWheel(1, 1000, 60);
-            wheelArr[2] = new TimerWheel(2, 60000, 60);
-            wheelArr[3] = new TimerWheel(3, 3600000, 24);
+            wheelArr[1] = new TimerWheel(1, wheelArr[0].TotalTickInMS, 60);
+            wheelArr[2] = new TimerWheel(2, wheelArr[1].TotalTickInMS, 60);
+            wheelArr[3] = new TimerWheel(3, wheelArr[2].TotalTickInMS, 24);
+            wheelArr[4] = new TimerWheel(4, wheelArr[3].TotalTickInMS, 30);
+
             for (int i = 0; i < wheelArr.Length; i++)
             {
                 wheelArr[i].wheelTriggerEvent = OnTimerWheelTrigger;
@@ -56,7 +65,7 @@ namespace Dot.Timer
 
         internal void OnUpdate(float deltaTime)
         {
-            lapseTime += deltaTime;
+            lapseTime += deltaTime ;
             int lTime = (int)(lapseTime * 1000);
             int turnNum = lTime / wheelArr[0].TickInMS;
             if (wheelArr[0] != null && taskInfoDic.Count > 0)
@@ -67,6 +76,18 @@ namespace Dot.Timer
                 }
             }
             lapseTime -= turnNum * wheelArr[0].TickInMS * 0.001f;
+        }
+
+        internal TimerTaskInfo AddTimerTask(float intervalInSec,
+                                                float totalInSec,
+                                                TimerCallback startCallback,
+                                                TimerCallback intervalCallback,
+                                                TimerCallback endCallback,
+                                                object callbackData)
+        {
+            TimerTask task = GetIdleTimerTask();
+            task.OnReused(intervalInSec, totalInSec, startCallback, intervalCallback, endCallback, callbackData);
+            return AddTimerTask(task);
         }
 
         internal TimerTaskInfo AddTimerTask(TimerTask task)
@@ -157,7 +178,7 @@ namespace Dot.Timer
                 {
                     continue;
                 }
-                if (task.remainingWheelInMS == 0)
+                if (task.remainingInMS == 0)
                 {
                     task.OnTrigger();
                 }
