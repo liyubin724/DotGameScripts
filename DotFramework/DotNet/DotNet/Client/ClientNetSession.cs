@@ -10,7 +10,7 @@ namespace Dot.Net.Client
 {
     public enum ClientNetSessionState
     {
-        NotUnable = 0,
+        Unavailable = 0,
         Connecting,
         Normal,
         ConnectedFailed,
@@ -44,14 +44,14 @@ namespace Dot.Net.Client
         private int port = -1;
         public string IP { get => ip; }
         public int Port { get => port; }
-        public string SessionAddress { get => $"{ip}:{port}"; }
+        public string Address { get => $"{ip}:{port}"; }
 
         private Socket socket = null;
         private SocketAsyncEventArgs generalAsyncEvent = null;
         private SocketAsyncEventArgs receiveAsyncEvent = null;
 
         private object sessionStateLock = new object();
-        private ClientNetSessionState state = ClientNetSessionState.NotUnable;
+        private ClientNetSessionState state = ClientNetSessionState.Unavailable;
         private ClientNetSessionState State 
         {
             get

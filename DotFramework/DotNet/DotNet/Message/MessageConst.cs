@@ -28,8 +28,7 @@ namespace Dot.Net.Message
         {
             MessageMinSize = sizeof(int) //Total Length
                 + sizeof(byte) //Serial Number
-                + sizeof(byte) //Compression
-                + sizeof(byte) //Crypto
+                + sizeof(byte) //compression and crypt
                 + sizeof(int); //Message ID
         }
     }

@@ -1,21 +1,29 @@
-﻿using Dot.Net.Stream;
+﻿using Dot.Core.Util;
+using Dot.Net.Stream;
 using System;
 using System.Net;
 
 namespace Dot.Net.Message.Writer
 {
+    public enum MessageWriterType : byte
+    {
+        None = 0,
+        Json,
+        ProtoBuf,
+    }
+
     public abstract class AMessageWriter : IMessageWriter
     {
+        public MessageWriterType WriterType { get; set; } = MessageWriterType.None;
         public IMessageCrypto Crypto { get; set; } = null;
         public IMessageCompressor Compressor { get; set; } = null;
 
-        private MessageWriterType writerType = MessageWriterType.None;
         private byte serialNumber = 0;
         private MemoryStreamEx bufferStream = new MemoryStreamEx();
 
         protected AMessageWriter(MessageWriterType writerType)
         {
-            this.writerType = writerType;
+            WriterType = writerType;
         }
 
         protected AMessageWriter(MessageWriterType writerType,
@@ -35,43 +43,46 @@ namespace Dot.Net.Message.Writer
         {
             bufferStream.Clear();
 
-            byte compressionTypeByte = (byte)MessageCompressorType.Uncompressed;
-            byte cryptoTypeByte = (byte)MessageCryptoType.Nocrypto;
-            byte[] bytes = datas;
-            if (bytes != null)
+            if(isCrypto && Crypto == null)
             {
-                if (Crypto != null && isCrypto)
-                {
-                    cryptoTypeByte = (byte)Crypto.GetCryptoType();
-                    bytes = Crypto.Encrypt(bytes);
-                }
-
-                if (Compressor != null && isCompress)
-                {
-                    compressionTypeByte = (byte)Compressor.GetCompressorType();
-                    bytes = Compressor.Compress(bytes);
-                }
+                isCrypto = false;
+            }
+            if(isCompress && Compressor ==null)
+            {
+                isCompress = false;
             }
 
-            int byteSize = MessageConst.MessageMinSize + (bytes != null ? bytes.Length + sizeof(byte) : 0);
-            int netByteSize = IPAddress.HostToNetworkOrder(byteSize);
-            byte[] netSizeBytes = BitConverter.GetBytes(netByteSize);
+            byte flag = 0;
+            byte[] dataBytes = datas;
+            if(isCrypto)
+            {
+                BitUtil.SetBit(flag, 0, true);
+                dataBytes = Crypto.Encrypt(dataBytes);
+            }
+            if(isCompress)
+            {
+                BitUtil.SetBit(flag, 1, true);
+                dataBytes = Compressor.Compress(dataBytes);
+            }
+
+            int byteTotalSize = MessageConst.MessageMinSize + (dataBytes != null ? dataBytes.Length + sizeof(byte) : 0);
+            int netByteTotalSize = IPAddress.HostToNetworkOrder(byteTotalSize);
+            byte[] netSizeBytes = BitConverter.GetBytes(netByteTotalSize);
+
+            ++serialNumber;
 
             bufferStream.Write(netSizeBytes, 0, netSizeBytes.Length);
             bufferStream.WriteByte((byte)serialNumber);
-            bufferStream.WriteByte(compressionTypeByte);
-            bufferStream.WriteByte(cryptoTypeByte);
-
-            serialNumber++;
+            bufferStream.WriteByte(flag);
 
             int netMessageID = IPAddress.HostToNetworkOrder(messageID);
             byte[] netMessageIDBytes = BitConverter.GetBytes(netMessageID);
 
             bufferStream.Write(netMessageIDBytes, 0, netMessageIDBytes.Length);
-            if (bytes != null)
+            if (dataBytes != null)
             {
-                bufferStream.WriteByte((byte)writerType);
-                bufferStream.Write(bytes, 0, bytes.Length);
+                bufferStream.WriteByte((byte)WriterType);
+                bufferStream.Write(dataBytes, 0, dataBytes.Length);
             }
             return bufferStream.ToArray();
         }
@@ -98,5 +109,6 @@ namespace Dot.Net.Message.Writer
             serialNumber = 0;
             bufferStream.Clear();
         }
+
     }
 }

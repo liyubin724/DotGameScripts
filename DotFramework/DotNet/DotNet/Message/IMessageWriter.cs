@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace Dot.Net.Message
 {
-    public enum MessageWriterType : byte
-    {
-        None = 0,
-        Json,
-        ProtoBuf,
-    }
-
     public interface IMessageWriter
     {
         IMessageCrypto Crypto { get; set; }

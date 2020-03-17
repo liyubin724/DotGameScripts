@@ -21,10 +21,5 @@ namespace Dot.Net.Message.Crypto
         {
             return AESCrypto.Decrypt(datas, key, iv);
         }
-
-        public MessageCryptoType GetCryptoType()
-        {
-            return MessageCryptoType.AES;
-        }
     }
 }

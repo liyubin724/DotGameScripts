@@ -13,10 +13,5 @@ namespace Dot.Net.Message.Compressor
         {
             return SnappySharp.Uncompress(bytes);
         }
-
-        public MessageCompressorType GetCompressorType()
-        {
-            return MessageCompressorType.Snappy;
-        }
     }
 }
