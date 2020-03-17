@@ -7,7 +7,7 @@
     <ProjectGuid>{13725F38-BA86-4378-BA49-DD41BB638322}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotCore</RootNamespace>
+    <RootNamespace>Dot.Core</RootNamespace>
     <AssemblyName>DotCore</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -44,12 +44,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dispose\ADisposable.cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Proxy\UpdateProxy.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\BitUtil.cs" />
     <Compile Include="Util\DontDestoryBehaviour.cs" />
     <Compile Include="Util\DontDestroyHandler.cs" />
     <Compile Include="Util\MathUtil.cs" />

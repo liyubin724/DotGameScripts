@@ -5,30 +5,19 @@ using System.Net;
 
 namespace Dot.Net.Message.Writer
 {
-    public enum MessageWriterType : byte
-    {
-        None = 0,
-        Json,
-        ProtoBuf,
-    }
-
     public abstract class AMessageWriter : IMessageWriter
     {
-        public MessageWriterType WriterType { get; set; } = MessageWriterType.None;
         public IMessageCrypto Crypto { get; set; } = null;
         public IMessageCompressor Compressor { get; set; } = null;
 
         private byte serialNumber = 0;
         private MemoryStreamEx bufferStream = new MemoryStreamEx();
 
-        protected AMessageWriter(MessageWriterType writerType)
+        protected AMessageWriter()
         {
-            WriterType = writerType;
         }
 
-        protected AMessageWriter(MessageWriterType writerType,
-            IMessageCompressor compressor,
-            IMessageCrypto crypto):this(writerType)
+        protected AMessageWriter(IMessageCompressor compressor,IMessageCrypto crypto)
         {
             Compressor = compressor;
             Crypto = crypto;
@@ -56,16 +45,16 @@ namespace Dot.Net.Message.Writer
             byte[] dataBytes = datas;
             if(isCrypto)
             {
-                BitUtil.SetBit(flag, 0, true);
+                BitUtil.SetBit(flag, MessageConst.MESSAGE_CRYPTO_FLAG_INDEX, true);
                 dataBytes = Crypto.Encrypt(dataBytes);
             }
             if(isCompress)
             {
-                BitUtil.SetBit(flag, 1, true);
+                BitUtil.SetBit(flag, MessageConst.MESSAGE_COMPRESSOR_FLAG_INDEX, true);
                 dataBytes = Compressor.Compress(dataBytes);
             }
 
-            int byteTotalSize = MessageConst.MessageMinSize + (dataBytes != null ? dataBytes.Length + sizeof(byte) : 0);
+            int byteTotalSize = MessageConst.MESSAGE_MIN_LENGTH + (dataBytes != null ? dataBytes.Length : 0);
             int netByteTotalSize = IPAddress.HostToNetworkOrder(byteTotalSize);
             byte[] netSizeBytes = BitConverter.GetBytes(netByteTotalSize);
 
@@ -81,7 +70,6 @@ namespace Dot.Net.Message.Writer
             bufferStream.Write(netMessageIDBytes, 0, netMessageIDBytes.Length);
             if (dataBytes != null)
             {
-                bufferStream.WriteByte((byte)WriterType);
                 bufferStream.Write(dataBytes, 0, dataBytes.Length);
             }
             return bufferStream.ToArray();

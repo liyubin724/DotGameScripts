@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dot.Net.Message
+﻿namespace Dot.Net.Message
 {
     public enum MessageErrorCode
     {
-        Receiver_ReadSerialNumberError = 100,
-        Receiver_ReadCompressorTypeError,
-        Receiver_ReadCryptoTypeError,
-        Receiver_ReadMessageIDError,
-        Receiver_ReadPatternTypeError,
-        Receiver_CompareMessageDataLengthError,
-        Receiver_CompareSerialNumberError,
+        Reader_ReadSerialNumberError = 100,
+        Reader_ReadFlagTypeError,
+        Reader_ReadMessageIDError,
+        Reader_CompareMessageDataLengthError,
+        Reader_CompareSerialNumberError,
 
-        Receiver_CompareCompressorTypeError,
-        ReceIver_CompareCryptoTypeError,
+        Reader_CompareCryptoTypeError,
     }
 
     public class MessageConst
     {
-        public static readonly int MessageMinSize = 0;
+        public static readonly int MESSAGE_MIN_LENGTH = 0;
+
+        public static readonly int MESSAGE_CRYPTO_FLAG_INDEX = 0;
+        public static readonly int MESSAGE_COMPRESSOR_FLAG_INDEX = 1;
 
         static MessageConst()
         {
-            MessageMinSize = sizeof(int) //Total Length
+            MESSAGE_MIN_LENGTH = sizeof(int) //Total Length
                 + sizeof(byte) //Serial Number
                 + sizeof(byte) //compression and crypt
                 + sizeof(int); //Message ID

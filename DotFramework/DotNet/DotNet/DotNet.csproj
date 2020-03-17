@@ -31,11 +31,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotCore">
+      <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
+    </Reference>
     <Reference Include="DotCrypto">
       <HintPath>..\..\DotLibs\DotCrypto.dll</HintPath>
     </Reference>
+    <Reference Include="DotLog">
+      <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
+    </Reference>
     <Reference Include="DotSnappy">
       <HintPath>..\..\DotLibs\DotSnappy.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,13 +60,14 @@
     <Compile Include="Client\ClientNet.cs" />
     <Compile Include="Client\ClientNetConst.cs" />
     <Compile Include="Client\ClientNetSession.cs" />
-    <Compile Include="Client\Receiver\ClientNetDataReceiver.cs" />
     <Compile Include="Message\Compressor\SnappyMessageCompressor.cs" />
     <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
     <Compile Include="Message\IMessageCompressor.cs" />
     <Compile Include="Message\IMessageCrypto.cs" />
+    <Compile Include="Message\IMessageReader.cs" />
     <Compile Include="Message\IMessageWriter.cs" />
     <Compile Include="Message\MessageConst.cs" />
+    <Compile Include="Message\Reader\MessageReader.cs" />
     <Compile Include="Message\Writer\AMessageWriter.cs" />
     <Compile Include="Message\Writer\JsonMessageWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

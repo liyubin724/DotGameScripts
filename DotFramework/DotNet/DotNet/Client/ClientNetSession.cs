@@ -17,23 +17,9 @@ namespace Dot.Net.Client
         Disconnected,
     }
 
-    public delegate void OnMessageReceived(int messageID, byte[] datas);
-    public delegate void OnMessageError(MessageErrorCode errorCode);
-
-    public interface IClientNetDataReceiver
-    {
-        IMessageCrypto Crypto { get; set; }
-        IMessageCompressor Compressor { get; set; }
-        OnMessageReceived ReceivedCallback { get; set; }
-        OnMessageError ErrorCallback { get; set; }
-
-        void OnDataReceived(byte[] datas, int size);
-        void Reset();
-    }
-
     public interface IClientNetStateListener
     {
-        void OnStateChanged(ClientNetSessionState oldState, ClientNetSessionState newState);
+        void OnStateChanged(ClientNetSessionState state);
     }
 
     public class ClientNetSession
@@ -45,9 +31,10 @@ namespace Dot.Net.Client
         public string IP { get => ip; }
         public int Port { get => port; }
         public string Address { get => $"{ip}:{port}"; }
-
+        
         private Socket socket = null;
-        private SocketAsyncEventArgs generalAsyncEvent = null;
+
+        private SocketAsyncEventArgs sendAsyncEvent = null;
         private SocketAsyncEventArgs receiveAsyncEvent = null;
 
         private object sessionStateLock = new object();
@@ -67,10 +54,8 @@ namespace Dot.Net.Client
                 {
                     if(state!=value)
                     {
-                        ClientNetSessionState oldState = state;
                         state = value;
-
-                        stateListener?.OnStateChanged(oldState, state);
+                        stateListener?.OnStateChanged(state);
                     }
                 }
             }
@@ -82,12 +67,11 @@ namespace Dot.Net.Client
         private List<byte> waitingSendBytes = new List<byte>();
 
         private object receiverLock = new object();
-        private IClientNetDataReceiver dataReceiver = null;
+        private IMessageReader messageReader = null;
 
-
-        public ClientNetSession(IClientNetDataReceiver receiver,IClientNetStateListener listener)
+        public ClientNetSession(IMessageReader reader,IClientNetStateListener listener)
         {
-            dataReceiver = receiver;
+            messageReader = reader;
             stateListener = listener;
         }
 
@@ -146,25 +130,25 @@ namespace Dot.Net.Client
                     State = ClientNetSessionState.Connecting;
 
                     IPAddress ipAddress = IPAddress.Parse(ip);
-                    generalAsyncEvent = new SocketAsyncEventArgs()
+                    SocketAsyncEventArgs connectAsyncEvent = new SocketAsyncEventArgs()
                     {
                         RemoteEndPoint = new IPEndPoint(ipAddress, port),
                         UserToken = socket,
                     };
-                    generalAsyncEvent.Completed += OnHandleSocketEvent;
+                    connectAsyncEvent.Completed += OnHandleSocketEvent;
 
-                    socket.ConnectAsync(generalAsyncEvent);
+                    socket.ConnectAsync(connectAsyncEvent);
                     return true;
                 }catch(Exception e)
                 {
-                    generalAsyncEvent = null;
+                    LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNetSession::Connect->{e.Message}");
                     State = ClientNetSessionState.ConnectedFailed;
                     socket = null;
                     return false;
                 }
             }else
             {
-
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, "ClientNetSession::Connect->The socket has been created.");
             }
             return false;
         }
@@ -189,10 +173,10 @@ namespace Dot.Net.Client
 
         public void Disconnect()
         {
-            if(generalAsyncEvent!=null)
+            if(sendAsyncEvent!=null)
             {
-                generalAsyncEvent.Completed -= OnHandleSocketEvent;
-                generalAsyncEvent = null;
+                sendAsyncEvent.Completed -= OnHandleSocketEvent;
+                sendAsyncEvent = null;
             }
             if(receiveAsyncEvent !=null)
             {
@@ -242,9 +226,14 @@ namespace Dot.Net.Client
                 {
                     try
                     {
-                        generalAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
+                        if(sendAsyncEvent == null)
+                        {
+                            sendAsyncEvent = new SocketAsyncEventArgs();
+                            sendAsyncEvent.Completed += OnHandleSocketEvent;
+                        }
+                        sendAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
                         waitingSendBytes.Clear();
-                        if(!socket.SendAsync(generalAsyncEvent))
+                        if(!socket.SendAsync(sendAsyncEvent))
                         {
                             Disconnect();
                         }else
@@ -310,6 +299,8 @@ namespace Dot.Net.Client
 
         private void ProcessConnect(SocketAsyncEventArgs socketEvent)
         {
+            socketEvent.Completed -= OnHandleSocketEvent;
+
             if(socketEvent.SocketError == SocketError.Success)
             {
                 State = ClientNetSessionState.Normal;
@@ -347,7 +338,7 @@ namespace Dot.Net.Client
                 {
                     lock(receiverLock)
                     {
-                        dataReceiver.OnDataReceived(socketEvent.Buffer, socketEvent.BytesTransferred);
+                        messageReader.OnDataReceived(socketEvent.Buffer, socketEvent.BytesTransferred);
                     }
                     Receive();
                     return;
@@ -360,7 +351,6 @@ namespace Dot.Net.Client
         {
             Disconnect();
         }
-
     }
 
 }

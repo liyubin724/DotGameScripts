@@ -5,11 +5,11 @@ namespace Dot.Net.Message.Writer
 {
     public class JsonMessageWriter : AMessageWriter
     {
-        public JsonMessageWriter() : base(MessageWriterType.Json)
+        public JsonMessageWriter()
         {
         }
 
-        public JsonMessageWriter(IMessageCompressor compressor, IMessageCrypto crypto) : base(MessageWriterType.Json, compressor, crypto)
+        public JsonMessageWriter(IMessageCompressor compressor, IMessageCrypto crypto) : base(compressor, crypto)
         {
         }
 

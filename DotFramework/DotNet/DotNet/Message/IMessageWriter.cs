@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dot.Net.Message
+﻿namespace Dot.Net.Message
 {
     public interface IMessageWriter
     {
