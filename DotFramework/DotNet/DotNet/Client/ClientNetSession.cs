@@ -205,7 +205,7 @@ namespace Dot.Net.Client
             State = ClientNetSessionState.Disconnected;
         }
 
-        public void DoLateUpdate()
+        internal void DoLateUpdate()
         {
             if(State != ClientNetSessionState.Normal)
             {
@@ -297,7 +297,7 @@ namespace Dot.Net.Client
                 State = ClientNetSessionState.Normal;
 
                 receiveAsyncEvent = new SocketAsyncEventArgs();
-                receiveAsyncEvent.SetBuffer(new byte[4096], 0, 4096);
+                receiveAsyncEvent.SetBuffer(new byte[ClientNetConst.BUFFER_SIZE], 0, ClientNetConst.BUFFER_SIZE);
                 receiveAsyncEvent.Completed += OnHandleSocketEvent;
 
                 Receive();

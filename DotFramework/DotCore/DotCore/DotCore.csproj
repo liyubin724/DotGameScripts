@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dispose\ADisposable.cs" />
+    <Compile Include="Dispose\IDispose.cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Proxy\UpdateProxy.cs" />

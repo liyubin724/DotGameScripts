@@ -70,12 +70,18 @@
     <Compile Include="Message\Reader\MessageReader.cs" />
     <Compile Include="Message\Writer\AMessageWriter.cs" />
     <Compile Include="Message\Writer\JsonMessageWriter.cs" />
+    <Compile Include="NetConst.cs" />
+    <Compile Include="NetManager.cs" />
+    <Compile Include="NetManager_Client.cs" />
+    <Compile Include="NetManager_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\ServerNet.cs" />
+    <Compile Include="Server\ServerNetConst.cs" />
+    <Compile Include="Server\ServerNetListener.cs" />
+    <Compile Include="Server\ServerNetSession.cs" />
     <Compile Include="Stream\BufferStream.cs" />
     <Compile Include="Stream\MemoryStreamEx.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Server\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
