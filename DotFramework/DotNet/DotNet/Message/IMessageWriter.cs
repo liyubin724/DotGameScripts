@@ -10,7 +10,6 @@
         byte[] EncodeMessage(int messageID);
         byte[] EncodeData(int messageID, byte[] datas);
         byte[] EncodeData(int messageID, byte[] datas, bool isCrypto, bool isCompress);
-        byte[] EncodeMessage<T>(T message);
 
         void Reset();
     }

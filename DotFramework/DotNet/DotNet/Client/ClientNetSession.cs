@@ -17,11 +17,6 @@ namespace Dot.Net.Client
         Disconnected,
     }
 
-    public interface IClientNetStateListener
-    {
-        void OnStateChanged(ClientNetSessionState state);
-    }
-
     public class ClientNetSession
     {
         private static readonly string IP_ADDRESS_REGEX = @"^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$";
@@ -39,7 +34,7 @@ namespace Dot.Net.Client
 
         private object sessionStateLock = new object();
         private ClientNetSessionState state = ClientNetSessionState.Unavailable;
-        private ClientNetSessionState State 
+        public ClientNetSessionState State 
         {
             get
             {
@@ -48,20 +43,17 @@ namespace Dot.Net.Client
                     return state;
                 }
             }
-            set
+            private set
             {
                 lock(sessionStateLock)
                 {
                     if(state!=value)
                     {
                         state = value;
-                        stateListener?.OnStateChanged(state);
                     }
                 }
             }
          }
-        private IClientNetStateListener stateListener = null;
-
         private object sendingLock = new object();
         private bool isSending = false;
         private List<byte> waitingSendBytes = new List<byte>();
@@ -69,10 +61,9 @@ namespace Dot.Net.Client
         private object receiverLock = new object();
         private IMessageReader messageReader = null;
 
-        public ClientNetSession(IMessageReader reader,IClientNetStateListener listener)
+        public ClientNetSession(IMessageReader reader)
         {
             messageReader = reader;
-            stateListener = listener;
         }
 
         public bool IsConnected()

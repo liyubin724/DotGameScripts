@@ -14,11 +14,11 @@ namespace Dot.Net.Message.Reader
         private BufferStream bufferStream = new BufferStream();
         private byte serialNumber = 0;
 
-        protected MessageReader()
+        public MessageReader()
         {
         }
 
-        protected MessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
+        public MessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
         {
             Crypto = crypto;
             Compressor = compressor;

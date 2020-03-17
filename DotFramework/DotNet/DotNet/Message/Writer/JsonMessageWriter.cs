@@ -13,7 +13,7 @@ namespace Dot.Net.Message.Writer
         {
         }
 
-        public override byte[] EncodeMessage<T>(T message)
+        protected override byte[] EncodeMessage<T>(T message)
         {
             string json = JsonConvert.SerializeObject(message);
             if(string.IsNullOrEmpty(json))

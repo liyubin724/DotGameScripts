@@ -90,7 +90,7 @@ namespace Dot.Net.Message.Writer
             return EncodeData(messageID, null);
         }
 
-        public abstract byte[] EncodeMessage<T>(T message);
+        protected abstract byte[] EncodeMessage<T>(T message);
 
         public virtual void Reset()
         {
