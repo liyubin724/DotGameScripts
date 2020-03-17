@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -38,6 +39,25 @@ namespace Dot.Crypto
                 str_md5_out = str_md5_out.Replace("-", "");
                 return str_md5_out;
             }
+        }
+        /// <summary>
+        /// 计算文件的MD值，如果文件读取失败将返回string.Empty
+        /// </summary>
+        /// <param name="filePath">文件的路径</param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string Md5File(string filePath, MD5Length length = MD5Length.L32)
+        {
+            if(!File.Exists(filePath))
+            {
+                return string.Empty;
+            }
+            byte[] bytes = File.ReadAllBytes(filePath);
+            if(bytes==null || bytes.Length == 0)
+            {
+                return string.Empty;
+            }
+            return Md5(bytes, length);
         }
 
         /// <summary>
