@@ -75,6 +75,8 @@ namespace Dot.Net.Message.Reader
                         break;
                     }
 
+                    messageID = IPAddress.NetworkToHostOrder(messageID);
+
                     offsetIndex += sizeof(int);
                     if (offsetIndex < totalLength + startIndex)
                     {

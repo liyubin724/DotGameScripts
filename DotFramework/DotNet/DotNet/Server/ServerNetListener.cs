@@ -58,11 +58,14 @@ namespace Dot.Net.Server
             netCreator = creator;
         }
 
-        public void Startup(int port,int maxCount)
+        public void Startup(string ip,int port,int maxCount)
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            //IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPAddress ipAddress = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+
+            LogUtil.LogInfo(ServerNetConst.LOGGER_NAME, $"ServerNetListener::Startup->address = {ipAddress.ToString()}");
 
             Socket listener = new Socket(ipAddress.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);

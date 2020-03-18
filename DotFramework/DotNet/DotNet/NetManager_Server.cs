@@ -7,13 +7,15 @@ namespace Dot.Net
     public partial class NetManager : Singleton<NetManager>, IServerNetCreator
     {
         private ServerNetListener netListener = null;
+        public ServerNetListener GetServerNet { get => netListener; }
 
         public int ServerNetMaxCount { get; set; } = 10;
 
-        public void StartupAsServer(int port)
+        public ServerNetListener StartupAsServer(int port)
         {
             netListener = new ServerNetListener(this);
-            netListener.Startup(port, ServerNetMaxCount);
+            netListener.Startup("127.0.0.1",port, ServerNetMaxCount);
+            return netListener;
         }
 
         public IMessageReader GetMessageReader()

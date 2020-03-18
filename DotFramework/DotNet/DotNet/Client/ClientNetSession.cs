@@ -129,7 +129,7 @@ namespace Dot.Net.Client
                     };
                     connectAsyncEvent.Completed += OnHandleSocketEvent;
 
-                    LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::Connect->Begin connecting... (Address = {Address}");
+                    LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::Connect->Begin connecting... (Address = {Address})");
 
                     socket.ConnectAsync(connectAsyncEvent);
                     return true;
@@ -167,44 +167,8 @@ namespace Dot.Net.Client
 
         public void Disconnect()
         {
-            LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, "ClientNetSession::Disconnect->disconnected");
-            if(sendAsyncEvent!=null)
-            {
-                sendAsyncEvent.Completed -= OnHandleSocketEvent;
-                sendAsyncEvent = null;
-            }
-            if(receiveAsyncEvent !=null)
-            {
-                receiveAsyncEvent.Completed -= OnHandleSocketEvent;
-                receiveAsyncEvent = null;
-            }
-
-            lock(sendingLock)
-            {
-                waitingSendBytes.Clear();
-            }
-
-            if(socket!=null)
-            {
-                if(socket.Connected)
-                {
-                    try
-                    {
-                        socket.Shutdown(SocketShutdown.Both);
-                    }catch(Exception e)
-                    {
-
-                    }finally
-                    {
-                        socket.Close();
-                        socket = null;
-                    }
-                }else
-                {
-                    socket.Close();
-                    socket = null;
-                }
-            }
+            Close();
+            State = ClientNetSessionState.Disconnected;
         }
 
         internal void DoLateUpdate()
@@ -264,7 +228,53 @@ namespace Dot.Net.Client
                 }
             }catch(Exception e)
             {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNetSession::Receive->{e.Message}");
                 Disconnect();
+            }
+        }
+
+        private void Close()
+        {
+            LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, "ClientNetSession::Close->Closed Session");
+            if (sendAsyncEvent != null)
+            {
+                sendAsyncEvent.Completed -= OnHandleSocketEvent;
+                sendAsyncEvent = null;
+            }
+            if (receiveAsyncEvent != null)
+            {
+                receiveAsyncEvent.Completed -= OnHandleSocketEvent;
+                receiveAsyncEvent = null;
+            }
+
+            lock (sendingLock)
+            {
+                waitingSendBytes.Clear();
+            }
+
+            if (socket != null)
+            {
+                if (socket.Connected)
+                {
+                    try
+                    {
+                        socket.Shutdown(SocketShutdown.Both);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally
+                    {
+                        socket.Close();
+                        socket = null;
+                    }
+                }
+                else
+                {
+                    socket.Close();
+                    socket = null;
+                }
             }
         }
 
@@ -308,7 +318,7 @@ namespace Dot.Net.Client
             }else
             {
                 LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::ProcessConnect->Connect failed.error = {socketEvent.SocketError}");
-                Disconnect();
+                Close();
                 State = ClientNetSessionState.ConnectedFailed;
             }
         }
@@ -325,7 +335,6 @@ namespace Dot.Net.Client
             }else
             {
                 Disconnect();
-                State = ClientNetSessionState.Disconnected;
             }
         }
 
@@ -345,7 +354,6 @@ namespace Dot.Net.Client
                 }
             }
             Disconnect();
-            State = ClientNetSessionState.Disconnected;
         }
 
         private void ProcessDisconnect(SocketAsyncEventArgs socketEvent)
@@ -355,7 +363,7 @@ namespace Dot.Net.Client
 
         public void Dispose()
         {
-            
+            Close();
         }
     }
 

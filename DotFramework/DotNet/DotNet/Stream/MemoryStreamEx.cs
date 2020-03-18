@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 
 namespace Dot.Net.Stream
 {
@@ -14,8 +15,8 @@ namespace Dot.Net.Stream
 
                 Seek(startIndex, SeekOrigin.Begin);
                 Read(intBytes, 0, intBytes.Length);
-
                 value = BitConverter.ToInt32(intBytes, 0);
+
                 return true;
             }
             return false;
