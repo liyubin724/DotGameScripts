@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Dot.Net.Message.Reader
 {
@@ -18,7 +14,11 @@ namespace Dot.Net.Message.Reader
 
         protected override object DecodeMessage(byte[] datas)
         {
-            return null;
+            if(datas == null || datas.Length == 0)
+            {
+                return null;
+            }
+            return Encoding.UTF8.GetString(datas);
         }
     }
 }

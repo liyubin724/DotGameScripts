@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dot.Net.Message
+﻿namespace Dot.Net.Message
 {
-    public delegate void OnMessageReceived(int messageID, byte[] datas);
+    public delegate void OnMessageReceived(int messageID, object message);
     public delegate void OnMessageError(MessageErrorCode errorCode);
 
     public interface IMessageReader

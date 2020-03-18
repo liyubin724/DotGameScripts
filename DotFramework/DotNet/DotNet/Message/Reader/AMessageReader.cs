@@ -11,9 +11,8 @@ namespace Dot.Net.Message.Reader
         public OnMessageReceived MessageReceived { get; set; } = null;
         public OnMessageError MessageError { get; set; } = null;
 
-        private BufferStream bufferStream = new BufferStream();
-
         private byte serialNumber = 0;
+        private BufferStream bufferStream = new BufferStream();
 
         protected AMessageReader()
         {
@@ -110,6 +109,7 @@ namespace Dot.Net.Message.Reader
 
         private void OnMessage(int messageID,byte[] messageDatas,bool isCrypt,bool isCompress)
         {
+            object message = null;
             byte[] msgBytes = messageDatas;
             if (msgBytes != null)
             {
@@ -121,8 +121,9 @@ namespace Dot.Net.Message.Reader
                 {
                     msgBytes = Crypto.Decrypt(msgBytes);
                 }
+                message = DecodeMessage(msgBytes);
             }
-            MessageReceived?.Invoke(messageID, msgBytes);
+            MessageReceived?.Invoke(messageID, message);
         }
 
         protected abstract object DecodeMessage(byte[] datas);

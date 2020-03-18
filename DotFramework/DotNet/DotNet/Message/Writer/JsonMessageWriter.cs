@@ -21,7 +21,7 @@ namespace Dot.Net.Message.Writer
                 return null;
             }else
             {
-                return Encoding.Default.GetBytes(json);
+                return Encoding.UTF8.GetBytes(json);
             }
         }
     }

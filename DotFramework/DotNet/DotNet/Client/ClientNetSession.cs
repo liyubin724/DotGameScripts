@@ -55,6 +55,7 @@ namespace Dot.Net.Client
                 }
             }
          }
+
         private object sendingLock = new object();
         private bool isSending = false;
         private List<byte> waitingSendBytes = new List<byte>();
@@ -169,41 +170,6 @@ namespace Dot.Net.Client
         {
             Close();
             State = ClientNetSessionState.Disconnected;
-        }
-
-        internal void DoLateUpdate()
-        {
-            if(State != ClientNetSessionState.Normal)
-            {
-                return;
-            }
-            lock(sendingLock)
-            {
-                if(waitingSendBytes.Count>0 && !isSending)
-                {
-                    try
-                    {
-                        if(sendAsyncEvent == null)
-                        {
-                            sendAsyncEvent = new SocketAsyncEventArgs();
-                            sendAsyncEvent.Completed += OnHandleSocketEvent;
-                        }
-                        sendAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
-                        waitingSendBytes.Clear();
-                        if(!socket.SendAsync(sendAsyncEvent))
-                        {
-                            Disconnect();
-                        }else
-                        {
-                            isSending = true;
-                        }
-                    }catch(Exception e)
-                    {
-                        LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNetSession::DoLateUpdate->e = {e.Message}");
-                        Disconnect();
-                    }
-                }
-            }
         }
 
         public void Send(byte[] datas)
@@ -359,6 +325,48 @@ namespace Dot.Net.Client
         private void ProcessDisconnect(SocketAsyncEventArgs socketEvent)
         {
             Disconnect();
+        }
+
+        internal void DoLateUpdate()
+        {
+            if (State != ClientNetSessionState.Normal)
+            {
+                return;
+            }
+            lock (sendingLock)
+            {
+                if (waitingSendBytes.Count > 0 && !isSending)
+                {
+                    try
+                    {
+                        if (sendAsyncEvent == null)
+                        {
+                            sendAsyncEvent = new SocketAsyncEventArgs();
+                            sendAsyncEvent.Completed += OnHandleSocketEvent;
+                        }
+                        sendAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
+                        waitingSendBytes.Clear();
+                        if (!socket.SendAsync(sendAsyncEvent))
+                        {
+                            Disconnect();
+                        }
+                        else
+                        {
+                            isSending = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNetSession::DoLateUpdate->e = {e.Message}");
+                        Disconnect();
+                    }
+                }
+            }
+
+            lock(receiverLock)
+            {
+                messageReader?.DoReadData();
+            }
         }
 
         public void Dispose()
