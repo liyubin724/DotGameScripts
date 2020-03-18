@@ -4,7 +4,7 @@ using System.Net;
 
 namespace Dot.Net.Message.Reader
 {
-    public class MessageReader : IMessageReader
+    public abstract class AMessageReader : IMessageReader
     {
         public IMessageCrypto Crypto { get; set; } = null;
         public IMessageCompressor Compressor { get; set; } = null;
@@ -12,13 +12,14 @@ namespace Dot.Net.Message.Reader
         public OnMessageError MessageError { get; set; } = null;
 
         private BufferStream bufferStream = new BufferStream();
+
         private byte serialNumber = 0;
 
-        public MessageReader()
+        protected AMessageReader()
         {
         }
 
-        public MessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
+        protected AMessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
         {
             Crypto = crypto;
             Compressor = compressor;
@@ -28,7 +29,11 @@ namespace Dot.Net.Message.Reader
         {
             MemoryStreamEx stream = bufferStream.GetActivedStream();
             stream.Write(datas, 0, size);
+        }
 
+        public void DoReadData()
+        {
+            MemoryStreamEx stream = bufferStream.GetActivedStream();
             int streamLength = (int)stream.Length;
             if (streamLength >= MessageConst.MESSAGE_MIN_LENGTH)
             {
@@ -88,11 +93,11 @@ namespace Dot.Net.Message.Reader
                             break;
                         }
 
-                        OnMessage(messageID, messageDatas,isCrypto,isCompressor);
+                        OnMessage(messageID, messageDatas, isCrypto, isCompressor);
                     }
                     else
                     {
-                        OnMessage(messageID,null,isCrypto,isCompressor);
+                        OnMessage(messageID, null, isCrypto, isCompressor);
                     }
 
                     startIndex += totalLength;
@@ -119,6 +124,8 @@ namespace Dot.Net.Message.Reader
             }
             MessageReceived?.Invoke(messageID, msgBytes);
         }
+
+        protected abstract object DecodeMessage(byte[] datas);
 
         public void Reset()
         {

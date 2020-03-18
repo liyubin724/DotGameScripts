@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dot.Net
+﻿namespace Dot.Net
 {
-    public enum MessageWriterType
+    public enum MessageType
     {
         Json = 0,
         ProtoBuf = 1,

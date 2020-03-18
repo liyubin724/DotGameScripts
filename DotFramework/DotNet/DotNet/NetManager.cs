@@ -13,7 +13,7 @@ namespace Dot.Net
     {
         public MessageCompressorType CompressorType { get; set; } = MessageCompressorType.None;
         public MessageCryptoType CryptoType { get; set; } = MessageCryptoType.None;
-        public MessageWriterType WriterType { get; set; } = MessageWriterType.Json;
+        public MessageType WriterType { get; set; } = MessageType.Json;
 
         protected override void DoInit()
         {
@@ -68,17 +68,17 @@ namespace Dot.Net
 
         private IMessageReader GetReader()
         {
-            return new MessageReader();
+            return new AMessageReader();
         }
 
         private IMessageWriter GetWriter()
         {
             IMessageCrypto crypto = GetCrypto();
             IMessageCompressor compressor = GetCompressor();
-            if(WriterType == MessageWriterType.Json)
+            if(WriterType == MessageType.Json)
             {
                 return new JsonMessageWriter(compressor, crypto);
-            }else if(WriterType == MessageWriterType.ProtoBuf)
+            }else if(WriterType == MessageType.ProtoBuf)
             {
 
             }

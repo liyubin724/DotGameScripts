@@ -18,6 +18,7 @@ namespace Dot.Net.Message
         OnMessageError MessageError { get; set; }
 
         void OnDataReceived(byte[] datas, int size);
+        void DoReadData();
         void Reset();
     }
 }
