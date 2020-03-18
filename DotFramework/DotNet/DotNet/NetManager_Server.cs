@@ -1,13 +1,39 @@
 ﻿using Dot.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dot.Net.Message;
+using Dot.Net.Server;
 
 namespace Dot.Net
 {
-    public partial class NetManager : Singleton<NetManager>
+    public partial class NetManager : Singleton<NetManager>, IServerNetCreator
     {
+        private ServerNetListener netListener = null;
+
+        public int ServerNetMaxCount { get; set; } = 10;
+
+        public void StartupAsServer(int port)
+        {
+            netListener = new ServerNetListener(this);
+            netListener.Startup(port, ServerNetMaxCount);
+        }
+
+        public IMessageReader GetMessageReader()
+        {
+            return GetReader();
+        }
+
+        public IMessageWriter GetMessageWriter()
+        {
+            return GetWriter();
+        }
+
+        public void DoUpdateServer(float deltaTime)
+        {
+            netListener?.DoUpdate(deltaTime);
+        }
+
+        public void DoLateUpdateServer()
+        {
+            netListener?.DoLateUpdate();
+        }
     }
 }

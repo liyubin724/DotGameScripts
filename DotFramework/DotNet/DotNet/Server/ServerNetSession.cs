@@ -1,4 +1,5 @@
-﻿using Dot.Log;
+﻿using Dot.Core.Dispose;
+using Dot.Log;
 using Dot.Net.Message;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,8 @@ namespace Dot.Net.Server
         Disconnected,
     }
 
-    public class ServerNetSession
+    public class ServerNetSession : IDispose
     {
-        private int id;
         private Socket socket = null;
         private IMessageReader messageReader = null;
 
@@ -50,15 +50,19 @@ namespace Dot.Net.Server
             }
         }
 
-        public ServerNetSession(int id, Socket socket,IMessageReader reader)
+        public ServerNetSession(Socket socket,IMessageReader reader)
         {
-            this.id = id;
             this.socket = socket;
             messageReader = reader;
 
             State = ServerNetSessionState.Normal;
 
             Receive();
+        }
+
+        public bool IsConnected()
+        {
+            return State == ServerNetSessionState.Normal;
         }
 
         private void Receive()
@@ -197,6 +201,7 @@ namespace Dot.Net.Server
             lock (sendingLock)
             {
                 waitingSendBytes.Clear();
+                isSending = false;
             }
 
             if (socket != null)
@@ -223,6 +228,16 @@ namespace Dot.Net.Server
                     socket = null;
                 }
             }
+
+            State = ServerNetSessionState.Disconnected;
+        }
+
+        public void Dispose()
+        {
+            Disconnect();
+            
+            messageReader = null;
+            State = ServerNetSessionState.Unavailable;
         }
     }
 }

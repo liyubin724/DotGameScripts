@@ -23,16 +23,7 @@ namespace Dot.Net
                 LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"NetMananger::CreateClientNet->the net has been created.netID={netID}");
                 return null;
             }
-
-            IMessageWriter writer = null;
-            if (writerType == MessageWriterType.Json)
-            {
-                writer = new JsonMessageWriter();
-            }
-
-            IMessageReader reader = new MessageReader();
-            ClientNet net = new ClientNet(writer, reader);
-
+            ClientNet net = new ClientNet(GetWriter(), GetReader());
             clientNetDic.Add(netID, net);
 
             return net;
