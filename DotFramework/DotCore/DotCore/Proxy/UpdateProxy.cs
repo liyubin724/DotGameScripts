@@ -27,17 +27,17 @@
             remove { lateUpdateHandle -= value; }
         }
 
-        internal void DoUpdate(float deltaTime)
+        public void DoUpdate(float deltaTime)
         {
             updateHandle?.Invoke(deltaTime);
         }
 
-        internal void DoUnscaleUpdate(float unscaleDeltaTime)
+        public void DoUnscaleUpdate(float unscaleDeltaTime)
         {
             unscaleUpdateHandle?.Invoke(unscaleDeltaTime);
         }
 
-        internal void DoLateUpdate()
+        public void DoLateUpdate()
         {
             lateUpdateHandle?.Invoke();
         }

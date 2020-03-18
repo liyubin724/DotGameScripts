@@ -9,26 +9,28 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dot.Net</RootNamespace>
     <AssemblyName>DotNet</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\DotLibs\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\DotLibs\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotCore">
@@ -39,6 +41,9 @@
     </Reference>
     <Reference Include="DotLog">
       <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
+    </Reference>
+    <Reference Include="DotPool">
+      <HintPath>..\..\DotLibs\DotPool.dll</HintPath>
     </Reference>
     <Reference Include="DotSnappy">
       <HintPath>..\..\DotLibs\DotSnappy.dll</HintPath>
@@ -75,6 +80,7 @@
     <Compile Include="NetManager_Client.cs" />
     <Compile Include="NetManager_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\IServerNetCreator.cs" />
     <Compile Include="Server\ServerNet.cs" />
     <Compile Include="Server\ServerNetConst.cs" />
     <Compile Include="Server\ServerNetListener.cs" />
@@ -84,4 +90,10 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>set pdbPath=$(TargetDir)$(ProjectName).pdb
+if exist %25pdbPath%25 (
+del /q %25pdbPath%25
+)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

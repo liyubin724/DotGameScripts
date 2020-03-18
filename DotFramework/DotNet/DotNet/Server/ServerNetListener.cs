@@ -72,17 +72,21 @@ namespace Dot.Net.Server
                 listener.Bind(localEndPoint);
                 listener.Listen(maxCount);
 
-                while (true)
+                Thread thread = new Thread(() =>
                 {
-                    allDone.Reset();
-                    LogUtil.LogInfo("ServerNet", "Waiting for a connection...");
+                    while (true)
+                    {
+                        allDone.Reset();
+                        LogUtil.LogInfo("ServerNet", "Waiting for a connection...");
 
-                    listener.BeginAccept(
-                        new AsyncCallback(AcceptCallback),
-                        listener);
+                        listener.BeginAccept(
+                            new AsyncCallback(AcceptCallback),
+                            listener);
 
-                    allDone.WaitOne();
-                }
+                        allDone.WaitOne();
+                    }
+                });
+                thread.Start();
             }
             catch (Exception e)
             {

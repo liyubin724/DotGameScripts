@@ -12,7 +12,7 @@ namespace Dot.Net
     {
         private Dictionary<int, ClientNet> clientNetDic = null;
 
-        public ClientNet CreateClientNet(int netID, MessageWriterType writerType)
+        public ClientNet CreateClientNet(int netID)
         {
             if(clientNetDic== null)
             {
