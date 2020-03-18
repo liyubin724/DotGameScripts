@@ -1,4 +1,5 @@
-﻿using Dot.Log;
+﻿using Dot.Core.Dispose;
+using Dot.Log;
 using Dot.Net.Message;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Dot.Net.Client
         Disconnected,
     }
 
-    public class ClientNetSession
+    public class ClientNetSession : IDispose
     {
         private static readonly string IP_ADDRESS_REGEX = @"^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$";
 
@@ -128,6 +129,8 @@ namespace Dot.Net.Client
                     };
                     connectAsyncEvent.Completed += OnHandleSocketEvent;
 
+                    LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::Connect->Begin connecting... (Address = {Address}");
+
                     socket.ConnectAsync(connectAsyncEvent);
                     return true;
                 }catch(Exception e)
@@ -164,6 +167,7 @@ namespace Dot.Net.Client
 
         public void Disconnect()
         {
+            LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, "ClientNetSession::Disconnect->disconnected");
             if(sendAsyncEvent!=null)
             {
                 sendAsyncEvent.Completed -= OnHandleSocketEvent;
@@ -201,8 +205,6 @@ namespace Dot.Net.Client
                     socket = null;
                 }
             }
-
-            State = ClientNetSessionState.Disconnected;
         }
 
         internal void DoLateUpdate()
@@ -296,6 +298,8 @@ namespace Dot.Net.Client
             {
                 State = ClientNetSessionState.Normal;
 
+                LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, "ClientNetSession::ProcessConnect->Connect success");
+
                 receiveAsyncEvent = new SocketAsyncEventArgs();
                 receiveAsyncEvent.SetBuffer(new byte[ClientNetConst.BUFFER_SIZE], 0, ClientNetConst.BUFFER_SIZE);
                 receiveAsyncEvent.Completed += OnHandleSocketEvent;
@@ -303,7 +307,9 @@ namespace Dot.Net.Client
                 Receive();
             }else
             {
+                LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::ProcessConnect->Connect failed.error = {socketEvent.SocketError}");
                 Disconnect();
+                State = ClientNetSessionState.ConnectedFailed;
             }
         }
 
@@ -311,13 +317,15 @@ namespace Dot.Net.Client
         {
             if(socketEvent.SocketError == SocketError.Success)
             {
-                lock(sendingLock)
+                LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, "ClientNetSession::ProcessSend->Send success");
+                lock (sendingLock)
                 {
                     isSending = false;
                 }
             }else
             {
                 Disconnect();
+                State = ClientNetSessionState.Disconnected;
             }
         }
 
@@ -327,7 +335,8 @@ namespace Dot.Net.Client
             {
                 if(socketEvent.BytesTransferred>0)
                 {
-                    lock(receiverLock)
+                    LogUtil.LogInfo(ClientNetConst.LOGGER_NAME, $"ClientNetSession::ProcessReceive->Received message.length = {socketEvent.BytesTransferred}");
+                    lock (receiverLock)
                     {
                         messageReader.OnDataReceived(socketEvent.Buffer, socketEvent.BytesTransferred);
                     }
@@ -336,11 +345,17 @@ namespace Dot.Net.Client
                 }
             }
             Disconnect();
+            State = ClientNetSessionState.Disconnected;
         }
 
         private void ProcessDisconnect(SocketAsyncEventArgs socketEvent)
         {
             Disconnect();
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 

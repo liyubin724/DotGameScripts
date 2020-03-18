@@ -4,7 +4,8 @@ namespace Dot.Log
 {
     public enum LogLevelType
     {
-        Info,
+        Info = 0,
+        Debug,
         Warning,
         Error,
         Fatal,
@@ -25,6 +26,13 @@ namespace Dot.Log
         void LogInfoFormat(string msgFormat, params object[] args);
         void LogInfoFormat(Type tagType, string msgFormat, params object[] args);
         void LogInfoFormat(string tagName, string msgFormat, params object[] args);
+
+        void LogDebug(string msg);
+        void LogDebug(Type tagType, string msg);
+        void LogDebug(string tagName, string msg);
+        void LogDebugFormat(string msgFormat, params object[] args);
+        void LogDebugFormat(Type tagType, string msgFormat, params object[] args);
+        void LogDebugFormat(string tagName, string msgFormat, params object[] args);
 
         void LogWarning(string msg);
         void LogWarning(Type tagType, string msg);

@@ -32,6 +32,22 @@ namespace Dot.Log
             }
         }
 
+        private ILog4NetLog GetLogger(string loggerName)
+        {
+            if (string.IsNullOrEmpty(loggerName))
+            {
+                throw new ArgumentNullException("Log4NetLogger::GetLogger->loggerName is null or empty.");
+            }
+
+            if (!isInited)
+            {
+                throw new LogNotInitilizedException();
+            }
+
+            return log4net.LogManager.GetLogger(loggerName);
+        }
+
+        #region Log
         public void Log(LogLevelType levelType, string msg)
         {
             Log(levelType, DEFAULT_LOGGER_NAME, msg);
@@ -44,81 +60,24 @@ namespace Dot.Log
 
         public void Log(LogLevelType levelType, string tagName, string msg)
         {
-            if(levelType == LogLevelType.Info)
+            if (levelType == LogLevelType.Info)
             {
                 LogInfo(tagName, msg);
-            }else if(levelType == LogLevelType.Warning)
+            }
+            else if (levelType == LogLevelType.Warning)
             {
                 LogWarning(tagName, msg);
-            }else if(levelType == LogLevelType.Error)
+            }
+            else if (levelType == LogLevelType.Error)
             {
                 LogError(tagName, msg);
-            }else if(levelType == LogLevelType.Fatal)
+            }
+            else if (levelType == LogLevelType.Fatal)
             {
                 LogFatal(tagName, msg);
             }
 
             throw new InvalidOperationException($"Log4NetLogger::Log->LogLevelType not found.levelType = {levelType}");
-        }
-
-        public void LogError(string msg)
-        {
-            LogError(DEFAULT_LOGGER_NAME, msg);
-        }
-
-        public void LogError(Type tagType, string msg)
-        {
-            LogError(tagType?.Name, msg);
-        }
-
-        public void LogError(string tagName, string msg)
-        {
-            GetLogger(tagName)?.Error(msg);
-        }
-
-        public void LogErrorFormat(string msgFormat, params object[] args)
-        {
-            LogErrorFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
-        }
-
-        public void LogErrorFormat(Type tagType, string msgFormat, params object[] args)
-        {
-            LogErrorFormat(tagType?.Name, msgFormat, args);
-        }
-
-        public void LogErrorFormat(string tagName, string msgFormat, params object[] args)
-        {
-            GetLogger(tagName)?.ErrorFormat(msgFormat, args);
-        }
-
-        public void LogFatal(string msg)
-        {
-            LogFatal(DEFAULT_LOGGER_NAME, msg);
-        }
-
-        public void LogFatal(Type tagType, string msg)
-        {
-            LogFatal(tagType?.Name, msg);
-        }
-
-        public void LogFatal(string tagName, string msg)
-        {
-            GetLogger(tagName)?.Fatal(msg);
-        }
-
-        public void LogFatalFormat(string msgFormat, params object[] args)
-        {
-            LogFatalFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
-        }
-
-        public void LogFatalFormat(Type tagType, string msgFormat, params object[] args)
-        {
-            LogFatalFormat(tagType?.Name, msgFormat, args);
-        }
-
-        public void LogFatalFormat(string tagName, string msgFormat, params object[] args)
-        {
-            GetLogger(tagName)?.FatalFormat(msgFormat,args);
         }
 
         public void LogFormat(LogLevelType levelType, string msgFormat, params object[] values)
@@ -135,7 +94,7 @@ namespace Dot.Log
         {
             if (levelType == LogLevelType.Info)
             {
-                LogInfoFormat(tagName, msgFormat,values);
+                LogInfoFormat(tagName, msgFormat, values);
             }
             else if (levelType == LogLevelType.Warning)
             {
@@ -150,7 +109,9 @@ namespace Dot.Log
                 LogFatalFormat(tagName, msgFormat, values);
             }
         }
+        #endregion
 
+        #region Info
         public void LogInfo(string msg)
         {
             LogInfo(DEFAULT_LOGGER_NAME, msg);
@@ -180,7 +141,41 @@ namespace Dot.Log
         {
             GetLogger(tagName)?.InfoFormat(msgFormat, args);
         }
+        #endregion
 
+        #region Debug
+        public void LogDebug(string msg)
+        {
+            LogDebug(DEFAULT_LOGGER_NAME, msg);
+        }
+
+        public void LogDebug(Type tagType, string msg)
+        {
+            LogDebug(tagType?.Name, msg);
+        }
+
+        public void LogDebug(string tagName, string msg)
+        {
+            GetLogger(tagName)?.Debug(msg);
+        }
+
+        public void LogDebugFormat(string msgFormat, params object[] args)
+        {
+            LogDebugFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
+        }
+
+        public void LogDebugFormat(Type tagType, string msgFormat, params object[] args)
+        {
+            LogDebugFormat(tagType?.Name, msgFormat, args);
+        }
+
+        public void LogDebugFormat(string tagName, string msgFormat, params object[] args)
+        {
+            GetLogger(tagName)?.DebugFormat(msgFormat, args);
+        }
+        #endregion
+
+        #region Warning
         public void LogWarning(string msg)
         {
             LogWarning(DEFAULT_LOGGER_NAME, msg);
@@ -210,21 +205,71 @@ namespace Dot.Log
         {
             GetLogger(tagName)?.WarnFormat(msgFormat, args);
         }
+        #endregion
 
-        private ILog4NetLog GetLogger(string loggerName)
+        #region Error
+        public void LogError(string msg)
         {
-            if(string.IsNullOrEmpty(loggerName))
-            {
-                throw new ArgumentNullException("Log4NetLogger::GetLogger->loggerName is null or empty.");
-            }
-
-            if(!isInited)
-            {
-                throw new LogNotInitilizedException();
-            }
-
-            return log4net.LogManager.GetLogger(loggerName);
+            LogError(DEFAULT_LOGGER_NAME, msg);
         }
 
+        public void LogError(Type tagType, string msg)
+        {
+            LogError(tagType?.Name, msg);
+        }
+
+        public void LogError(string tagName, string msg)
+        {
+            GetLogger(tagName)?.Error(msg);
+        }
+
+        public void LogErrorFormat(string msgFormat, params object[] args)
+        {
+            LogErrorFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
+        }
+
+        public void LogErrorFormat(Type tagType, string msgFormat, params object[] args)
+        {
+            LogErrorFormat(tagType?.Name, msgFormat, args);
+        }
+
+        public void LogErrorFormat(string tagName, string msgFormat, params object[] args)
+        {
+            GetLogger(tagName)?.ErrorFormat(msgFormat, args);
+        }
+        #endregion
+
+        #region Fatal
+        public void LogFatal(string msg)
+        {
+            LogFatal(DEFAULT_LOGGER_NAME, msg);
+        }
+
+        public void LogFatal(Type tagType, string msg)
+        {
+            LogFatal(tagType?.Name, msg);
+        }
+
+        public void LogFatal(string tagName, string msg)
+        {
+            GetLogger(tagName)?.Fatal(msg);
+        }
+
+        public void LogFatalFormat(string msgFormat, params object[] args)
+        {
+            LogFatalFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
+        }
+
+        public void LogFatalFormat(Type tagType, string msgFormat, params object[] args)
+        {
+            LogFatalFormat(tagType?.Name, msgFormat, args);
+        }
+
+        public void LogFatalFormat(string tagName, string msgFormat, params object[] args)
+        {
+            GetLogger(tagName)?.FatalFormat(msgFormat, args);
+        }
+
+        #endregion
     }
 }

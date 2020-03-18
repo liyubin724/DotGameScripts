@@ -29,54 +29,79 @@ namespace Dot.Log
             }
         }
 
-        public static void LogError(Type tagType, string msg)
+        #region Info
+        public static void LogInfo(string tagName, string msg)
         {
-            if(logger!=null && maxLogLevel <= LogLevelType.Error)
-            {
-                logger.LogError(tagType, msg);
-            }
-        }
-
-        public static void LogError(string tagName,string msg)
-        {
-            if(logger!=null && maxLogLevel <= LogLevelType.Error)
-            {
-                logger.LogError(tagName, msg);
-            }
-        }
-
-        public static void LogInfo(string tagName,string msg)
-        {
-            if(logger!=null && maxLogLevel<=LogLevelType.Info)
+            if (logger != null && maxLogLevel <= LogLevelType.Info)
             {
                 logger.LogInfo(tagName, msg);
             }
         }
 
-        public static void LogInfo(Type tagType,string msg)
+        public static void LogInfo(Type tagType, string msg)
         {
-            if(logger!=null && maxLogLevel<=LogLevelType.Info)
+            if (logger != null && maxLogLevel <= LogLevelType.Info)
             {
                 logger.LogInfo(tagType, msg);
             }
         }
+        #endregion
 
-        public static void LogWarning(Type tagType,string msg)
+        #region Debug
+        public static void LogDebug(string tagName, string msg)
         {
-            if(logger!=null && maxLogLevel <= LogLevelType.Warning)
+            if (logger != null && maxLogLevel <= LogLevelType.Debug)
+            {
+                logger.LogDebug(tagName, msg);
+            }
+        }
+
+        public static void LogDebug(Type tagType, string msg)
+        {
+            if (logger != null && maxLogLevel <= LogLevelType.Debug)
+            {
+                logger.LogDebug(tagType, msg);
+            }
+        }
+        #endregion
+
+        #region Warning
+        public static void LogWarning(Type tagType, string msg)
+        {
+            if (logger != null && maxLogLevel <= LogLevelType.Warning)
             {
                 logger.LogWarning(tagType, msg);
             }
         }
 
-        public static void LogWarning(string tagName,string msg)
+        public static void LogWarning(string tagName, string msg)
         {
-            if(logger!=null && maxLogLevel<=LogLevelType.Warning)
+            if (logger != null && maxLogLevel <= LogLevelType.Warning)
             {
                 logger.LogWarning(tagName, msg);
             }
         }
+        #endregion
 
+        #region Error
+        public static void LogError(Type tagType, string msg)
+        {
+            if (logger != null && maxLogLevel <= LogLevelType.Error)
+            {
+                logger.LogError(tagType, msg);
+            }
+        }
+
+        public static void LogError(string tagName, string msg)
+        {
+            if (logger != null && maxLogLevel <= LogLevelType.Error)
+            {
+                logger.LogError(tagName, msg);
+            }
+        }
+        #endregion
+
+        #region Fatal
         private static void LogFatal(string tagName, string msg)
         {
             if (logger != null)
@@ -84,6 +109,6 @@ namespace Dot.Log
                 logger.LogFatal(tagName, msg);
             }
         }
-
+        #endregion
     }
 }
