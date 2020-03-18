@@ -65,6 +65,7 @@
     <Compile Include="Client\ClientNet.cs" />
     <Compile Include="Client\ClientNetConst.cs" />
     <Compile Include="Client\ClientNetSession.cs" />
+    <Compile Include="Demo\DotNetTest.cs" />
     <Compile Include="Message\Compressor\SnappyMessageCompressor.cs" />
     <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
     <Compile Include="Message\IMessageCompressor.cs" />
@@ -72,7 +73,8 @@
     <Compile Include="Message\IMessageReader.cs" />
     <Compile Include="Message\IMessageWriter.cs" />
     <Compile Include="Message\MessageConst.cs" />
-    <Compile Include="Message\Reader\MessageReader.cs" />
+    <Compile Include="Message\Reader\AMessageReader.cs" />
+    <Compile Include="Message\Reader\JsonMessageReader.cs" />
     <Compile Include="Message\Writer\AMessageWriter.cs" />
     <Compile Include="Message\Writer\JsonMessageWriter.cs" />
     <Compile Include="NetConst.cs" />

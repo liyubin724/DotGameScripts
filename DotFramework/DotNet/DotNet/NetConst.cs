@@ -1,6 +1,6 @@
 ﻿namespace Dot.Net
 {
-    public enum MessageType
+    public enum MessageReaderWriterType
     {
         Json = 0,
         ProtoBuf = 1,

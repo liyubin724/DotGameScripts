@@ -11,13 +11,13 @@ using System.Threading;
 
 namespace Dot.Net.Server
 {
-    public delegate void OnMessageHandler(long netID,int messageID,byte[] datas);
+    public delegate void OnMessageHandler(long netID,int messageID,object message);
 
     public class ServerNetMessageData : IObjectPoolItem
     {
         public long netID = -1;
         public int messageID = -1;
-        public byte[] datas = null;
+        public object message = null;
 
         public void OnGet()
         {
@@ -32,7 +32,7 @@ namespace Dot.Net.Server
         {
             netID = -1;
             messageID = -1;
-            datas = null;
+            message = null;
         }
     }
 
@@ -119,16 +119,14 @@ namespace Dot.Net.Server
             }
         }
 
-        private void OnMessageReceived(long id,int messageID,byte[] datas)
+        private void OnMessageReceived(long netID,int messageID,object message)
         {
-            lock(dataListLock)
+            if (handlerDic.TryGetValue(messageID, out OnMessageHandler handler))
             {
-                ServerNetMessageData messageData = dataPool.Get();
-                messageData.netID = id;
-                messageData.messageID = messageID;
-                messageData.datas = datas;
-
-                dataList.Add(messageData);
+                handler?.Invoke(netID, messageID, message);
+            }else
+            {
+                LogUtil.LogWarning(ServerNetConst.LOGGER_NAME, $"ServerNetListener::OnMessageReceived->message handler is not found.messageID = {messageID}");
             }
         }
 
@@ -145,21 +143,6 @@ namespace Dot.Net.Server
 
         internal void DoUpdate(float deltaTime)
         {
-            lock(dataListLock)
-            {
-                while(dataList.Count>0)
-                {
-                    ServerNetMessageData messageData = dataList[0];
-                    dataList.RemoveAt(0);
-
-                    if(handlerDic.TryGetValue(messageData.messageID,out OnMessageHandler handler))
-                    {
-                        handler?.Invoke(messageData.netID, messageData.messageID, messageData.datas);
-                    }
-
-                    dataPool.Release(messageData);
-                }
-            }
         }
 
         internal void DoLateUpdate()
@@ -190,6 +173,30 @@ namespace Dot.Net.Server
             if (handlerDic.ContainsKey(messageID))
             {
                 handlerDic.Remove(messageID);
+            }
+        }
+
+        public void SendMessage<T>(long netID,int messageID, T msg)
+        {
+            if(netDic.TryGetValue(netID,out ServerNet serverNet))
+            {
+                serverNet.SendMessage<T>(messageID, msg);
+            }
+        }
+
+        public void SendEmptyMessage(long netID, int messageID)
+        {
+            if (netDic.TryGetValue(netID, out ServerNet serverNet))
+            {
+                serverNet.SendEmptyMessage(messageID);
+            }
+        }
+
+        public void SendData(long netID, int messageID, byte[] msg)
+        {
+            if (netDic.TryGetValue(netID, out ServerNet serverNet))
+            {
+                serverNet.SendData(messageID,msg);
             }
         }
 

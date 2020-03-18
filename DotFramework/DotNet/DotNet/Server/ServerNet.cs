@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace Dot.Net.Server
 {
-    public delegate void OnMessageReceived(long id, int messageID, byte[] datas);
+    public delegate void OnMessageReceived(long id, int messageID, object datas);
     public delegate void OnNetDisconnected(long id);
 
     public class ServerNet : IDispose
@@ -42,11 +42,10 @@ namespace Dot.Net.Server
         private void OnMessageError(MessageErrorCode code)
         {
             LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNet::OnMessageError->message error.code = {code}");
-            
             Dispose();
         }
 
-        private void OnMessageReceived(int messageID, byte[] datas)
+        private void OnMessageReceived(int messageID, object datas)
         {
             MessageReceived?.Invoke(id, messageID, datas);
         }
@@ -108,14 +107,15 @@ namespace Dot.Net.Server
         public void Dispose()
         {
             id = -1;
-            netSession.Dispose();
-
+            
             messageReader.MessageError = null;
             messageReader.MessageReceived = null;
             messageReader = null;
 
             messageWriter = null;
             MessageReceived = null;
+
+            netSession.Dispose();
         }
     }
 }

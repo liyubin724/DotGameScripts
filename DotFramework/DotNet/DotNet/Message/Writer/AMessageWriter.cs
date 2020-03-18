@@ -77,7 +77,7 @@ namespace Dot.Net.Message.Writer
 
         public byte[] EncodeMessage<T>(int messageID, T message)
         {
-            return EncodeMessage(messageID, EncodeMessage(message),false,false);
+            return EncodeMessage(messageID, message,false,false);
         }
 
         public byte[] EncodeMessage<T>(int messageID, T message, bool isCrypto, bool isCompress)

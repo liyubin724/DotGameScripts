@@ -83,65 +83,9 @@ namespace Dot.Net.Server
             }
             catch (Exception e)
             {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetSession::Receive->Receive message cased a error.message = {e.Message}");
                 Disconnect();
             }
-        }
-
-        private void OnHandleSocketEvent(object sender, SocketAsyncEventArgs socketEvent)
-        {
-            switch(socketEvent.LastOperation)
-            {
-                case SocketAsyncOperation.Send:
-                    ProcessSend(socketEvent);
-                    break;
-                case SocketAsyncOperation.Receive:
-                    ProcessReceive(socketEvent);
-                    break;
-                case SocketAsyncOperation.Disconnect:
-                    ProcessDisconnect(socketEvent);
-                    break;
-                default:
-                    LogUtil.LogWarning(ServerNetConst.LOGGER_NAME, $"ClientNetSession::OnHandleSocketEvent->received unkown event.opration = {socketEvent.LastOperation}");
-                    break;
-            }
-        }
-
-        private void ProcessSend(SocketAsyncEventArgs socketEvent)
-        {
-            if (socketEvent.SocketError == SocketError.Success)
-            {
-                lock (sendingLock)
-                {
-                    isSending = false;
-                }
-            }
-            else
-            {
-                Disconnect();
-            }
-        }
-
-        private void ProcessReceive(SocketAsyncEventArgs socketEvent)
-        {
-            if (socketEvent.SocketError == SocketError.Success)
-            {
-                if (socketEvent.BytesTransferred > 0)
-                {
-                    lock (receiverLock)
-                    {
-                        messageReader.OnDataReceived(socketEvent.Buffer, socketEvent.BytesTransferred);
-                    }
-
-                    Receive();
-                    return;
-                }
-            }
-            Disconnect();
-        }
-
-        private void ProcessDisconnect(SocketAsyncEventArgs socketEvent)
-        {
-            Disconnect();
         }
 
         public void Send(byte[] datas)
@@ -152,40 +96,7 @@ namespace Dot.Net.Server
             }
         }
 
-        internal void DoLateUpdate()
-        {
-            lock (sendingLock)
-            {
-                if (waitingSendBytes.Count > 0 && !isSending)
-                {
-                    try
-                    {
-                        if (sendAsyncEvent == null)
-                        {
-                            sendAsyncEvent = new SocketAsyncEventArgs();
-                            sendAsyncEvent.Completed += OnHandleSocketEvent;
-                        }
-                        sendAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
-                        waitingSendBytes.Clear();
-                        if (!socket.SendAsync(sendAsyncEvent))
-                        {
-                            Disconnect();
-                        }
-                        else
-                        {
-                            isSending = true;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetSession::DoLateUpdate->e = {e.Message}");
-                        Disconnect();
-                    }
-                }
-            }
-        }
-
-        public void Disconnect()
+        private void Close()
         {
             if (sendAsyncEvent != null)
             {
@@ -228,14 +139,119 @@ namespace Dot.Net.Server
                     socket = null;
                 }
             }
+        }
 
+        public void Disconnect()
+        {
+            Close();
             State = ServerNetSessionState.Disconnected;
+        }
+
+        private void OnHandleSocketEvent(object sender, SocketAsyncEventArgs socketEvent)
+        {
+            switch(socketEvent.LastOperation)
+            {
+                case SocketAsyncOperation.Send:
+                    ProcessSend(socketEvent);
+                    break;
+                case SocketAsyncOperation.Receive:
+                    ProcessReceive(socketEvent);
+                    break;
+                case SocketAsyncOperation.Disconnect:
+                    ProcessDisconnect(socketEvent);
+                    break;
+                default:
+                    LogUtil.LogWarning(ServerNetConst.LOGGER_NAME, $"ClientNetSession::OnHandleSocketEvent->received unkown event.opration = {socketEvent.LastOperation}");
+                    break;
+            }
+        }
+
+        private void ProcessSend(SocketAsyncEventArgs socketEvent)
+        {
+            if (socketEvent.SocketError == SocketError.Success)
+            {
+                lock (sendingLock)
+                {
+                    isSending = false;
+                }
+            }
+            else
+            {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetSession::ProcessSend->send message error.error = {socketEvent.SocketError}");
+                Disconnect();
+            }
+        }
+
+        private void ProcessReceive(SocketAsyncEventArgs socketEvent)
+        {
+            if (socketEvent.SocketError == SocketError.Success)
+            {
+                if (socketEvent.BytesTransferred > 0)
+                {
+                    lock (receiverLock)
+                    {
+                        messageReader.OnDataReceived(socketEvent.Buffer, socketEvent.BytesTransferred);
+                    }
+
+                    Receive();
+                    return;
+                }
+            }
+            LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetSession::ProcessReceive->Receive message error.error = {socketEvent.SocketError}");
+            Disconnect();
+        }
+
+        private void ProcessDisconnect(SocketAsyncEventArgs socketEvent)
+        {
+            Disconnect();
+        }
+
+        internal void DoLateUpdate()
+        {
+            if(State != ServerNetSessionState.Normal)
+            {
+                return;
+            }
+            lock (sendingLock)
+            {
+                if (waitingSendBytes.Count > 0 && !isSending)
+                {
+                    try
+                    {
+                        if (sendAsyncEvent == null)
+                        {
+                            sendAsyncEvent = new SocketAsyncEventArgs();
+                            sendAsyncEvent.Completed += OnHandleSocketEvent;
+                        }
+                        sendAsyncEvent.SetBuffer(waitingSendBytes.ToArray(), 0, waitingSendBytes.Count);
+                        waitingSendBytes.Clear();
+                        if (!socket.SendAsync(sendAsyncEvent))
+                        {
+                            Disconnect();
+                        }
+                        else
+                        {
+                            isSending = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetSession::DoLateUpdate->e = {e.Message}");
+                        Disconnect();
+                    }
+                }
+            }
+
+            lock (receiverLock)
+            {
+                messageReader.DoReadData();
+            }
         }
 
         public void Dispose()
         {
-            Disconnect();
-            
+            Close();
+
             messageReader = null;
             State = ServerNetSessionState.Unavailable;
         }

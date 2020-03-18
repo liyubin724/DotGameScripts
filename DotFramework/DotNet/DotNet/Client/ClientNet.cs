@@ -1,17 +1,12 @@
-﻿using Dot.Core.Proxy;
-using Dot.Log;
+﻿using Dot.Log;
 using Dot.Net.Message;
 using System.Collections.Generic;
 
 namespace Dot.Net.Client
 {
-    public delegate void OnMessageHandler(byte[] datas);
+    public delegate void OnMessageHandler(object message);
+    public delegate void OnNetStateChanged(ClientNet clientNet);
 
-    public delegate void OnNetConnecting(ClientNet net);
-    public delegate void OnNetConnectedSuccess(ClientNet clientNet);
-    public delegate void OnNetConnectedFailed(ClientNet clientNet);
-    public delegate void OnNetDisconnected(ClientNet clientNet);
-    
     public class ClientNet
     {
         private IMessageWriter messageWriter = null;
@@ -22,10 +17,10 @@ namespace Dot.Net.Client
 
         private Dictionary<int, OnMessageHandler> handlerDic = new Dictionary<int, OnMessageHandler>();
 
-        public event OnNetConnecting NetConnecting;
-        public event OnNetConnectedSuccess NetConnectedSuccess;
-        public event OnNetConnectedFailed NetConnectedFailed;
-        public event OnNetDisconnected NetDisconnected;
+        public event OnNetStateChanged NetConnecting;
+        public event OnNetStateChanged NetConnectedSuccess;
+        public event OnNetStateChanged NetConnectedFailed;
+        public event OnNetStateChanged NetDisconnected;
 
         public ClientNet(IMessageWriter writer, IMessageReader reader)
         {
@@ -99,7 +94,7 @@ namespace Dot.Net.Client
 
             handlerDic.Clear();
 
-            netSession.Disconnect();
+            netSession.Dispose();
             netSession = null;
         }
 
@@ -109,7 +104,7 @@ namespace Dot.Net.Client
             netSession.Disconnect();
         }
 
-        private void OnMessageReceived(int messageID,byte[] datas)
+        private void OnMessageReceived(int messageID,object datas)
         {
             if(handlerDic.TryGetValue(messageID,out OnMessageHandler handler))
             {
