@@ -3,9 +3,9 @@ using Dot.Net.Stream;
 using System;
 using System.Net;
 
-namespace Dot.Net.Message.Writer
+namespace Dot.Net.Message
 {
-    public abstract class AMessageWriter : IMessageWriter
+    public class MessageWriter
     {
         public IMessageCrypto Crypto { get; set; } = null;
         public IMessageCompressor Compressor { get; set; } = null;
@@ -13,22 +13,27 @@ namespace Dot.Net.Message.Writer
         private byte serialNumber = 0;
         private MemoryStreamEx bufferStream = new MemoryStreamEx();
 
-        protected AMessageWriter()
+        public MessageWriter()
         {
         }
 
-        protected AMessageWriter(IMessageCompressor compressor,IMessageCrypto crypto)
+        public MessageWriter(IMessageCompressor compressor,IMessageCrypto crypto)
         {
             Compressor = compressor;
             Crypto = crypto;
         }
 
-        public byte[] EncodeData(int messageID, byte[] datas)
+        public byte[] EncodeData(int messageID)
         {
-            return EncodeData(messageID, datas, false, false);
+            return EncodeData(messageID, null, false, false);
         }
 
-        public byte[] EncodeData(int messageID, byte[] datas, bool isCrypto, bool isCompress)
+        public byte[] EncodeData(int messageID, byte[] msgBytes)
+        {
+            return EncodeData(messageID, msgBytes, true, true);
+        }
+
+        public byte[] EncodeData(int messageID, byte[] msgBytes, bool isCrypto, bool isCompress)
         {
             bufferStream.Clear();
 
@@ -42,7 +47,7 @@ namespace Dot.Net.Message.Writer
             }
 
             byte flag = 0;
-            byte[] dataBytes = datas;
+            byte[] dataBytes = msgBytes;
             if(isCrypto)
             {
                 BitUtil.SetBit(flag, MessageConst.MESSAGE_CRYPTO_FLAG_INDEX, true);
@@ -75,28 +80,10 @@ namespace Dot.Net.Message.Writer
             return bufferStream.ToArray();
         }
 
-        public byte[] EncodeMessage<T>(int messageID, T message)
-        {
-            return EncodeMessage(messageID, message,false,false);
-        }
-
-        public byte[] EncodeMessage<T>(int messageID, T message, bool isCrypto, bool isCompress)
-        {
-            return EncodeData(messageID, EncodeMessage(message),isCrypto,isCompress);
-        }
-
-        public byte[] EncodeMessage(int messageID)
-        {
-            return EncodeData(messageID, null);
-        }
-
-        protected abstract byte[] EncodeMessage<T>(T message);
-
         public virtual void Reset()
         {
             serialNumber = 0;
             bufferStream.Clear();
         }
-
     }
 }

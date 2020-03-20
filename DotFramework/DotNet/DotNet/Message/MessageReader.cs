@@ -2,9 +2,12 @@
 using Dot.Net.Stream;
 using System.Net;
 
-namespace Dot.Net.Message.Reader
+namespace Dot.Net.Message
 {
-    public abstract class AMessageReader : IMessageReader
+    public delegate void OnMessageReceived(int messageID, byte[] msgBytes);
+    public delegate void OnMessageError(MessageErrorCode errorCode);
+
+    public class MessageReader
     {
         public IMessageCrypto Crypto { get; set; } = null;
         public IMessageCompressor Compressor { get; set; } = null;
@@ -14,20 +17,20 @@ namespace Dot.Net.Message.Reader
         private byte serialNumber = 0;
         private BufferStream bufferStream = new BufferStream();
 
-        protected AMessageReader()
+        public MessageReader()
         {
         }
 
-        protected AMessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
+        public MessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
         {
             Crypto = crypto;
             Compressor = compressor;
         }
 
-        public void OnDataReceived(byte[] datas, int size)
+        public void OnDataReceived(byte[] bytes, int size)
         {
             MemoryStreamEx stream = bufferStream.GetActivedStream();
-            stream.Write(datas, 0, size);
+            stream.Write(bytes, 0, size);
         }
 
         public void DoReadData()
@@ -107,26 +110,22 @@ namespace Dot.Net.Message.Reader
             }
         }
 
-        private void OnMessage(int messageID,byte[] messageDatas,bool isCrypt,bool isCompress)
+        private void OnMessage(int messageID,byte[] msgBytes,bool isCrypt,bool isCompress)
         {
-            object message = null;
-            byte[] msgBytes = messageDatas;
-            if (msgBytes != null)
+            byte[] bytes = msgBytes;
+            if (bytes != null)
             {
                 if (isCompress)
                 {
-                    msgBytes = Compressor.Uncompress(msgBytes);
+                    bytes = Compressor.Uncompress(bytes);
                 }
                 if(isCrypt)
                 {
-                    msgBytes = Crypto.Decrypt(msgBytes);
+                    bytes = Crypto.Decrypt(bytes);
                 }
-                message = DecodeMessage(messageID,msgBytes);
             }
-            MessageReceived?.Invoke(messageID, message);
+            MessageReceived?.Invoke(messageID, bytes);
         }
-
-        protected abstract object DecodeMessage(int messageID,byte[] datas);
 
         public void Reset()
         {

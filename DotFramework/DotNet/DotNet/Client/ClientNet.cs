@@ -1,31 +1,30 @@
-﻿using Dot.Log;
+﻿using Dot.Core.Dispose;
+using Dot.Log;
 using Dot.Net.Message;
-using System.Collections.Generic;
 
 namespace Dot.Net.Client
 {
-    public delegate void OnMessageHandler(object message);
-    public delegate void OnNetStateChanged(ClientNet clientNet);
+    public delegate void OnClientReceiveNetMessage(int id, int messageID, byte[] msgDatas);
+    public delegate void OnClientChangeState(int id, ClientNetSessionState oldState, ClientNetSessionState newState);
 
-    public class ClientNet
+    public class ClientNet : IDispose
     {
-        private IMessageWriter messageWriter = null;
-        private IMessageReader messageReader = null;
+        private int id = -1;
+
+        private MessageWriter messageWriter = null;
+        private MessageReader messageReader = null;
 
         private ClientNetSession netSession = null;
         private ClientNetSessionState sessionState = ClientNetSessionState.Unavailable;
 
-        private Dictionary<int, OnMessageHandler> handlerDic = new Dictionary<int, OnMessageHandler>();
+        public OnClientChangeState NetStageChanged { get; set; }
+        public OnClientReceiveNetMessage NetMessageRecevied { get; set; }
 
-        public event OnNetStateChanged NetConnecting;
-        public event OnNetStateChanged NetConnectedSuccess;
-        public event OnNetStateChanged NetConnectedFailed;
-        public event OnNetStateChanged NetDisconnected;
-
-        public ClientNet(IMessageWriter writer, IMessageReader reader)
+        public ClientNet(int id,IMessageCrypto crypto,IMessageCompressor compressor)
         {
-            messageWriter = writer;
-            messageReader = reader;
+            this.id = id;
+            messageWriter = new MessageWriter(compressor,crypto);
+            messageReader = new MessageReader(crypto, compressor);
 
             netSession = new ClientNetSession(messageReader);
             messageReader.MessageError = OnMessageError;
@@ -42,7 +41,7 @@ namespace Dot.Net.Client
             netSession.Connect(address);
         }
 
-        public void Connect(string ip,int port)
+        public void Connect(string ip, int port)
         {
             netSession.Connect(ip, port);
         }
@@ -60,28 +59,34 @@ namespace Dot.Net.Client
         internal void DoUpdate(float deltaTime)
         {
             ClientNetSessionState currentSessionState = netSession.State;
-            if(currentSessionState!=sessionState)
+            if (currentSessionState != sessionState)
             {
+                ClientNetSessionState oldState = sessionState;
                 sessionState = currentSessionState;
-                if(currentSessionState == ClientNetSessionState.Connecting)
-                {
-                    NetConnecting?.Invoke(this);
-                }else if(currentSessionState == ClientNetSessionState.Normal)
-                {
-                    NetConnectedSuccess?.Invoke(this);
-                }else if(currentSessionState == ClientNetSessionState.ConnectedFailed)
-                {
-                    NetConnectedFailed?.Invoke(this);
-                }else if(currentSessionState == ClientNetSessionState.Disconnected)
-                {
-                    NetDisconnected?.Invoke(this);
-                }
+                NetStageChanged?.Invoke(id, oldState, sessionState);
+
+                //if (currentSessionState == ClientNetSessionState.Connecting)
+                //{
+                //    NetConnecting?.Invoke(this);
+                //}
+                //else if (currentSessionState == ClientNetSessionState.Normal)
+                //{
+                //    NetConnectedSuccess?.Invoke(this);
+                //}
+                //else if (currentSessionState == ClientNetSessionState.ConnectedFailed)
+                //{
+                //    NetConnectedFailed?.Invoke(this);
+                //}
+                //else if (currentSessionState == ClientNetSessionState.Disconnected)
+                //{
+                //    NetDisconnected?.Invoke(this);
+                //}
             }
         }
 
         internal void DoLateUpdate()
         {
-            if(IsConnected())
+            if (IsConnected())
             {
                 netSession.DoLateUpdate();
             }
@@ -91,8 +96,6 @@ namespace Dot.Net.Client
         {
             messageReader.MessageError = null;
             messageReader.MessageReceived = null;
-
-            handlerDic.Clear();
 
             netSession.Dispose();
             netSession = null;
@@ -104,70 +107,46 @@ namespace Dot.Net.Client
             netSession.Disconnect();
         }
 
-        private void OnMessageReceived(int messageID,object datas)
+        private void OnMessageReceived(int messageID, byte[] datas)
         {
-            if(handlerDic.TryGetValue(messageID,out OnMessageHandler handler))
-            {
-                handler(datas);
-            }else
-            {
-                LogUtil.LogWarning(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageHandler->not found handler.messageID={messageID}");
-            }
+            NetMessageRecevied?.Invoke(id,messageID, datas);
         }
 
-        public void RegisterHandler(int messageID,OnMessageHandler handler)
+        public void SendData(int messageID)
         {
-            if(!handlerDic.ContainsKey(messageID))
+            if (IsConnected())
             {
-                handlerDic.Add(messageID, handler);
-            }else
-            {
-                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::RegisterHandler->the messageID has been added.messageID={messageID}");
-            }
-        }
-
-        public void UnregisterHandler(int messageID)
-        {
-            if(handlerDic.ContainsKey(messageID))
-            {
-                handlerDic.Remove(messageID);
-            }
-        }
-
-        public void SendMessage<T>(int messageID,T msg)
-        {
-            if(IsConnected())
-            {
-                byte[] netBytes = messageWriter.EncodeMessage<T>(messageID, msg);
-                if(netBytes!=null && netBytes.Length>0)
+                byte[] netBytes = messageWriter.EncodeData(messageID);
+                if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
                 }
             }
         }
 
-        public void SendEmptyMessage(int messageID)
+        public void SendData(int messageID, byte[] msg)
         {
-            if(IsConnected())
-            {
-                byte[] netBytes = messageWriter.EncodeMessage(messageID);
-                if(netBytes!=null && netBytes.Length>0)
-                {
-                    netSession.Send(netBytes);
-                }
-            }
-        }
-
-        public void SendData(int messageID,byte[] msg)
-        {
-            if(IsConnected())
+            if (IsConnected())
             {
                 byte[] netBytes = messageWriter.EncodeData(messageID, msg);
-                if(netBytes!=null && netBytes.Length>0)
+                if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
                 }
             }
         }
+
+        public void SendData(int messageID, byte[] msg, bool isCrypto, bool isCompress)
+        {
+            if (IsConnected())
+            {
+                byte[] netBytes = messageWriter.EncodeData(messageID, msg, isCrypto, isCompress);
+                if (netBytes != null && netBytes.Length > 0)
+                {
+                    netSession.Send(netBytes);
+                }
+            }
+        }
+
     }
 }

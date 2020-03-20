@@ -68,27 +68,15 @@ namespace Dot.Net
 
         private IMessageReader GetReader()
         {
-            if(RWType == MessageReaderWriterType.Json)
-            {
-                return new JsonMessageReader();
-            }
-
-            return null;
+            return new MessageReader();
         }
 
         private IMessageWriter GetWriter()
         {
             IMessageCrypto crypto = GetCrypto();
             IMessageCompressor compressor = GetCompressor();
-            if(RWType == MessageReaderWriterType.Json)
-            {
-                return new JsonMessageWriter(compressor, crypto);
-            }else if(RWType == MessageReaderWriterType.ProtoBuf)
-            {
 
-            }
-
-            return null;
+            return new MessageWriter(compressor,crypto);
         }
     }
 }

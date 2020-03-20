@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace Dot.Net.Server
 {
-    public delegate void OnMessageReceived(long id, int messageID, object datas);
+    public delegate void OnMessageReceived(long id, int messageID, byte[] datas);
     public delegate void OnNetDisconnected(long id);
 
     public class ServerNet : IDispose
@@ -45,7 +45,7 @@ namespace Dot.Net.Server
             Dispose();
         }
 
-        private void OnMessageReceived(int messageID, object datas)
+        private void OnMessageReceived(int messageID, byte[] datas)
         {
             MessageReceived?.Invoke(id, messageID, datas);
         }
@@ -68,11 +68,11 @@ namespace Dot.Net.Server
             netSession.DoLateUpdate();
         }
 
-        public void SendMessage<T>(int messageID, T msg)
+        public void SendData(int messageID)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeMessage<T>(messageID, msg);
+                byte[] netBytes = messageWriter.EncodeData(messageID);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
@@ -80,11 +80,11 @@ namespace Dot.Net.Server
             }
         }
 
-        public void SendEmptyMessage(int messageID)
+        public void SendData(int messageID, byte[] msgDatas)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeMessage(messageID);
+                byte[] netBytes = messageWriter.EncodeData(messageID, msgDatas);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
@@ -92,11 +92,11 @@ namespace Dot.Net.Server
             }
         }
 
-        public void SendData(int messageID, byte[] msg)
+        public void SendData(int messageID,byte[] msgDatas,bool isCrypto,bool isCompress)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeData(messageID, msg);
+                byte[] netBytes = messageWriter.EncodeData(messageID, msgDatas,isCrypto,isCompress);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);

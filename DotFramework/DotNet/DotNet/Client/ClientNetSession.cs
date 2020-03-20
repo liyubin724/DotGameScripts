@@ -61,9 +61,9 @@ namespace Dot.Net.Client
         private List<byte> waitingSendBytes = new List<byte>();
 
         private object receiverLock = new object();
-        private IMessageReader messageReader = null;
+        private MessageReader messageReader = null;
 
-        public ClientNetSession(IMessageReader reader)
+        public ClientNetSession(MessageReader reader)
         {
             messageReader = reader;
         }

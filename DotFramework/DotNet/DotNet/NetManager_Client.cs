@@ -1,9 +1,6 @@
 ﻿using Dot.Core;
 using Dot.Log;
 using Dot.Net.Client;
-using Dot.Net.Message;
-using Dot.Net.Message.Reader;
-using Dot.Net.Message.Writer;
 using System.Collections.Generic;
 
 namespace Dot.Net
@@ -23,7 +20,7 @@ namespace Dot.Net
                 LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"NetMananger::CreateClientNet->the net has been created.netID={netID}");
                 return null;
             }
-            ClientNet net = new ClientNet(GetWriter(), GetReader());
+            ClientNet net = new ClientNet(netID,GetCrypto(), GetCompressor());
             clientNetDic.Add(netID, net);
 
             return net;
