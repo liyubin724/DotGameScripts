@@ -4,7 +4,7 @@ namespace Dot.Core.Util
 {
     public static class DontDestroyHandler
     {
-        private static readonly string RootName = "Singleton Root";
+        private static readonly string RootName = "Singleton-Root";
         private static Transform rootTran = null;
 
         private static Transform RootTransform
@@ -13,22 +13,17 @@ namespace Dot.Core.Util
             {
                 if(rootTran == null)
                 {
-                    CreateRootTransform();
+                    GameObject rootGO = GameObject.Find(RootName);
+                    if (rootGO == null)
+                    {
+                        rootGO = new GameObject(RootName);
+                    }
+                    Object.DontDestroyOnLoad(rootGO);
+                    rootTran = rootGO.transform;
                 }
 
                 return rootTran;
             }
-        }
-
-        private static void CreateRootTransform()
-        {
-            GameObject rootGO = GameObject.Find(RootName);
-            if (rootGO == null)
-            {
-                rootGO = new GameObject(RootName);
-            }
-            Object.DontDestroyOnLoad(rootGO);
-            rootTran = rootGO.transform;
         }
 
         public static Transform CreateTransform(string name)
@@ -41,15 +36,15 @@ namespace Dot.Core.Util
 
         public static void AddTransform(Transform tran,bool worldPositionStays = false)
         {
-            tran.SetParent(rootTran, worldPositionStays);
+            RootTransform.SetParent(rootTran, worldPositionStays);
         }
 
-        public static T CreateComponent<T>() where T : MonoBehaviour
+        public static T CreateComponent<T>(string name = null) where T : MonoBehaviour
         {
             T component = RootTransform.GetComponentInChildren<T>();
             if(component == null)
             {
-                Transform tran = CreateTransform(typeof(T).Name);
+                Transform tran = CreateTransform(string.IsNullOrEmpty(name)?typeof(T).Name:name);
                 component = tran.gameObject.AddComponent<T>();
             }
 

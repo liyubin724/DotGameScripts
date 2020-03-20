@@ -48,6 +48,9 @@
     <Reference Include="DotSnappy">
       <HintPath>..\..\DotLibs\DotSnappy.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\DotDependLibs\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
@@ -75,8 +78,10 @@
     <Compile Include="Message\MessageConst.cs" />
     <Compile Include="Message\Reader\AMessageReader.cs" />
     <Compile Include="Message\Reader\JsonMessageReader.cs" />
+    <Compile Include="Message\Reader\PBMessageReader.cs" />
     <Compile Include="Message\Writer\AMessageWriter.cs" />
     <Compile Include="Message\Writer\JsonMessageWriter.cs" />
+    <Compile Include="Message\Writer\PBMessageWriter.cs" />
     <Compile Include="NetConst.cs" />
     <Compile Include="NetManager.cs" />
     <Compile Include="NetManager_Client.cs" />

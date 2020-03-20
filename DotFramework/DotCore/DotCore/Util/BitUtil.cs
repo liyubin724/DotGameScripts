@@ -2,6 +2,13 @@
 {
     public static class BitUtil
     {
+        /// <summary>
+        /// 对Byte的数据根据指定的字节进行操作
+        /// </summary>
+        /// <param name="input">需要设置的数据</param>
+        /// <param name="index">需要操作的字节位置</param>
+        /// <param name="enable">enable为true时，指定位置的字节设置为1，否则为0</param>
+        /// <returns></returns>
         public static byte SetBit(byte input,int index,bool enable)
         {
             if (enable)
