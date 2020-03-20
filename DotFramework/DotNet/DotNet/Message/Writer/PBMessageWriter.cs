@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,8 @@ namespace Dot.Net.Message.Writer
 
         protected override byte[] EncodeMessage<T>(T message)
         {
-            throw new NotImplementedException();
+            IMessage iMess = (IMessage)message;
+            return iMess.ToByteArray();
         }
     }
 }

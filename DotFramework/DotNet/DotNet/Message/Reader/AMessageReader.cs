@@ -121,12 +121,12 @@ namespace Dot.Net.Message.Reader
                 {
                     msgBytes = Crypto.Decrypt(msgBytes);
                 }
-                message = DecodeMessage(msgBytes);
+                message = DecodeMessage(messageID,msgBytes);
             }
             MessageReceived?.Invoke(messageID, message);
         }
 
-        protected abstract object DecodeMessage(byte[] datas);
+        protected abstract object DecodeMessage(int messageID,byte[] datas);
 
         public void Reset()
         {

@@ -12,7 +12,7 @@ namespace Dot.Net.Message.Reader
         {
         }
 
-        protected override object DecodeMessage(byte[] datas)
+        protected override object DecodeMessage(int messageID,byte[] datas)
         {
             if(datas == null || datas.Length == 0)
             {

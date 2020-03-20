@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dot.Net.Message.Reader
+﻿namespace Dot.Net.Message.Reader
 {
     public class PBMessageReader : AMessageReader
     {
@@ -16,9 +10,9 @@ namespace Dot.Net.Message.Reader
         {
         }
 
-        protected override object DecodeMessage(byte[] datas)
+        protected override object DecodeMessage(int messageID,byte[] datas)
         {
-            throw new NotImplementedException();
+            return datas;
         }
     }
 }
