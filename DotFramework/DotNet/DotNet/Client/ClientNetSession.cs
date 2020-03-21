@@ -226,7 +226,7 @@ namespace Dot.Net.Client
                     {
                         socket.Shutdown(SocketShutdown.Both);
                     }
-                    catch (Exception e)
+                    catch
                     {
 
                     }

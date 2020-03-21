@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\DotLibs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_MESSAGE_JSON,NET_MESSAGE_PB</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -27,7 +27,7 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\DotLibs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET_MESSAGE_JSON,NET_MESSAGE_PB</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>false</DebugSymbols>
@@ -68,7 +68,8 @@
     <Compile Include="Client\ClientNet.cs" />
     <Compile Include="Client\ClientNetConst.cs" />
     <Compile Include="Client\ClientNetSession.cs" />
-    <Compile Include="Demo\DotNetTest.cs" />
+    <Compile Include="Client\ClientNet_Json.cs" />
+    <Compile Include="Client\ClientNet_PB.cs" />
     <Compile Include="Message\Compressor\SnappyMessageCompressor.cs" />
     <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
     <Compile Include="Message\IMessageCompressor.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="NetManager_Client.cs" />
     <Compile Include="NetManager_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\IServerNetCreator.cs" />
     <Compile Include="Server\ServerNet.cs" />
     <Compile Include="Server\ServerNetConst.cs" />
     <Compile Include="Server\ServerNetListener.cs" />
@@ -92,9 +92,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>set pdbPath=$(TargetDir)$(ProjectName).pdb
-if exist %25pdbPath%25 (
-del /q %25pdbPath%25
-)</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

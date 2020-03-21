@@ -10,7 +10,9 @@ namespace Dot.Net.Client
     public delegate object ClientMessageParser(int messageID, byte[] msgDatas);
     public delegate void ClientMessageHandler(int messageID, object message);
 
-    public class ClientNet : IDispose
+    public delegate void ClientFinalMessageHandler(int messageID, byte[] msgDatas);
+
+    public partial class ClientNet : IDispose
     {
         private int uniqueID = -1;
         public int UniqueID { get => uniqueID; }
@@ -23,6 +25,8 @@ namespace Dot.Net.Client
 
         private Dictionary<int, ClientMessageParser> messageParserDic = new Dictionary<int, ClientMessageParser>();
         private Dictionary<int, ClientMessageHandler> messageHandlerDic = new Dictionary<int, ClientMessageHandler>();
+
+        public ClientFinalMessageHandler FinalMessageHandler { get; set; } = null;
 
         public event ClientNetStateChanged NetConnecting;
         public event ClientNetStateChanged NetConnectedSuccess;
@@ -119,18 +123,26 @@ namespace Dot.Net.Client
 
         private void OnMessageReceived(int messageID, byte[] datas)
         {
-            if(messageParserDic.TryGetValue(messageID,out ClientMessageParser parser) && parser!=null)
+            if (messageHandlerDic.TryGetValue(messageID, out ClientMessageHandler handler) && handler != null)
             {
-                if(messageHandlerDic.TryGetValue(messageID,out ClientMessageHandler handler) && handler !=null)
+                if (messageParserDic.TryGetValue(messageID, out ClientMessageParser parser) && parser != null)
                 {
                     handler.Invoke(messageID, parser.Invoke(messageID, datas));
                 }else
                 {
+                    handler.Invoke(messageID, datas);
+                }
+            }
+            else
+            {
+                if(FinalMessageHandler!=null)
+                {
+                    LogUtil.LogWarning(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageReceived->the handler not found.messageID = {messageID}");
+                    FinalMessageHandler.Invoke(messageID, datas);
+                }else
+                {
                     LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageReceived->the handler not found.messageID = {messageID}");
                 }
-            }else
-            {
-                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageReceived->the parser not found.messageID = {messageID}");
             }
         }
 

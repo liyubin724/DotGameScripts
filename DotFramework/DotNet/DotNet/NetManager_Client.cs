@@ -1,6 +1,7 @@
 ﻿using Dot.Core;
 using Dot.Log;
 using Dot.Net.Client;
+using Dot.Net.Message;
 using System.Collections.Generic;
 
 namespace Dot.Net
@@ -9,18 +10,24 @@ namespace Dot.Net
     {
         private Dictionary<int, ClientNet> clientNetDic = null;
 
-        public ClientNet CreateClientNet(int netID)
+        public ClientNet CreateClientNet(IMessageCrypto crypto=null, IMessageCompressor compressor=null)
         {
-            if(clientNetDic== null)
+            int netID = idCreator.NextID;
+            return CreateClientNet(netID, crypto, compressor);
+        }
+
+        public ClientNet CreateClientNet(int netID,IMessageCrypto crypto=null,IMessageCompressor compressor=null)
+        {
+            if (clientNetDic == null)
             {
                 clientNetDic = new Dictionary<int, ClientNet>();
             }
-            if(clientNetDic.ContainsKey(netID))
+            if (clientNetDic.ContainsKey(netID))
             {
                 LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"NetMananger::CreateClientNet->the net has been created.netID={netID}");
                 return null;
             }
-            ClientNet net = new ClientNet(netID,GetCrypto(), GetCompressor());
+            ClientNet net = new ClientNet(netID, crypto,compressor);
             clientNetDic.Add(netID, net);
 
             return net;
