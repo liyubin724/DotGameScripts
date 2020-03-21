@@ -1,11 +1,14 @@
 ﻿using Dot.Core.Dispose;
 using Dot.Log;
 using Dot.Net.Message;
+using System.Collections.Generic;
 
 namespace Dot.Net.Client
 {
-    public delegate void OnClientReceiveNetMessage(int id, int messageID, byte[] msgDatas);
-    public delegate void OnClientChangeState(int id, ClientNetSessionState oldState, ClientNetSessionState newState);
+    public delegate void OnNetStateChanged(ClientNet clientNet);
+
+    public delegate object MessageParser(int messageID, byte[] msgDatas);
+    public delegate void MessageHandler(int messageID, object message);
 
     public class ClientNet : IDispose
     {
@@ -17,8 +20,13 @@ namespace Dot.Net.Client
         private ClientNetSession netSession = null;
         private ClientNetSessionState sessionState = ClientNetSessionState.Unavailable;
 
-        public OnClientChangeState NetStageChanged { get; set; }
-        public OnClientReceiveNetMessage NetMessageRecevied { get; set; }
+        private Dictionary<int, MessageParser> messageParserDic = new Dictionary<int, MessageParser>();
+        private Dictionary<int, MessageHandler> messageHandlerDic = new Dictionary<int, MessageHandler>();
+
+        public event OnNetStateChanged NetConnecting;
+        public event OnNetStateChanged NetConnectedSuccess;
+        public event OnNetStateChanged NetConnectedFailed;
+        public event OnNetStateChanged NetDisconnected;
 
         public ClientNet(int id,IMessageCrypto crypto,IMessageCompressor compressor)
         {
@@ -61,26 +69,24 @@ namespace Dot.Net.Client
             ClientNetSessionState currentSessionState = netSession.State;
             if (currentSessionState != sessionState)
             {
-                ClientNetSessionState oldState = sessionState;
                 sessionState = currentSessionState;
-                NetStageChanged?.Invoke(id, oldState, sessionState);
 
-                //if (currentSessionState == ClientNetSessionState.Connecting)
-                //{
-                //    NetConnecting?.Invoke(this);
-                //}
-                //else if (currentSessionState == ClientNetSessionState.Normal)
-                //{
-                //    NetConnectedSuccess?.Invoke(this);
-                //}
-                //else if (currentSessionState == ClientNetSessionState.ConnectedFailed)
-                //{
-                //    NetConnectedFailed?.Invoke(this);
-                //}
-                //else if (currentSessionState == ClientNetSessionState.Disconnected)
-                //{
-                //    NetDisconnected?.Invoke(this);
-                //}
+                if (currentSessionState == ClientNetSessionState.Connecting)
+                {
+                    NetConnecting?.Invoke(this);
+                }
+                else if (currentSessionState == ClientNetSessionState.Normal)
+                {
+                    NetConnectedSuccess?.Invoke(this);
+                }
+                else if (currentSessionState == ClientNetSessionState.ConnectedFailed)
+                {
+                    NetConnectedFailed?.Invoke(this);
+                }
+                else if (currentSessionState == ClientNetSessionState.Disconnected)
+                {
+                    NetDisconnected?.Invoke(this);
+                }
             }
         }
 
@@ -97,6 +103,9 @@ namespace Dot.Net.Client
             messageReader.MessageError = null;
             messageReader.MessageReceived = null;
 
+            messageParserDic.Clear();
+            messageHandlerDic.Clear();
+
             netSession.Dispose();
             netSession = null;
         }
@@ -109,9 +118,22 @@ namespace Dot.Net.Client
 
         private void OnMessageReceived(int messageID, byte[] datas)
         {
-            NetMessageRecevied?.Invoke(id,messageID, datas);
+            if(messageParserDic.TryGetValue(messageID,out MessageParser parser) && parser!=null)
+            {
+                if(messageHandlerDic.TryGetValue(messageID,out MessageHandler handler) && handler !=null)
+                {
+                    handler.Invoke(messageID, parser.Invoke(messageID, datas));
+                }else
+                {
+                    LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageReceived->the handler not found.messageID = {messageID}");
+                }
+            }else
+            {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageReceived->the parser not found.messageID = {messageID}");
+            }
         }
 
+        #region Send Data
         public void SendData(int messageID)
         {
             if (IsConnected())
@@ -147,6 +169,59 @@ namespace Dot.Net.Client
                 }
             }
         }
+        #endregion
 
+        #region Register Message Parser
+        public void RegisterMessageParser(int messageID,MessageParser parser)
+        {
+            if(!messageParserDic.ContainsKey(messageID))
+            {
+                messageParserDic.Add(messageID, parser);
+            }else
+            {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::RegisterMessageParser->The parser has been added.messageID={messageID}");
+            }
+        }
+
+        public void UnregisterMessageParser(int messageID)
+        {
+            if (messageParserDic.ContainsKey(messageID))
+            {
+                messageParserDic.Remove(messageID);
+            }
+            else
+            {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::UnregisterMessageParser->The parser not found.messageID={messageID}");
+            }
+        }
+        #endregion
+
+        #region Register Message Handler
+
+        public void RegisterMessageHandler(int messageID, MessageHandler handler)
+        {
+            if (!messageHandlerDic.ContainsKey(messageID))
+            {
+                messageHandlerDic.Add(messageID, handler);
+            }
+            else
+            {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::RegisterMessageHandler->the handler has been added.messageID={messageID}");
+            }
+        }
+
+        public void UnregisterMessageHandler(int messageID)
+        {
+            if (messageHandlerDic.ContainsKey(messageID))
+            {
+                messageHandlerDic.Remove(messageID);
+            }
+            else
+            {
+                LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::UnregisterMessageHandler->The handler not found.messageID={messageID}");
+            }
+        }
+
+        #endregion
     }
 }

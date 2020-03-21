@@ -73,15 +73,9 @@
     <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
     <Compile Include="Message\IMessageCompressor.cs" />
     <Compile Include="Message\IMessageCrypto.cs" />
-    <Compile Include="Message\IMessageReader.cs" />
-    <Compile Include="Message\IMessageWriter.cs" />
     <Compile Include="Message\MessageConst.cs" />
-    <Compile Include="Message\Reader\AMessageReader.cs" />
-    <Compile Include="Message\Reader\JsonMessageReader.cs" />
-    <Compile Include="Message\Reader\PBMessageReader.cs" />
-    <Compile Include="Message\Writer\AMessageWriter.cs" />
-    <Compile Include="Message\Writer\JsonMessageWriter.cs" />
-    <Compile Include="Message\Writer\PBMessageWriter.cs" />
+    <Compile Include="Message\MessageReader.cs" />
+    <Compile Include="Message\MessageWriter.cs" />
     <Compile Include="NetConst.cs" />
     <Compile Include="NetManager.cs" />
     <Compile Include="NetManager_Client.cs" />
