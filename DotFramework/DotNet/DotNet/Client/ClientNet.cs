@@ -5,14 +5,15 @@ using System.Collections.Generic;
 
 namespace Dot.Net.Client
 {
-    public delegate void OnNetStateChanged(ClientNet clientNet);
+    public delegate void ClientNetStateChanged(ClientNet clientNet);
 
-    public delegate object MessageParser(int messageID, byte[] msgDatas);
-    public delegate void MessageHandler(int messageID, object message);
+    public delegate object ClientMessageParser(int messageID, byte[] msgDatas);
+    public delegate void ClientMessageHandler(int messageID, object message);
 
     public class ClientNet : IDispose
     {
-        private int id = -1;
+        private int uniqueID = -1;
+        public int UniqueID { get => uniqueID; }
 
         private MessageWriter messageWriter = null;
         private MessageReader messageReader = null;
@@ -20,17 +21,17 @@ namespace Dot.Net.Client
         private ClientNetSession netSession = null;
         private ClientNetSessionState sessionState = ClientNetSessionState.Unavailable;
 
-        private Dictionary<int, MessageParser> messageParserDic = new Dictionary<int, MessageParser>();
-        private Dictionary<int, MessageHandler> messageHandlerDic = new Dictionary<int, MessageHandler>();
+        private Dictionary<int, ClientMessageParser> messageParserDic = new Dictionary<int, ClientMessageParser>();
+        private Dictionary<int, ClientMessageHandler> messageHandlerDic = new Dictionary<int, ClientMessageHandler>();
 
-        public event OnNetStateChanged NetConnecting;
-        public event OnNetStateChanged NetConnectedSuccess;
-        public event OnNetStateChanged NetConnectedFailed;
-        public event OnNetStateChanged NetDisconnected;
+        public event ClientNetStateChanged NetConnecting;
+        public event ClientNetStateChanged NetConnectedSuccess;
+        public event ClientNetStateChanged NetConnectedFailed;
+        public event ClientNetStateChanged NetDisconnected;
 
         public ClientNet(int id,IMessageCrypto crypto,IMessageCompressor compressor)
         {
-            this.id = id;
+            uniqueID = id;
             messageWriter = new MessageWriter(compressor,crypto);
             messageReader = new MessageReader(crypto, compressor);
 
@@ -113,14 +114,14 @@ namespace Dot.Net.Client
         private void OnMessageError(MessageErrorCode code)
         {
             LogUtil.LogError(ClientNetConst.LOGGER_NAME, $"ClientNet::OnMessageError->message error.code = {code}");
-            netSession.Disconnect();
+            Dispose();
         }
 
         private void OnMessageReceived(int messageID, byte[] datas)
         {
-            if(messageParserDic.TryGetValue(messageID,out MessageParser parser) && parser!=null)
+            if(messageParserDic.TryGetValue(messageID,out ClientMessageParser parser) && parser!=null)
             {
-                if(messageHandlerDic.TryGetValue(messageID,out MessageHandler handler) && handler !=null)
+                if(messageHandlerDic.TryGetValue(messageID,out ClientMessageHandler handler) && handler !=null)
                 {
                     handler.Invoke(messageID, parser.Invoke(messageID, datas));
                 }else
@@ -172,7 +173,7 @@ namespace Dot.Net.Client
         #endregion
 
         #region Register Message Parser
-        public void RegisterMessageParser(int messageID,MessageParser parser)
+        public void RegisterMessageParser(int messageID,ClientMessageParser parser)
         {
             if(!messageParserDic.ContainsKey(messageID))
             {
@@ -198,7 +199,7 @@ namespace Dot.Net.Client
 
         #region Register Message Handler
 
-        public void RegisterMessageHandler(int messageID, MessageHandler handler)
+        public void RegisterMessageHandler(int messageID, ClientMessageHandler handler)
         {
             if (!messageHandlerDic.ContainsKey(messageID))
             {

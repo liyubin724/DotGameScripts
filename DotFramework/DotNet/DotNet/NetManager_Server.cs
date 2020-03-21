@@ -4,7 +4,7 @@ using Dot.Net.Server;
 
 namespace Dot.Net
 {
-    public partial class NetManager : Singleton<NetManager>, IServerNetCreator
+    public partial class NetManager : Singleton<NetManager>
     {
         private ServerNetListener netListener = null;
         public ServerNetListener GetServerNet { get => netListener; }
@@ -13,19 +13,9 @@ namespace Dot.Net
 
         public ServerNetListener StartupAsServer(int port)
         {
-            netListener = new ServerNetListener(this);
+            netListener = new ServerNetListener(1);
             netListener.Startup("127.0.0.1",port, ServerNetMaxCount);
             return netListener;
-        }
-
-        public IMessageReader GetMessageReader()
-        {
-            return GetReader();
-        }
-
-        public IMessageWriter GetMessageWriter()
-        {
-            return GetWriter();
         }
 
         public void DoUpdateServer(float deltaTime)

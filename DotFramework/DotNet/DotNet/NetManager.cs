@@ -3,8 +3,6 @@ using Dot.Core.Proxy;
 using Dot.Net.Message;
 using Dot.Net.Message.Compressor;
 using Dot.Net.Message.Crypto;
-using Dot.Net.Message.Reader;
-using Dot.Net.Message.Writer;
 using System;
 
 namespace Dot.Net
@@ -66,17 +64,5 @@ namespace Dot.Net
             return null;
         }
 
-        private IMessageReader GetReader()
-        {
-            return new MessageReader();
-        }
-
-        private IMessageWriter GetWriter()
-        {
-            IMessageCrypto crypto = GetCrypto();
-            IMessageCompressor compressor = GetCompressor();
-
-            return new MessageWriter(compressor,crypto);
-        }
     }
 }

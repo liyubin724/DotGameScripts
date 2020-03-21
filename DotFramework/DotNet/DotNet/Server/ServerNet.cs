@@ -5,16 +5,16 @@ using System.Net.Sockets;
 
 namespace Dot.Net.Server
 {
-    public delegate void OnMessageReceived(long id, int messageID, byte[] datas);
-    public delegate void OnNetDisconnected(long id);
+    public delegate void OnMessageReceived(int id, int messageID, byte[] datas);
+    public delegate void OnNetDisconnected(int id);
 
     public class ServerNet : IDispose
     {
-        private long id = -1;
-        public long ID { get => id; }
+        private int uniqueID = -1;
+        public int UniqueID { get => uniqueID; }
 
-        private IMessageWriter messageWriter = null;
-        private IMessageReader messageReader = null;
+        private MessageWriter messageWriter = null;
+        private MessageReader messageReader = null;
 
         private ServerNetSession netSession = null;
 
@@ -23,11 +23,11 @@ namespace Dot.Net.Server
 
         private ServerNetSessionState sessionState = ServerNetSessionState.Unavailable;
 
-        public ServerNet(long id, Socket socket, IMessageWriter writer, IMessageReader reader)
+        public ServerNet(int id, Socket socket, IMessageCrypto crypto,IMessageCompressor compressor)
         {
-            this.id = id;
-            messageWriter = writer;
-            messageReader = reader;
+            uniqueID = id;
+            messageWriter = new MessageWriter(compressor,crypto);
+            messageReader = new MessageReader(crypto,compressor);
 
             netSession = new ServerNetSession(socket,messageReader);
             messageReader.MessageError = OnMessageError;
@@ -47,7 +47,7 @@ namespace Dot.Net.Server
 
         private void OnMessageReceived(int messageID, byte[] datas)
         {
-            MessageReceived?.Invoke(id, messageID, datas);
+            MessageReceived?.Invoke(uniqueID, messageID, datas);
         }
 
         internal void DoUpdate(float deltaTime)
@@ -58,7 +58,7 @@ namespace Dot.Net.Server
                 sessionState = currentSessionState;
                  if (currentSessionState == ServerNetSessionState.Disconnected)
                 {
-                    NetDisconnected?.Invoke(id);
+                    NetDisconnected?.Invoke(uniqueID);
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace Dot.Net.Server
 
         public void Dispose()
         {
-            id = -1;
+            uniqueID = -1;
             
             messageReader.MessageError = null;
             messageReader.MessageReceived = null;

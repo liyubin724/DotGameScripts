@@ -17,7 +17,7 @@ namespace Dot.Net.Server
     public class ServerNetSession : IDispose
     {
         private Socket socket = null;
-        private IMessageReader messageReader = null;
+        private MessageReader messageReader = null;
 
         private SocketAsyncEventArgs sendAsyncEvent = null;
         private object sendingLock = new object();
@@ -50,7 +50,7 @@ namespace Dot.Net.Server
             }
         }
 
-        public ServerNetSession(Socket socket,IMessageReader reader)
+        public ServerNetSession(Socket socket, MessageReader reader)
         {
             this.socket = socket;
             messageReader = reader;

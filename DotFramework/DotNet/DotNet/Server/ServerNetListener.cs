@@ -11,11 +11,12 @@ using System.Threading;
 
 namespace Dot.Net.Server
 {
-    public delegate void OnMessageHandler(long netID,int messageID,object message);
+    public delegate object ServerMessageParser(int messageID, byte[] msgDatas);
+    public delegate void ServerMessageHandler(int netID, int messageID, object message);
 
     public class ServerNetMessageData : IObjectPoolItem
     {
-        public long netID = -1;
+        public int netID = -1;
         public int messageID = -1;
         public object message = null;
 
@@ -38,6 +39,9 @@ namespace Dot.Net.Server
 
     public class ServerNetListener : IDispose
     {
+        private int uniqueID = -1;
+        public int UniqueID { get => uniqueID; }
+
         private ManualResetEvent allDone = new ManualResetEvent(false);
 
         private ObjectPool<ServerNetMessageData> dataPool = new ObjectPool<ServerNetMessageData>();
@@ -45,17 +49,21 @@ namespace Dot.Net.Server
         private List<ServerNetMessageData> dataList = new List<ServerNetMessageData>();
 
         private Socket socket = null;
-        private UniqueID idCreator = new UniqueID();
+        private UniqueIntID clientIDCreator = new UniqueIntID();
 
         private object netDicLock = new object();
-        private Dictionary<long, ServerNet> netDic = new Dictionary<long, ServerNet>();
-        private Dictionary<int, OnMessageHandler> handlerDic = new Dictionary<int, OnMessageHandler>();
+        private Dictionary<int, ServerNet> netDic = new Dictionary<int, ServerNet>();
 
-        private IServerNetCreator netCreator = null;
+        private Dictionary<int, ServerMessageParser> messageParserDic = new Dictionary<int, ServerMessageParser>();
+        private Dictionary<int, ServerMessageHandler> messageHandlerDic = new Dictionary<int, ServerMessageHandler>();
 
-        public ServerNetListener(IServerNetCreator creator)
+        private IMessageCrypto messageCrypto = null;
+        private IMessageCompressor messageCompressor = null;
+        public ServerNetListener(int id,IMessageCrypto crypto,IMessageCompressor compressor)
         {
-            netCreator = creator;
+            uniqueID = id;
+            messageCrypto = crypto;
+            messageCompressor = compressor;
         }
 
         public void Startup(string ip,int port,int maxCount)
@@ -104,33 +112,37 @@ namespace Dot.Net.Server
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
 
-            IMessageWriter writer = netCreator.GetMessageWriter();
-            IMessageReader reader = netCreator.GetMessageReader();
-
-            long id = idCreator.NextID;
-
-            ServerNet serverNet = new ServerNet(id,handler,writer,reader);
+            int netID = clientIDCreator.NextID;
+            ServerNet serverNet = new ServerNet(netID, handler,messageCrypto,messageCompressor);
             serverNet.MessageReceived = OnMessageReceived;
             serverNet.NetDisconnected = OnNetDisconnected;
 
             lock(netDicLock)
             {
-                netDic.Add(id, serverNet);
+                netDic.Add(netID, serverNet);
             }
         }
 
-        private void OnMessageReceived(long netID,int messageID,object message)
+        private void OnMessageReceived(int netID,int messageID,byte[] msgBytes)
         {
-            if (handlerDic.TryGetValue(messageID, out OnMessageHandler handler))
+            if (messageParserDic.TryGetValue(messageID, out ServerMessageParser parser) && parser != null)
             {
-                handler?.Invoke(netID, messageID, message);
-            }else
+                if (messageHandlerDic.TryGetValue(messageID, out ServerMessageHandler handler) && handler != null)
+                {
+                    handler.Invoke(netID,messageID, parser.Invoke(messageID, msgBytes));
+                }
+                else
+                {
+                    LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::OnMessageReceived->the handler not found.messageID = {messageID}");
+                }
+            }
+            else
             {
-                LogUtil.LogWarning(ServerNetConst.LOGGER_NAME, $"ServerNetListener::OnMessageReceived->message handler is not found.messageID = {messageID}");
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::OnMessageReceived->the parser not found.messageID = {messageID}");
             }
         }
 
-        private void OnNetDisconnected(long id)
+        private void OnNetDisconnected(int id)
         {
             lock(netDicLock)
             {
@@ -156,43 +168,7 @@ namespace Dot.Net.Server
             }
         }
 
-        public void RegisterHandler(int messageID, OnMessageHandler handler)
-        {
-            if (!handlerDic.ContainsKey(messageID))
-            {
-                handlerDic.Add(messageID, handler);
-            }
-            else
-            {
-                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNet::RegisterHandler->the messageID has been added.messageID={messageID}");
-            }
-        }
-
-        public void UnregisterHandler(int messageID)
-        {
-            if (handlerDic.ContainsKey(messageID))
-            {
-                handlerDic.Remove(messageID);
-            }
-        }
-
-        public void SendMessage<T>(long netID,int messageID, T msg)
-        {
-            if(netDic.TryGetValue(netID,out ServerNet serverNet))
-            {
-                serverNet.SendMessage<T>(messageID, msg);
-            }
-        }
-
-        public void SendEmptyMessage(long netID, int messageID)
-        {
-            if (netDic.TryGetValue(netID, out ServerNet serverNet))
-            {
-                serverNet.SendEmptyMessage(messageID);
-            }
-        }
-
-        public void SendData(long netID, int messageID, byte[] msg)
+        public void SendData(int netID, int messageID, byte[] msg)
         {
             if (netDic.TryGetValue(netID, out ServerNet serverNet))
             {
@@ -216,8 +192,6 @@ namespace Dot.Net.Server
                 }
                 netDic.Clear();
             }
-            handlerDic.Clear();
-            netCreator = null;
 
             if (socket != null)
             {
@@ -244,5 +218,59 @@ namespace Dot.Net.Server
                 }
             }
         }
+
+        #region Register Message Parser
+        public void RegisterMessageParser(int messageID, ServerMessageParser parser)
+        {
+            if (!messageParserDic.ContainsKey(messageID))
+            {
+                messageParserDic.Add(messageID, parser);
+            }
+            else
+            {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::RegisterMessageParser->The parser has been added.messageID={messageID}");
+            }
+        }
+
+        public void UnregisterMessageParser(int messageID)
+        {
+            if (messageParserDic.ContainsKey(messageID))
+            {
+                messageParserDic.Remove(messageID);
+            }
+            else
+            {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::UnregisterMessageParser->The parser not found.messageID={messageID}");
+            }
+        }
+        #endregion
+
+        #region Register Message Handler
+
+        public void RegisterMessageHandler(int messageID, ServerMessageHandler handler)
+        {
+            if (!messageHandlerDic.ContainsKey(messageID))
+            {
+                messageHandlerDic.Add(messageID, handler);
+            }
+            else
+            {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::RegisterMessageHandler->the handler has been added.messageID={messageID}");
+            }
+        }
+
+        public void UnregisterMessageHandler(int messageID)
+        {
+            if (messageHandlerDic.ContainsKey(messageID))
+            {
+                messageHandlerDic.Remove(messageID);
+            }
+            else
+            {
+                LogUtil.LogError(ServerNetConst.LOGGER_NAME, $"ServerNetListener::UnregisterMessageHandler->The handler not found.messageID={messageID}");
+            }
+        }
+
+        #endregion
     }
 }
