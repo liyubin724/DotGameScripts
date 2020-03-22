@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6B04C951-972E-4E87-8A4A-0117D107E9F5}</ProjectGuid>
+    <ProjectGuid>{7B7B91FD-BD29-446A-A347-940EA926CF47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dot.Pool</RootNamespace>
-    <AssemblyName>DotPool</AssemblyName>
+    <RootNamespace>Dot.GOPool</RootNamespace>
+    <AssemblyName>DotGOPool</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -59,17 +59,10 @@
   <ItemGroup>
     <Compile Include="GameObjectPool.cs" />
     <Compile Include="GameObjectPoolConst.cs" />
+    <Compile Include="GameObjectPoolGroup.cs" />
     <Compile Include="GameObjectPoolItem.cs" />
-    <Compile Include="ObjectPool.cs" />
     <Compile Include="GameObjectPoolManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GameObjectPoolGroup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>set pdbPath=$(TargetDir)$(ProjectName).pdb
-if exist %25pdbPath%25 (
-del /q %25pdbPath%25
-)</PreBuildEvent>
-  </PropertyGroup>
 </Project>

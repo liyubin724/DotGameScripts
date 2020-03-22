@@ -59,6 +59,7 @@
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
+    <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Proxy\UpdateProxy.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />

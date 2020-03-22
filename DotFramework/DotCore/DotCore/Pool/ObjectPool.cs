@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dot.Pool
+namespace Dot.Core.Pool
 {
     public interface IObjectPoolItem
     {
