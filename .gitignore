@@ -5,6 +5,8 @@ DotFramework/*/packages
 bin/
 obj/
 temp/
+Library/
+Logs/
 
 # Office »º´æÎÄ¼þ
 ~'$'*.docx
