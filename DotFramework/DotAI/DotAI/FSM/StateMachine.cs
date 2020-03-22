@@ -110,6 +110,7 @@ namespace Dot.AI.FSM
             {
                 if(stateDic.TryGetValue(stateToken,out StateBase state))
                 {
+                    
                     if(!IsRunning)
                     {
                         CurrentState = state;
