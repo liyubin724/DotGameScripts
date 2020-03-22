@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotUI", "DotUI\DotUI.csproj", "{E8B86E93-50F2-4302-9110-0A80785D168C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotUIEditor", "DotUIEditor\DotUIEditor.csproj", "{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8B86E93-50F2-4302-9110-0A80785D168C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8B86E93-50F2-4302-9110-0A80785D168C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8B86E93-50F2-4302-9110-0A80785D168C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8B86E93-50F2-4302-9110-0A80785D168C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC980C00-A7C1-45A0-A0A2-A8332F442E8F}
+	EndGlobalSection
+EndGlobal
