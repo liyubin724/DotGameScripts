@@ -38,3 +38,6 @@ DotNet
     -> DotSnappy
     -> Google.Protobuf
     -> Newtonsoft.Json
+
+DotSnappy
+    -> 
