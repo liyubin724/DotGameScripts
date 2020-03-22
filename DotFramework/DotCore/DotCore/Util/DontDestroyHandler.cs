@@ -36,7 +36,7 @@ namespace Dot.Core.Util
 
         public static void AddTransform(Transform tran,bool worldPositionStays = false)
         {
-            RootTransform.SetParent(rootTran, worldPositionStays);
+            tran.SetParent(RootTransform, worldPositionStays);
         }
 
         public static T CreateComponent<T>(string name = null) where T : MonoBehaviour

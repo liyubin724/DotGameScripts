@@ -7,7 +7,7 @@
     <ProjectGuid>{7B7B91FD-BD29-446A-A347-940EA926CF47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dot.GOPool</RootNamespace>
+    <RootNamespace>Dot.Pool</RootNamespace>
     <AssemblyName>DotGOPool</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

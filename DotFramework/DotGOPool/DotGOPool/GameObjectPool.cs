@@ -5,6 +5,7 @@ using Dot.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
@@ -173,14 +174,14 @@ namespace Dot.Pool
                 {
                     poolItem.DoSpawned();
                 }
+
+                if (isAutoSetActive)
+                {
+                    item.SetActive(true);
+                }
+                usedItemList.Add(new WeakReference<GameObject>(item));
             }
 
-            if (isAutoSetActive)
-            {
-                item.SetActive(true);
-            }
-
-            usedItemList.Add(new WeakReference<GameObject>(item));
             return item;
         }
 
@@ -250,7 +251,7 @@ namespace Dot.Pool
         }
 #endregion
 
-#region Release Item
+        #region Release Item
         /// <summary>
         /// 回收GameObject
         /// </summary>
