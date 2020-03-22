@@ -2,7 +2,7 @@
 using Dot.Core.Generic;
 using Dot.Log;
 using Dot.Net.Message;
-using Dot.Pool;
+using Dot.Core.Pool;
 using System;
 using System.Collections.Generic;
 using System.Net;

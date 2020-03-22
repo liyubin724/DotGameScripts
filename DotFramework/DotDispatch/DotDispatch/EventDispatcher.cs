@@ -1,4 +1,4 @@
-﻿using Dot.Pool;
+﻿using Dot.Core.Pool;
 using Dot.Timer;
 using System.Collections.Generic;
 

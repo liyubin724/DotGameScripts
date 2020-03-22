@@ -35,9 +35,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
     </Reference>
-    <Reference Include="DotPool">
-      <HintPath>..\..\DotLibs\DotPool.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

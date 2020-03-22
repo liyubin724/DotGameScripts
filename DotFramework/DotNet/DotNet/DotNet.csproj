@@ -42,9 +42,6 @@
     <Reference Include="DotLog">
       <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
     </Reference>
-    <Reference Include="DotPool">
-      <HintPath>..\..\DotLibs\DotPool.dll</HintPath>
-    </Reference>
     <Reference Include="DotSnappy">
       <HintPath>..\..\DotLibs\DotSnappy.dll</HintPath>
     </Reference>

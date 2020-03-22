@@ -1,4 +1,4 @@
-﻿using Dot.Pool;
+﻿using Dot.Core.Pool;
 using System;
 using System.Collections.Generic;
 using System.Linq;

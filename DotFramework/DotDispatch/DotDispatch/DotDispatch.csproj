@@ -39,10 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
     </Reference>
-    <Reference Include="DotPool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotPool.dll</HintPath>
-    </Reference>
     <Reference Include="DotTimer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotLibs\DotTimer.dll</HintPath>
