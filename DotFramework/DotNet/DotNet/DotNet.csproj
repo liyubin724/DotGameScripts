@@ -92,7 +92,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>set pdbPath=$(TargetDir)$(ProjectName).pdb
+if exist %25pdbPath%25 (
+del /q %25pdbPath%25
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>

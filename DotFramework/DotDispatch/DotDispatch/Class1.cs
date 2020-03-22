@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEvent
+namespace DotDispatch
 {
     public class Class1
     {
