@@ -58,11 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameObjectPool.cs" />
+    <Compile Include="GameObjectPoolConst.cs" />
     <Compile Include="GameObjectPoolItem.cs" />
     <Compile Include="ObjectPool.cs" />
-    <Compile Include="PoolManager.cs" />
+    <Compile Include="GameObjectPoolManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpawnPool.cs" />
+    <Compile Include="GameObjectPoolGroup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

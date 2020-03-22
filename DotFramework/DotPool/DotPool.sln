@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotPool", "DotPool\DotPool.csproj", "{6B04C951-972E-4E87-8A4A-0117D107E9F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotPoolEditor", "DotPoolEditor\DotPoolEditor.csproj", "{15E762BE-5AA1-4646-81E9-BD50399E2B2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6B04C951-972E-4E87-8A4A-0117D107E9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B04C951-972E-4E87-8A4A-0117D107E9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B04C951-972E-4E87-8A4A-0117D107E9F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E762BE-5AA1-4646-81E9-BD50399E2B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E762BE-5AA1-4646-81E9-BD50399E2B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E762BE-5AA1-4646-81E9-BD50399E2B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E762BE-5AA1-4646-81E9-BD50399E2B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

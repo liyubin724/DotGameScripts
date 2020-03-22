@@ -1,33 +1,27 @@
-﻿using Dot.Log;
-using Dot.Timer;
-using Dot.Core;
+﻿using Dot.Core;
 using Dot.Core.Util;
+using Dot.Log;
+using Dot.Timer;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Dot.Pool
 {
-    internal static class PoolConst
-    {
-        internal static readonly string LOGGER_NAME = "GameObjectPool";
-    }
+    public delegate void PoolPreloadComplete(string groupName, string assetPath);
 
-    public delegate void OnPoolComplete(string spawnName, string assetPath);
-
-    public class PoolManager : Singleton<PoolManager>
+    public class GameObjectPoolManager : Singleton<GameObjectPoolManager>
     {
         private Transform mgrTransform = null;
-        private Dictionary<string, SpawnPool> spawnDic = new Dictionary<string, SpawnPool>();
+        private Dictionary<string, GameObjectPoolGroup> groupDic = new Dictionary<string, GameObjectPoolGroup>();
 
         private float cullTimeInterval = 60f;
         private TimerTaskInfo cullTimerTask = null;
         protected override void DoInit()
         {
-            mgrTransform = DontDestroyHandler.CreateTransform("PoolManager");
+            LogUtil.LogInfo(GameObjectPoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
+            mgrTransform = DontDestroyHandler.CreateTransform(GameObjectPoolConst.MANAGER_NAME);
 
             cullTimerTask = TimerManager.GetInstance().AddIntervalTimer(cullTimeInterval, OnCullTimerUpdate);
-
-            LogUtil.LogInfo(PoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
         }
         
         /// <summary>
@@ -35,24 +29,24 @@ namespace Dot.Pool
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool HasSpawnPool(string name)=> spawnDic.ContainsKey(name);
+        public bool HasGroup(string name)=> groupDic.ContainsKey(name);
 
         /// <summary>
         ///获取指定的分组，如果不存在可以指定isCreateIfNot为true进行创建
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="isCreateIfNot"></param>
+        /// <param name="autoCreateIfNot"></param>
         /// <returns></returns>
-        public SpawnPool GetSpawnPool(string name,bool isCreateIfNot = false)
+        public GameObjectPoolGroup GetGroup(string name,bool autoCreateIfNot = false)
         {
-            if (spawnDic.TryGetValue(name, out SpawnPool pool))
+            if (groupDic.TryGetValue(name, out GameObjectPoolGroup pool))
             {
                 return pool;
             }
 
-            if(isCreateIfNot)
+            if(autoCreateIfNot)
             {
-                return CreateSpawnPool(name);
+                return CreateGroup(name);
             }
             return null;
         }
@@ -62,12 +56,12 @@ namespace Dot.Pool
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public SpawnPool CreateSpawnPool(string name)
+        public GameObjectPoolGroup CreateGroup(string name)
         {
-            if (!spawnDic.TryGetValue(name, out SpawnPool pool))
+            if (!groupDic.TryGetValue(name, out GameObjectPoolGroup pool))
             {
-                pool = new SpawnPool(name, mgrTransform);
-                spawnDic.Add(name, pool);
+                pool = new GameObjectPoolGroup(name, mgrTransform);
+                groupDic.Add(name, pool);
             }
             return pool;
         }
@@ -76,39 +70,37 @@ namespace Dot.Pool
         /// 删除指定的分组，对应分组中所有的缓存池都将被删除
         /// </summary>
         /// <param name="name"></param>
-        public void DeleteSpawnPool(string name)
+        public void DeleteGroup(string name)
         {
-            if (spawnDic.TryGetValue(name, out SpawnPool spawn))
+            if (groupDic.TryGetValue(name, out GameObjectPoolGroup spawn))
             {
-                spawnDic.Remove(name);
-
-                spawn.DestroySpawn();
+                groupDic.Remove(name);
+                spawn.DestroyGroup();
             }
         }
 
         private void OnCullTimerUpdate(System.Object obj)
         {
-            foreach(var kvp in spawnDic)
+            foreach(var kvp in groupDic)
             {
-                kvp.Value.CullSpawn(cullTimeInterval);
+                kvp.Value.CullGroup(cullTimeInterval);
             }
         }
         
         public override void DoDispose()
         {
-            foreach (var kvp in spawnDic)
+            foreach (var kvp in groupDic)
             {
-                kvp.Value.DestroySpawn();
+                kvp.Value.DestroyGroup();
             }
-            spawnDic.Clear();
+            groupDic.Clear();
 
             if (cullTimerTask != null)
             {
                 TimerManager.GetInstance().RemoveTimer(cullTimerTask);
             }
             cullTimerTask = null;
-            spawnDic = null;
+            groupDic = null;
         }
-       
     }
 }

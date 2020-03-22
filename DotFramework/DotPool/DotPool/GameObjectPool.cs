@@ -1,13 +1,12 @@
-﻿using Dot.Timer;
-using Dot.Core.Util;
+﻿using Dot.Core.Asset;
+using Dot.Core.Extension;
 using Dot.Log;
+using Dot.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
-using Dot.Asset;
-using Dot.Util;
 
 namespace Dot.Pool
 {
@@ -21,37 +20,65 @@ namespace Dot.Pool
         RuntimeInstance,//运行时创建的对象做模板
     }
 
+    /// <summary>
+    /// 以GameObject为对象的缓存池
+    /// </summary>
     public class GameObjectPool
     {
-        private SpawnPool spawnPool = null;
+        /// <summary>
+        /// 缓存池所属的分组
+        /// </summary>
+        private GameObjectPoolGroup spawnPool = null;
 
+        /// <summary>
+        ///唯一名称，一般情况下为资源的路径
+        /// </summary>
         private string uniqueName = null;
         private PoolTemplateType templateType = PoolTemplateType.Prefab;
+        /// <summary>
+        /// 缓存池中使用的GameObject的模板
+        /// </summary>
         private GameObject instanceOrPrefabTemplate = null;
-
         internal GameObject Template { get => instanceOrPrefabTemplate; }
 
+        /// <summary>
+        /// 空闲的GameObject对象栈
+        /// </summary>
         private Queue<GameObject> unusedItemQueue = new Queue<GameObject>();
+        /// <summary>
+        /// 从缓存池中获取的正在使用的对象
+        /// 为了上层方便对GameObject管理，采用弱引用的方式存储，
+        /// 可以保证即使是上层删除了GameObject也不会对整体造成影响
+        /// </summary>
         private List<WeakReference<GameObject>> usedItemList = new List<WeakReference<GameObject>>();
+        /// <summary>
+        /// 缓存池预加载完后回调
+        /// </summary>
+        public PoolPreloadComplete PreloadCompleteCallback = null;
 
-        public OnPoolComplete completeCallback = null;
+        //预加载的GameObject数量
+        public int PreloadTotalAmount { get; set; } = 0;
+        //每帧加载的数量，可以防止一次大量的预加载造成卡顿，一般可以在Loading中提前处理
+        public int PreloadOnceAmount { get; set; } = 1;
 
-        public int preloadTotalAmount = 0;
-        public int preloadOnceAmount = 1;
+        //是否自动定时的清理缓存池中空闲的GameObject
+        public bool IsAutoCull { get; set; } = false;
+        //进行清理时，一次性清理的数量，为0表示一次性清理所有的
+        public int CullOnceAmount { get; set; } = 0;
+        //两次清理执行时间间隔,以秒为单位
+        public int CullDelayTime { get; set; } = 30;
 
-        public bool isCull = false;
-        public int cullOnceAmount = 0;
-        public int cullDelayTime = 30;
+        //缓存池中GameObejct对象可以创建的最大的上限，如果超出则无法生成新的GameObject
+        //值为0时，表示无限制
+        public int LimitMaxAmount = 0;
+        //缓存池清理时，池中至少保持的GameObject的数量下限
+        //值为0时表示无限制
+        public int LimitMinAmount = 0;
 
-        public int limitMaxAmount = 0;
-        public int limitMinAmount = 0;
-
-        private float preCullTime = 0;
-        private float curTime = 0;
-
+        //预加载的定时器
         private TimerTaskInfo preloadTimerTask = null;
 
-        internal GameObjectPool(SpawnPool pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
+        internal GameObjectPool(GameObjectPoolGroup pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
         {
             spawnPool = pool;
             uniqueName = aPath;
@@ -59,10 +86,10 @@ namespace Dot.Pool
             instanceOrPrefabTemplate = templateGObj;
             this.templateType = templateType;
 
-            if(templateType!= PoolTemplateType.Prefab)
+            if(templateType != PoolTemplateType.Prefab)
             {
                 instanceOrPrefabTemplate.SetActive(false);
-                instanceOrPrefabTemplate.transform.SetParent(pool.SpawnTransform, false);
+                instanceOrPrefabTemplate.transform.SetParent(pool.GroupTransform, false);
             }
 
             preloadTimerTask = TimerManager.GetInstance().AddIntervalTimer(0.05f, OnPreloadTimerUpdate);
@@ -76,41 +103,41 @@ namespace Dot.Pool
         private void OnPreloadTimerUpdate(SystemObject obj)
         {
             int curAmount = unusedItemQueue.Count;
-            if (curAmount >= preloadTotalAmount)
+            if (curAmount >= PreloadTotalAmount)
             {
-                OnPoolComplete();
+                OnPoolPreloadComplete();
             }
             else
             {
-                int poa = preloadOnceAmount;
+                int poa = PreloadOnceAmount;
                 if (poa == 0)
                 {
-                    poa = preloadTotalAmount;
+                    poa = PreloadTotalAmount;
                 }
                 else
                 {
-                    poa = Mathf.Min(preloadOnceAmount, preloadTotalAmount - curAmount);
+                    poa = Mathf.Min(PreloadOnceAmount, PreloadTotalAmount - curAmount);
                 }
                 for (int i = 0; i < poa; ++i)
                 {
                     GameObject instance = CreateNewItem();
-                    instance.transform.SetParent(spawnPool.SpawnTransform, false);
+                    instance.transform.SetParent(spawnPool.GroupTransform, false);
                     instance.SetActive(false);
                     unusedItemQueue.Enqueue(instance);
                 }
             }
         }
 
-        private void OnPoolComplete()
+        private void OnPoolPreloadComplete()
         {
-            completeCallback?.Invoke(spawnPool.PoolName, uniqueName);
-            completeCallback = null;
-
-            if(preloadTimerTask!=null)
+            if (preloadTimerTask != null)
             {
                 TimerManager.GetInstance().RemoveTimer(preloadTimerTask);
                 preloadTimerTask = null;
             }
+
+            PreloadCompleteCallback?.Invoke(spawnPool.GroupName, uniqueName);
+            PreloadCompleteCallback = null;
         }
 
         #endregion
@@ -123,9 +150,9 @@ namespace Dot.Pool
         /// <returns></returns>
         public GameObject GetPoolItem(bool isAutoSetActive = true)
         {
-            if (limitMaxAmount != 0 && GetUsedItemCount() > limitMaxAmount)
+            if (LimitMaxAmount != 0 && GetUsedItemCount() > LimitMaxAmount)
             {
-                LogUtil.LogWarning(PoolConst.LOGGER_NAME, "GameObjectPool::GetItem->Large than Max Amount");
+                LogUtil.LogWarning(GameObjectPoolConst.LOGGER_NAME, "GameObjectPool::GetItem->Large than Max Amount");
                 return null;
             }
 
@@ -163,9 +190,9 @@ namespace Dot.Pool
         /// <typeparam name="T">继承于MonoBehaviour的组件</typeparam>
         /// <param name="isAutoActive">是否激获取到的GameObject,默认为true</param>
         /// <returns></returns>
-        public T GetComponentItem<T>(bool isAutoActive = true,bool isAddIfNotFind = false) where T:MonoBehaviour
+        public T GetComponentItem<T>(bool isAutoActive = true,bool autoAddIfNot = false) where T:MonoBehaviour
         {
-            if(instanceOrPrefabTemplate.GetComponent<T> ()==null && !isAddIfNotFind)
+            if(instanceOrPrefabTemplate.GetComponent<T> ()==null && !autoAddIfNot)
             {
                 return null;
             }
@@ -178,10 +205,10 @@ namespace Dot.Pool
                 if(component == null)
                 {
                     component = gObj.AddComponent<T>();
-                    GameObjectPoolItem poolItem = component as GameObjectPoolItem;
-                    if(poolItem!=null)
+
+                    if(component is GameObjectPoolItem poolItem)
                     {
-                        poolItem.SpawnName = spawnPool.PoolName;
+                        poolItem.SpawnName = spawnPool.GroupName;
                         poolItem.AssetPath = uniqueName;
                         poolItem.DoSpawned();
                     }
@@ -200,11 +227,14 @@ namespace Dot.Pool
             }
             else
             {
-#if ASSET_BUNDLE
-                item = (GameObject)AssetManager.GetInstance().InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
-#else
-                item = GameObject.Instantiate(instanceOrPrefabTemplate);
-#endif
+                //在使用DotAsset进行资源加载时，AssetUtil会接管Instantiate的行为
+                if(AssetUtil.InstanceAsset !=null)
+                {
+                    item = AssetUtil.InstanceAsset(uniqueName, instanceOrPrefabTemplate);
+                }else
+                {
+                    item = GameObject.Instantiate(instanceOrPrefabTemplate);
+                }
             }
 
             if (item != null)
@@ -213,7 +243,7 @@ namespace Dot.Pool
                 if (poolItem != null)
                 {
                     poolItem.AssetPath = uniqueName;
-                    poolItem.SpawnName = spawnPool.PoolName;
+                    poolItem.SpawnName = spawnPool.GroupName;
                 }
             }
             return item;
@@ -222,14 +252,14 @@ namespace Dot.Pool
 
 #region Release Item
         /// <summary>
-        /// 回收GameObject，如果此GameObject不带有GameObjectPoolItem组件，则无法回收到池中，将会直接删除
+        /// 回收GameObject
         /// </summary>
         /// <param name="item"></param>
         public void ReleasePoolItem(GameObject item)
         {
             if(item == null)
             {
-                LogUtil.LogError(PoolConst.LOGGER_NAME, "GameObjectPool::ReleaseItem->Item is Null");
+                LogUtil.LogError(GameObjectPoolConst.LOGGER_NAME, "GameObjectPool::ReleaseItem->Item is Null");
                 return;
             }
 
@@ -239,10 +269,11 @@ namespace Dot.Pool
                 pItem.DoDespawned();
             }
 
-            item.transform.SetParent(spawnPool.SpawnTransform, false);
+            item.transform.SetParent(spawnPool.GroupTransform, false);
             item.SetActive(false);
             unusedItemQueue.Enqueue(item);
 
+            //从使用列表中删除要回收的对象
             for (int i = usedItemList.Count - 1; i >= 0; i--)
             {
                 if(usedItemList[i].TryGetTarget(out GameObject target))
@@ -258,57 +289,62 @@ namespace Dot.Pool
                             break;
                         }
                     }
+                }else
+                {
+                    usedItemList.RemoveAt(i);
                 }
-
-                usedItemList.RemoveAt(i);
             }
         }
-#endregion
+        #endregion
 
-
+        private float cullTime = 0;
         internal void CullPool(float deltaTime)
         {
             CleanUsedItem();
-            if (!isCull)
-            {
-                return;
-            }
-            curTime += deltaTime;
-            if(curTime - preCullTime < cullDelayTime)
+            if (!IsAutoCull)
             {
                 return;
             }
 
+            cullTime += deltaTime;
+            if(cullTime < CullDelayTime)
+            {
+                return;
+            }
+            cullTime = 0;
+
+            //计算一次裁剪的数量
             int cullAmout = 0;
-            if (usedItemList.Count + unusedItemQueue.Count <= limitMinAmount)
+            if (usedItemList.Count + unusedItemQueue.Count <= LimitMinAmount)
             {
                 cullAmout = 0;
             }
             else
             {
-                cullAmout = usedItemList.Count + unusedItemQueue.Count - limitMinAmount;
+                cullAmout = usedItemList.Count + unusedItemQueue.Count - LimitMinAmount;
                 if (cullAmout > unusedItemQueue.Count)
                 {
                     cullAmout = unusedItemQueue.Count;
                 }
             }
 
-            if (cullOnceAmount > 0 && cullOnceAmount < cullAmout)
+            if (CullOnceAmount > 0 && CullOnceAmount < cullAmout)
             {
-                cullAmout = cullOnceAmount;
+                cullAmout = CullOnceAmount;
             }
 
             for (int i = 0; i < cullAmout && unusedItemQueue.Count>0; i++)
             {
                 UnityObject.Destroy(unusedItemQueue.Dequeue());
             }
-
-            preCullTime = curTime;
         }
         
+        /// <summary>
+        /// 销毁缓存池
+        /// </summary>
         internal void DestroyPool()
         {
-            completeCallback = null;
+            PreloadCompleteCallback = null;
             if (preloadTimerTask != null)
             {
                 TimerManager.GetInstance().RemoveTimer(preloadTimerTask);
@@ -327,10 +363,10 @@ namespace Dot.Pool
             {
                 UnityObject.Destroy(instanceOrPrefabTemplate);
             }
+            instanceOrPrefabTemplate = null;
 
             uniqueName = null;
             spawnPool = null;
-            instanceOrPrefabTemplate = null;
         }
 
         private int GetUsedItemCount()

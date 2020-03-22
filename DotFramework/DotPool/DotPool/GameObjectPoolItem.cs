@@ -58,13 +58,13 @@ namespace Dot.Pool
                 Destroy(CachedGameObject);
                 return;
             }
-            if (!PoolManager.GetInstance().HasSpawnPool(SpawnName))
+            if (!GameObjectPoolManager.GetInstance().HasGroup(SpawnName))
             {
                 Destroy(CachedGameObject);
                 return;
             }
-            SpawnPool spawnPool = PoolManager.GetInstance().GetSpawnPool(SpawnName);
-            GameObjectPool gObjPool = spawnPool.GetGameObjectPool(AssetPath);
+            GameObjectPoolGroup spawnPool = GameObjectPoolManager.GetInstance().GetGroup(SpawnName);
+            GameObjectPool gObjPool = spawnPool.GetPool(AssetPath);
             if (gObjPool == null)
             {
                 Destroy(CachedGameObject);
