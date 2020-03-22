@@ -31,6 +31,9 @@ DotGOPool
     ->DotLog
     ->DotTimer
 
+DotSnappy
+    ->
+
 DotNet
     -> DotCore
     -> DotCrypto
@@ -39,5 +42,3 @@ DotNet
     -> Google.Protobuf
     -> Newtonsoft.Json
 
-DotSnappy
-    -> 
