@@ -2,6 +2,7 @@
 DotFramework/*/packages
 *.bak
 *.temp
+*.log
 bin/
 obj/
 temp/
