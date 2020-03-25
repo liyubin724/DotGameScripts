@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNet</name>
+    </assembly>
+    <members>
+        <member name="T:Dot.Net.MessageCryptoType">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>
