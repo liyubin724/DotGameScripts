@@ -17,11 +17,11 @@ namespace Game.Net.Proto
             serverNetListener.RegisterMessageParser(C2SProto.C2S_SHOP_LIST,Parse_ShopListRequest);
         }
 
-        private static object Parse_LoginRequest(int netID,int messageID,byte[] msgBytes)
+        private static object Parse_LoginRequest(int messageID,byte[] msgBytes)
         {
             return LoginRequest.Parser.ParseFrom(msgBytes);
         }
-        private static object Parse_ShopListRequest(int netID,int messageID,byte[] msgBytes)
+        private static object Parse_ShopListRequest(int messageID,byte[] msgBytes)
         {
             return ShopListRequest.Parser.ParseFrom(msgBytes);
         }

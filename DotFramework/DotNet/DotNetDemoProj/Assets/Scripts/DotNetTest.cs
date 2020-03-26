@@ -1,11 +1,8 @@
-﻿//This class is used to test the netframework
-
-using Dot.Core.Proxy;
+﻿using Dot.Core.Proxy;
 using Dot.Log;
 using Dot.Net.Client;
 using Dot.Net.Server;
 using Game.Net.Proto;
-using Google.Protobuf;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +54,7 @@ namespace Dot.Net.Demo
 
                             LoginResponse response = new LoginResponse();
                             response.Result = true;
-                            serverNetListener.SendData(netID, S2CProto.S2C_LOGIN, response.ToByteArray());
+                            serverNetListener.SendPBMessage<LoginResponse>(netID, S2CProto.S2C_LOGIN, response);
                         });
                         serverNetListener.RegisterMessageHandler(C2SProto.C2S_SHOP_LIST, (netID, messageID, message) =>
                         {
@@ -66,7 +63,7 @@ namespace Dot.Net.Demo
 
                             ShopListResponse response = new ShopListResponse();
                             response.Names = $"Test Shop ->{request.ShopType} ->{request.PageNumber}";
-                            serverNetListener.SendData(netID, S2CProto.S2C_SHOP_LIST, response.ToByteArray());
+                            serverNetListener.SendPBMessage(netID, S2CProto.S2C_SHOP_LIST, response);
                         });
                     }
                     GUILayout.Label("Received:");
@@ -82,6 +79,23 @@ namespace Dot.Net.Demo
                         S2CProto_Parser.RegisterParser(clientNet1);
 
                         clientNet1.Connect("127.0.0.1", 1100);
+                        clientNet1.NetConnecting += (client) =>
+                        {
+                            clientReceivedList1.Add($"connecting to server");
+                        };
+                        clientNet1.NetConnectedSuccess += (client) =>
+                         {
+                             clientReceivedList1.Add($"connected success");
+                         };
+                        clientNet1.NetConnectedFailed += (client) =>
+                        {
+                            clientReceivedList1.Add($"Connected failed");
+                        };
+                        clientNet1.NetDisconnected += (client) =>
+                        {
+                            clientReceivedList1.Add($"disconnected");
+                        };
+
                         clientNet1.RegisterMessageHandler(S2CProto.S2C_LOGIN, (messageID,message) =>
                         {
                             LoginResponse response = (LoginResponse)message;
