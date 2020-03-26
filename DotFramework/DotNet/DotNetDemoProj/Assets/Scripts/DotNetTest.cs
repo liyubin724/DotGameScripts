@@ -4,11 +4,10 @@ using Dot.Core.Proxy;
 using Dot.Log;
 using Dot.Net.Client;
 using Dot.Net.Server;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 using Game.Net.Proto;
 using Google.Protobuf;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Dot.Net.Demo
 {
@@ -31,7 +30,7 @@ namespace Dot.Net.Demo
             UpdateProxy.GetInstance().DoLateUpdate();
         }
 
-        private ServerNetListener serverNet = null;
+        private ServerNetListener serverNetListener = null;
         private List<string> serverReceivedList = new List<string>();
 
         private ClientNet clientNet1 = null;
@@ -49,25 +48,25 @@ namespace Dot.Net.Demo
                 {
                     if (GUILayout.Button("Start Server"))
                     {
-                        serverNet = NetManager.GetInstance().CreateServerNet(1100);
-                        C2SProto_Parser.RegisterParser(serverNet);
-                        serverNet.RegisterMessageHandler(C2SProto.C2S_LOGIN, (netID,messageID, message) =>
+                        serverNetListener = NetManager.GetInstance().CreateServerNet(1100);
+                        C2SProto_Parser.RegisterParser(serverNetListener);
+                        serverNetListener.RegisterMessageHandler(C2SProto.C2S_LOGIN, (netID,messageID, message) =>
                         {
                             LoginRequest request = (LoginRequest)message;
                             serverReceivedList.Add($"netID = {netID},account = {request.UserAccount},password={request.Password}");
 
                             LoginResponse response = new LoginResponse();
                             response.Result = true;
-                            serverNet.SendData(netID, S2CProto.S2C_LOGIN, response.ToByteArray());
+                            serverNetListener.SendData(netID, S2CProto.S2C_LOGIN, response.ToByteArray());
                         });
-                        serverNet.RegisterMessageHandler(C2SProto.C2S_SHOP_LIST, (netID, messageID, message) =>
+                        serverNetListener.RegisterMessageHandler(C2SProto.C2S_SHOP_LIST, (netID, messageID, message) =>
                         {
                             ShopListRequest request = (ShopListRequest)message;
                             serverReceivedList.Add($"netID = {netID},ShopType = {request.ShopType},PageNumber={request.PageNumber}");
 
                             ShopListResponse response = new ShopListResponse();
                             response.Names = $"Test Shop ->{request.ShopType} ->{request.PageNumber}";
-                            serverNet.SendData(netID, S2CProto.S2C_SHOP_LIST, response.ToByteArray());
+                            serverNetListener.SendData(netID, S2CProto.S2C_SHOP_LIST, response.ToByteArray());
                         });
                     }
                     GUILayout.Label("Received:");
