@@ -37,7 +37,7 @@ namespace Dot.Net.Server
         }
     }
 
-    public partial class ServerNetListener : IDispose
+    public class ServerNetListener : IDispose
     {
         private int uniqueID = -1;
         public int UniqueID { get => uniqueID; }

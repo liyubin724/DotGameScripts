@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Dot.Net.Server
 {
-    public partial class ServerNetListener
+    public partial class ServerNet
     {
-        public void SendJsonMessage(int netID,int messageID)
+        public void SendJsonMessage(int messageID)
         {
-            SendData(netID, messageID, null);
+            SendData(messageID);
         }
 
-        public void SendJsonMessage<T>(int netID,int messageID, T msg)
+        public void SendJsonMessage<T>(int messageID, T msg)
         {
             string msgJson = JsonConvert.SerializeObject(msg);
             byte[] msgBytes = null;
@@ -19,10 +19,10 @@ namespace Dot.Net.Server
             {
                 msgBytes = Encoding.UTF8.GetBytes(msgJson);
             }
-            SendData(netID,messageID, msgBytes);
+            SendData(messageID, msgBytes);
         }
 
-        public void SendJsonMessage<T>(int netID, int messageID, T msg, bool isCrypto, bool isCompress)
+        public void SendJsonMessage<T>(int messageID, T msg, bool isCrypto, bool isCompress)
         {
             string msgJson = JsonConvert.SerializeObject(msg);
             byte[] msgBytes = null;
@@ -30,7 +30,7 @@ namespace Dot.Net.Server
             {
                 msgBytes = Encoding.UTF8.GetBytes(msgJson);
             }
-            SendData(netID, messageID, msgBytes,isCrypto,isCompress);
+            SendData(messageID, msgBytes,isCrypto,isCompress);
         }
     }
 }
