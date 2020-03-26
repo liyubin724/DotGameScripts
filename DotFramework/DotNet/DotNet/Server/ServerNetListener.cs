@@ -37,7 +37,7 @@ namespace Dot.Net.Server
         }
     }
 
-    public class ServerNetListener : IDispose
+    public partial class ServerNetListener : IDispose
     {
         private int uniqueID = -1;
         public int UniqueID { get => uniqueID; }
@@ -173,6 +173,14 @@ namespace Dot.Net.Server
             if (netDic.TryGetValue(netID, out ServerNet serverNet))
             {
                 serverNet.SendData(messageID,msg);
+            }
+        }
+
+        public void SendData(int netID,int messageID,byte[] msg,bool isCrypto,bool isCompress)
+        {
+            if (netDic.TryGetValue(netID, out ServerNet serverNet))
+            {
+                serverNet.SendData(messageID, msg,isCrypto,isCompress);
             }
         }
 
