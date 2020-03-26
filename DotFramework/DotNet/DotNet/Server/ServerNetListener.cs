@@ -37,7 +37,7 @@ namespace Dot.Net.Server
         }
     }
 
-    public class ServerNetListener : IDispose
+    public partial class ServerNetListener : IDispose
     {
         private int uniqueID = -1;
         public int UniqueID { get => uniqueID; }
@@ -165,6 +165,14 @@ namespace Dot.Net.Server
                 {
                     kvp.Value.DoLateUpdate();
                 }
+            }
+        }
+
+        public void SendData(int netID,int messageID)
+        {
+            if (netDic.TryGetValue(netID, out ServerNet serverNet))
+            {
+                serverNet.SendData(messageID);
             }
         }
 

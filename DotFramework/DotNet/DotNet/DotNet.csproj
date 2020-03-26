@@ -82,8 +82,8 @@
     <Compile Include="Server\ServerNet.cs" />
     <Compile Include="Server\ServerNetConst.cs" />
     <Compile Include="Server\ServerNetListener.cs" />
-    <Compile Include="Server\ServerNet_Json.cs" />
-    <Compile Include="Server\ServerNet_PB.cs" />
+    <Compile Include="Server\ServerNetListener_Json.cs" />
+    <Compile Include="Server\ServerNetListener_PB.cs" />
     <Compile Include="Server\ServerNetSession.cs" />
     <Compile Include="Stream\BufferStream.cs" />
     <Compile Include="Stream\MemoryStreamEx.cs" />

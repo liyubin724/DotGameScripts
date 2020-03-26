@@ -8,7 +8,7 @@ namespace Dot.Net.Server
     public delegate void OnMessageReceived(int id, int messageID, byte[] datas);
     public delegate void OnNetDisconnected(int id);
 
-    public partial class ServerNet : IDispose
+    public class ServerNet : IDispose
     {
         private int uniqueID = -1;
         public int UniqueID { get => uniqueID; }
