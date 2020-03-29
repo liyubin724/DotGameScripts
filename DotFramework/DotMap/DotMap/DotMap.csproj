@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,11 +49,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="MapBehaviour.cs" />
+    <Compile Include="MapLightmapData.cs" />
+    <Compile Include="MapManager.cs" />
+    <Compile Include="Item\DynamicItemData.cs" />
+    <Compile Include="Item\ItemBehaviour.cs" />
+    <Compile Include="Lightmap\SceneLightmapData.cs" />
+    <Compile Include="Item\ItemPlacementData.cs" />
+    <Compile Include="Lightmap\RendererLightmapData.cs" />
+    <Compile Include="Item\StaticItemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="PrefabBaker\" />
+    <Folder Include="QuadTree\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
