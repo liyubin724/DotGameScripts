@@ -2,16 +2,22 @@
 
 using Dot.Asset.Datas;
 using Dot.Log;
-using Dot.Pool;
+using Dot.Core.Pool;
 using System.Linq;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 使用Database进行资源的加载，只能用于编辑器模式中
+    /// </summary>
     public class DatabaseLoader : AAssetLoader
     {
         private ObjectPool<DatabaseAssetNode> assetNodePool = new ObjectPool<DatabaseAssetNode>();
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         protected override void DoInitUpdate()
         {
             addressConfig = AssetConst.GetAddressConfig();
@@ -75,7 +81,7 @@ namespace Dot.Asset
 
         private float GetAssetProgress(string assetPath)
         {
-            DatabaseAsyncOperation operation = operations.GetByKey(assetPath) as DatabaseAsyncOperation;
+            DatabaseAsyncOperation operation = operations[assetPath] as DatabaseAsyncOperation;
             return operation.GetProgress();
         }
 
@@ -130,7 +136,7 @@ namespace Dot.Asset
             assetNodeDic.Add(assetPath, assetNode);
 
             DatabaseAsyncOperation operation = new DatabaseAsyncOperation(assetPath);
-            operations.AddOrUpdate(assetPath, operation);
+            operations.Add(assetPath, operation);
 
             return assetNode;
         }

@@ -1,10 +1,10 @@
 @ECHO OFF
 
-SETLOCAL enabledelayedexpansion
+SETLOCAL ENABLEDELAYEDEXPANSION
 
 SET BuildMode=Debug
 SET BuildLogPath=.\build.log
-SET ProjectName=DotAI
+SET ProjectName=DotCore
 
 IF EXIST %BuildLogPath% (
     DEL /Q %BuildLogPath%%

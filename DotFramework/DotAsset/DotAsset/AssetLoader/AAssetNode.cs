@@ -3,9 +3,18 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 加载中及缓存到的资源结点
+    /// </summary>
     public abstract class AAssetNode : IObjectPoolItem
     {
+        /// <summary>
+        /// 资源路径
+        /// </summary>
         public string AssetPath { get; private set; }
+        /// <summary>
+        /// 是否设定此资源永不销毁
+        /// </summary>
         public bool IsNeverDestroy { get; set; }
 
         protected int refCount = 0;

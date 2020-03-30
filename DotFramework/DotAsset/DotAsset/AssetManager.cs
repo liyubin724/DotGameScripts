@@ -108,14 +108,14 @@ namespace Dot.Asset
                 initCallback?.Invoke(false);
             }else
             {
-                assetLoader.Initialize((result) =>
+                assetLoader.Initialize((Action<bool>)((result) =>
                 {
                     if(!result)
                     {
-                        LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::InitManager->init failed");
+                        LogUtil.LogError((string)AssetConst.LOGGER_NAME, "AssetManager::InitManager->init failed");
                     }
 
-                    LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetManager::InitManager->init Success");
+                    LogUtil.LogInfo((string)AssetConst.LOGGER_NAME, "AssetManager::InitManager->init Success");
 
                     if (loaderMode == AssetLoaderMode.AssetBundle)
                     {
@@ -133,7 +133,7 @@ namespace Dot.Asset
                     }
 
                     initCallback.Invoke(result);
-                },  assetRootDir);
+                }),  assetRootDir);
             }
         }
 

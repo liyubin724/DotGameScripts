@@ -21,6 +21,10 @@ namespace Dot.Asset
         {
         }
 
+        public void OnNew()
+        {
+        }
+
         public void OnRelease()
         {
             uniqueID = -1;
@@ -34,7 +38,7 @@ namespace Dot.Asset
     public class AssetBridge : ABaseDispose
     {
         private AssetLoaderPriority loaderPriority = AssetLoaderPriority.Default;
-        private UniqueIDCreator idCreator = new UniqueIDCreator();
+        private UniqueIntID idCreator = new UniqueIntID();
 
         private static ObjectPool<AssetBridgeData> bridgeDataPool = new ObjectPool<AssetBridgeData>();
 

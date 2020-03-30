@@ -11,6 +11,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 资源加载器状态
+    /// </summary>
     public enum AssetLoaderState
     {
         None = 0,
@@ -23,17 +26,21 @@ namespace Dot.Asset
     {
         protected ObjectPool<AssetLoaderData> dataPool = new ObjectPool<AssetLoaderData>(5);
 
+        //等待加载的资源队列，会根据优先级调整加载的先后顺序
         protected StablePriorityQueue<AssetLoaderData> dataWaitingQueue = new StablePriorityQueue<AssetLoaderData>(10);
+        //当前正在加载中的资源
         protected List<AssetLoaderData> dataLoadingList = new List<AssetLoaderData>();
+        //正在执行加载的加载器
         protected ListDictionary<string, AAsyncOperation> operations = new ListDictionary<string, AAsyncOperation>();
-
+        //缓存的资源
         protected Dictionary<string, AAssetNode> assetNodeDic = new Dictionary<string, AAssetNode>();
+
+        public int MaxLoadingCount { get; set; } = 8;
+        protected AssetLoaderState State { get; set; }
 
         protected Action<bool> initCallback = null;
         protected string assetRootDir = string.Empty;
-        public int MaxLoadingCount { get; set; } = 6;
 
-        protected AssetLoaderState State { get; set; }
         protected AssetAddressConfig addressConfig = null;
         public string GetAssetPathByAddress(string address)
         {
@@ -43,7 +50,11 @@ namespace Dot.Asset
             }
             return null;
         }
-
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="callback">初始化回调</param>
+        /// <param name="assetDir">资源的根目录</param>
         internal void Initialize(Action<bool> callback,string assetDir)
         {
             initCallback = callback;
@@ -51,9 +62,29 @@ namespace Dot.Asset
 
             State = AssetLoaderState.Initing;
         }
+
+        /// <summary>
+        /// 在初始阶段，每帧调用进行初始化,子类中需要重写以完成初始化过程
+        /// </summary>
         protected abstract void DoInitUpdate();
 
-        internal AssetHandler LoadBatchAssetAsync(string label,string[] addresses,
+        /// <summary>
+        /// 按批量方式进行资源的加载
+        /// 如果指定使用标签进行资源加载，则会忽略<paramref name="addresses"/>的值
+        /// </summary>
+        /// <param name="label">加载设定指定标签的资源</param>
+        /// <param name="addresses">资源加载地址</param>
+        /// <param name="isInstance">是否需要实例化</param>
+        /// <param name="complete">单个资源加载完毕后回调</param>
+        /// <param name="batchComplete">所有资源加载完毕后回调</param>
+        /// <param name="progress">单个资源加载进度回调</param>
+        /// <param name="batchProgress">所有资源加载进度回调</param>
+        /// <param name="priority">优先级</param>
+        /// <param name="userData">自定义参数</param>
+        /// <returns></returns>
+        internal AssetHandler LoadBatchAssetAsync(
+            string label,
+            string[] addresses,
             bool isInstance,
             OnAssetLoadComplete complete,
             OnBatchAssetLoadComplete batchComplete,
@@ -62,10 +93,11 @@ namespace Dot.Asset
             AssetLoaderPriority priority,
             SystemObject userData)
         {
-            if(!string.IsNullOrEmpty(label) && addresses == null)
+            //如果指定按标签加载资源，则查找标记为指定标签的所有资源
+            if(!string.IsNullOrEmpty(label))
             {
                 addresses = addressConfig.GetAddressesByLabel(label);
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::LoadBatchAssetAsync->Load asset by label.label = {label},addresses = {string.Join(",",addresses)}");
+                LogUtil.LogDebug(AssetConst.LOGGER_NAME, $"AssetLoader::LoadBatchAssetAsync->Load asset by label.label = {label},addresses = {string.Join(",",addresses)}");
             }
 
             if (addresses == null || addresses.Length == 0)
@@ -73,7 +105,7 @@ namespace Dot.Asset
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "AAssetLoader::LoadBatchAssetAsync->addresses is null");
                 return null;
             }
-
+            //获取资源真实的路径
             string[] paths = addressConfig.GetPathsByAddresses(addresses);
             if(paths == null || paths.Length == 0)
             {
@@ -81,40 +113,37 @@ namespace Dot.Asset
                 return null;
             }else
             {
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::LoadBatchAssetAsync->find assetPath by address.addresses = {string.Join(",", addresses)},path = {string.Join(",",paths)}");
+                LogUtil.LogDebug(AssetConst.LOGGER_NAME, $"AssetLoader::LoadBatchAssetAsync->find assetPath by address.addresses = {string.Join(",", addresses)},path = {string.Join(",",paths)}");
             }
-
-            AssetLoaderData data = dataPool.Get();
-            data.InitData(label, addresses, paths, isInstance, complete, progress, batchComplete, batchProgress, userData);
 
             if (dataWaitingQueue.Count >= dataWaitingQueue.MaxSize)
             {
                 dataWaitingQueue.Resize(dataWaitingQueue.MaxSize * 2);
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::LoadBatchAssetAsync->Reset the queue size.");
+                LogUtil.LogDebug(AssetConst.LOGGER_NAME, "AssetLoader::LoadBatchAssetAsync->Reset the queue size.");
             }
-            dataWaitingQueue.Enqueue(data, (float)priority);
+
+            AssetLoaderData data = dataPool.Get();
+            data.InitData(label, addresses, paths, isInstance, complete, progress, batchComplete, batchProgress, userData);
             data.State = AssetLoaderDataState.Waiting;
+            dataWaitingQueue.Enqueue(data, (float)priority);
 
             return data.Handler;
         }
 
         internal void DoUpdate(float deltaTime)
         {
+            //检查Loader初始化状态
             if(State == AssetLoaderState.Initing)
             {
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::DoUpdate->Update to Init Loader.");
-
                 DoInitUpdate();
 
                 if(State == AssetLoaderState.Running)
                 {
-                    LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, "AssetLoader::DoUpdate->Loader init success.");
-
+                    LogUtil.LogDebug(AssetConst.LOGGER_NAME, "AssetLoader::DoUpdate->Loader init success.");
                     initCallback?.Invoke(true);
                 }else if(State == AssetLoaderState.Error)
                 {
                     LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetLoader::DoUpdate->Loader init failed.");
-
                     initCallback?.Invoke(false);
                 }
                 return;
@@ -138,10 +167,14 @@ namespace Dot.Asset
                 data.State = AssetLoaderDataState.Loading;
                 dataLoadingList.Add(data);
 
-                LogUtil.LogInfo(AssetConst.LOGGER_DEBUG_NAME, $"AssetLoader::DoWaitingDataUpdate->Start Load Data.data = {data}");
+                LogUtil.LogDebug(AssetConst.LOGGER_NAME, $"AssetLoader::DoWaitingDataUpdate->Start Load Data.data = {data}");
             }
         }
 
+        /// <summary>
+        /// 开始加载指定的资源，子类需要重写
+        /// </summary>
+        /// <param name="data"></param>
         protected abstract void StartLoadingData(AssetLoaderData data);
 
         private void DoAsyncOperationUpdate()
@@ -166,6 +199,10 @@ namespace Dot.Asset
             }
         }
 
+        /// <summary>
+        /// 资源加载器加载结束，子类需要重写
+        /// </summary>
+        /// <param name="operation"></param>
         protected abstract void OnOperationFinished(AAsyncOperation operation);
 
         private void DoLoadingDataUpdate()
@@ -185,10 +222,20 @@ namespace Dot.Asset
             }
         }
 
+        /// <summary>
+        /// 子类需要重写，用于检查资源当前状况
+        /// </summary>
+        /// <param name="data"></param>
         protected abstract void OnDataUpdate(AssetLoaderData data);
 
+        /// <summary>
+        /// 停止资源加载
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="destroyIfIsInstnace"></param>
         internal void UnloadAssetAsync(AssetHandler handler, bool destroyIfIsInstnace)
         {
+            //判断需要停止的是否还尚未开始加载
             if(dataWaitingQueue.Count>0)
             {
                 foreach(var data in dataWaitingQueue)
@@ -227,6 +274,10 @@ namespace Dot.Asset
 
         private Action unloadUnusedCallback = null;
         private AsyncOperation unloadUnusedOperation = null;
+        /// <summary>
+        /// 深度清理资源
+        /// </summary>
+        /// <param name="callback">清理完毕后回调</param>
         internal void DeepUnloadUnusedAsset(Action callback)
         {
             if(unloadUnusedCallback!=null)
@@ -255,10 +306,28 @@ namespace Dot.Asset
                 unloadUnusedCallback = null;
             }
         }
-
+        /// <summary>
+        /// 清理所有的资源
+        /// </summary>
         internal virtual void DoDispose()
         {
-            
+            while(dataWaitingQueue.Count>0)
+            {
+                var loaderData = dataWaitingQueue.Dequeue();
+                dataPool.Release(loaderData);
+            }
+            for(int i =dataLoadingList.Count-1;i>=0;--i)
+            {
+                var loaderData = dataLoadingList[i];
+                dataLoadingList.RemoveAt(i);
+                dataPool.Release(loaderData);
+            }
+            dataPool.Clear();
+            operations.Clear();
+            assetNodeDic.Clear();
+            State = AssetLoaderState.None;
+            initCallback = null;
+            addressConfig = null;
         }
     }
 }
