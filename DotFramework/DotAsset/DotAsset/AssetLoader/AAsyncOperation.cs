@@ -2,6 +2,9 @@
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 执行异步资源加载状态
+    /// </summary>
     public enum OperationState
     {
         None = 0,
@@ -37,7 +40,9 @@ namespace Dot.Asset
                 OnOperationLoading();
             }
         }
-
+        /// <summary>
+        /// 开始加载
+        /// </summary>
         protected abstract void OnOperationStart();
         protected abstract void OnOperationLoading();
         protected internal abstract UnityObject GetAsset();

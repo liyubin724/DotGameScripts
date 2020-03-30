@@ -141,6 +141,12 @@ namespace Dot.Asset
             return assetNode;
         }
 
+        /// <summary>
+        /// 实例化资源
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         protected internal override UnityObject InstantiateAsset(string address, UnityObject asset)
         {
             if(asset!=null)

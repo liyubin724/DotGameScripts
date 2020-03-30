@@ -8,16 +8,16 @@ namespace Dot.Asset
     internal class DatabaseAssetNode : AAssetNode
     {
         private UnityObject uObject = null;
-        private bool isSetAsset = false;
+        private bool isDone = false;
         internal void SetAsset(UnityObject uObj)
         {
             uObject = uObj;
-            isSetAsset = true;
+            isDone = true;
         }
 
-        protected internal override UnityEngine.Object GetAsset()
+        protected internal override UnityObject GetAsset()
         {
-            if(uObject!=null)
+            if(uObject != null)
             {
                 return uObject;
             }else
@@ -27,7 +27,7 @@ namespace Dot.Asset
             }
         }
 
-        protected internal override UnityEngine.Object GetInstance()
+        protected internal override UnityObject GetInstance()
         {
             if(uObject!=null)
             {
@@ -59,13 +59,13 @@ namespace Dot.Asset
 
         protected internal override bool IsDone()
         {
-            return isSetAsset;
+            return isDone;
         }
 
         protected internal override void Unload()
         {
             uObject = null;
-            isSetAsset = false;
+            isDone = false;
         }
     }
 }

@@ -10,16 +10,28 @@ IF EXIST %BuildLogPath% (
 
 CALL ..\set-devenv.bat
 
-ECHO build start
+ECHO build start(%ProjectName%)
 
 devenv .\%ProjectName%.sln /rebuild "%BuildMode%" /project "%ProjectName%" /out %BuildLogPath%
 
-ECHO %ERRORLEVEL%
-
 IF ERRORLEVEL 1 (
-    ECHO build Error
+    GOTO BuildError
 ) ELSE (
     ECHO build success
 )
 
-PAUSE
+ECHO build start(%ProjectName%Editor)
+
+devenv .\%ProjectName%.sln /rebuild "%BuildMode%" /project "%ProjectName%Editor" /out %BuildLogPath%
+
+IF ERRORLEVEL 1 (
+    GOTO BuildError
+) ELSE (
+    ECHO build success
+    GOTO BuildSuccess
+)
+
+:BuildError
+ECHO build failed & PAUSE > nul
+
+:BuildSuccess

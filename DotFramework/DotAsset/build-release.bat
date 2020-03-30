@@ -14,8 +14,6 @@ ECHO build start
 
 devenv .\%ProjectName%.sln /rebuild "%BuildMode%" /project "%ProjectName%" /out %BuildLogPath%
 
-ECHO %ERRORLEVEL%
-
 IF ERRORLEVEL 1 (
     ECHO build Error
 ) ELSE (

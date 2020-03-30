@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\DotLibs\DotAssetEditor.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -30,9 +31,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\DotLibs\DotAssetEditor.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotCoreEditor">
+      <HintPath>..\..\DotLibs\Editor\DotCoreEditor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetAddress\AssetAddressGroup.cs" />
+    <Compile Include="AssetAddress\AssetAddressGroupEditor.cs" />
+    <Compile Include="AssetAddress\AssetAddressOperation.cs" />
+    <Compile Include="AssetAddress\AssetAddressOperationPropertyDrawer.cs" />
+    <Compile Include="AssetAddress\AssetAddressUtil.cs" />
+    <Compile Include="AssetAddress\AssetFilterFinder.cs" />
+    <Compile Include="AssetAddress\AssetFilterFinderPropertyDrawer.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
