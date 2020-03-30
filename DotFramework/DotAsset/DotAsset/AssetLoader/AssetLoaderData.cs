@@ -5,6 +5,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 资源加载状态
+    /// </summary>
     public enum AssetLoaderDataState
     {
         None = 0,
@@ -15,6 +18,9 @@ namespace Dot.Asset
         Error,
     }
 
+    /// <summary>
+    /// 由于资源的加载是异步的，所以需要存储加载时数据，用于加载完成及进度更新
+    /// </summary>
     public class AssetLoaderData : StablePriorityQueueNode, IObjectPoolItem
     {
         private string label = string.Empty;
@@ -27,10 +33,12 @@ namespace Dot.Asset
         private OnBatchAssetsLoadProgress batchProgressCallback;
         private SystemObject userData = null;
 
-        private AssetHandler handler = null;
-        internal AssetHandler Handler { get => handler; }
+        internal AssetHandler Handler { get; set; }
         internal AssetLoaderDataState State { get; set; }
 
+        /// <summary>
+        /// 返回资源路径
+        /// </summary>
         public string[] Paths { get => paths; }
 
         public void InitData(string label,string[] addresses,string[] paths,bool isInstance,
@@ -47,49 +55,57 @@ namespace Dot.Asset
             this.batchProgressCallback = batchProgress;
             this.userData = userData;
 
-            handler = new AssetHandler(label, addresses, userData);
+            Handler = new AssetHandler(label, addresses, userData);
         }
         
+        /// <summary>
+        /// 某个资源加载完毕
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="assetNode"></param>
         internal void DoComplete(int index,AAssetNode assetNode)
         {
-            string path = paths[index];
-            if(!string.IsNullOrEmpty(path))
+            paths[index] = null;
+
+            UnityObject uObj;
+            if (isInstance)
             {
-                paths[index] = null;
-
-                UnityObject uObj;
-                if (isInstance)
-                {
-                    uObj = assetNode.GetInstance();
-                }else
-                {
-                    uObj = assetNode.GetAsset();
-                }
-                handler.UObjects[index] = uObj;
-
-                handler.IsDone = true;
-
-                progressCallback?.Invoke(addresses[index], 1.0f, userData);
-                completeCallback?.Invoke(addresses[index], uObj, userData);
+                uObj = assetNode.GetInstance();
             }
+            else
+            {
+                uObj = assetNode.GetAsset();
+            }
+            Handler.UObjects[index] = uObj;
+
+            progressCallback?.Invoke(addresses[index], 1.0f, userData);
+            completeCallback?.Invoke(addresses[index], uObj, userData);
         }
 
         private bool isProgressChanged = false;
+        /// <summary>
+        /// 某个资源加载进度发生变化
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="progress"></param>
         internal void DoProgress(int index,float progress)
         {
-            if(progress!=handler.Progresses[index])
+            if(progress!=Handler.Progresses[index])
             {
                 isProgressChanged = true;
 
-                handler.Progresses[index] = progress;
+                Handler.Progresses[index] = progress;
                 progressCallback?.Invoke(addresses[index], progress,userData);
             }
         }
-
+        /// <summary>
+        /// 所有的资源加载完毕
+        /// </summary>
         internal void DoBatchComplete()
         {
-            batchProgressCallback?.Invoke(addresses, handler.Progresses, userData);
-            batchCompleteCallback?.Invoke(addresses, handler.UObjects, userData);
+            Handler.IsDone = true;
+            batchProgressCallback?.Invoke(addresses, Handler.Progresses, userData);
+            batchCompleteCallback?.Invoke(addresses, Handler.UObjects, userData);
             State = AssetLoaderDataState.Finished;
         }
 
@@ -97,15 +113,15 @@ namespace Dot.Asset
         {
             if(isProgressChanged)
             {
-                batchProgressCallback?.Invoke(addresses, handler.Progresses, userData);
+                batchProgressCallback?.Invoke(addresses, Handler.Progresses, userData);
                 isProgressChanged = false;
             }
         }
 
         internal void DoCancel(bool destroyIfIsInstnace)
         {
-            handler.DoCancel(isInstance, destroyIfIsInstnace);
-            handler = null;
+            Handler.DoCancel(isInstance, destroyIfIsInstnace);
+            Handler = null;
 
             completeCallback = null;
             progressCallback = null;
@@ -132,7 +148,7 @@ namespace Dot.Asset
             batchProgressCallback = null;
             userData = null;
 
-            handler = null;
+            Handler = null;
 
             State = AssetLoaderDataState.None;
         }
