@@ -6,8 +6,8 @@ namespace Dot.Asset.Datas
 {
     public static class AssetConst
     {
-        public const string LOGGER_NAME = "AssetLoader";
-        public const string LOGGER_DEBUG_NAME = "AssetLoader-Debug";
+        public const string LOGGER_NAME = "DotAsset";
+        public const string LOGGER_DEBUG_NAME = "DotAsset-Debug";
 
         public static readonly string ASSET_MANIFEST_NAME = "manifest_config";
         public static readonly string ASSET_MANIFEST_EXT = ".json";
