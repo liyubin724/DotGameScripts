@@ -1,10 +1,9 @@
 ﻿using Dot.Core.Util;
-using Dot.Util;
 using System;
 using System.IO;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
-namespace DotEditor.AssetFilter.AssetAddress
+namespace DotEditor.Asset.AssetAddress
 {
     public enum AssetCompressionMode
     {

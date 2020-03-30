@@ -55,7 +55,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EGUI.cs" />
+    <Compile Include="EGUILayout.cs" />
+    <Compile Include="EGUIResources.cs" />
+    <Compile Include="EGUIStyles.cs" />
+    <Compile Include="EGUIToolbarSearchField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeGUI\TreeElement.cs" />
+    <Compile Include="TreeGUI\TreeElementUtility.cs" />
+    <Compile Include="TreeGUI\TreeModel.cs" />
+    <Compile Include="TreeGUI\TreeViewWithTreeModel.cs" />
     <Compile Include="Util\AssemblyUtil.cs" />
     <Compile Include="Util\AssetDatabaseUtil.cs" />
     <Compile Include="Util\DirectoryUtil.cs" />
@@ -69,6 +78,8 @@
     <Compile Include="Util\SpriteAtlasUtil.cs" />
     <Compile Include="Util\TypeUtil.cs" />
     <Compile Include="Util\UnityObjectUtil.cs" />
+    <Compile Include="Window\DotDraggablePopupWindow.cs" />
+    <Compile Include="Window\DotPopupWindow.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

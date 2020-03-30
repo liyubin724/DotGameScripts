@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DotEditor.AssetAddress
+namespace DotEditor.Asset.AssetAddress
 {
     [CreateAssetMenu(fileName = "asset_address_group", menuName = "Asset/Asset Address Group", order = 0)]
     public class AssetAddressGroup : ScriptableObject
@@ -14,7 +14,7 @@ namespace DotEditor.AssetAddress
         public bool isPreload = false;
         public bool isNeverDestroy = false;
 
-        public List<AssetFilterFinder> finders = new List<AssetFilterFinder>();
+        public List<AssetFilter> finders = new List<AssetFilter>();
         public AssetAddressOperation operation = new AssetAddressOperation();
     }
 }

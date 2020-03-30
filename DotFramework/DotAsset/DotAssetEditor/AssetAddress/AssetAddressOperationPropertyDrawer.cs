@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssetFilter.AssetAddress
+namespace DotEditor.Asset.AssetAddress
 {
     [CustomPropertyDrawer(typeof(AssetAddressOperation))]
     public class AssetAddressOperationPropertyDrawer : PropertyDrawer

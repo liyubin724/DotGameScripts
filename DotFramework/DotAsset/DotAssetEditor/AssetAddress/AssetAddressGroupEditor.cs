@@ -4,7 +4,7 @@ using Rotorz.Games.Collections;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssetAddress
+namespace DotEditor.Asset.AssetAddress
 {
     [CustomEditor(typeof(AssetAddressGroup))]
     public class AssetAddressGroupEditor : Editor

@@ -6,7 +6,7 @@ using System.IO;
 using UnityEditor;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
-namespace DotEditor.AssetFilter.AssetAddress
+namespace DotEditor.Asset.AssetAddress
 {
     public static class AssetAddressUtil
     {
@@ -66,7 +66,7 @@ namespace DotEditor.AssetFilter.AssetAddress
         {
             foreach(var finder in addressGroup.finders)
             {
-                string[] assetPaths = finder.Find();
+                string[] assetPaths = finder.Filter();
                 if(assetPaths!=null && assetPaths.Length>0)
                 {
                     foreach(var assetPath in assetPaths)

@@ -3,37 +3,38 @@ using Rotorz.Games.Collections;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.AssetFilter
+namespace DotEditor.Asset.AssetAddress
 {
-    [CustomPropertyDrawer(typeof(AssetFilterFinder))]
-    public class AssetFilterFinderPropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(AssetFilter))]
+    public class AssetFilterPropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return property.CountInProperty() * ReorderableListGUI.DefaultItemHeight;
+            return property.CountInProperty() * EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             SerializedProperty assetFolder = property.FindPropertyRelative("assetFolder");
             SerializedProperty isIncludeSubfolder = property.FindPropertyRelative("isIncludeSubfolder");
-            SerializedProperty fileNameRegex = property.FindPropertyRelative("fileNameRegex");
-            SerializedProperty inAnyFolderNames = property.FindPropertyRelative("inAnyFolderNames");
-            SerializedProperty inParentFolderNames = property.FindPropertyRelative("inParentFolderNames");
+            SerializedProperty fileRegex = property.FindPropertyRelative("fileRegex");
 
             Rect curRect = position;
-            curRect.height = ReorderableListGUI.DefaultItemHeight;
+            curRect.height = EditorGUIUtility.singleLineHeight;
 
             assetFolder.stringValue = DotEditorGUI.DrawAssetFolderSelection(curRect, "Asset Folder", assetFolder.stringValue);
             
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, isIncludeSubfolder);
             curRect.y += curRect.height;
-            EditorGUI.PropertyField(curRect, fileNameRegex);
+            EditorGUI.PropertyField(curRect, fileRegex);
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, inAnyFolderNames);
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, inParentFolderNames);
         }
+
     }
+
+
 }
