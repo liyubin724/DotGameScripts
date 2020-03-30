@@ -115,9 +115,9 @@ namespace Dot.Asset
             }
             else
             {
-                if(operations.Contains(bundlePath))
+                if(operations.ContainsKey(bundlePath))
                 {
-                    return operations.GetByKey(bundlePath).GetProgress();
+                    return operations[bundlePath].GetProgress();
                 }
             }
             LogUtil.LogError(AssetConst.LOGGER_NAME, "The Bundle not loading");
@@ -273,7 +273,7 @@ namespace Dot.Asset
             bundleNodeDic.Add(bundlePath, bundleNode);
 
             BundleAsyncOperation operation = new BundleAsyncOperation(bundlePath, GetBundleFilePath);
-            operations.AddOrUpdate(bundlePath, operation);
+            operations.Add(bundlePath, operation);
 
             return bundleNode;
         }

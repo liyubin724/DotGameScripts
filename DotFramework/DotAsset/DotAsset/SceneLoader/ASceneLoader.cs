@@ -20,8 +20,8 @@ namespace Dot.Asset
         }
 
         public SceneHandler LoadSceneAsync(string address,
-            OnSceneComplete complete,
-            OnSceneProgress progress,
+            OnSceneLoadComplete complete,
+            OnSceneLoadProgress progress,
             LoadSceneMode mode,
             bool activateOnLoad,
             SystemObject userData)
@@ -47,8 +47,8 @@ namespace Dot.Asset
         }
 
         public SceneHandler UnloadSceneAsync(string address,
-            OnSceneComplete complete,
-            OnSceneProgress progress,
+            OnSceneLoadComplete complete,
+            OnSceneLoadProgress progress,
             SystemObject userData)
         {
             if (assetLoader != null)

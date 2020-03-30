@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\DotLibs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UNITY_EDITOR</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PriorityQueue, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotLibs\PriorityQueue.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +77,7 @@
     <Compile Include="AssetManager.cs" />
     <Compile Include="AssetManager_Clean.cs" />
     <Compile Include="AssetManager_Scene.cs" />
+    <Compile Include="AssetUtil.cs" />
     <Compile Include="BundleLoader\BundleAssetNode.cs" />
     <Compile Include="BundleLoader\BundleAsyncOperation.cs" />
     <Compile Include="BundleLoader\BundleLoader.cs" />

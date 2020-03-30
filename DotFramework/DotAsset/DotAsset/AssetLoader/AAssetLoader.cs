@@ -1,8 +1,7 @@
 ﻿using Dot.Asset.Datas;
 using Dot.Core.Generic;
-using Dot.Log;
 using Dot.Core.Pool;
-using Dot.Timer;
+using Dot.Log;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;
@@ -152,12 +151,12 @@ namespace Dot.Asset
                 int index = 0;
                 while(operations.Count>index && index<MaxLoadingCount)
                 {
-                    AAsyncOperation operation = operations.GetByIndex(index);
+                    AAsyncOperation operation = operations[index];
                     operation.DoUpdate();
 
                     if(operation.State >= OperationState.Finished)
                     {
-                        operations.DeleteByIndex(index);
+                        operations.RemoveAt(index);
                         OnOperationFinished(operation);
                     }else
                     {

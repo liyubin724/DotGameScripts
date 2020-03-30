@@ -34,5 +34,9 @@ namespace Dot.Asset
             IsNeverDestroy = false;
             refCount = 0;
         }
+
+        public void OnNew()
+        {
+        }
     }
 }

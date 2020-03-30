@@ -24,8 +24,8 @@ namespace Dot.Asset
         internal string address;
         internal string scenePath;
         internal string sceneName;
-        internal OnSceneComplete completeCallback = null;
-        internal OnSceneProgress progressCallback = null;
+        internal OnSceneLoadComplete completeCallback = null;
+        internal OnSceneLoadProgress progressCallback = null;
         internal SystemObject userData =null;
         internal LoadSceneMode sceneMode = LoadSceneMode.Single;
         internal bool isActiveWhenLoaded = true;
@@ -34,7 +34,7 @@ namespace Dot.Asset
         internal SceneLoaderDataState state = SceneLoaderDataState.None;
 
         public void InitLoadData(string address,string path,
-            OnSceneComplete complete,OnSceneProgress progress,
+            OnSceneLoadComplete complete,OnSceneLoadProgress progress,
             LoadSceneMode sceneMode,bool isActive,
             SystemObject userData)
         {
@@ -52,7 +52,7 @@ namespace Dot.Asset
         }
 
         public void InitUnloadData(string address, string path,
-            OnSceneComplete complete, OnSceneProgress progress,
+            OnSceneLoadComplete complete, OnSceneLoadProgress progress,
             SystemObject userData)
         {
             this.address = address;

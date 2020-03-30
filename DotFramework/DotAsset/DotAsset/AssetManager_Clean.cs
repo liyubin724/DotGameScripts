@@ -9,6 +9,9 @@ namespace Dot.Asset
     {
         private TimerTaskInfo autoCleanTimer = null;
         private float autoCleanInterval = 60;
+        /// <summary>
+        /// 获取和指定清理资源的周期,默认60秒
+        /// </summary>
         public float AutoCleanInterval
         {
             get
@@ -20,21 +23,23 @@ namespace Dot.Asset
                 if (autoCleanInterval != value && value >= 0)
                 {
                     autoCleanInterval = value;
-                    StopAutoClean();
                     StartAutoClean();
                 }
             }
         }
 
-        public void StartAutoClean()
+        private void StartAutoClean()
         {
-            if(autoCleanTimer == null && autoCleanInterval>0)
+            if (autoCleanTimer != null)
             {
-                autoCleanTimer = TimerManager.GetInstance().AddIntervalTimer(autoCleanInterval, (userData)=>assetLoader?.UnloadUnusedAsset());
+                StopAutoClean();
+            }
+            else if (autoCleanInterval > 0)
+            {
+                autoCleanTimer = TimerManager.GetInstance().AddIntervalTimer(autoCleanInterval, (userData) => assetLoader?.UnloadUnusedAsset());
             }
         }
-
-        public void StopAutoClean()
+        private void StopAutoClean()
         {
             if (autoCleanTimer != null)
             {
@@ -43,6 +48,10 @@ namespace Dot.Asset
             }
         }
 
+        /// <summary>
+        /// 默认情况下资源的清理是基于GC和定时器，通过此接口可以立即深度清理资源
+        /// </summary>
+        /// <param name="callback">清理完毕后回调</param>
         public void UnloadUnusedAsset(Action callback = null)
         {
             if (assetLoader == null)

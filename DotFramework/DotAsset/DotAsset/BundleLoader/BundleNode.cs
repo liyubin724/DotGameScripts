@@ -122,5 +122,9 @@ namespace Dot.Asset
             dependNodes.Clear();
             refCount = 0;
         }
+
+        public void OnNew()
+        {
+        }
     }
 }
