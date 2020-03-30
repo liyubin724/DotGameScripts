@@ -78,8 +78,8 @@
     <Compile Include="Util\SpriteAtlasUtil.cs" />
     <Compile Include="Util\TypeUtil.cs" />
     <Compile Include="Util\UnityObjectUtil.cs" />
-    <Compile Include="Window\DotDraggablePopupWindow.cs" />
-    <Compile Include="Window\DotPopupWindow.cs" />
+    <Compile Include="Window\DraggablePopupWindow.cs" />
+    <Compile Include="Window\PopupWindow.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

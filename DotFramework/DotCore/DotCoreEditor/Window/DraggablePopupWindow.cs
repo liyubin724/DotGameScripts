@@ -5,7 +5,7 @@ namespace DotEditor.Core.Window
     /// <summary>
     /// 通过继承DraggablePopupWindow可以生成一个可拖动的弹框
     /// </summary>
-    public abstract class DotDraggablePopupWindow : DotPopupWindow
+    public abstract class DraggablePopupWindow : PopupWindow
     {
         private Vector2 offset;
 

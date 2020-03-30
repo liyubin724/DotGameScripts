@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace DotEditor.Core.Window
 {
-    public class DotPopupWindow : EditorWindow
+    public class PopupWindow : EditorWindow
     {
-        public static T ShowPopupWin<T>(Rect position,bool isAutoClose) where T : DotPopupWindow
+        public static T ShowPopupWin<T>(Rect position,bool isAutoClose) where T : PopupWindow
         {
             T win = EditorWindow.GetWindow<T>();
             win.minSize = position.size;
@@ -21,9 +21,9 @@ namespace DotEditor.Core.Window
             return win;
         }
 
-        public static DotPopupWindow ShowPopupWin(Rect position, Action<DotPopupWindow> drawElementCallback, Action closeCallback,bool isAutoClose)
+        public static PopupWindow ShowPopupWin(Rect position, Action<PopupWindow> drawElementCallback, Action closeCallback,bool isAutoClose)
         {
-            var win = GetWindow<DotPopupWindow>();
+            var win = GetWindow<PopupWindow>();
             win.minSize = position.size;
             win.position = position;
 
@@ -37,7 +37,7 @@ namespace DotEditor.Core.Window
         }
 
         protected bool AutoClose { get; set; } = false;
-        private Action<DotPopupWindow> drawElementCallback = null;
+        private Action<PopupWindow> drawElementCallback = null;
         private Action closeCallback = null;
 
         protected virtual void DrawBackground()
