@@ -1,57 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DotEditor.Core.Util
 {
     public static class DirectoryUtil
     {
-        public static string[] GetAsset(string assetDir, bool includeSubdir)
+        /// <summary>
+        /// 查找指定的目标下资源
+        /// </summary>
+        /// <param name="assetDir">基于Assets的目录</param>
+        /// <param name="isIncludeSubfolder">是否包括子目录</param>
+        /// <returns></returns>
+        public static string[] GetAsset(string assetDir, bool isIncludeSubfolder,bool isIgnoreMeta)
         {
             string diskDir = PathUtil.GetDiskPath(assetDir);
-            string[] files = Directory.GetFiles(diskDir, "*.*", includeSubdir ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles(diskDir, "*.*", isIncludeSubfolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             if(files!=null && files.Length>0)
             {
-                for(int i =0;i<files.Length;i++)
-                {
-                    files[i] = PathUtil.GetAssetPath(files[i].Replace("\\", "/"));
-                }
+                return (
+                        from file in files 
+                        where isIgnoreMeta && Path.GetExtension(file).ToLower() != ".meta"
+                        select PathUtil.GetAssetPath(file.Replace("\\", "/"))
+                        ).ToArray();
             }
-            return files;
+            return null;
         }
 
-        public static string[] GetAssetsByFileNameFilter(string assetDir,bool includeSubdir,string filter)
+        /// <summary>
+        /// 查找指定的目标中匹配指定的格式的文件（使用文件名与后缀进行匹配）
+        /// </summary>
+        /// <example>
+        /// string[] assetPaths = DirectoryUtil.GetAsset("Assets/UI", true, @"^\w*.prefab$");
+        /// </example>
+        /// <param name="assetDir">基于Assets的目录</param>
+        /// <param name="isIncludeSubfolder">是否包括子目录</param>
+        /// <param name="filePattern">文件名匹配正则表达式</param>
+        /// <returns></returns>
+        public static string[] GetAsset(string assetDir,bool isIncludeSubfolder,string filePattern)
         {
-            return GetAssetsByFileNameFilter(assetDir, includeSubdir, filter, null);
-        }
-
-        public static string[] GetAssetsByFileNameFilter(string assetDir,bool includeSubdir, string filter,string[] ignoreExtersion)
-        {
-            string[] files = GetAsset(assetDir, includeSubdir);
-            List<string> assetPathList = new List<string>();
-            foreach(var file in files)
+            string[] assetPaths = GetAsset(assetDir, isIncludeSubfolder, false);
+            if(assetPaths == null || assetPaths.Length==0)
             {
-                string fileName = Path.GetFileName(file);
-                bool isValid = true;
-                if(!string.IsNullOrEmpty(filter))
-                {
-                    isValid = Regex.IsMatch(fileName, filter);
-                }
-                if(isValid && ignoreExtersion!=null && ignoreExtersion.Length>0)
-                {
-                    string fileExt = Path.GetExtension(file).ToLower();
-                    if(Array.IndexOf(ignoreExtersion,fileExt)>=0)
-                    {
-                        isValid = false;
-                    }
-                }
-                if(isValid)
-                {
-                    assetPathList.Add(file);
-                }
+                return null;
             }
-            return assetPathList.ToArray();
+
+            return (
+                from assetPath in assetPaths 
+                where Regex.IsMatch(Path.GetFileName(assetPath), filePattern)
+                select assetPath
+                ).ToArray();
         }
 
         /// <summary>

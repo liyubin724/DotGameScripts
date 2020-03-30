@@ -1,7 +1,5 @@
 @ECHO OFF
 
-SETLOCAL ENABLEDELAYEDEXPANSION
-
 SET BuildMode=Debug
 SET BuildLogPath=.\build.log
 SET ProjectName=DotCore
@@ -12,8 +10,28 @@ IF EXIST %BuildLogPath% (
 
 CALL ..\set-devenv.bat
 
-ECHO build start
+ECHO build start(%ProjectName%)
 
 devenv .\%ProjectName%.sln /rebuild "%BuildMode%" /project "%ProjectName%" /out %BuildLogPath%
 
-ECHO build finish
+IF ERRORLEVEL 1 (
+    GOTO BuildError
+) ELSE (
+    ECHO build success
+)
+
+ECHO build start(%ProjectName%Editor)
+
+devenv .\%ProjectName%.sln /rebuild "%BuildMode%" /project "%ProjectName%Editor" /out %BuildLogPath%
+
+IF ERRORLEVEL 1 (
+    GOTO BuildError
+) ELSE (
+    ECHO build success
+    GOTO BuildSuccess
+)
+
+:BuildError
+ECHO build failed & PAUSE > nul
+
+:BuildSuccess
