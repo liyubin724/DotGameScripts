@@ -2,14 +2,25 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Core
 {
     public static class EGUILayout
     {
-        public static void DrawScript(MonoBehaviour target)
+        public static void DrawScript(UnityObject target)
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), typeof(MonoScript), false);
+            Type targetType = target.GetType();
+            if(typeof(MonoBehaviour).IsAssignableFrom(targetType))
+            {
+                EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), typeof(MonoScript), false);
+            }else if(typeof(ScriptableObject).IsAssignableFrom(targetType))
+            {
+                EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ScriptableObject)target), typeof(MonoScript), false);
+            }else
+            {
+                EditorGUILayout.LabelField("Script", targetType.FullName);
+            }
         }
 
         public static T DrawPopup<T>(string label, string[] contents, T[] values, T selectedValue)

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\DotLibs\</OutputPath>
+    <OutputPath>..\..\DotLibs\Editor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\DotLibs\</OutputPath>
+    <OutputPath>..\..\DotLibs\Editor\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,6 +41,10 @@
     </Reference>
     <Reference Include="DotCoreEditor">
       <HintPath>..\..\DotLibs\Editor\DotCoreEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,8 +68,8 @@
     <Compile Include="AssetAddress\AssetAddressOperation.cs" />
     <Compile Include="AssetAddress\AssetAddressOperationPropertyDrawer.cs" />
     <Compile Include="AssetAddress\AssetAddressUtil.cs" />
-    <Compile Include="AssetAddress\AssetFilterFinder.cs" />
-    <Compile Include="AssetAddress\AssetFilterFinderPropertyDrawer.cs" />
+    <Compile Include="AssetAddress\AssetFilter.cs" />
+    <Compile Include="AssetAddress\AssetFilterPropertyDrawer.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

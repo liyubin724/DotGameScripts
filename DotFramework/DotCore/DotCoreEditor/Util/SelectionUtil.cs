@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
@@ -15,6 +16,12 @@ namespace DotEditor.Core.Util
                 foreach (var guid in guids)
                 {
                     string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+
+                    string diskPath = PathUtil.GetDiskPath(assetPath);
+                    if(File.Exists(diskPath))
+                    {
+                        assetPath = Path.GetDirectoryName(assetPath).Replace("\\","/");
+                    }
                     dirs.Add(assetPath);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using DotEditor.Core;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ namespace DotEditor.Asset.AssetAddress
             {
                 EditorGUI.LabelField(rect, new GUIContent("Filters"));
             };
-            filterRList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+            filterRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 SerializedProperty property = filters.GetArrayElementAtIndex(index);
                 EditorGUI.PropertyField(rect, property);
@@ -42,11 +43,31 @@ namespace DotEditor.Asset.AssetAddress
             {
                 filters.InsertArrayElementAtIndex(filters.arraySize);
             };
+            filterRList.drawElementBackgroundCallback = (rect, index, isActive, isFocused) =>
+              {
+                  if(isActive)
+                  {
+                      EditorGUI.DrawRect(rect, Color.blue);
+                  }else
+                  {
+                      if (index % 2 == 0)
+                      {
+                          EditorGUI.DrawRect(rect, EGUIResources.BackgroundColor);
+                      }
+                      else
+                      {
+                          EditorGUI.DrawRect(rect, EGUIResources.BorderColor);
+                      }
+                  }
+                  
+              };
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
+            EGUILayout.DrawScript(target);
 
             EditorGUILayout.PropertyField(groupName);
             EditorGUILayout.PropertyField(isEnable);

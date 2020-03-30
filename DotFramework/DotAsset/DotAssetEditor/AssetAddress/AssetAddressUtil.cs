@@ -1,15 +1,30 @@
 ﻿using Dot.Asset.Datas;
-using DotEditor.Util;
+using DotEditor.Core.Util;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.Asset.AssetAddress
 {
     public static class AssetAddressUtil
     {
+        [MenuItem("Game/Asset/Create Address Group")]
+        public static void CreateGroupAsset()
+        {
+            string[] dirs = SelectionUtil.GetSelectionDirs();
+            if(dirs!=null && dirs.Length>0)
+            {
+                string filePath = $"{dirs[0]}/asset_address_group.asset";
+                filePath = AssetDatabase.GenerateUniqueAssetPath(filePath);
+                var config = ScriptableObject.CreateInstance<AssetAddressGroup>();
+                AssetDatabase.CreateAsset(config, filePath);
+                AssetDatabase.ImportAsset(filePath);
+            }
+        }
+
         public static AssetAddressConfig GetAddressConfig(bool isCreateIfNot = true)
         {
             string configPath = AssetConst.AssetAddressConfigPath;

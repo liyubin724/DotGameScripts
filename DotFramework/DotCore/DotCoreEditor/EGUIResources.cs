@@ -6,6 +6,18 @@ namespace DotEditor.Core
 {
     public static class EGUIResources
     {
+        #region 灰色系
+        public static Color32 lightGray = new Color32(211, 211, 211,255);
+        public static Color32 silver = new Color32(192, 192, 192, 255);
+        public static Color32 darkGray = new Color32(169, 169, 169, 255);
+        public static Color32 gray = new Color32(128, 128, 128, 255);
+        public static Color32 dimGray = new Color32(105, 105, 105, 255);
+        #endregion
+        public static Color32 dodgerBlue = new Color32(30, 144, 255, 255);
+        public static Color32 cornflowerBlue = new Color32(100, 149, 225, 255);
+
+
+
         private static Color32 gridLineColor = new Color(0.45f, 0.45f, 0.45f);
         private static Color32 gridBgColor = new Color(0.18f, 0.18f, 0.18f);
 
