@@ -6,6 +6,8 @@ namespace DotEditor.Asset.AssetAddress
     [Serializable]
     public class AssetFilter
     {
+        public static readonly int FIELD_COUNT = 3;
+
         public string assetFolder = "Assets";
         public bool isIncludeSubfolder = true;
 

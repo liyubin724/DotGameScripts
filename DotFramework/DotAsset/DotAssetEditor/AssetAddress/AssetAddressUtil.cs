@@ -64,7 +64,7 @@ namespace DotEditor.Asset.AssetAddress
 
         private static void UpdateAddressConfig(List<AssetAddressData> addressDatas, AssetAddressGroup addressGroup)
         {
-            foreach(var finder in addressGroup.finders)
+            foreach(var finder in addressGroup.filters)
             {
                 string[] assetPaths = finder.Filter();
                 if(assetPaths!=null && assetPaths.Length>0)

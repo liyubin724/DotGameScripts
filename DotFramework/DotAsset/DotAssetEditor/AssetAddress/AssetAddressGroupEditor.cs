@@ -1,7 +1,5 @@
-﻿using Dot.Asset.Datas;
-using DotEditor.Util;
-using Rotorz.Games.Collections;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace DotEditor.Asset.AssetAddress
@@ -14,8 +12,10 @@ namespace DotEditor.Asset.AssetAddress
         SerializedProperty isMain = null;
         SerializedProperty isPreload = null;
         SerializedProperty isNeverDestroy = null;
-        SerializedProperty finders = null;
         SerializedProperty operation = null;
+        SerializedProperty filters = null;
+
+        ReorderableList filterRList = null;
 
         private void OnEnable()
         {
@@ -24,8 +24,24 @@ namespace DotEditor.Asset.AssetAddress
             isMain = serializedObject.FindProperty("isMain");
             isPreload = serializedObject.FindProperty("isPreload");
             isNeverDestroy = serializedObject.FindProperty("isNeverDestroy");
-            finders = serializedObject.FindProperty("finders");
             operation = serializedObject.FindProperty("operation");
+            
+            filters = serializedObject.FindProperty("filters");
+            filterRList = new ReorderableList(serializedObject, filters,true,true,true,true);
+            filterRList.elementHeight = AssetFilter.FIELD_COUNT * EditorGUIUtility.singleLineHeight;
+            filterRList.drawHeaderCallback = (rect) =>
+            {
+                EditorGUI.LabelField(rect, new GUIContent("Filters"));
+            };
+            filterRList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+            {
+                SerializedProperty property = filters.GetArrayElementAtIndex(index);
+                EditorGUI.PropertyField(rect, property);
+            };
+            filterRList.onAddCallback = (list) =>
+            {
+                filters.InsertArrayElementAtIndex(filters.arraySize);
+            };
         }
 
         public override void OnInspectorGUI()
@@ -43,11 +59,7 @@ namespace DotEditor.Asset.AssetAddress
             EditorGUILayout.PropertyField(operation);
 
             EditorGUILayout.Space();
-            ReorderableListGUI.Title("Finders");
-            ReorderableListGUI.ListField(finders, ReorderableListGUI.DefaultItemHeight * 5, () =>
-            {
-                GUILayout.Label("List is empty!", EditorStyles.miniLabel);
-            });
+            filterRList.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();
 

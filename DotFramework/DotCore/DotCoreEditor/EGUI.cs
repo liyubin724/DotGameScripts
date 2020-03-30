@@ -108,5 +108,31 @@ namespace DotEditor.Core
             }
             return folder;
         }
+
+        public static void DrawAssetFolderSelection(Rect rect,SerializedProperty property,bool isReadonly = true)
+        {
+            Rect drawRect = new Rect(rect.x, rect.y, rect.width - rect.height * 2, rect.height);
+            EditorGUI.BeginDisabledGroup(isReadonly);
+            {
+                EditorGUI.PropertyField(drawRect,property);
+            }
+            EditorGUI.EndDisabledGroup();
+
+            drawRect.x += drawRect.width;
+            drawRect.width = rect.height;
+            if (GUI.Button(drawRect,new GUIContent(EGUIResources.FolderIcon)))
+            {
+                string folderPath = EditorUtility.OpenFolderPanel("folder", property.stringValue, "");
+                if (!string.IsNullOrEmpty(folderPath))
+                {
+                    property.stringValue = PathUtil.GetAssetPath(folderPath);
+                }
+            }
+            drawRect.x += drawRect.width;
+            if (GUI.Button(drawRect, "\u2716"))
+            {
+                property.stringValue = "";
+            }
+        }
     }
 }

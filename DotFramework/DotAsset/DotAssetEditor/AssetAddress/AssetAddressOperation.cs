@@ -1,16 +1,22 @@
-﻿using Dot.Core.Util;
+﻿using Dot.Core.Extension;
 using System;
 using System.IO;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.Asset.AssetAddress
 {
-    public enum AssetCompressionMode
-    {
-        Uncompressed = 0,
-        LZ4,
-        LZMA,
-    }
+    //public enum AssetCompressionMode
+    //{
+    //    Uncompressed = 0,
+    //    LZ4,
+    //    LZMA,
+    //}
+
+    //public enum AssetBundleNameType
+    //{
+    //    Origin = 0,
+    //    MD5,
+    //}
 
     public enum AssetPackMode
     {
@@ -25,20 +31,14 @@ namespace DotEditor.Asset.AssetAddress
         FileNameWithoutExtension,
     }
 
-    public enum AssetBundleNameType
-    {
-        Origin = 0,
-        MD5,
-    }
-
     [Serializable]
     public class AssetAddressOperation
     {
+        public static readonly int FIELD_COUNT = 3;
+
         public AssetPackMode packMode = AssetPackMode.Together;
         public AssetAddressMode addressMode = AssetAddressMode.FullPath;
-        public AssetBundleNameType bundleNameType = AssetBundleNameType.Origin;
         public string labels = string.Empty;
-        public AssetCompressionMode compressionType = AssetCompressionMode.LZ4;
 
         public string GetAddressName(string assetPath)
         {
@@ -57,17 +57,12 @@ namespace DotEditor.Asset.AssetAddress
             string bundleName = string.Empty;
             if (packMode == AssetPackMode.Separate)
             {
-                bundleName = StringUtil.RemoveSpecialCharacter(assetPath, "_");
+                bundleName = assetPath.ReplaceSpecialCharacter("_");
             }
             else if (packMode == AssetPackMode.Together)
             {
                 string rootFolder = Path.GetDirectoryName(assetPath).Replace("\\", "/");
-                bundleName = StringUtil.RemoveSpecialCharacter(rootFolder, "_");
-            }
-
-            if(bundleNameType == AssetBundleNameType.MD5)
-            {
-                bundleName = MD5Util.GetMD5(bundleName);
+                bundleName = rootFolder.ReplaceSpecialCharacter("_");
             }
             return bundleName.ToLower();
         }
@@ -79,7 +74,7 @@ namespace DotEditor.Asset.AssetAddress
                 return new string[0];
             }else
             {
-                return labels.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                return labels.SplitToNotEmptyArray('|');
             }
         }
 
