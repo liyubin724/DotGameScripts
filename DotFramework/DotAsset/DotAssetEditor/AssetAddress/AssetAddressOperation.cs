@@ -34,8 +34,6 @@ namespace DotEditor.Asset.AssetAddress
     [Serializable]
     public class AssetAddressOperation
     {
-        public static readonly int FIELD_COUNT = 4;
-
         public AssetPackMode packMode = AssetPackMode.Together;
         public AssetAddressMode addressMode = AssetAddressMode.FullPath;
         public string labels = string.Empty;

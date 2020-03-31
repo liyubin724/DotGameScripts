@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.Asset.AssetAddress
@@ -8,7 +9,8 @@ namespace DotEditor.Asset.AssetAddress
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return AssetAddressOperation.FIELD_COUNT * EditorGUIUtility.singleLineHeight;
+            int fieldCount = fieldInfo.FieldType.GetFields(BindingFlags.Public | BindingFlags.Instance).Length;
+            return (fieldCount+1) * EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

@@ -29,7 +29,7 @@ namespace DotEditor.Asset.AssetAddress
             
             filters = serializedObject.FindProperty("filters");
             filterRList = new ReorderableList(serializedObject, filters,true,true,true,true);
-            filterRList.elementHeight = AssetFilter.FIELD_COUNT * EditorGUIUtility.singleLineHeight;
+            filterRList.elementHeight = 3 * EditorGUIUtility.singleLineHeight;
             filterRList.drawHeaderCallback = (rect) =>
             {
                 EditorGUI.LabelField(rect, new GUIContent("Filters"));
@@ -71,15 +71,19 @@ namespace DotEditor.Asset.AssetAddress
 
             EditorGUILayout.PropertyField(groupName);
             EditorGUILayout.PropertyField(isEnable);
-            
+
+            EditorGUILayout.Space();
+
             EditorGUILayout.PropertyField(isMain);
             EditorGUILayout.PropertyField(isPreload);
             EditorGUILayout.PropertyField(isNeverDestroy);
 
             EditorGUILayout.Space();
+
             EditorGUILayout.PropertyField(operation);
 
             EditorGUILayout.Space();
+
             filterRList.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();

@@ -70,7 +70,6 @@
     <Compile Include="AssetAddress\AssetAddressUtil.cs" />
     <Compile Include="AssetAddress\AssetFilter.cs" />
     <Compile Include="AssetAddress\AssetFilterPropertyDrawer.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
