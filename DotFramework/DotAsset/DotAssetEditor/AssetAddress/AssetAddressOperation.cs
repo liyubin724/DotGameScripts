@@ -5,19 +5,6 @@ using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.Asset.AssetAddress
 {
-    //public enum AssetCompressionMode
-    //{
-    //    Uncompressed = 0,
-    //    LZ4,
-    //    LZMA,
-    //}
-
-    //public enum AssetBundleNameType
-    //{
-    //    Origin = 0,
-    //    MD5,
-    //}
-
     public enum AssetPackMode
     {
         Together,

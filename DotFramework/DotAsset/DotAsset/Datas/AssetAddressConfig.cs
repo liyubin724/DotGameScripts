@@ -12,7 +12,6 @@ namespace Dot.Asset.Datas
     {
         public AssetAddressData[] addressDatas = new AssetAddressData[0];
 
-        private bool isInit = false;
         private Dictionary<string, AssetAddressData> addressToDataDic = new Dictionary<string, AssetAddressData>();
         private Dictionary<string, AssetAddressData> pathToDataDic = new Dictionary<string, AssetAddressData>();
         private Dictionary<string, List<string>> labelToAddressDic = new Dictionary<string, List<string>>();
@@ -59,7 +58,6 @@ namespace Dot.Asset.Datas
                     }
                 }
             }
-            isInit = true;
         }
 
         /// <summary>

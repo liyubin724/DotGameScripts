@@ -70,9 +70,19 @@
     <Compile Include="AssetAddress\AssetAddressUtil.cs" />
     <Compile Include="AssetAddress\AssetFilter.cs" />
     <Compile Include="AssetAddress\AssetFilterPropertyDrawer.cs" />
+    <Compile Include="AssetPacker\AssetAddressRepeatPopupWindow.cs" />
+    <Compile Include="AssetPacker\AssetPackerConfig.cs" />
+    <Compile Include="AssetPacker\AssetPackerTreeView.cs" />
+    <Compile Include="AssetPacker\AssetPackerUtil.cs" />
+    <Compile Include="AssetPacker\AssetPackerWindow.cs" />
+    <Compile Include="AssetPacker\BundlePackConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotCrypto\DotCrypto\DotCrypto.csproj">
+      <Project>{B9CB10B2-B310-446D-ACBA-3D0149251A93}</Project>
+      <Name>DotCrypto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotAsset\DotAsset.csproj">
       <Project>{b79fb10b-44f2-4d0d-9a55-60d1becc2c0f}</Project>
       <Name>DotAsset</Name>
