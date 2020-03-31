@@ -242,7 +242,7 @@ namespace DotEditor.Asset.AssetPacker
                     EditorGUILayout.Space();
                     if (GUILayout.Button("Pack Bundle"))
                     {
-                        
+                        AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundleBuildConfig);
                     }
                 }
                 EditorGUILayout.EndVertical();

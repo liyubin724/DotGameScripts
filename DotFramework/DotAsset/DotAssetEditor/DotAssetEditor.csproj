@@ -90,6 +90,7 @@
     <Compile Include="AssetPacker\AssetPackerUtil.cs" />
     <Compile Include="AssetPacker\AssetPackerWindow.cs" />
     <Compile Include="AssetPacker\BundleBuildConfig.cs" />
+    <Compile Include="AssetPacker\BundleBuildPipeline.cs" />
     <Compile Include="AssetPacker\IAssetBundlePacker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

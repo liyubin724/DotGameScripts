@@ -39,12 +39,12 @@ namespace DotEditor.Asset.AssetPacker
         {
         }
 
-        internal BuildTarget GetBuildTarget()
+        public BuildTarget GetBuildTarget()
         {
             return (BuildTarget)buildTarget;
         }
 
-        internal BuildAssetBundleOptions GetBundleOptions()
+        public BuildAssetBundleOptions GetBundleOptions()
         {
             BuildAssetBundleOptions options = bundleOptions;
             if (compression == CompressOption.Uncompressed)

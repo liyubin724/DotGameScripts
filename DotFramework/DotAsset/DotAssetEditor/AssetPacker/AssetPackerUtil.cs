@@ -245,7 +245,7 @@ namespace DotEditor.Asset.AssetPacker
                 return;
             }
 
-            AssetBundleConfig bundleConfig = bundlePacker.PackAssetBundle(packerConfig, buildConfig);
+            AssetBundleConfig bundleConfig = bundlePacker.PackAssetBundle(packerConfig, buildConfig,outputDir);
             var json = JsonConvert.SerializeObject(bundleConfig, Formatting.Indented);
             string jsonFilePath = $"{outputDir}/{AssetConst.ASSET_BUNDLE_CONFIG_NAME}";
             File.WriteAllText(jsonFilePath, json);
