@@ -163,27 +163,34 @@ namespace DotEditor.Asset.AssetPacker
                         assetPackerTreeView.CollapseAll();
                     }
                 }
-                EditorGUI.BeginChangeCheck();
+                Rect menuRect = GUILayoutUtility.GetRect(Contents.RunModeContent, EditorStyles.toolbarButton);
+                if (EditorGUI.DropdownButton(menuRect, Contents.RunModeContent,FocusType.Passive,EditorStyles.toolbarButton))
                 {
-                    EGUI.BeginLabelWidth(70);
-                    {
-                        runMode = (RunMode)EditorGUILayout.EnumPopup(Contents.RunModeContent, runMode, EditorStyles.toolbarPopup, GUILayout.Width(170));
-                    }
-                    EGUI.EndLableWidth();
-                }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (runMode == RunMode.AssetBundle)
+                    GenericMenu menu = new GenericMenu();
+                    menu.AddItem(new GUIContent(RunMode.AssetDatabase.ToString()), runMode == RunMode.AssetDatabase, () =>
+                     {
+                         PlayerSettingsUtil.RemoveScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
+                     });
+                    menu.AddItem(new GUIContent(RunMode.AssetBundle.ToString()), runMode == RunMode.AssetBundle, () =>
                     {
                         PlayerSettingsUtil.AddScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
-                    }
-                    else
-                    {
-                        PlayerSettingsUtil.RemoveScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
-                    }
+                    });
+                    menu.DropDown(menuRect);
                 }
-
-                bundlePathFormatType = (BundlePathFormatType)EditorGUILayout.EnumPopup(Contents.BundlePathFormatContent, bundlePathFormatType, EditorStyles.toolbarPopup, GUILayout.Width(170));
+                menuRect = GUILayoutUtility.GetRect(Contents.BundlePathFormatContent, EditorStyles.toolbarButton);
+                if (EditorGUI.DropdownButton(menuRect, Contents.BundlePathFormatContent, FocusType.Passive, EditorStyles.toolbarButton))
+                {
+                    GenericMenu menu = new GenericMenu();
+                    menu.AddItem(new GUIContent(BundlePathFormatType.Origin.ToString()), bundlePathFormatType == BundlePathFormatType.Origin, () =>
+                    {
+                        bundlePathFormatType = BundlePathFormatType.Origin;
+                    });
+                    menu.AddItem(new GUIContent(BundlePathFormatType.MD5.ToString()), bundlePathFormatType == BundlePathFormatType.MD5, () =>
+                    {
+                        bundlePathFormatType = BundlePathFormatType.MD5;
+                    });
+                    menu.DropDown(menuRect);
+                }
 
                 GUILayout.FlexibleSpace();
 
@@ -375,7 +382,7 @@ namespace DotEditor.Asset.AssetPacker
         {
             internal static GUIContent WinTitleContent = new GUIContent("Asset Packer");
             internal static GUIContent RunModeContent = new GUIContent("Run Mode");
-            internal static GUIContent BundlePathFormatContent = new GUIContent("Path Format");
+            internal static GUIContent BundlePathFormatContent = new GUIContent("Bundle Path Format");
         }
     }
 }

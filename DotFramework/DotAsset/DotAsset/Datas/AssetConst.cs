@@ -19,11 +19,6 @@ namespace Dot.Asset.Datas
 
         public static readonly string ASSET_BUNDLE_DIR_NAME = "assetbundles";
 
-        public static string GetAddressConfigFileName()
-        {
-            return $"{ASSET_ADDRESS_NAME}{ASSET_ADDRESS_EXT}";
-        }
-
         public static AssetAddressConfig GetAddressConfig()
         {
             string configPath = AssetConst.AssetAddressConfigPath;

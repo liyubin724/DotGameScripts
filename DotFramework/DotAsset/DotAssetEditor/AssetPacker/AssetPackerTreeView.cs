@@ -58,7 +58,7 @@ namespace DotEditor.Asset.AssetPacker
             }
             else
             {
-                return SINGLE_ROW_HEIGHT * 6;
+                return SINGLE_ROW_HEIGHT * 5;
             }
         }
         protected override void RowGUI(RowGUIArgs args)
