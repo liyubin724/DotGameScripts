@@ -24,7 +24,7 @@ namespace DotEditor.Asset.AssetAddress
             }
         }
 
-        [MenuItem("Game/Asset/Create Address Group", priority = 1)]
+        [MenuItem("Game/Asset/Build Address", priority = 1)]
         public static void BuildAssetAddressConfig()
         {
             AssetAddressGroup[] groups = AssetDatabaseUtil.FindInstances<AssetAddressGroup>();
