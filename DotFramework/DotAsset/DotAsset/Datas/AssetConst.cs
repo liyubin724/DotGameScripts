@@ -10,12 +10,19 @@ namespace Dot.Asset.Datas
 
         public static readonly string ASSET_MANIFEST_NAME = "manifest_config";
         public static readonly string ASSET_MANIFEST_EXT = ".json";
+        
         public static readonly string ASSET_ADDRESS_NAME = "address_config";
         public static readonly string ASSET_ADDRESS_EXT = ".json";
+
         public static readonly string ASSET_BUNDLE_PACK_NAME = "bundle_config";
         public static readonly string ASSET_BUNDLE_PACK_EXT = ".json";
 
         public static readonly string ASSET_BUNDLE_DIR_NAME = "assetbundles";
+
+        public static string GetAddressConfigFileName()
+        {
+            return $"{ASSET_ADDRESS_NAME}{ASSET_ADDRESS_EXT}";
+        }
 
         public static AssetAddressConfig GetAddressConfig()
         {

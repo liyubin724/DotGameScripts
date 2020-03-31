@@ -90,7 +90,7 @@ namespace DotEditor.Asset.AssetAddress
 
             if(GUILayout.Button("Execute",GUILayout.Height(40)))
             {
-                AssetAddressUtil.UpdateAddressConfig();
+                AssetAddressUtil.UpdateConfigByGroup(target as AssetAddressGroup);
                 EditorUtility.DisplayDialog("Finished", "Finished", "OK");
             }
         }

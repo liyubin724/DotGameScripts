@@ -22,7 +22,7 @@ namespace DotEditor.Core.Util
             {
                 return (
                         from file in files 
-                        where isIgnoreMeta && Path.GetExtension(file).ToLower() != ".meta"
+                        where !isIgnoreMeta ||( isIgnoreMeta && Path.GetExtension(file).ToLower() != ".meta")
                         select PathUtil.GetAssetPath(file.Replace("\\", "/"))
                         ).ToArray();
             }

@@ -46,6 +46,21 @@ namespace DotEditor.Core.Util
             return FindAssets(null, null, typeof(T), null,string.IsNullOrEmpty(folderPath) ? null : new string[] { folderPath });
         }
 
+        public static T[] FindInstances<T>() where T : UnityEngine.Object
+        {
+            string[] assetPaths = FindAssets<T>();
+            if(assetPaths == null || assetPaths.Length == 0)
+            {
+                return null;
+            }
+            T[] result = new T[assetPaths.Length];
+            for(int i =0;i<assetPaths.Length;++i)
+            {
+                result[i] = AssetDatabase.LoadAssetAtPath<T>(assetPaths[i]);
+            }
+            return result;
+        }
+
         /// <summary>
         /// 查找指定类型的资源
         /// </summary>
@@ -146,34 +161,27 @@ namespace DotEditor.Core.Util
             }
 
             string folderPath = string.Empty;
-            if (!string.IsNullOrEmpty(assetFolder))
+            if(string.IsNullOrEmpty(assetFolder))
             {
-                string diskFolderPath = PathUtil.GetDiskPath(assetFolder);
-                if (!Directory.Exists(diskFolderPath))
-                {
-                    Directory.CreateDirectory(diskFolderPath);
-                }
-                folderPath = assetFolder;
-            }
-            else
-            {
-                folderPath = AssetDatabase.GetAssetPath(Selection.activeObject);
-
-                if (string.IsNullOrEmpty(folderPath))
+                string[] folders = SelectionUtil.GetSelectionDirs();
+                if(folders == null || folders.Length == 0)
                 {
                     folderPath = "Assets";
-                }
-                else if (Path.GetExtension(folderPath) != string.Empty)
+                }else
                 {
-                    folderPath = folderPath.Replace(Path.GetFileName(folderPath), string.Empty);
+                    folderPath = folders[0];
                 }
+            }else
+            {
+                folderPath = assetFolder;
             }
-
+            
             var asset = ScriptableObject.CreateInstance<T>();
-            var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/" + fileName + ".asset");
+            string assetPath = $"{folderPath}/{fileName}.asset";
+            assetPath = AssetDatabase.GenerateUniqueAssetPath(assetPath);
 
-            AssetDatabase.CreateAsset(asset, assetPathAndName);
-            AssetDatabase.SaveAssets();
+            AssetDatabase.CreateAsset(asset, assetPath);
+            AssetDatabase.ImportAsset(assetPath);
             return asset;
         }
         /// <summary>

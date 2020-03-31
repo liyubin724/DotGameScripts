@@ -1,8 +1,7 @@
 ﻿using Dot.Asset.Datas;
 using DotEditor.Core.Util;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Dot.Asset.Datas.AssetAddressConfig;
@@ -11,7 +10,7 @@ namespace DotEditor.Asset.AssetAddress
 {
     public static class AssetAddressUtil
     {
-        [MenuItem("Game/Asset/Create Address Group")]
+        [MenuItem("Game/Asset/Create Address Group",priority =0)]
         public static void CreateGroupAsset()
         {
             string[] dirs = SelectionUtil.GetSelectionDirs();
@@ -25,77 +24,73 @@ namespace DotEditor.Asset.AssetAddress
             }
         }
 
-        public static AssetAddressConfig GetAddressConfig(bool isCreateIfNot = true)
+        [MenuItem("Game/Asset/Create Address Group", priority = 1)]
+        public static void BuildAssetAddressConfig()
         {
-            string configPath = AssetConst.AssetAddressConfigPath;
-            AssetAddressConfig config = null;        
-            if(File.Exists(configPath))
+            AssetAddressGroup[] groups = AssetDatabaseUtil.FindInstances<AssetAddressGroup>();
+            if(groups!=null && groups.Length>0)
             {
-                config = JsonConvert.DeserializeObject<AssetAddressConfig>(configPath);
-            }
+                AssetAddressConfig config = GetOrCreateConfig();
+                config.Clear();
 
-            if(config == null && isCreateIfNot)
-            {
-                config = new AssetAddressConfig();
+                foreach(var group in groups)
+                {
+                    UpdateConfigByGroup(group);
+                }
+                config.Reload();
+                AssetDatabase.SaveAssets();
             }
-            return config;
         }
 
-        public static void SaveAddressConfig(AssetAddressConfig config)
+        public static void UpdateConfigByGroup(AssetAddressGroup group)
         {
-            if (config == null)
+            if(!group.isMain ||!group.isEnable)
             {
                 return;
             }
-            string configPath = AssetConst.AssetAddressConfigPath;
-            string dir = Path.GetDirectoryName(configPath);
-            if (!Directory.Exists(dir))
+            AssetAddressConfig config = GetOrCreateConfig();
+            Dictionary<string, AssetAddressData> dataDic = new Dictionary<string, AssetAddressData>();
+            foreach(var d in config.addressDatas)
             {
-                Directory.CreateDirectory(dir);
+                dataDic.Add(d.assetPath, d);
             }
-            var json = JsonConvert.SerializeObject(config,Formatting.Indented);
-            File.WriteAllText(configPath, json);
-        }
 
-        public static void UpdateAddressConfig()
-        {
-            AssetAddressConfig addressConfig = new AssetAddressConfig();
-
-            string[] groupPaths = AssetDatabaseUtil.FindAssets<AssetAddressGroup>();
-            List<AssetAddressData> addressDatas = new List<AssetAddressData>();
-
-            foreach(var groupPath in groupPaths)
+            foreach (var filter in group.filters)
             {
-                AssetAddressGroup addressGroup = AssetDatabase.LoadAssetAtPath<AssetAddressGroup>(groupPath);
-                if(addressGroup.isMain)
+                string[] assetPaths = filter.Filter();
+                if (assetPaths != null && assetPaths.Length > 0)
                 {
-                    UpdateAddressConfig(addressDatas, addressGroup);
-                }
-            }
-            addressConfig.addressDatas = addressDatas.ToArray();
-
-            AssetAddressUtil.SaveAddressConfig(addressConfig);
-        }
-
-        private static void UpdateAddressConfig(List<AssetAddressData> addressDatas, AssetAddressGroup addressGroup)
-        {
-            foreach(var finder in addressGroup.filters)
-            {
-                string[] assetPaths = finder.Filter();
-                if(assetPaths!=null && assetPaths.Length>0)
-                {
-                    foreach(var assetPath in assetPaths)
+                    foreach (var assetPath in assetPaths)
                     {
-                        AssetAddressData addressData = addressGroup.operation.GetAddressData(assetPath);
-
-                        addressData.isPreload = addressGroup.isPreload;
-                        addressData.isNeverDestroy = addressGroup.isNeverDestroy;
-
-                        addressDatas.Add(addressData);
+                        if(!dataDic.TryGetValue(assetPath,out AssetAddressData addressData))
+                        {
+                            addressData = group.operation.GetAddressData(assetPath);
+                            dataDic.Add(assetPath, addressData);
+                        }else
+                        {
+                            group.operation.UpdateAddressData(addressData);
+                        }
+                        addressData.isPreload = group.isPreload;
+                        addressData.isNeverDestroy = group.isNeverDestroy;
                     }
                 }
             }
+
+            config.addressDatas = dataDic.Values.ToArray();
+            config.Reload();
         }
 
+        private static readonly string ASSET_ADDRESS_CONFIG_PATH = "Assets/address_config.asset";
+        public static AssetAddressConfig GetOrCreateConfig()
+        {
+            AssetAddressConfig config = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(ASSET_ADDRESS_CONFIG_PATH);
+            if(config == null)
+            {
+                config = ScriptableObject.CreateInstance<AssetAddressConfig>();
+                AssetDatabase.CreateAsset(config, ASSET_ADDRESS_CONFIG_PATH);
+                AssetDatabase.ImportAsset(ASSET_ADDRESS_CONFIG_PATH);
+            }
+            return config;
+        }
     }
 }

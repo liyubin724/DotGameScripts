@@ -96,5 +96,14 @@ namespace DotEditor.Asset.AssetAddress
 
             return addressData;
         }
+
+        public void UpdateAddressData(AssetAddressData addressData)
+        {
+            string assetPath = addressData.assetPath;
+            addressData.assetAddress = GetAddressName(assetPath);
+            addressData.bundlePath = GetBundleName(assetPath);
+            addressData.labels = GetLabels();
+            addressData.isScene = IsScene(assetPath);
+        }
     }
 }
