@@ -39,7 +39,56 @@ namespace DotEditor.Asset.AssetPacker
                 }
             }
             packerConfig.Sort();
+
+            AddAddressGroup(packerConfig);
+
             return packerConfig;
+        }
+
+        private static string AddressGroupName = "Default Address Group";
+        private static void AddAddressGroup(AssetPackerConfig assetPackerConfig)
+        {
+            if (assetPackerConfig != null)
+            {
+                RemoveAddressGroup(assetPackerConfig);
+
+                string[] assetPaths = AssetDatabaseUtil.FindAssets<AssetAddressConfig>();
+                if (assetPaths == null || assetPaths.Length == 0)
+                {
+                    Debug.LogError("AssetPackUtil::AddAddressGroup->AssetAddressConfig is not found!");
+                    return;
+                }
+
+                AssetPackerGroupData groupData = new AssetPackerGroupData()
+                {
+                    groupName = AddressGroupName,
+                };
+                AssetPackerAddressData addressData = new AssetPackerAddressData()
+                {
+                    assetAddress = AssetConst.ASSET_ADDRESS_CONFIG_NAME,
+                    assetPath = assetPaths[0],
+                    bundlePath = AssetConst.ASSET_ADDRESS_BUNDLE_NAME,
+                    bundlePathMd5 = MD5Crypto.Md5(AssetConst.ASSET_ADDRESS_BUNDLE_NAME).ToLower(),
+                };
+                groupData.assetFiles.Add(addressData);
+
+                assetPackerConfig.groupDatas.Add(groupData);
+            }
+        }
+
+        private static void RemoveAddressGroup(AssetPackerConfig assetPackerConfig)
+        {
+            if (assetPackerConfig != null)
+            {
+                foreach (var group in assetPackerConfig.groupDatas)
+                {
+                    if (group.groupName == AddressGroupName)
+                    {
+                        assetPackerConfig.groupDatas.Remove(group);
+                        break;
+                    }
+                }
+            }
         }
 
         private static List<AssetPackerAddressData> GetAssetsInGroup(AssetAddressGroup groupData)
@@ -132,13 +181,7 @@ namespace DotEditor.Asset.AssetPacker
             AssetDatabase.SaveAssets();
         }
 
-        public static void SetAssetBundleNames(bool isShowProgressBar = false)
-        {
-            AssetPackerConfig config = GetAssetPackerConfig();
-            SetAssetBundleNames(config, isShowProgressBar);
-        }
-
-        public static void SetAssetBundleNames(AssetPackerConfig assetPackerConfig, bool isShowProgressBar = false)
+        public static void SetAssetBundleNames(AssetPackerConfig assetPackerConfig, BundlePathFormatType bundlePathFormat,bool isShowProgressBar = false)
         {
             if (isShowProgressBar)
             {
@@ -160,6 +203,10 @@ namespace DotEditor.Asset.AssetPacker
 
                 string assetPath = addressDatas[i].assetPath;
                 string bundlePath = addressDatas[i].bundlePath;
+                if(bundlePathFormat == BundlePathFormatType.MD5)
+                {
+                    bundlePath = addressDatas[i].bundlePathMd5;
+                }
 
                 AssetImporter ai = AssetImporter.GetAtPath(assetPath);
                 ai.assetBundleName = bundlePath;
@@ -228,12 +275,6 @@ namespace DotEditor.Asset.AssetPacker
                 return;
             }
 
-            if(!AddAddressGroup(packerConfig))
-            {
-                Debug.Log("AssetPackerUtil::PackAssetBundle->Add Address Group failed");
-                return;
-            }
-
             string outputDir = $"{buildConfig.bundleOutputDir}/{buildConfig.buildTarget.ToString()}/assetbundles";
             if (buildConfig.cleanupBeforeBuild && Directory.Exists(outputDir))
             {
@@ -251,53 +292,6 @@ namespace DotEditor.Asset.AssetPacker
             File.WriteAllText(jsonFilePath, json);
         }
 
-        private static string AddressGroupName = "Default Address Group";
-        private static bool AddAddressGroup(AssetPackerConfig assetPackerConfig)
-        {
-            if(assetPackerConfig!=null)
-            {
-                RemoveAddressGroup(assetPackerConfig);
-
-                string[] assetPaths = AssetDatabaseUtil.FindAssets<AssetAddressConfig>();
-                if(assetPaths == null || assetPaths.Length == 0)
-                {
-                    Debug.LogError("AssetPackUtil::AddAddressGroup->AssetAddressConfig is not found!");
-                    return false;
-                }
-
-                AssetPackerGroupData groupData = new AssetPackerGroupData()
-                {
-                    groupName = AddressGroupName,
-                };
-                AssetPackerAddressData addressData = new AssetPackerAddressData()
-                {
-                    assetAddress = AssetConst.ASSET_ADDRESS_CONFIG_NAME,
-                    assetPath = assetPaths[0],
-                    bundlePath = AssetConst.ASSET_ADDRESS_BUNDLE_NAME,
-                    bundlePathMd5 = MD5Crypto.Md5(AssetConst.ASSET_ADDRESS_BUNDLE_NAME).ToLower(),
-                };
-                groupData.assetFiles.Add(addressData);
-
-                assetPackerConfig.groupDatas.Add(groupData);
-                return true;
-            }
-            return false;
-        }
-
-        private static void RemoveAddressGroup(AssetPackerConfig assetPackerConfig)
-        {
-            if(assetPackerConfig!=null)
-            {
-                foreach(var group in assetPackerConfig.groupDatas)
-                {
-                    if(group.groupName == AddressGroupName)
-                    {
-                        assetPackerConfig.groupDatas.Remove(group);
-                        break;
-                    }
-                }    
-            }
-        }
     }
 
 }

@@ -237,7 +237,7 @@ namespace DotEditor.Asset.AssetPacker
                     }
                     if (GUILayout.Button(Contents.OperationSetBundleNameContent))
                     {
-                        AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+                        AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, bundleBuildConfig.pathFormat,true);
                     }
                     EditorGUILayout.Space();
                     if (GUILayout.Button("Pack Bundle"))
@@ -258,8 +258,8 @@ namespace DotEditor.Asset.AssetPacker
                                 AssetAddressUtil.BuildAssetAddressConfig();
 
                                 AssetPackerUtil.ClearBundleNames(true);
-                                AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
-                                //AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+                                AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, bundleBuildConfig.pathFormat, true);
+                                AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundleBuildConfig);
                             };
                         }
                     }
