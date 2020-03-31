@@ -1,4 +1,6 @@
-﻿using Dot.Crypto;
+﻿using Dot.Asset;
+using Dot.Asset.Datas;
+using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
 using DotEditor.Core.Util;
 using Newtonsoft.Json;
@@ -13,6 +15,8 @@ using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Asset.AssetPacker
 {
+    public delegate AssetBundleConfig PackAssetBundle(AssetPackerConfig packerConfig, BundleBuildConfig buildConfig);
+
     public static class AssetPackerUtil
     {
         public static AssetPackerConfig GetAssetPackerConfig()
@@ -204,61 +208,91 @@ namespace DotEditor.Asset.AssetPacker
             }
         }
 
-        public static void PackAssetBundle(bool isShowProgressBar = false)
+        public static PackAssetBundle DoPackAssetBundle = null;
+        public static void PackAssetBundle(AssetPackerConfig packerConfig, BundleBuildConfig buildConfig)
         {
-            //AssetPackerConfig assetPackerConfig = GetAssetPackerConfig();
-            //BundlePackConfig bundlePackConfig = GetBundlePackConfig();
-            //PackAssetBundle(assetPackerConfig, bundlePackConfig, isShowProgressBar);
+            if(DoPackAssetBundle == null)
+            {
+                Debug.LogError("AssetPackerUtil::PackAssetBundle->DoPackAssetBundle is null.");
+                return;
+            }
+
+            if(string.IsNullOrEmpty(buildConfig.bundleOutputDir))
+            {
+                Debug.Log("AssetPackerUtil::PackAssetBundle->bundleOutputDir is null.");
+                return;
+            }
+
+            if(!AddAddressGroup(packerConfig))
+            {
+                Debug.Log("AssetPackerUtil::PackAssetBundle->Add Address Group failed");
+                return;
+            }
+
+            string outputDir = $"{buildConfig.bundleOutputDir}/{buildConfig.buildTarget.ToString()}/assetbundles";
+            if (buildConfig.cleanupBeforeBuild && Directory.Exists(outputDir))
+            {
+                Directory.Delete(outputDir, true);
+            }
+            if (!Directory.CreateDirectory(outputDir).Exists)
+            {
+                Debug.LogError("AssetPackUitl::PackAssetBundle->Folder is not found. dir = " + outputDir);
+                return;
+            }
+
+            AssetBundleConfig bundleConfig = DoPackAssetBundle(packerConfig, buildConfig);
+            var json = JsonConvert.SerializeObject(bundleConfig, Formatting.Indented);
+            string jsonFilePath = $"{outputDir}/{AssetConst.ASSET_BUNDLE_CONFIG_NAME}";
+            File.WriteAllText(jsonFilePath, json);
         }
 
-        //public static void PackAssetBundle(AssetPackerConfig assetPackerConfig, BundlePackConfig bundlePackConfig, bool isShowProgressBar = false)
-        //{
-        //    string outputDir = $"{bundlePackConfig.bundleOutputDir}/{bundlePackConfig.buildTarget.ToString()}/{AssetConst.ASSET_BUNDLE_DIR_NAME}";
-        //    if(bundlePackConfig.cleanupBeforeBuild && Directory.Exists(outputDir))
-        //    {
-        //        Directory.Delete(outputDir, true);
-        //    }
-        //    if(!Directory.CreateDirectory(outputDir).Exists)
-        //    {
-        //        Debug.LogError("AssetPackUitl::PackAssetBundle->Folder is not found. dir = "+outputDir);
-        //        return;
-        //    }
+        private static string AddressGroupName = "Default Address Group";
+        private static bool AddAddressGroup(AssetPackerConfig assetPackerConfig)
+        {
+            if(assetPackerConfig!=null)
+            {
+                RemoveAddressGroup(assetPackerConfig);
 
-        //    var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputDir, bundlePackConfig.GetBundleOptions(), bundlePackConfig.GetBuildTarget());
-        //    if(manifest!=null)
-        //    {
-        //        SaveManifestAsJson(assetPackerConfig, manifest,outputDir);
-        //    }else
-        //    {
-        //        Debug.LogError("AssetPackerUtil::PackAssetBundle->Build Failed");
-        //    }
-        //}
+                string[] assetPaths = AssetDatabaseUtil.FindAssets<AssetAddressConfig>();
+                if(assetPaths == null || assetPaths.Length == 0)
+                {
+                    Debug.LogError("AssetPackUtil::AddAddressGroup->AssetAddressConfig is not found!");
+                    return false;
+                }
 
-        //private static void SaveManifestAsJson(AssetPackerConfig assetPackerConfig, CompatibilityAssetBundleManifest manifest,string outputDir)
-        //{
-        //    AssetBundleConfig assetBundleConfig = new AssetBundleConfig();
+                AssetPackerGroupData groupData = new AssetPackerGroupData()
+                {
+                    groupName = AddressGroupName,
+                };
+                AssetPackerAddressData addressData = new AssetPackerAddressData()
+                {
+                    assetAddress = AssetConst.ASSET_ADDRESS_CONFIG_NAME,
+                    assetPath = assetPaths[0],
+                    bundlePath = AssetConst.ASSET_ADDRESS_BUNDLE_NAME,
+                    bundlePathMd5 = MD5Crypto.Md5(AssetConst.ASSET_ADDRESS_BUNDLE_NAME).ToLower(),
+                };
+                groupData.assetFiles.Add(addressData);
 
-        //    List<AssetBundleDetail> bundleDetails = new List<AssetBundleDetail>();
+                assetPackerConfig.groupDatas.Add(groupData);
+                return true;
+            }
+            return false;
+        }
 
-        //    string[] bundles = manifest.GetAllAssetBundles();
-        //    foreach(var bundlePath in bundles)
-        //    {
-        //        AssetBundleDetail detail = new AssetBundleDetail();
-        //        detail.name = bundlePath;
-        //        detail.hash = manifest.GetAssetBundleHash(bundlePath).ToString();
-        //        detail.crc = manifest.GetAssetBundleCrc(bundlePath).ToString();
-        //        detail.dependencies = manifest.GetAllDependencies(bundlePath);
-
-        //        string bundleDiskPath = $"{outputDir}/{bundlePath}";
-        //        detail.md5 = MD5Util.GetFileMD5(bundleDiskPath);
-
-        //        bundleDetails.Add(detail);
-        //    }
-        //    assetBundleConfig.details = bundleDetails.ToArray();
-
-        //    var json = JsonConvert.SerializeObject(assetBundleConfig, Formatting.Indented);
-        //    string jsonFilePath = $"{outputDir}/{AssetConst.ASSET_MANIFEST_NAME}{AssetConst.ASSET_MANIFEST_EXT}";
-        //    File.WriteAllText(jsonFilePath, json);
-        //}
+        private static void RemoveAddressGroup(AssetPackerConfig assetPackerConfig)
+        {
+            if(assetPackerConfig!=null)
+            {
+                foreach(var group in assetPackerConfig.groupDatas)
+                {
+                    if(group.groupName == AddressGroupName)
+                    {
+                        assetPackerConfig.groupDatas.Remove(group);
+                        break;
+                    }
+                }    
+            }
+        }
     }
+
 }

@@ -11,8 +11,9 @@ namespace Dot.Asset
 
         public static readonly string ASSET_ADDRESS_CONFIG_NAME = "asset_address_config.asset";
         public static readonly string ASSET_ADDRESS_BUNDLE_NAME = "asset_address_config_asset";
-        public static readonly string ASSET_BUNDLE_CONFIG_NAME = "asset_bundle_config.json";
 
+        public static readonly string ASSET_BUNDLE_CONFIG_NAME = "asset_bundle_config.json";
+        
 
 
         public static readonly string ASSET_MANIFEST_NAME = "manifest_config";
@@ -20,11 +21,6 @@ namespace Dot.Asset
         
         public static readonly string ASSET_ADDRESS_NAME = "address_config";
         public static readonly string ASSET_ADDRESS_EXT = ".json";
-
-        public static readonly string ASSET_BUNDLE_PACK_NAME = "bundle_config";
-        public static readonly string ASSET_BUNDLE_PACK_EXT = ".json";
-
-        public static readonly string ASSET_BUNDLE_DIR_NAME = "assetbundles";
 
         public static AssetAddressConfig GetAddressConfig()
         {
@@ -80,14 +76,6 @@ namespace Dot.Asset
             get
             {
                 return $"{AssetConfigDir}/{ASSET_ADDRESS_NAME}{ASSET_ADDRESS_EXT}";
-            }
-        }
-
-        public static string BundlePackConfigPath
-        {
-            get
-            {
-                return $"{AssetConfigDir}/{ASSET_BUNDLE_PACK_NAME}{ASSET_BUNDLE_PACK_EXT}";
             }
         }
     }

@@ -17,11 +17,19 @@ namespace DotEditor.Asset.AssetPacker
         StandaloneWindows64 = 19,
     }
 
+    public enum BundlePathFormatType
+    {
+        Origin = 0,
+        MD5,
+    }
+
     [Serializable]
     public class BundleBuildConfig
     {
         public string bundleOutputDir = null;
         public bool cleanupBeforeBuild = false;
+
+        public BundlePathFormatType pathFormat = BundlePathFormatType.Origin;
 
         public ValidBuildTarget buildTarget = ValidBuildTarget.StandaloneWindows64;
         public CompressOption compression = CompressOption.StandardCompression;

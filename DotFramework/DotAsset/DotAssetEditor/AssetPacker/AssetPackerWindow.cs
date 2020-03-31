@@ -16,12 +16,6 @@ namespace DotEditor.Asset.AssetPacker
         AssetBundle,
     }
 
-    public enum BundlePathFormatType
-    {
-        Origin = 0,
-        MD5,
-    }
-
     public class AssetPackerWindow : EditorWindow
     {
         [MenuItem("Game/Asset/Packer Window",priority =10)]
@@ -34,7 +28,6 @@ namespace DotEditor.Asset.AssetPacker
         private static readonly string ASSET_BUNDLE_SYMBOL = "ASSET_BUNDLE";
 
         private RunMode runMode = RunMode.AssetDatabase;
-        private BundlePathFormatType bundlePathFormatType = BundlePathFormatType.Origin;
         
         private bool isExpandAll = false;
 
@@ -170,20 +163,6 @@ namespace DotEditor.Asset.AssetPacker
                     });
                     menu.DropDown(menuRect);
                 }
-                menuRect = GUILayoutUtility.GetRect(Contents.BundlePathFormatContent, EditorStyles.toolbarButton);
-                if (EditorGUI.DropdownButton(menuRect, Contents.BundlePathFormatContent, FocusType.Passive, EditorStyles.toolbarButton))
-                {
-                    GenericMenu menu = new GenericMenu();
-                    menu.AddItem(new GUIContent(BundlePathFormatType.Origin.ToString()), bundlePathFormatType == BundlePathFormatType.Origin, () =>
-                    {
-                        bundlePathFormatType = BundlePathFormatType.Origin;
-                    });
-                    menu.AddItem(new GUIContent(BundlePathFormatType.MD5.ToString()), bundlePathFormatType == BundlePathFormatType.MD5, () =>
-                    {
-                        bundlePathFormatType = BundlePathFormatType.MD5;
-                    });
-                    menu.DropDown(menuRect);
-                }
 
                 GUILayout.FlexibleSpace();
 
@@ -231,8 +210,8 @@ namespace DotEditor.Asset.AssetPacker
                     EditorGUI.BeginChangeCheck();
                     {
                         bundleBuildConfig.bundleOutputDir = EGUILayout.DrawDiskFolderSelection(Contents.BuildOutputDirStr, bundleBuildConfig.bundleOutputDir);
+                        bundleBuildConfig.pathFormat = (BundlePathFormatType)EditorGUILayout.EnumPopup(Contents.BuildPathFormatContent, bundleBuildConfig.pathFormat);
                         bundleBuildConfig.cleanupBeforeBuild = EditorGUILayout.Toggle(Contents.BuildCleanup, bundleBuildConfig.cleanupBeforeBuild);
-                        
                         bundleBuildConfig.buildTarget = (ValidBuildTarget)EditorGUILayout.EnumPopup(Contents.BuildTargetContent, bundleBuildConfig.buildTarget);
                         bundleBuildConfig.compression = (CompressOption)EditorGUILayout.EnumPopup(Contents.BuildCompressionContent, bundleBuildConfig.compression);
                     }
@@ -397,6 +376,7 @@ namespace DotEditor.Asset.AssetPacker
             internal static GUIContent BuildTitleContent = new GUIContent("Build Config");
 
             internal static string BuildOutputDirStr = "Output Dir";
+            internal static GUIContent BuildPathFormatContent = new GUIContent("Path Format");
             internal static GUIContent BuildCleanup = new GUIContent("Is Cleanup");
             internal static GUIContent BuildTargetContent = new GUIContent("Build Target");
             internal static GUIContent BuildCompressionContent = new GUIContent("Compression");
