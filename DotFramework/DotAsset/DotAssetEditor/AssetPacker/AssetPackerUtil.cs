@@ -4,6 +4,7 @@ using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
 using DotEditor.Core.Util;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,6 @@ using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Asset.AssetPacker
 {
-    public delegate AssetBundleConfig PackAssetBundle(AssetPackerConfig packerConfig, BundleBuildConfig buildConfig);
-
     public static class AssetPackerUtil
     {
         public static AssetPackerConfig GetAssetPackerConfig()
@@ -208,10 +207,16 @@ namespace DotEditor.Asset.AssetPacker
             }
         }
 
-        public static PackAssetBundle DoPackAssetBundle = null;
         public static void PackAssetBundle(AssetPackerConfig packerConfig, BundleBuildConfig buildConfig)
         {
-            if(DoPackAssetBundle == null)
+            IAssetBundlePacker bundlePacker = null;
+            Type[] bundlePackerTypes = AssemblyUtil.GetDerivedTypes(typeof(IAssetBundlePacker));
+            if(bundlePackerTypes!=null && bundlePackerTypes.Length>0)
+            {
+                bundlePacker = (IAssetBundlePacker)Activator.CreateInstance(bundlePackerTypes[0]);
+            }
+
+            if(bundlePacker == null)
             {
                 Debug.LogError("AssetPackerUtil::PackAssetBundle->DoPackAssetBundle is null.");
                 return;
@@ -240,7 +245,7 @@ namespace DotEditor.Asset.AssetPacker
                 return;
             }
 
-            AssetBundleConfig bundleConfig = DoPackAssetBundle(packerConfig, buildConfig);
+            AssetBundleConfig bundleConfig = bundlePacker.PackAssetBundle(packerConfig, buildConfig);
             var json = JsonConvert.SerializeObject(bundleConfig, Formatting.Indented);
             string jsonFilePath = $"{outputDir}/{AssetConst.ASSET_BUNDLE_CONFIG_NAME}";
             File.WriteAllText(jsonFilePath, json);

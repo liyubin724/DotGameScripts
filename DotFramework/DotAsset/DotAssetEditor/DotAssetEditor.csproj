@@ -60,6 +60,7 @@
       <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -89,7 +90,11 @@
     <Compile Include="AssetPacker\AssetPackerUtil.cs" />
     <Compile Include="AssetPacker\AssetPackerWindow.cs" />
     <Compile Include="AssetPacker\BundleBuildConfig.cs" />
+    <Compile Include="AssetPacker\IAssetBundlePacker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
