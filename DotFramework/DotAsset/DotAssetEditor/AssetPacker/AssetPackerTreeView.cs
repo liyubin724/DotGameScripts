@@ -75,79 +75,98 @@ namespace DotEditor.Asset.AssetPacker
             contentRect.y += 2;
             contentRect.height -= 4;
 
-            GUILayout.BeginArea(contentRect);
+            if (groupTreeData.IsGroup)
             {
-                if (groupTreeData.IsGroup)
+                DrawGroupData(contentRect, args.item.id,groupData, childCount);
+            }
+            else
+            {
+                AssetPackerAddressData addressData = groupData.assetFiles[groupTreeData.dataIndex];
+                DrawAddressData(contentRect, addressData);
+            }
+        }
+
+        private void DrawGroupData(Rect contentRect,int itemID,AssetPackerGroupData groupData,int childCount)
+        {
+            Rect drawRect = new Rect(contentRect.x, contentRect.y, contentRect.height, contentRect.height);
+            if (Window.IsGroupAddressRepeated(groupData))
+            {
+                if (GUI.Button(drawRect,addressRepeatContent))
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        if (Window.IsGroupAddressRepeated(groupData))
-                        {
-                            if (GUILayout.Button(addressRepeatContent,GUILayout.Width(24)))
-                            {
-                                SetExpanded(args.item.id, true);
-                            }
-                        }
-
-                        string groupName = groupData.groupName;
-                        if (groupData.isMain)
-                        {
-                            groupName += "(Main)";
-                        }
-                        if(groupData.isPreload)
-                        {
-                            groupName += "(Preload)";
-                        }
-                        if(groupData.isNeverDestroy)
-                        {
-                            groupName += "(NeverDestroy)";
-                        }
-
-                        groupName += "  " + childCount;
-
-                        EditorGUILayout.LabelField(new GUIContent(groupName),GUILayout.ExpandWidth(true));
-                    }
-                    EditorGUILayout.EndHorizontal();
-                }
-                else
-                {
-                    GUILayout.BeginHorizontal();
-                    {
-                        AssetPackerAddressData assetData = groupData.assetFiles[groupTreeData.dataIndex];
-                        if (Window.IsAddressRepeated(assetData.assetAddress,out List<AssetPackerAddressData> datas))
-                        {
-                            Rect rect = GUILayoutUtility.GetRect(addressRepeatContent,"button",GUILayout.Width(24));
-                            if (GUILayout.Button(addressRepeatContent, GUILayout.Width(24)))
-                            {
-                                AssetAddressRepeatPopupContent content = new AssetAddressRepeatPopupContent()
-                                {
-                                    RepeatAddressDatas = datas.ToArray(),
-                                };
-                                PopupWindow.Show(rect, content);
-                            }
-                        }
-                        EGUI.BeginLabelWidth(80);
-                        {
-                            EditorGUILayout.TextField("address:", assetData.assetAddress);
-                            GUILayout.BeginVertical();
-                            {
-                                EditorGUILayout.TextField("path:", assetData.assetPath);
-                                EditorGUILayout.TextField("bundle:", assetData.bundlePath);
-                                EditorGUILayout.TextField("bundle-md5:", assetData.bundlePathMd5);
-                                EditorGUILayout.TextField("labels:", string.Join(",", assetData.labels));
-                            }
-                            GUILayout.EndVertical();
-                        }
-                        EGUI.EndLableWidth();
-                        if (GUILayout.Button("Select", GUILayout.Width(60), GUILayout.ExpandHeight(true)))
-                        {
-                            SelectionUtil.PingObject(assetData.assetPath);
-                        }
-                    }
-                    GUILayout.EndHorizontal();
+                    SetExpanded(itemID, true);
                 }
             }
-            GUILayout.EndArea();
+
+            drawRect.x += drawRect.width + 5;
+            drawRect.width = contentRect.width - drawRect.x;
+
+            string groupName = groupData.groupName;
+            if (groupData.isMain)
+            {
+                groupName += "(Main)";
+            }
+            if (groupData.isPreload)
+            {
+                groupName += "(Preload)";
+            }
+            if (groupData.isNeverDestroy)
+            {
+                groupName += "(NeverDestroy)";
+            }
+            groupName += "  " + childCount;
+
+            EditorGUI.LabelField(drawRect,new GUIContent(groupName));
+        }
+
+        private void DrawAddressData(Rect contentRect,AssetPackerAddressData addressData)
+        {
+            Rect drawRect = new Rect(contentRect.x, contentRect.y, 24, 24);
+            if (Window.IsAddressRepeated(addressData.assetAddress, out List<AssetPackerAddressData> datas))
+            {
+                if (GUI.Button(drawRect,addressRepeatContent))
+                {
+                    AssetAddressRepeatPopupContent content = new AssetAddressRepeatPopupContent()
+                    {
+                        RepeatAddressDatas = datas.ToArray(),
+                    };
+                    PopupWindow.Show(drawRect, content);
+                }
+            }
+
+            drawRect.x += drawRect.width + 5;
+            drawRect.width = (contentRect.width - drawRect.x - contentRect.height - 20)*.5f;
+            drawRect.height = EditorGUIUtility.singleLineHeight;
+
+            EGUI.BeginLabelWidth(80);
+            {
+                EditorGUI.TextField(drawRect,"address:", addressData.assetAddress);
+            }
+            EGUI.EndLableWidth();
+
+            drawRect.x += drawRect.width;
+            drawRect.height = EditorGUIUtility.singleLineHeight;
+
+            EGUI.BeginLabelWidth(80);
+            {
+                EditorGUI.TextField(drawRect, "path:", addressData.assetPath);
+                drawRect.y += drawRect.height;
+                EditorGUI.TextField(drawRect, "bundle:", addressData.bundlePath);
+                drawRect.y += drawRect.height;
+                EditorGUI.TextField(drawRect, "bundle-md5:", addressData.bundlePathMd5);
+                drawRect.y += drawRect.height;
+                EditorGUI.TextField(drawRect, "labels:", string.Join(",", addressData.labels));
+            }
+            EGUI.EndLableWidth();
+
+            drawRect = contentRect;
+            drawRect.x += contentRect.width - contentRect.height - 20;
+            drawRect.width = contentRect.height;
+            drawRect.height = contentRect.height;
+
+            if (GUI.Button(drawRect,"Select"))
+            {
+                SelectionUtil.PingObject(addressData.assetPath);
+            }
         }
     }
 }
