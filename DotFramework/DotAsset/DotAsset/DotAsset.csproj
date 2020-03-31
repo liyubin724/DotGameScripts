@@ -34,25 +34,9 @@
     <DocumentationFile>..\..\DotLibs\DotAsset.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
-    </Reference>
-    <Reference Include="DotLog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
-    </Reference>
-    <Reference Include="DotTimer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotTimer.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PriorityQueue, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\PriorityQueue.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -97,6 +81,24 @@
     <Compile Include="SceneLoader\ASceneLoader.cs" />
     <Compile Include="SceneLoader\SceneHandler.cs" />
     <Compile Include="SceneLoader\SceneLoaderData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DotCore\DotCore\DotCore.csproj">
+      <Project>{13725f38-ba86-4378-ba49-dd41bb638322}</Project>
+      <Name>DotCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DotLog\DotLog\DotLog.csproj">
+      <Project>{7c57ebb0-164b-4df9-b6d5-b3096930b1e7}</Project>
+      <Name>DotLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DotTimer\DotTimer\DotTimer.csproj">
+      <Project>{7a4432fc-8a44-4eea-94f0-b5a586bb15bd}</Project>
+      <Name>DotTimer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PriorityQueue\PriorityQueue\PriorityQueue.csproj">
+      <Project>{ecbdfa0f-fed1-40ab-883d-f4a28245e418}</Project>
+      <Name>PriorityQueue</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

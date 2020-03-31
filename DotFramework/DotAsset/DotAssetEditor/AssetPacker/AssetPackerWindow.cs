@@ -257,7 +257,8 @@ namespace DotEditor.Asset.AssetPacker
                 {
                     if (!string.IsNullOrEmpty(addressData.bundlePath))
                     {
-                        isValid = addressData.bundlePath.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+                        string bPath = $"{addressData.bundlePath} {addressData.bundlePathMd5}";
+                        isValid = bPath.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
                     }
                 }
             }

@@ -35,13 +35,6 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
-    </Reference>
-    <Reference Include="DotCoreEditor">
-      <HintPath>..\..\DotLibs\Editor\DotCoreEditor.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotDependLibs\Newtonsoft.Json.dll</HintPath>
@@ -70,7 +63,7 @@
     <Compile Include="AssetAddress\AssetAddressUtil.cs" />
     <Compile Include="AssetAddress\AssetFilter.cs" />
     <Compile Include="AssetAddress\AssetFilterPropertyDrawer.cs" />
-    <Compile Include="AssetPacker\AssetAddressRepeatPopupWindow.cs" />
+    <Compile Include="AssetPacker\AssetAddressRepeatPopupContent.cs" />
     <Compile Include="AssetPacker\AssetPackerConfig.cs" />
     <Compile Include="AssetPacker\AssetPackerTreeView.cs" />
     <Compile Include="AssetPacker\AssetPackerUtil.cs" />
@@ -79,9 +72,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotCore\DotCoreEditor\DotCoreEditor.csproj">
+      <Project>{fb339ec9-55a6-4789-a316-b6b7f7055161}</Project>
+      <Name>DotCoreEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DotCore\DotCore\DotCore.csproj">
+      <Project>{13725f38-ba86-4378-ba49-dd41bb638322}</Project>
+      <Name>DotCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DotCrypto\DotCrypto\DotCrypto.csproj">
-      <Project>{B9CB10B2-B310-446D-ACBA-3D0149251A93}</Project>
+      <Project>{b9cb10b2-b310-446d-acba-3d0149251a93}</Project>
       <Name>DotCrypto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DotLog\DotLog\DotLog.csproj">
+      <Project>{7c57ebb0-164b-4df9-b6d5-b3096930b1e7}</Project>
+      <Name>DotLog</Name>
     </ProjectReference>
     <ProjectReference Include="..\DotAsset\DotAsset.csproj">
       <Project>{b79fb10b-44f2-4d0d-9a55-60d1becc2c0f}</Project>

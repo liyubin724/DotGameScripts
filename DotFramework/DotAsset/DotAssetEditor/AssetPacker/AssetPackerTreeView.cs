@@ -116,10 +116,14 @@ namespace DotEditor.Asset.AssetPacker
                         AssetPackerAddressData assetData = groupData.assetFiles[groupTreeData.dataIndex];
                         if (Window.IsAddressRepeated(assetData.assetAddress,out List<AssetPackerAddressData> datas))
                         {
-                            Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
+                            Rect rect = GUILayoutUtility.GetRect(addressRepeatContent,"button",GUILayout.Width(24));
                             if (GUILayout.Button(addressRepeatContent, GUILayout.Width(24)))
                             {
-                                //AssetAddressRepeatPopupWindow.ShowWin(datas.ToArray(), pos);
+                                AssetAddressRepeatPopupContent content = new AssetAddressRepeatPopupContent()
+                                {
+                                    RepeatAddressDatas = datas.ToArray(),
+                                };
+                                PopupWindow.Show(rect, content);
                             }
                         }
                         EGUI.BeginLabelWidth(80);
@@ -133,13 +137,12 @@ namespace DotEditor.Asset.AssetPacker
                                 EditorGUILayout.TextField("labels:", string.Join(",", assetData.labels));
                             }
                             GUILayout.EndVertical();
-
-                            if(GUILayout.Button("Select",GUILayout.Width(60),GUILayout.ExpandHeight(true)))
-                            {
-                                SelectionUtil.ActiveObject(assetData.assetPath);
-                            }
                         }
                         EGUI.EndLableWidth();
+                        if (GUILayout.Button("Select", GUILayout.Width(60), GUILayout.ExpandHeight(true)))
+                        {
+                            SelectionUtil.PingObject(assetData.assetPath);
+                        }
                     }
                     GUILayout.EndHorizontal();
                 }

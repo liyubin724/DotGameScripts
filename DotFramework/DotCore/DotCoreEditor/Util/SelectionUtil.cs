@@ -29,6 +29,18 @@ namespace DotEditor.Core.Util
             return dirs.ToArray();
         }
 
+        public static void PingObject(UnityObject uObj)
+        {
+            EditorUtility.FocusProjectWindow();
+            EditorGUIUtility.PingObject(uObj);
+        }
+
+        public static void PingObject(string assetPath)
+        {
+            var uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
+            PingObject(uObj);
+        }
+
         /// <summary>
         /// 设置在Project中选中的资源
         /// </summary>
