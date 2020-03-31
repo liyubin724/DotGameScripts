@@ -1,9 +1,10 @@
 ﻿#if UNITY_EDITOR
 
 using Dot.Asset.Datas;
-using Dot.Log;
 using Dot.Core.Pool;
+using Dot.Log;
 using System.Linq;
+using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
@@ -20,13 +21,17 @@ namespace Dot.Asset
         /// </summary>
         protected override void DoInitUpdate()
         {
-            addressConfig = AssetConst.GetAddressConfig();
-            if (addressConfig == null)
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(AssetAddressConfig).Name}");
+            if(guids!=null && guids.Length>0)
             {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
-                State = AssetLoaderState.Error;
+                addressConfig = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(guids[0]);
+                if(addressConfig!=null)
+                {
+                    State = AssetLoaderState.Running;
+                }
             }
-            State = AssetLoaderState.Running;
+            LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
+            State = AssetLoaderState.Error;
         }
 
         protected override void OnDataUpdate(AssetLoaderData data)

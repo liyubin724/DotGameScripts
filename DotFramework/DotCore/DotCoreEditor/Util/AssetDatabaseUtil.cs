@@ -36,6 +36,27 @@ namespace DotEditor.Core.Util
         }
 
         /// <summary>
+        /// 在给定的目录(folderPath)中查找指定类型的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="folderPath"></param>
+        /// <returns></returns>
+        public static T[] FindInstancesInFolder<T>(string folderPath) where T:UnityEngine.Object
+        {
+            string[] assetPaths = FindAssetInFolder<T>(folderPath);
+            if (assetPaths == null || assetPaths.Length == 0)
+            {
+                return null;
+            }
+            T[] result = new T[assetPaths.Length];
+            for (int i = 0; i < assetPaths.Length; ++i)
+            {
+                result[i] = AssetDatabase.LoadAssetAtPath<T>(assetPaths[i]);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 在给定的目录(folderPath)中查找指定类型的资源
         /// </summary>
         /// <typeparam name="T"></typeparam>

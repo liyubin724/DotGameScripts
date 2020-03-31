@@ -88,7 +88,7 @@
     <Compile Include="AssetPacker\AssetPackerTreeView.cs" />
     <Compile Include="AssetPacker\AssetPackerUtil.cs" />
     <Compile Include="AssetPacker\AssetPackerWindow.cs" />
-    <Compile Include="AssetPacker\BundlePackConfig.cs" />
+    <Compile Include="AssetPacker\BundleBuildConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

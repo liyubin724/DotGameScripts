@@ -92,7 +92,7 @@
     <Compile Include="DatabaseLoader\DatabaseSceneLoader.cs" />
     <Compile Include="Datas\AssetAddressConfig.cs" />
     <Compile Include="Datas\AssetBundleConfig.cs" />
-    <Compile Include="Datas\AssetConst.cs" />
+    <Compile Include="AssetConst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SceneLoader\ASceneLoader.cs" />
     <Compile Include="SceneLoader\SceneHandler.cs" />

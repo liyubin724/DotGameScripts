@@ -18,6 +18,20 @@ namespace Dot.Asset
 
         protected override void DoInitUpdate()
         {
+            AssetBundle assetAddressConfigAB;
+            if (GetBundleFilePath(AssetConst.ASSET_ADDRESS_BUNDLE_NAME,out string configPath,out ulong offset))
+            {
+                assetAddressConfigAB = AssetBundle.LoadFromFile(configPath, 0, offset);
+            }else
+            {
+                assetAddressConfigAB = AssetBundle.LoadFromFile(configPath);
+            }
+            addressConfig = assetAddressConfigAB.LoadAsset<AssetAddressConfig>(AssetConst.ASSET_ADDRESS_CONFIG_NAME);
+            assetAddressConfigAB.Unload(true);
+
+
+
+
             addressConfig = AssetConst.GetAddressConfig();
             if (addressConfig == null)
             {

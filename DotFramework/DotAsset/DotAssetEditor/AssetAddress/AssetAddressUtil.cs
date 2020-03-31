@@ -1,4 +1,5 @@
-﻿using Dot.Asset.Datas;
+﻿using Dot.Asset;
+using Dot.Asset.Datas;
 using DotEditor.Core.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,15 +81,22 @@ namespace DotEditor.Asset.AssetAddress
             config.Reload();
         }
 
-        private static readonly string ASSET_ADDRESS_CONFIG_PATH = "Assets/address_config.asset";
         public static AssetAddressConfig GetOrCreateConfig()
         {
-            AssetAddressConfig config = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(ASSET_ADDRESS_CONFIG_PATH);
-            if(config == null)
+            AssetAddressConfig[] configs = AssetDatabaseUtil.FindInstances<AssetAddressConfig>();
+
+            AssetAddressConfig config;
+            if (configs == null || configs.Length == 0)
             {
+                string defaultAssetPath = $"Assets/{AssetConst.ASSET_ADDRESS_CONFIG_NAME}";
+                
                 config = ScriptableObject.CreateInstance<AssetAddressConfig>();
-                AssetDatabase.CreateAsset(config, ASSET_ADDRESS_CONFIG_PATH);
-                AssetDatabase.ImportAsset(ASSET_ADDRESS_CONFIG_PATH);
+
+                AssetDatabase.CreateAsset(config, defaultAssetPath);
+                AssetDatabase.ImportAsset(defaultAssetPath);
+            }else
+            {
+                config = configs[0];
             }
             return config;
         }

@@ -1,4 +1,5 @@
-﻿using DotEditor.Core;
+﻿using DotEditor.Asset.AssetAddress;
+using DotEditor.Core;
 using DotEditor.Core.TreeGUI;
 using DotEditor.Core.Util;
 using System;
@@ -104,6 +105,9 @@ namespace DotEditor.Asset.AssetPacker
             return false;
         }
 
+        Rect lastRect = Rect.zero;
+        Rect treeRect = Rect.zero;
+        Rect operationRect = Rect.zero;
         private void OnGUI()
         {
             DrawToolbar();
@@ -118,33 +122,22 @@ namespace DotEditor.Asset.AssetPacker
                     SetTreeModel();
                 };
             }
-            Rect lastRect = GUILayoutUtility.GetLastRect();
-            GUILayout.Label("", GUILayout.ExpandWidth(true), GUILayout.Height(position.height - lastRect.y-lastRect.height -120));
-            lastRect = GUILayoutUtility.GetLastRect();
-            Rect treeViewRect = new Rect(lastRect.x, lastRect.y, lastRect.width, lastRect.height);
-            assetPackerTreeView?.OnGUI(treeViewRect);
+            GUILayout.Label(GUIContent.none, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+            if(Event.current.type == EventType.Repaint)
+            {
+                lastRect = GUILayoutUtility.GetLastRect();
+                
+                treeRect = lastRect;
+                treeRect.height -= 140;
 
-            //GUILayout.BeginHorizontal();
-            //{
-            //    GUILayout.BeginVertical();
-            //    {
-            //        DrawBundleConfig();
-            //    }
-            //    GUILayout.EndVertical();
-
-            //    GUILayout.BeginVertical(GUILayout.Width(200));
-            //    {
-            //        DrawBundleOperation();
-            //    }
-            //    GUILayout.EndVertical();
-
-            //    GUILayout.BeginVertical(GUILayout.Width(200));
-            //    {
-            //        DrawBundleAutoOperation();
-            //    }
-            //    GUILayout.EndVertical();
-            //}
-            //GUILayout.EndHorizontal();
+                operationRect = new Rect(treeRect.x, treeRect.y + treeRect.height + 2, treeRect.width, lastRect.height - treeRect.height - 3);
+            }
+            assetPackerTreeView?.OnGUI(treeRect);
+            GUILayout.BeginArea(operationRect);
+            {
+                DrawPackOperation();
+            }
+            GUILayout.EndArea();
         }
 
         private void DrawToolbar()
@@ -217,6 +210,83 @@ namespace DotEditor.Asset.AssetPacker
                     searchField.CategoryIndex = 0;
                 }
                 searchField.OnGUILayout();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private BundleBuildConfig bundleBuildConfig = null;
+        private void DrawPackOperation()
+        {
+            if(bundleBuildConfig == null)
+            {
+                bundleBuildConfig = AssetPackerUtil.ReadBundleBuildConfig();
+            }
+
+            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.ExpandHeight(true),GUILayout.ExpandWidth(true));
+                {
+                    EditorGUILayout.LabelField(Contents.BuildTitleContent, EGUIStyles.MiddleCenterLabel);
+
+                    EditorGUI.BeginChangeCheck();
+                    {
+                        bundleBuildConfig.bundleOutputDir = EGUILayout.DrawDiskFolderSelection(Contents.BuildOutputDirStr, bundleBuildConfig.bundleOutputDir);
+                        bundleBuildConfig.cleanupBeforeBuild = EditorGUILayout.Toggle(Contents.BuildCleanup, bundleBuildConfig.cleanupBeforeBuild);
+                        
+                        bundleBuildConfig.buildTarget = (ValidBuildTarget)EditorGUILayout.EnumPopup(Contents.BuildTargetContent, bundleBuildConfig.buildTarget);
+                        bundleBuildConfig.compression = (CompressOption)EditorGUILayout.EnumPopup(Contents.BuildCompressionContent, bundleBuildConfig.compression);
+                    }
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        AssetPackerUtil.WriteBundleBuildConfig(bundleBuildConfig);
+                    }
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.Width(160),GUILayout.ExpandHeight(true));
+                {
+                    EditorGUILayout.LabelField(Contents.OperationTitleContent, EGUIStyles.MiddleCenterLabel);
+
+                    if (GUILayout.Button(Contents.OperationBuildAddressContent))
+                    {
+                        AssetAddressUtil.BuildAssetAddressConfig();
+                    }
+                    EditorGUILayout.Space();
+                    if (GUILayout.Button(Contents.OperationCleanBundleNameContent))
+                    {
+                        AssetPackerUtil.ClearBundleNames(true);
+                    }
+                    if (GUILayout.Button(Contents.OperationSetBundleNameContent))
+                    {
+                        AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+                    }
+                    EditorGUILayout.Space();
+                    if (GUILayout.Button("Pack Bundle"))
+                    {
+                        
+                    }
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(160));
+                {
+                    EGUI.BeginGUIBackgroundColor(Color.red);
+                    {
+                        if (GUILayout.Button(Contents.OperationAutoBuildContent, GUILayout.ExpandHeight(true),GUILayout.ExpandWidth(true)))
+                        {
+                            EditorApplication.delayCall += () =>
+                            {
+                                AssetAddressUtil.BuildAssetAddressConfig();
+
+                                AssetPackerUtil.ClearBundleNames(true);
+                                AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
+                                //AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
+                            };
+                        }
+                    }
+                    EGUI.EndGUIBackgroundColor();
+                }
+                EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -318,71 +388,27 @@ namespace DotEditor.Asset.AssetPacker
             }
         }
 
-        //private BundlePackConfig bundlePackConfig = null;
-        //private void DrawBundleConfig()
-        //{
-        //    if(bundlePackConfig == null)
-        //    {
-        //        bundlePackConfig = AssetPackerUtil.GetBundlePackConfig();
-        //    }
-
-        //    EditorGUI.BeginChangeCheck();
-        //    {
-        //        bundlePackConfig.bundleOutputDir = EGUILayout.DrawDiskFolderSelection("Bundle Output Dir", bundlePackConfig.bundleOutputDir);
-        //        bundlePackConfig.cleanupBeforeBuild = EditorGUILayout.Toggle("Cleanup", bundlePackConfig.cleanupBeforeBuild);
-        //        bundlePackConfig.buildTarget = (ValidBuildTarget)EditorGUILayout.EnumPopup("Build Target", bundlePackConfig.buildTarget);
-        //        bundlePackConfig.compression = (CompressOption)EditorGUILayout.EnumPopup("Compression", bundlePackConfig.compression);
-        //    }
-        //    if(EditorGUI.EndChangeCheck())
-        //    {
-        //        AssetPackerUtil.SaveBundlePackConfig(bundlePackConfig);
-        //    }
-        //}
-
-        //private void DrawBundleOperation()
-        //{
-        //    if(GUILayout.Button("Update Address"))
-        //    {
-        //        AssetAddressUtil.UpdateAddressConfig();
-        //    }
-        //    if(GUILayout.Button("Set Bundle Names"))
-        //    {
-        //        AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
-        //    }
-        //    if(GUILayout.Button("Clear Bundle Names"))
-        //    {
-        //        AssetPackerUtil.ClearBundleNames();
-        //    }
-        //    if(GUILayout.Button("Pack Bundle"))
-        //    {
-        //        AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
-        //    }
-        //}
-
-        //private void DrawBundleAutoOperation()
-        //{
-        //    DotEditorGUI.BeginGUIBackgroundColor(Color.red);
-        //    {
-        //        if(GUILayout.Button("Auto Pack Bundle",GUILayout.Height(40)))
-        //        {
-        //            EditorApplication.delayCall += () =>
-        //            {
-        //                AssetAddressUtil.UpdateAddressConfig();
-
-        //                AssetPackerUtil.ClearBundleNames();
-        //                AssetPackerUtil.SetAssetBundleNames(assetPackerConfig, true);
-        //                AssetPackerUtil.PackAssetBundle(assetPackerConfig, bundlePackConfig, true);
-        //            };
-        //        }
-        //    }
-        //    DotEditorGUI.EndGUIBackgroundColor();
-        //}
-
         static class Contents
         {
             internal static GUIContent WinTitleContent = new GUIContent("Asset Packer");
             internal static GUIContent RunModeContent = new GUIContent("Run Mode");
             internal static GUIContent BundlePathFormatContent = new GUIContent("Bundle Path Format");
+
+            internal static GUIContent BuildTitleContent = new GUIContent("Build Config");
+
+            internal static string BuildOutputDirStr = "Output Dir";
+            internal static GUIContent BuildCleanup = new GUIContent("Is Cleanup");
+            internal static GUIContent BuildTargetContent = new GUIContent("Build Target");
+            internal static GUIContent BuildCompressionContent = new GUIContent("Compression");
+
+            internal static GUIContent OperationTitleContent = new GUIContent("Operation");
+
+            internal static GUIContent OperationBuildAddressContent = new GUIContent("Build Address");
+            internal static GUIContent OperationCleanBundleNameContent = new GUIContent("Clean Bundle Name");
+            internal static GUIContent OperationSetBundleNameContent = new GUIContent("Set Bundle Name");
+            internal static GUIContent OperationBuildContent = new GUIContent("Pack Bundle");
+
+            internal static GUIContent OperationAutoBuildContent = new GUIContent("Auto Pack Bundle");
         }
     }
 }
