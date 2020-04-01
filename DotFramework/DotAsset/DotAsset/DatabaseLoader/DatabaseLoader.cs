@@ -24,7 +24,8 @@ namespace Dot.Asset
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(AssetAddressConfig).Name}");
             if(guids!=null && guids.Length>0)
             {
-                addressConfig = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(guids[0]);
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+                addressConfig = AssetDatabase.LoadAssetAtPath<AssetAddressConfig>(assetPath);
                 if(addressConfig!=null)
                 {
                     State = AssetLoaderState.Running;

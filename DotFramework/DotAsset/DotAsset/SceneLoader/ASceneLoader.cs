@@ -1,5 +1,4 @@
-﻿using Dot.Asset.Datas;
-using Dot.Log;
+﻿using Dot.Log;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +9,9 @@ namespace Dot.Asset
     public abstract class ASceneLoader
     {
         protected AAssetLoader assetLoader = null;
+
         protected List<SceneLoaderData> loaderDatas = new List<SceneLoaderData>();
+
         protected SceneLoaderData currentLoaderData = null;
         protected AsyncOperation asyncOperation = null;
 
@@ -20,8 +21,8 @@ namespace Dot.Asset
         }
 
         public SceneHandler LoadSceneAsync(string address,
-            OnSceneLoadComplete complete,
             OnSceneLoadProgress progress,
+            OnSceneLoadComplete complete,
             LoadSceneMode mode,
             bool activateOnLoad,
             SystemObject userData)
@@ -47,8 +48,8 @@ namespace Dot.Asset
         }
 
         public SceneHandler UnloadSceneAsync(string address,
-            OnSceneLoadComplete complete,
             OnSceneLoadProgress progress,
+            OnSceneLoadComplete complete,
             SystemObject userData)
         {
             if (assetLoader != null)
@@ -86,7 +87,6 @@ namespace Dot.Asset
                 SceneLoaderData data = loaderDatas[0];
                 loaderDatas.RemoveAt(0);
 
-#if UNITY_EDITOR || UNITY_STANDALONE
                 string sceneName = data.sceneName;
                 if(data.state == SceneLoaderDataState.Load)
                 {
@@ -105,7 +105,7 @@ namespace Dot.Asset
                         return;
                     }
                 }
-#endif
+
                 currentLoaderData = data;
             }
         }

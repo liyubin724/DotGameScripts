@@ -5,6 +5,9 @@ using SystemObject = System.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 场景加载或卸载时状态
+    /// </summary>
     public enum SceneLoaderDataState
     {
         None = 0,
@@ -33,9 +36,13 @@ namespace Dot.Asset
         internal SceneHandler handler;
         internal SceneLoaderDataState state = SceneLoaderDataState.None;
 
-        public void InitLoadData(string address,string path,
-            OnSceneLoadComplete complete,OnSceneLoadProgress progress,
-            LoadSceneMode sceneMode,bool isActive,
+        public void InitLoadData(
+            string address,
+            string path,
+            OnSceneLoadComplete complete,
+            OnSceneLoadProgress progress,
+            LoadSceneMode sceneMode,
+            bool isActive,
             SystemObject userData)
         {
             this.address = address;
@@ -47,12 +54,15 @@ namespace Dot.Asset
             this.isActiveWhenLoaded = isActive;
             this.userData = userData;
 
-            handler = new SceneHandler();
+            handler = new SceneHandler(address, sceneName, scenePath);
             state = SceneLoaderDataState.Load;
         }
 
-        public void InitUnloadData(string address, string path,
-            OnSceneLoadComplete complete, OnSceneLoadProgress progress,
+        public void InitUnloadData(
+            string address, 
+            string path,
+            OnSceneLoadComplete complete,
+            OnSceneLoadProgress progress,
             SystemObject userData)
         {
             this.address = address;
@@ -62,16 +72,18 @@ namespace Dot.Asset
             progressCallback = progress;
             this.userData = userData;
 
-            handler = new SceneHandler();
+            handler = new SceneHandler(address,sceneName,scenePath);
             state = SceneLoaderDataState.Unload;
         }
 
         internal void DoComplete(Scene scene)
         {
             state = SceneLoaderDataState.Finished;
+
+            handler.IsDone = true;
             handler.TargetScene = scene;
 
-            if(!isActiveWhenLoaded)
+            if(!isActiveWhenLoaded && scene.IsValid())
             {
                 GameObject[] objs = scene.GetRootGameObjects();
                 foreach(var obj in objs)

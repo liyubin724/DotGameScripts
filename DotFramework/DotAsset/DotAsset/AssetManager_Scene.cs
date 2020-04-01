@@ -33,8 +33,8 @@ namespace Dot.Asset
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
         public SceneHandler LoadSceneAsync(string address,
-            OnSceneLoadComplete complete,
             OnSceneLoadProgress progress,
+            OnSceneLoadComplete complete,
             LoadSceneMode mode = LoadSceneMode.Single,
             bool activateOnLoad = true,
             SystemObject userData = null)
@@ -45,7 +45,7 @@ namespace Dot.Asset
                 return null;
             }
 
-             return sceneLoader.LoadSceneAsync(address, complete, progress, mode, activateOnLoad, userData);
+             return sceneLoader.LoadSceneAsync(address, progress, complete,  mode, activateOnLoad, userData);
         }
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace Dot.Asset
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
         public SceneHandler UnloadSceneAsync(string address,
-            OnSceneLoadComplete complete,
             OnSceneLoadProgress progress,
+            OnSceneLoadComplete complete,
             SystemObject userData = null)
         {
             if (sceneLoader == null)
@@ -66,7 +66,7 @@ namespace Dot.Asset
                 LogUtil.LogError(AssetConst.LOGGER_NAME, "AssetManager::UnloadSceneAsync->loader hasn't been inited");
                 return null;
             }
-            return sceneLoader.UnloadSceneAsync(address, complete, progress, userData);
+            return sceneLoader.UnloadSceneAsync(address, progress, complete, userData);
         }
     }
 }
