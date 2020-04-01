@@ -39,6 +39,9 @@ namespace DotEditor.Asset.AssetAddress
                     UpdateConfigByGroup(group);
                 }
                 config.Reload();
+
+                EditorUtility.SetDirty(config);
+
                 AssetDatabase.SaveAssets();
             }
         }
@@ -79,6 +82,7 @@ namespace DotEditor.Asset.AssetAddress
 
             config.addressDatas = dataDic.Values.ToArray();
             config.Reload();
+            EditorUtility.SetDirty(config);
         }
 
         public static AssetAddressConfig GetOrCreateConfig()
