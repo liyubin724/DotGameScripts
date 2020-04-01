@@ -28,6 +28,7 @@ namespace Dot.Asset
                 if(addressConfig!=null)
                 {
                     State = AssetLoaderState.Running;
+                    return;
                 }
             }
             LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");

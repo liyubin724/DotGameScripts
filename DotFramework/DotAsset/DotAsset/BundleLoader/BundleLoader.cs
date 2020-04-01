@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Dot.Asset
 {
@@ -18,6 +20,10 @@ namespace Dot.Asset
 
         protected override void DoInitUpdate()
         {
+            string bundleConfigPath = $"{assetRootDir}/{AssetConst.ASSET_BUNDLE_CONFIG_NAME}";
+            string bundleConfigContent = File.ReadAllText(bundleConfigPath);
+            bundleConfig = JsonConvert.DeserializeObject<AssetBundleConfig>(bundleConfigContent);
+
             AssetBundle assetAddressConfigAB;
             if (GetBundleFilePath(AssetConst.ASSET_ADDRESS_BUNDLE_NAME,out string configPath,out ulong offset))
             {
@@ -29,24 +35,14 @@ namespace Dot.Asset
             addressConfig = assetAddressConfigAB.LoadAsset<AssetAddressConfig>(AssetConst.ASSET_ADDRESS_CONFIG_NAME);
             assetAddressConfigAB.Unload(true);
 
-
-
-
-            addressConfig = AssetConst.GetAddressConfig();
-            if (addressConfig == null)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Address config is null");
-                State = AssetLoaderState.Error;
-            }
-            bundleConfig = AssetConst.GetBundleConfig(assetRootDir);
-            if(bundleConfig == null)
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "Bundle Config is Null");
-                State = AssetLoaderState.Error;
-            }else
+            if(addressConfig!=null && bundleConfig!=null)
             {
                 State = AssetLoaderState.Running;
+                return;
             }
+
+            LogUtil.LogError(AssetConst.LOGGER_NAME, "config is Null");
+            State = AssetLoaderState.Error;
         }
 
         protected override void OnDataUpdate(AssetLoaderData data)

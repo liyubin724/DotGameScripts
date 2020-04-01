@@ -2,6 +2,9 @@
 
 namespace Dot.Asset.Datas
 {
+    /// <summary>
+    /// 存储打包后的所有AssetBundle的信息
+    /// </summary>
     public class AssetBundleConfig
     {
         public int version = 1;
@@ -22,12 +25,9 @@ namespace Dot.Asset.Datas
         {
             if(bundleDetailDic == null)
             {
-                bundleDetailDic = new Dictionary<string, AssetBundleDetail>();
-                foreach(var detail in details)
-                {
-                    bundleDetailDic.Add(detail.name, detail);
-                }
+                InitConfig();
             }
+
             if(bundleDetailDic.TryGetValue(bundlePath,out AssetBundleDetail bundleDetail))
             {
                 return bundleDetail.dependencies;
@@ -36,6 +36,9 @@ namespace Dot.Asset.Datas
         }
     }
 
+    /// <summary>
+    /// AssetBundle的详细信息
+    /// </summary>
     public class AssetBundleDetail
     {
         public string name;
