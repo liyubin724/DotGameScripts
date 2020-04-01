@@ -1,0 +1,514 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotAsset</name>
+    </assembly>
+    <members>
+        <member name="T:Dot.Asset.AssetLoaderState">
+            <summary>
+            资源加载器状态
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.Initialize(System.Action{System.Boolean},System.String)">
+            <summary>
+            初始化
+            </summary>
+            <param name="callback">初始化回调</param>
+            <param name="assetDir">资源的根目录</param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.DoInitUpdate">
+            <summary>
+            在初始阶段，每帧调用进行初始化,子类中需要重写以完成初始化过程
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.LoadBatchAssetAsync(System.String,System.String[],System.Boolean,Dot.Asset.OnAssetLoadComplete,Dot.Asset.OnBatchAssetLoadComplete,Dot.Asset.OnAssetLoadProgress,Dot.Asset.OnBatchAssetsLoadProgress,Dot.Asset.AssetLoaderPriority,System.Object)">
+            <summary>
+            按批量方式进行资源的加载
+            如果指定使用标签进行资源加载，则会忽略<paramref name="addresses"/>的值
+            </summary>
+            <param name="label">加载设定指定标签的资源</param>
+            <param name="addresses">资源加载地址</param>
+            <param name="isInstance">是否需要实例化</param>
+            <param name="complete">单个资源加载完毕后回调</param>
+            <param name="batchComplete">所有资源加载完毕后回调</param>
+            <param name="progress">单个资源加载进度回调</param>
+            <param name="batchProgress">所有资源加载进度回调</param>
+            <param name="priority">优先级</param>
+            <param name="userData">自定义参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.StartLoadingData(Dot.Asset.AssetLoaderData)">
+            <summary>
+            开始加载指定的资源，子类需要重写
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.OnOperationFinished(Dot.Asset.AAsyncOperation)">
+            <summary>
+            资源加载器加载结束，子类需要重写
+            </summary>
+            <param name="operation"></param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.OnDataUpdate(Dot.Asset.AssetLoaderData)">
+            <summary>
+            子类需要重写，用于检查资源当前状况
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.UnloadAssetAsync(Dot.Asset.AssetHandler,System.Boolean)">
+            <summary>
+            停止资源加载
+            </summary>
+            <param name="handler"></param>
+            <param name="destroyIfIsInstnace"></param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.DeepUnloadUnusedAsset(System.Action)">
+            <summary>
+            深度清理资源
+            </summary>
+            <param name="callback">清理完毕后回调</param>
+        </member>
+        <member name="M:Dot.Asset.AAssetLoader.DoDispose">
+            <summary>
+            清理所有的资源
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.AAssetNode">
+            <summary>
+            加载中及缓存到的资源结点
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AAssetNode.AssetPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AAssetNode.IsNeverDestroy">
+            <summary>
+            是否设定此资源永不清理
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.AAssetNode.refCount">
+            <summary>
+            资源被重复使用的次数，如果次数大于0，则会不执行清理
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AAssetNode.GetAsset">
+            <summary>
+            获取加载到的资源
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.AAssetNode.GetInstance">
+            <summary>
+            获取加载到的资源的实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.AAssetNode.IsAlive">
+            <summary>
+            判断是否还存活，如果不在存活，将会被清理
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.AAssetNode.IsDone">
+            <summary>
+            资源是否加载结束
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Dot.Asset.OperationState">
+            <summary>
+            执行异步资源加载状态
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AAsyncOperation.OnOperationStart">
+            <summary>
+            开始加载
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.AssetHandler">
+            <summary>
+            加载资源时返回数据结构，可用于检视加载情况
+            注意：除了使用侦听外，还可以通过<see cref="T:Dot.Asset.AssetHandler"/>来检视加载情况
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.Label">
+            <summary>
+            资源标记的标签，如果资源不是以标签的形式加载的话，则返回null
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.Addresses">
+            <summary>
+            加载的所有资源地址
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.Address">
+            <summary>
+            资源地址，如果加载的是单个资源，可能得到此资源的地址
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.UObjects">
+            <summary>
+            加载到的资源或者资源的实例，在使用时请提前使用<see cref="P:Dot.Asset.AssetHandler.IsDone"/>来检查是否加载完毕
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.UObject">
+            <summary>
+            加载到的资源或者资源的实例
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.Progresses">
+            <summary>
+             加载的每个资源的进度
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.Progress">
+            <summary>
+            资源加载进度
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.TotalProgress">
+            <summary>
+            资源加载总体进度
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.UserData">
+            <summary>
+            自定义参数
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetHandler.IsDone">
+            <summary>
+            资源是否加载完毕
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AssetHandler.#ctor(System.String,System.String[],System.Object)">
+            <summary>
+            构造函数，仅供包内使用，外部无法创建
+            </summary>
+            <param name="label">资源标签</param>
+            <param name="addresses">所有资源地址</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="M:Dot.Asset.AssetHandler.DoCancel(System.Boolean,System.Boolean)">
+            <summary>
+            取消资源加载，仅供包内部使用
+            </summary>
+            <param name="isInstance">是否需要实例化</param>
+            <param name="destroyIfIsInstnace">是否销毁已经实例化的对象</param>
+        </member>
+        <member name="T:Dot.Asset.AssetLoaderDataState">
+            <summary>
+            资源加载状态
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.AssetLoaderData">
+            <summary>
+            由于资源的加载是异步的，所以需要存储加载时数据，用于加载完成及进度更新
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.AssetLoaderData.Paths">
+            <summary>
+            返回资源路径
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AssetLoaderData.DoComplete(System.Int32,Dot.Asset.AAssetNode)">
+            <summary>
+            某个资源加载完毕
+            </summary>
+            <param name="index"></param>
+            <param name="assetNode"></param>
+        </member>
+        <member name="M:Dot.Asset.AssetLoaderData.DoProgress(System.Int32,System.Single)">
+            <summary>
+            某个资源加载进度发生变化
+            </summary>
+            <param name="index"></param>
+            <param name="progress"></param>
+        </member>
+        <member name="M:Dot.Asset.AssetLoaderData.DoBatchComplete">
+            <summary>
+            所有的资源加载完毕
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.OnAssetLoadComplete">
+            <summary>
+            资源加载完成后回调
+            </summary>
+            <param name="address">资源地址</param>
+            <param name="uObj">加载到的资源，如果为null表示加载失败</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.OnAssetLoadProgress">
+            <summary>
+            资源加载进度回调，当资源加载进度变化时会回调
+            </summary>
+            <param name="address">资源地址</param>
+            <param name="progress">当前资源加载进度</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.OnBatchAssetLoadComplete">
+            <summary>
+            批量加载资源时回调
+            </summary>
+            <param name="addresses">一次加载所有资源的地址，地址可以重复</param>
+            <param name="uObjs">加载完成后对应的资源，如果某个资源加载失败则为null</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.OnBatchAssetsLoadProgress">
+            <summary>
+            批量加载资源进度的回调
+            </summary>
+            <param name="addresses">一次加载所有资源的地址，地址可以重复</param>
+            <param name="progresses">对应资源加载进度</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.AssetLoaderMode">
+            <summary>
+            资源加载模式
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.AssetLoaderMode.AssetDatabase">
+            <summary>
+            使用AssetDatabase进行资源的加载，只适用于编辑器中
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.AssetLoaderMode.AssetBundle">
+            <summary>
+            使用AB进行资源加载，可用于编辑器及运行时
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.AssetLoaderPriority">
+            <summary>
+            资源加载的优先级，优先级越高，加载时会优先加载。
+            同等优先级下按资源的加载顺序加载
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.AssetManager">
+            <summary>
+            单例模式的资源加载管理
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.InitManager(Dot.Asset.AssetLoaderMode,System.Action{System.Boolean},System.String)">
+            <summary>
+            初始化资源加载器。
+            在使用前必须先进行初始化，初始成功后才能正常使用
+            </summary>
+            <param name="mode">资源加载模式,参见<see cref="T:Dot.Asset.AssetLoaderMode"/></param>
+            <param name="initCallback">管理器初始化成功后回调，成功返回true,否则返回false</param>
+            <param name="assetRootDir">使用AB加载资源时，需要指定AB资源所在的根目录</param>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.ChangeMaxLoadingCount(System.Int32)">
+            <summary>
+            修改可同时进行加载的加载器的数量
+            注意:此数量并非指定资源的数量
+            </summary>
+            <param name="count">加载器的最大数量</param>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.UnloadAssetAsync(Dot.Asset.AssetHandler,System.Boolean)">
+            <summary>
+            停止正在加载中的资源
+            如果资源已经加载完毕，调用后没有任何效果，只需要使用Destroy销毁资源即可。
+            如果资源在加载中，则会终止资源的回调（对于使用AB加载的话，由于Unity底层接口无法停止的问题，
+            所以并不会真正停止，只是不再回调加载完成后的接口），如果此资源需要实例化，则会根据<paramref name="destroyIfIsInstnace"/>
+            来判断是否删除已经实例化的资源
+            </summary>
+            <param name="handler">调用加载接口后返回的Handler</param>
+            <param name="destroyIfIsInstnace">如果资源需要实例化时，对于已经实例化的实例是否需要删除，如果指定为true，则会调用Destroy销毁</param>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.InstantiateAsset(System.String,UnityEngine.Object)">
+            <summary>
+            使用资源加载接口只加载资源后，如果需要实例化时，需要统一通过此接口
+            注意：必须使用此接口才能保证资源正常的实例化
+            </summary>
+            <param name="address">资源地址</param>
+            <param name="asset">加载到的资源</param>
+            <returns></returns>
+        </member>
+        <member name="P:Dot.Asset.AssetManager.AutoCleanInterval">
+            <summary>
+            获取和指定清理资源的周期,默认60秒
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.UnloadUnusedAsset(System.Action)">
+            <summary>
+            默认情况下资源的清理是基于GC和定时器，通过此接口可以立即深度清理资源
+            </summary>
+            <param name="callback">清理完毕后回调</param>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.LoadSceneAsync(System.String,Dot.Asset.OnSceneLoadProgress,Dot.Asset.OnSceneLoadComplete,UnityEngine.SceneManagement.LoadSceneMode,System.Boolean,System.Object)">
+            <summary>
+            异步加载并初始化场景。场景的加载分为两步，一是加载场景资源及其依赖资源，二是初始化场景
+            </summary>
+            <param name="address">场景地址</param>
+            <param name="complete">加载及初始化完成后回调</param>
+            <param name="progress">加载进度回调</param>
+            <param name="mode">加载模式<see cref="T:UnityEngine.SceneManagement.LoadSceneMode"/></param>
+            <param name="activateOnLoad">场景加载完毕后是否立即激活所有的根结点</param>
+            <param name="userData">自定义参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.AssetManager.UnloadSceneAsync(System.String,Dot.Asset.OnSceneLoadProgress,Dot.Asset.OnSceneLoadComplete,System.Object)">
+            <summary>
+            卸载指定的场景
+            </summary>
+            <param name="address">场景地址</param>
+            <param name="complete">卸载完毕后回调</param>
+            <param name="progress">卸载进度回调</param>
+            <param name="userData">自定义参数</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dot.Asset.OnSceneLoadComplete">
+            <summary>
+            场景加载完成后回调
+            </summary>
+            <param name="address">场景地址</param>
+            <param name="scene">加载到的场景对象</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.OnSceneLoadProgress">
+            <summary>
+            场景加载进度回调
+            </summary>
+            <param name="address">场景地址</param>
+            <param name="progress">加载进度</param>
+            <param name="userData">自定义参数</param>
+        </member>
+        <member name="T:Dot.Asset.Datas.AssetAddressConfig">
+            <summary>
+            资源地址配置
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.Datas.AssetAddressConfig.CheckIsSceneByPath(System.String)">
+            <summary>
+            判断资源是否是场景资源
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.Datas.AssetAddressConfig.GetPathByAddress(System.String)">
+            <summary>
+            查找资源地址对应的路径
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.Datas.AssetAddressConfig.GetPathsByAddresses(System.String[])">
+            <summary>
+            查找资源地址对应的路径
+            </summary>
+            <param name="addresses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.Datas.AssetAddressConfig.GetAddressesByLabel(System.String)">
+            <summary>
+            查找所有标记为指定标签的资源
+            </summary>
+            <param name="label"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dot.Asset.Datas.AssetAddressConfig.GetBundleByPath(System.String)">
+            <summary>
+            根据资源的路径查找所在的AB
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData">
+            <summary>
+            资源地址的详细信息
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.assetAddress">
+            <summary>
+            资源地址
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.assetPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.bundlePath">
+            <summary>
+            资源所属AB
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.labels">
+            <summary>
+            资源标签
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.isScene">
+            <summary>
+            是否是场景类资源
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.isPreload">
+            <summary>
+            是否需要提前预加载
+            </summary>
+        </member>
+        <member name="F:Dot.Asset.Datas.AssetAddressConfig.AssetAddressData.isNeverDestroy">
+            <summary>
+            资源一旦加载后是否常驻内存
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.Datas.AssetBundleConfig">
+            <summary>
+            存储打包后的所有AssetBundle的信息
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.Datas.AssetBundleDetail">
+            <summary>
+            AssetBundle的详细信息
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.SceneHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.Address">
+            <summary>
+            场景地址
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.SceneName">
+            <summary>
+            场景名称
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.ScenePath">
+            <summary>
+            场景资源的路径
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.Progress">
+            <summary>
+            场景加载进度
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.TargetScene">
+            <summary>
+            如果是加载场景的话，则存储加载成功后的场景
+            </summary>
+        </member>
+        <member name="P:Dot.Asset.SceneHandler.IsDone">
+            <summary>
+            场景加载或卸载是否完成
+            </summary>
+        </member>
+        <member name="M:Dot.Asset.SceneHandler.ActiveScene">
+            <summary>
+            激活场景的顶层结点
+            </summary>
+        </member>
+        <member name="T:Dot.Asset.SceneLoaderDataState">
+            <summary>
+            场景加载或卸载时状态
+            </summary>
+        </member>
+    </members>
+</doc>

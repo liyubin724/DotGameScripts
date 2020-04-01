@@ -7,8 +7,8 @@ namespace Dot.Asset
     public static class AssetUtil
     {
         #region Init Mgr
-#if UNITY_EDITOR
         private static AssetManager assetMgr = null;
+#if UNITY_EDITOR
 
         public static void InitDatabaseLoader(Action<bool> initCallback)
         {
