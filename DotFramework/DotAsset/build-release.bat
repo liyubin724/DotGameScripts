@@ -18,6 +18,7 @@ IF ERRORLEVEL 1 (
     GOTO BuildError
 ) ELSE (
     ECHO build success
+    GOTO BuildSuccess
 )
 
 :BuildError
