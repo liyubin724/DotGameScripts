@@ -7,10 +7,16 @@ using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 对Unity资源的缓存
+    /// </summary>
     public class BundleAssetNode : AAssetNode
     {
+        //资源所在的AssetBundle
         private BundleNode bundleNode = null;
+        //采用弱引用的形式缓存的对资源的引用
         private WeakReference assetWeakRef = null;
+        //生成的资源的实例
         private List<WeakReference> instanceWeakRefs = new List<WeakReference>();
 
         internal void InitNode(string assetPath,BundleNode node)
@@ -19,7 +25,10 @@ namespace Dot.Asset
             bundleNode = node;
             bundleNode.RetainRef();
         }
-
+        /// <summary>
+        /// 从AssetBundle中读取资源
+        /// </summary>
+        /// <returns></returns>
         protected internal override UnityObject GetAsset()
         {
             UnityObject asset = bundleNode.GetAsset(AssetPath);
@@ -33,6 +42,10 @@ namespace Dot.Asset
             return asset;
         }
 
+        /// <summary>
+        /// 从AssetBundle中获取资源后，并进行实例化。场景资源无法实例化
+        /// </summary>
+        /// <returns></returns>
         protected internal override UnityObject GetInstance()
         {
             UnityObject asset = bundleNode.GetAsset(AssetPath);

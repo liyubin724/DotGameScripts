@@ -1,9 +1,11 @@
-﻿using Dot.Asset.Datas;
-using Dot.Log;
+﻿using Dot.Log;
 using UnityEngine;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// AssetBundle异步加载操作
+    /// </summary>
     public class BundleAsyncOperation : AAsyncOperation
     {
         private AssetBundleCreateRequest asyncOperation = null;

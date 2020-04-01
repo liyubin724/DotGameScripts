@@ -21,7 +21,7 @@ namespace Dot.Asset
         public static void InitBundleLoader(Action<bool> initCallback,string bundleRootDir)
         {
             assetMgr = AssetManager.GetInstance();
-            assetMgr.InitManager(AssetLoaderMode.AssetDatabase, initCallback,bundleRootDir);
+            assetMgr.InitManager(AssetLoaderMode.AssetBundle, initCallback,bundleRootDir);
         }
 
         #endregion

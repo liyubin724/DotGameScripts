@@ -1,31 +1,35 @@
-﻿using Dot.Asset.Datas;
+﻿using Dot.Core.Pool;
 using Dot.Log;
-using Dot.Core.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// AssetBundle的缓存
+    /// </summary>
     public class BundleNode : IObjectPoolItem
     {
-        internal string BundlePath { get; private set; }
         private int refCount = 0;
         internal int RefCount { get => refCount; }
         private bool isDone = false;
         private AssetBundle assetBundle = null;
         private List<BundleNode> dependNodes = new List<BundleNode>();
 
-        internal void InitNode(string bundlePath)
-        {
-            BundlePath = bundlePath;
-        }
-
+        /// <summary>
+        /// 加载完毕后，设置AssetBundle
+        /// </summary>
+        /// <param name="bundle"></param>
         internal void SetBundle(AssetBundle bundle)
         {
             assetBundle = bundle;
             isDone = true;
         }
 
+        /// <summary>
+        /// 添加Bundle依赖的其它Bundle
+        /// </summary>
+        /// <param name="node"></param>
         internal void AddDepend(BundleNode node)
         {
             if(!dependNodes.Contains(node))
@@ -117,7 +121,6 @@ namespace Dot.Asset
         {
             Unload();
             IsUsedByScene = false;
-            BundlePath = null;
             isDone = false;
             dependNodes.Clear();
             refCount = 0;

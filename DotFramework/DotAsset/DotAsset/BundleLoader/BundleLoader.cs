@@ -10,6 +10,9 @@ using System.IO;
 
 namespace Dot.Asset
 {
+    /// <summary>
+    /// 在AssetBundle模式下对资源的加载器
+    /// </summary>
     public class BundleLoader : AAssetLoader
     {
         private ObjectPool<BundleNode> bundleNodePool = new ObjectPool<BundleNode>();
@@ -20,10 +23,12 @@ namespace Dot.Asset
 
         protected override void DoInitUpdate()
         {
+            //以同步的方式读取以JSON格式存储的Bundle的配置文件
             string bundleConfigPath = $"{assetRootDir}/{AssetConst.ASSET_BUNDLE_CONFIG_NAME}";
             string bundleConfigContent = File.ReadAllText(bundleConfigPath);
             bundleConfig = JsonConvert.DeserializeObject<AssetBundleConfig>(bundleConfigContent);
 
+            //以同步的方式加载AssetBundle，并读取资源地址的配置文件
             AssetBundle assetAddressConfigAB;
             if (GetBundleFilePath(AssetConst.ASSET_ADDRESS_BUNDLE_NAME,out string configPath,out ulong offset))
             {
@@ -32,8 +37,15 @@ namespace Dot.Asset
             {
                 assetAddressConfigAB = AssetBundle.LoadFromFile(configPath);
             }
-            addressConfig = assetAddressConfigAB.LoadAsset<AssetAddressConfig>(AssetConst.ASSET_ADDRESS_CONFIG_NAME);
-            assetAddressConfigAB.Unload(true);
+            if(assetAddressConfigAB!=null)
+            {
+                AssetAddressConfig[] addressConfigs = assetAddressConfigAB.LoadAllAssets<AssetAddressConfig>();
+                if(addressConfigs!=null && addressConfigs.Length>0)
+                {
+                    addressConfig = addressConfigs[0];
+                }
+                assetAddressConfigAB.Unload(false);
+            }
 
             if(addressConfig!=null && bundleConfig!=null)
             {
@@ -239,8 +251,7 @@ namespace Dot.Asset
         private BundleNode GetOrCreateMainBundleNode(string mainBundlePath,bool isScene)
         {
             string[] depends = bundleConfig.GetDependencies(mainBundlePath);
-            BundleNode bundleNode = null;
-            if (!bundleNodeDic.TryGetValue(mainBundlePath,out bundleNode))
+            if (!bundleNodeDic.TryGetValue(mainBundlePath,out BundleNode bundleNode))
             {
                 bundleNode = CreateBundleNode(mainBundlePath);
                 if (depends != null && depends.Length > 0)
@@ -278,8 +289,6 @@ namespace Dot.Asset
         private BundleNode CreateBundleNode(string bundlePath)
         {
             BundleNode bundleNode = new BundleNode();
-            bundleNode.InitNode(bundlePath);
-
             bundleNodeDic.Add(bundlePath, bundleNode);
 
             BundleAsyncOperation operation = new BundleAsyncOperation(bundlePath, GetBundleFilePath);
