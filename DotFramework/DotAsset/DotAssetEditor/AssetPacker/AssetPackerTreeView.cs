@@ -139,22 +139,22 @@ namespace DotEditor.Asset.AssetPacker
 
             EGUI.BeginLabelWidth(80);
             {
-                EditorGUI.TextField(drawRect,"address:", addressData.assetAddress);
+                EditorGUI.TextField(drawRect,"address", addressData.assetAddress);
             }
             EGUI.EndLableWidth();
 
-            drawRect.x += drawRect.width;
+            drawRect.x += drawRect.width+5;
             drawRect.height = EditorGUIUtility.singleLineHeight;
 
             EGUI.BeginLabelWidth(80);
             {
-                EditorGUI.TextField(drawRect, "path:", addressData.assetPath);
+                EditorGUI.TextField(drawRect, "path", addressData.assetPath);
                 drawRect.y += drawRect.height;
-                EditorGUI.TextField(drawRect, "bundle:", addressData.bundlePath);
+                EditorGUI.TextField(drawRect, "bundle", addressData.bundlePath);
                 drawRect.y += drawRect.height;
-                EditorGUI.TextField(drawRect, "bundle-md5:", addressData.bundlePathMd5);
+                EditorGUI.TextField(drawRect, "bundle-md5", addressData.bundlePathMd5);
                 drawRect.y += drawRect.height;
-                EditorGUI.TextField(drawRect, "labels:", string.Join(",", addressData.labels));
+                EditorGUI.TextField(drawRect, "labels", string.Join(",", addressData.labels));
             }
             EGUI.EndLableWidth();
 
