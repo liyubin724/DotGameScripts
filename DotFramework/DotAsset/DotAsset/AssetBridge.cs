@@ -1,165 +1,164 @@
-﻿//using Dot.Core.Generic;
-//using Dot.Core.Dispose;
-//using Dot.Core.Pool;
-//using System.Collections.Generic;
-//using SystemObject = System.Object;
-//using UnityObject = UnityEngine.Object;
+﻿using Dot.Core.Dispose;
+using Dot.Core.Generic;
+using Dot.Core.Pool;
+using System.Collections.Generic;
+using System.Linq;
+using SystemObject = System.Object;
+using UnityObject = UnityEngine.Object;
 
-//namespace Dot.Asset
-//{
-//    public class AssetBridgeData : IObjectPoolItem
-//    {
-//        public long uniqueID = -1;
-//        public string address = null;
-//        public string[] addresses = null;
-//        public AssetHandler handler = null;
-//        public OnAssetLoadComplete complete = null;
-//        public OnBatchAssetLoadComplete batchComplete = null;
-//        public SystemObject userData = null;
+namespace Dot.Asset
+{
+    public class AssetBridge : IDispose
+    {
+        private UniqueIntID idCreator = new UniqueIntID(0);
+        private AssetLoaderPriority loaderPriority = AssetLoaderPriority.Default;
 
-//        public void OnGet()
-//        {
-//        }
+        private static ObjectPool<AssetBridgeData> bridgeDataPool = new ObjectPool<AssetBridgeData>();
 
-//        public void OnNew()
-//        {
-//        }
+        private Dictionary<int, AssetBridgeData> bridgeDataDic = new Dictionary<int, AssetBridgeData>();
 
-//        public void OnRelease()
-//        {
-//            uniqueID = -1;
-//            handler = null;
-//            complete = null;
-//            batchComplete = null;
-//            userData = null;
-//        }
-//    }
+        public AssetBridge() { }
+        public AssetBridge(AssetLoaderPriority priority)
+        {
+            loaderPriority = priority;
+        }
 
-//    public class AssetBridge : ABaseDispose
-//    {
-//        private AssetLoaderPriority loaderPriority = AssetLoaderPriority.Default;
-//        private UniqueIntID idCreator = new UniqueIntID();
+        public int LoadAsset(string address, OnAssetLoadComplete complete, SystemObject userData = null)
+        {
+            AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.uniqueID = idCreator.GetNextID();
+            bridgeData.address = address;
+            bridgeData.complete = complete;
+            bridgeData.userData = userData;
 
-//        private static ObjectPool<AssetBridgeData> bridgeDataPool = new ObjectPool<AssetBridgeData>();
+            AssetHandler handler = AssetUtil.LoadAssetAsync(address, null, OnAssetComplete, loaderPriority, bridgeData);
+            bridgeData.handler = handler;
 
-//        private List<AssetBridgeData> bridgeDatas = new List<AssetBridgeData>();
+            bridgeDataDic.Add(bridgeData.uniqueID, bridgeData);
+            return bridgeData.uniqueID;
+        }
 
-//        public AssetBridge() { }
-//        public AssetBridge(AssetLoaderPriority priority)
-//        {
-//            loaderPriority = priority;
-//        }
+        public int InstanceAsset(string address, OnAssetLoadComplete complete, SystemObject userData = null)
+        {
+            AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.uniqueID = idCreator.GetNextID();
+            bridgeData.address = address;
+            bridgeData.complete = complete;
+            bridgeData.userData = userData;
 
-//        public long LoadAsset(string address,OnAssetLoadComplete complete,SystemObject userData = null)
-//        {
-//            AssetBridgeData bridgeData = bridgeDataPool.Get();
-//            bridgeData.address = address;
-//            bridgeData.uniqueID = idCreator.Next();
-//            bridgeData.complete = complete;
-//            bridgeData.userData = userData;
+            AssetHandler handler = AssetUtil.InstanceAssetAsync(address, null, OnAssetComplete, loaderPriority, bridgeData);
+            bridgeData.handler = handler;
 
-//            AssetHandler handler = AssetManager.GetInstance().LoadAssetAsync(address, OnAssetComplete, null, loaderPriority, bridgeData);
-//            bridgeData.handler = handler;
+            bridgeDataDic.Add(bridgeData.uniqueID, bridgeData);
+            return bridgeData.uniqueID;
+        }
 
-//            bridgeDatas.Add(bridgeData);
+        public int LoadAsset(string[] addresses, OnBatchAssetLoadComplete complete, SystemObject userData = null)
+        {
+            AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.uniqueID = idCreator.GetNextID();
+            bridgeData.addresses = addresses;
+            bridgeData.batchComplete = complete;
+            bridgeData.userData = userData;
 
-//            return bridgeData.uniqueID;
-//        }
+            AssetHandler handler = AssetUtil.LoadBatchAssetAsync(addresses, null, null,null,OnBatchAssetComplete,loaderPriority, bridgeData);
+            bridgeData.handler = handler;
 
-//        public long InstanceAsset(string address,OnAssetLoadComplete complete, SystemObject userData = null)
-//        {
-//            AssetBridgeData bridgeData = bridgeDataPool.Get();
-//            bridgeData.address = address;
-//            bridgeData.uniqueID = idCreator.Next();
-//            bridgeData.complete = complete;
-//            bridgeData.userData = userData;
+            bridgeDataDic.Add(bridgeData.uniqueID, bridgeData);
+            return bridgeData.uniqueID;
+        }
 
-//            AssetHandler handler = AssetManager.GetInstance().InstanceAssetAsync(address, OnAssetComplete, null, loaderPriority, bridgeData);
-//            bridgeData.handler = handler;
+        public int InstanceAsset(string[] addresses, OnBatchAssetLoadComplete complete, SystemObject userData = null)
+        {
+            AssetBridgeData bridgeData = bridgeDataPool.Get();
+            bridgeData.uniqueID = idCreator.GetNextID();
+            bridgeData.addresses = addresses;
+            bridgeData.batchComplete = complete;
+            bridgeData.userData = userData;
 
-//            bridgeDatas.Add(bridgeData);
+            AssetHandler handler = AssetUtil.InstanceBatchAssetAsync(addresses, null, null, null, OnBatchAssetComplete, loaderPriority, bridgeData);
+            bridgeData.handler = handler;
 
-//            return bridgeData.uniqueID;
-//        }
+            bridgeDataDic.Add(bridgeData.uniqueID, bridgeData);
+            return bridgeData.uniqueID;
+        }
 
-//        public long LoadAsset(string[] addresses, OnBatchAssetLoadComplete complete,SystemObject userData = null)
-//        {
-//            AssetBridgeData bridgeData = bridgeDataPool.Get();
-//            bridgeData.addresses = addresses;
-//            bridgeData.uniqueID = idCreator.Next();
-//            bridgeData.batchComplete = complete;
-//            bridgeData.userData = userData;
+        public void OnAssetComplete(string address, UnityObject uObj, SystemObject userData)
+        {
+            AssetBridgeData bridgeData = userData as AssetBridgeData;
+            if(bridgeDataDic.ContainsKey(bridgeData.uniqueID))
+            {
+                bridgeDataDic.Remove(bridgeData.uniqueID);
+                bridgeData.complete?.Invoke(address, uObj, bridgeData.userData);
+            }
+            bridgeDataPool.Release(bridgeData);
+        }
 
-//            AssetHandler handler = AssetManager.GetInstance().LoadAssetAsync(addresses, null, OnBatchAssetComplete, null, null, loaderPriority, bridgeData);
-//            bridgeData.handler = handler;
-
-//            bridgeDatas.Add(bridgeData);
-
-//            return bridgeData.uniqueID;
-//        }
-
-//        public void OnAssetComplete(string address,UnityObject uObj,SystemObject userData)
-//        {
-//            AssetBridgeData bridgeData = userData as AssetBridgeData;
-//            bridgeDatas.Remove(bridgeData);
-
-//            bridgeData.complete?.Invoke(address, uObj, bridgeData.userData);
-
-//            bridgeDataPool.Release(bridgeData);
-//        }
-
-//        public void OnBatchAssetComplete(string[] addresses,UnityObject[] uObjs,SystemObject userData)
-//        {
-//            AssetBridgeData bridgeData = userData as AssetBridgeData;
-//            bridgeDatas.Remove(bridgeData);
-
-//            bridgeData.batchComplete?.Invoke(addresses, uObjs, bridgeData.userData);
-
-//            bridgeDataPool.Release(bridgeData);
-//        }
-
-//        public void CancelLoadAsset(long id)
-//        {
-//            for(int i =0;i<bridgeDatas.Count -1;++i)
-//            {
-//                var bridgeData = bridgeDatas[i];
-//                if(bridgeData.uniqueID == id)
-//                {
-//                    AssetManager.GetInstance().UnloadAssetAsync(bridgeData.handler, true);
-//                    bridgeDatas.RemoveAt(i);
-
-//                    bridgeDataPool.Release(bridgeData);
-//                    return;
-//                }
-//            }
-//        }
-
-//        public AssetBridgeData GetBridgeData(long id)
-//        {
-//            foreach(var data in bridgeDatas)
-//            {
-//                if(data.uniqueID == id)
-//                {
-//                    return data;
-//                }
-//            }
-//            return null;
-//        }
-
-//        protected override void DisposeManagedResource()
-//        {
-//            for(int i = bridgeDatas.Count -1;i>=0;--i)
-//            {
-//                var data = bridgeDatas[i];
-//                AssetManager.GetInstance().UnloadAssetAsync(data.handler);
-//                bridgeDataPool.Release(data);
-//            }
-//            bridgeDatas.Clear();
-//        }
-
-//        protected override void DisposeUnmanagedResource()
-//        {
+        public void OnBatchAssetComplete(string[] addresses, UnityObject[] uObjs, SystemObject userData)
+        {
+            AssetBridgeData bridgeData = userData as AssetBridgeData;
+            if (bridgeDataDic.ContainsKey(bridgeData.uniqueID))
+            {
+                bridgeDataDic.Remove(bridgeData.uniqueID);
+                bridgeData.batchComplete?.Invoke(addresses, uObjs, bridgeData.userData);
+            }
             
-//        }
-//    }
-//}
+            bridgeDataPool.Release(bridgeData);
+        }
+
+        public void CancelLoad(int uniqueID)
+        {
+            if(bridgeDataDic.TryGetValue(uniqueID,out AssetBridgeData bridgeData))
+            {
+                bridgeDataDic.Remove(uniqueID);
+                AssetUtil.UnloadAssetAsync(bridgeData.handler, true);
+                bridgeDataPool.Release(bridgeData);
+            }
+        }
+
+        public void Dispose()
+        {
+            int[] ids = bridgeDataDic.Keys.ToArray();
+            foreach(var id in ids)
+            {
+                CancelLoad(id);
+            }
+
+            bridgeDataDic.Clear();
+            bridgeDataPool.Clear();
+        }
+
+         class AssetBridgeData : IObjectPoolItem
+         {
+            public int uniqueID = -1;
+            public bool isInstance = false;
+            public string address = null;
+            public string[] addresses = null;
+            public AssetHandler handler = null;
+            public OnAssetLoadComplete complete = null;
+            public OnBatchAssetLoadComplete batchComplete = null;
+            public SystemObject userData = null;
+
+            public void OnGet()
+            {
+            }
+
+            public void OnNew()
+            {
+            }
+
+            public void OnRelease()
+            {
+                uniqueID = -1;
+                address = null;
+                addresses = null;
+                handler = null;
+                complete = null;
+                batchComplete = null;
+                userData = null;
+            }
+        }
+    }
+
+
+}
