@@ -1,10 +1,9 @@
-﻿using Dot.Asset.Datas;
+﻿using Dot.Core;
+using Dot.Core.Proxy;
 using Dot.Log;
-using Dot.Core;
 using System;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
-using Dot.Core.Proxy;
 
 namespace Dot.Asset
 {
@@ -154,129 +153,78 @@ namespace Dot.Asset
             }
         }
 
-        /// <summary>
-        /// 异步加载设定为指定标签的所有资源
-        /// </summary>
-        /// <param name="label">资源的标签</param>
-        /// <param name="complete">单个资源加载完成时回调</param>
-        /// <param name="batchComplete">所有资源加载完毕时回调</param>
-        /// <param name="progress">单个资源加载进度回调</param>
-        /// <param name="batchProgress">所有资源加载进度回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler LoadAssetAsyncByLabel(string label,
+        public AssetHandler LoadAssetAsync(
+            string address,
+            OnAssetLoadProgress progress,
             OnAssetLoadComplete complete,
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
+        {
+            return LoadBatchAssetAsync(null, new string[] { address }, false, complete, null, progress, null, priority, userData);
+        }
+
+        public AssetHandler InstanceAssetAsync(
+            string address,
+            OnAssetLoadProgress progress,
+            OnAssetLoadComplete complete,
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
+        {
+            return LoadBatchAssetAsync(null, new string[] { address }, true, complete, null, progress, null, priority, userData);
+        }
+
+        public AssetHandler LoadBatchAssetAsync(
+            string[] addresses,
+            OnAssetLoadProgress progress,
+            OnAssetLoadComplete complete,
+            OnBatchAssetsLoadProgress batchProgress,
             OnBatchAssetLoadComplete batchComplete,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
         {
-            return LoadBatchAssetAsync(label,null,false, complete, batchComplete, progress, batchProgress, priority, userData);
+            return LoadBatchAssetAsync(null, addresses, false, complete, batchComplete, progress, batchProgress, priority, userData);
         }
 
-        /// <summary>
-        /// 异步加载指定资源
-        /// </summary>
-        /// <param name="assetPath">资源地址</param>
-        /// <param name="complete">资源加载完毕后回调</param>
-        /// <param name="progress">资源加载进度的回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler LoadAssetAsync(string assetPath,
+        public AssetHandler LoadBatchAssetAsyncByLabel(
+            string label,
+            OnAssetLoadProgress progress,
             OnAssetLoadComplete complete,
-            OnAssetLoadProgress progress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
-        {
-            return LoadBatchAssetAsync(null, new string[] { assetPath }, false, complete, null, progress, null, priority, userData);
-        }
-
-        /// <summary>
-        /// 异步进行批量资源加载
-        /// </summary>
-        /// <param name="addresses">所有资源的地址</param>
-        /// <param name="complete">单个资源加载完毕后回调</param>
-        /// <param name="batchComplete">所有资源加载完毕后回调</param>
-        /// <param name="progress">单个资源加载进度回调</param>
-        /// <param name="batchProgress">所有资源加载进度回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler LoadAssetAsync(string[] addresses, 
-            OnAssetLoadComplete complete,
+            OnBatchAssetsLoadProgress batchProgress,
             OnBatchAssetLoadComplete batchComplete,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
         {
-            return LoadBatchAssetAsync(null, addresses,false, complete, batchComplete, progress, batchProgress, priority, userData);
+            return LoadBatchAssetAsync(label, null, false, complete, batchComplete, progress, batchProgress, priority, userData);
         }
 
-        /// <summary>
-        /// 异步加载并实例化设定为指定标签的所有资源
-        /// 多用于Prefab的加载，资源加载完成后会将其实例化
-        /// </summary>
-        /// <param name="label">资源的标签</param>
-        /// <param name="complete">单个资源加载完成时回调</param>
-        /// <param name="batchComplete">所有资源加载完毕时回调</param>
-        /// <param name="progress">单个资源加载进度回调</param>
-        /// <param name="batchProgress">所有资源加载进度回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler InstanceAssetAsync(string label,
+        public AssetHandler InstanceBatchAssetAsync(
+            string[] addresses,
+            OnAssetLoadProgress progress,
             OnAssetLoadComplete complete,
+            OnBatchAssetsLoadProgress batchProgress,
             OnBatchAssetLoadComplete batchComplete,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
-        {
-            return LoadBatchAssetAsync(label, null, true, complete, batchComplete, progress, batchProgress, priority, userData);
-        }
-
-        /// <summary>
-        /// 异步加载并实例化指定资源
-        /// </summary>
-        /// <param name="assetPath">资源地址</param>
-        /// <param name="complete">资源加载完毕后回调</param>
-        /// <param name="progress">资源加载进度的回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler InstanceAssetAsync(string assetPath,
-            OnAssetLoadComplete complete,
-            OnAssetLoadProgress progress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
-        {
-            return LoadBatchAssetAsync(null, new string[] { assetPath }, true, complete, null, progress, null, priority, userData);
-        }
-
-        /// <summary>
-        /// 异步进行批量资源加载并实例化
-        /// </summary>
-        /// <param name="addresses">所有资源的地址</param>
-        /// <param name="complete">单个资源加载完毕后回调</param>
-        /// <param name="batchComplete">所有资源加载完毕后回调</param>
-        /// <param name="progress">单个资源加载进度回调</param>
-        /// <param name="batchProgress">所有资源加载进度回调</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="userData">自定义参数</param>
-        /// <returns></returns>
-        public AssetHandler InstanceAssetAsync(string[] addresses,
-            OnAssetLoadComplete complete,
-            OnBatchAssetLoadComplete batchComplete,
-            OnAssetLoadProgress progress = null,
-            OnBatchAssetsLoadProgress batchProgress = null,
-            AssetLoaderPriority priority = AssetLoaderPriority.Default,
-            SystemObject userData = null)
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
         {
             return LoadBatchAssetAsync(null, addresses, true, complete, batchComplete, progress, batchProgress, priority, userData);
+        }
+
+        public AssetHandler InstanceBatchAssetAsyncByLabel(
+            string label,
+            OnAssetLoadProgress progress,
+            OnAssetLoadComplete complete,
+            OnBatchAssetsLoadProgress batchProgress,
+            OnBatchAssetLoadComplete batchComplete,
+            AssetLoaderPriority priority,
+            SystemObject userData
+            )
+        {
+            return LoadBatchAssetAsync(label, null, true, complete, batchComplete, progress, batchProgress, priority, userData);
         }
 
         private AssetHandler LoadBatchAssetAsync(
