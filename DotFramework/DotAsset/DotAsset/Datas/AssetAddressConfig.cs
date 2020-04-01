@@ -101,7 +101,13 @@ namespace Dot.Asset.Datas
             string[] result = new string[addresses.Length];
             for(int i =0;i<addresses.Length;++i)
             {
-                result[i] = GetPathByAddress(addresses[i]);
+                string assetPath = GetPathByAddress(addresses[i]);
+                if(string.IsNullOrEmpty(assetPath))
+                {
+                    return null;
+                }
+
+                result[i] = assetPath;
             }
             return result;
         }
