@@ -10,8 +10,6 @@ namespace Dot.Asset
     /// </summary>
     public class BundleNode : IObjectPoolItem
     {
-        private int refCount = 0;
-        internal int RefCount { get => refCount; }
         private bool isDone = false;
         private AssetBundle assetBundle = null;
         private List<BundleNode> dependNodes = new List<BundleNode>();
@@ -22,8 +20,8 @@ namespace Dot.Asset
         /// <param name="bundle"></param>
         internal void SetBundle(AssetBundle bundle)
         {
-            assetBundle = bundle;
             isDone = true;
+            assetBundle = bundle;
         }
 
         /// <summary>
@@ -39,11 +37,9 @@ namespace Dot.Asset
             }
         }
 
-        internal void RetainRef()
-        {
-            ++refCount;
-        }
-
+        private int refCount = 0;
+        internal int RefCount { get => refCount; }
+        internal void RetainRef() => ++refCount;
         internal void ReleaseRef()
         {
             --refCount;
@@ -77,7 +73,15 @@ namespace Dot.Asset
             }
         }
 
-        internal bool IsUsedByScene { get; set; } = false;
+        private bool isUsedByScene = false;
+        internal void SetUsedByScene(bool isScene)
+        {
+            isUsedByScene = isScene;
+            foreach(var bn in dependNodes)
+            {
+                bn.isUsedByScene = isScene;
+            }
+        }
 
         internal bool IsScene
         {
@@ -104,23 +108,18 @@ namespace Dot.Asset
             return IsScene ? assetBundle : assetBundle?.LoadAsset(assetPath);
         }
 
-        internal void Unload()
-        {
-            if(assetBundle!=null)
-            {
-                assetBundle.Unload(!IsUsedByScene);
-            }
-            assetBundle = null;
-        }
-
         public void OnGet()
         {
         }
 
         public void OnRelease()
         {
-            Unload();
-            IsUsedByScene = false;
+            if (assetBundle != null)
+            {
+                assetBundle.Unload(!isUsedByScene);
+                assetBundle = null;
+            }
+            isUsedByScene = false;
             isDone = false;
             dependNodes.Clear();
             refCount = 0;

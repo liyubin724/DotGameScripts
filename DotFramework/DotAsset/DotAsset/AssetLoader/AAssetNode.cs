@@ -21,8 +21,8 @@ namespace Dot.Asset
         /// 资源被重复使用的次数，如果次数大于0，则会不执行清理
         /// </summary>
         protected int refCount = 0;
-        protected internal void Retain() => ++refCount;
-        protected internal void Release() => --refCount;
+        protected internal void RetainRef() => ++refCount;
+        protected internal void ReleaseRef() => --refCount;
 
         protected internal void InitNode(string path)
         {

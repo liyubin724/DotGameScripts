@@ -19,11 +19,18 @@ namespace Dot.Asset
         //生成的资源的实例
         private List<WeakReference> instanceWeakRefs = new List<WeakReference>();
 
-        internal void InitNode(string assetPath,BundleNode node)
+        internal bool IsScene { get; private set; } = false;
+
+        internal void InitNode(string assetPath,bool isScene,BundleNode node)
         {
             InitNode(assetPath);
+            IsScene = isScene;
             bundleNode = node;
             bundleNode.RetainRef();
+            if(isScene)
+            {
+                bundleNode.SetUsedByScene(true);
+            }
         }
         /// <summary>
         /// 从AssetBundle中读取资源
@@ -109,7 +116,7 @@ namespace Dot.Asset
 
         protected internal override bool IsDone() => bundleNode.IsDone;
 
-        internal bool IsScene { get; set; } = false;
+        
 
         protected internal override void Unload()
         {
@@ -118,9 +125,7 @@ namespace Dot.Asset
                 bundleNode.ReleaseRef();
                 bundleNode = null;
             }
-
             assetWeakRef = null;
-
             foreach (var asset in instanceWeakRefs)
             {
                 asset.Target = null;

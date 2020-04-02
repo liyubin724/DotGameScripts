@@ -65,7 +65,7 @@ namespace Dot.Asset
                 {
                     if(!string.IsNullOrEmpty(path))
                     {
-                        assetNodeDic[path].Release();
+                        assetNodeDic[path].ReleaseRef();
                     }
                 }
             }else if(data.State == AssetLoaderDataState.Loading)
@@ -84,7 +84,7 @@ namespace Dot.Asset
                     if (assetNode.IsDone())
                     {
                         data.DoComplete(i, assetNode);
-                        assetNode.Release();
+                        assetNode.ReleaseRef();
                     }
                     else
                     {
@@ -106,44 +106,31 @@ namespace Dot.Asset
             }
         }
 
+        private List<string> tempList = new List<string>();
+        //计算资源的加载进度
         private float GetAssetProgress(string assetPath)
         {
+            tempList.Clear();
+
             string mainBundlePath = addressConfig.GetBundleByPath(assetPath);
-            BundleNode bundleNode = bundleNodeDic[mainBundlePath];
-            if (bundleNode.IsDone)
-            {
-                return 1.0f;
-            }
             string[] depends = bundleConfig.GetDependencies(mainBundlePath);
-            float progress = GetBundleProgress(mainBundlePath);
-            float count = 1;
+            tempList.Add(mainBundlePath);
             if(depends!=null && depends.Length>0)
             {
-                count += depends.Length;
-                foreach(var depend in depends)
+                tempList.AddRange(depends);
+            }
+            float progressSum = 0.0f;
+            foreach(var bundlePath in tempList)
+            {
+                if (operations.ContainsKey(bundlePath))
                 {
-                    progress += GetBundleProgress(depend);
+                    progressSum += operations[bundlePath].GetProgress();
+                }else
+                {
+                    progressSum += 1.0f;
                 }
             }
-            return progress / count;
-        }
-
-        private float GetBundleProgress(string bundlePath)
-        {
-            BundleNode bundleNode = bundleNodeDic[bundlePath];
-            if(bundleNode.IsDone)
-            {
-                return 1.0f;
-            }
-            else
-            {
-                if(operations.ContainsKey(bundlePath))
-                {
-                    return operations[bundlePath].GetProgress();
-                }
-            }
-            LogUtil.LogError(AssetConst.LOGGER_NAME, "The Bundle not loading");
-            return 1.0f;
+            return progressSum / tempList.Count;
         }
 
         protected override void OnOperationFinished(AAsyncOperation operation)
@@ -161,64 +148,6 @@ namespace Dot.Asset
             }
         }
 
-        protected internal override void UnloadUnusedAsset()
-        {
-            UnloadAssetNode();
-            UnloadBundleNode();
-        }
-
-        private void UnloadAssetNode()
-        {
-            string[] assetPaths = assetNodeDic.Keys.ToArray();
-            foreach (var assetPath in assetPaths)
-            {
-                if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
-                {
-                    assetNode.Unload();
-                    assetNodeDic.Remove(assetPath);
-                    assetNodePool.Release(assetNode as BundleAssetNode);
-                }
-            }
-        }
-
-        private void UnloadBundleNode()
-        {
-            string[] bundlePaths = bundleNodeDic.Keys.ToArray();
-            foreach (var bundlePath in bundlePaths)
-            {
-                if (bundleNodeDic.TryGetValue(bundlePath, out BundleNode bundleNode) && bundleNode.RefCount == 0)
-                {
-                    bundleNodeDic.Remove(bundlePath);
-
-                    bundleNode.Unload();
-                    bundleNodePool.Release(bundleNode);
-                }
-            }
-        }
-
-        protected override void UnloadAsset(string assetPath)
-        {
-            if(!string.IsNullOrEmpty(assetPath) && assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
-            {
-                BundleAssetNode bundleAssetNode = assetNode as BundleAssetNode;
-                if (!assetNode.IsAlive() || bundleAssetNode.IsScene)
-                {
-                    assetNode.Unload();
-                    assetNodeDic.Remove(assetPath);
-                    assetNodePool.Release(assetNode as BundleAssetNode);
-
-                    if(bundleAssetNode.IsScene)
-                    {
-                        UnloadBundleNode();
-                    }
-                }
-            }
-            else
-            {
-                LogUtil.LogError(AssetConst.LOGGER_NAME, "BundleLoader::UnloadAsset->asset not found by address,assetPath = " + assetPath);
-            }
-        }
-
         protected override void StartLoadingData(AssetLoaderData data)
         {
             for(int i =0;i<data.Paths.Length;++i)
@@ -228,33 +157,31 @@ namespace Dot.Asset
                 {
                     assetNode = CreateAssetNode(assetPath);
                 }
-                assetNode.Retain();
+                assetNode.RetainRef();
             }
         }
 
         private BundleAssetNode CreateAssetNode(string assetPath)
         {
-            string mainBundlePath = addressConfig.GetBundleByPath(assetPath);
-            bool isScene = addressConfig.CheckIsSceneByPath(assetPath);
-
             BundleAssetNode assetNode = assetNodePool.Get();
-            BundleNode bundleNode = GetOrCreateMainBundleNode(mainBundlePath,isScene);
+            string mainBundlePath = addressConfig.GetBundleByPath(assetPath);
+            BundleNode bundleNode = GetOrCreateMainBundleNode(mainBundlePath);
 
-            assetNode.InitNode(assetPath, bundleNode);
-            assetNode.IsScene = isScene;
+            bool isScene = addressConfig.CheckIsSceneByPath(assetPath);
+            assetNode.InitNode(assetPath, isScene,bundleNode);
 
             assetNodeDic.Add(assetPath, assetNode);
-
             return assetNode;
         }
 
         //获取或者创建资源所在的Bundle的BundleNode
-        private BundleNode GetOrCreateMainBundleNode(string mainBundlePath,bool isScene)
+        private BundleNode GetOrCreateMainBundleNode(string mainBundlePath)
         {
             string[] depends = bundleConfig.GetDependencies(mainBundlePath);
             if (!bundleNodeDic.TryGetValue(mainBundlePath,out BundleNode bundleNode))
             {
                 bundleNode = CreateBundleNode(mainBundlePath);
+                
                 if (depends != null && depends.Length > 0)
                 {
                     foreach (var depend in depends)
@@ -268,22 +195,6 @@ namespace Dot.Asset
                     }
                 }
             }
-
-            if(isScene)
-            {
-                bundleNode.IsUsedByScene = true;
-                if (depends != null && depends.Length > 0)
-                {
-                    foreach (var depend in depends)
-                    {
-                        if (bundleNodeDic.TryGetValue(depend, out BundleNode dependBundleNode))
-                        {
-                            dependBundleNode.IsUsedByScene = true;
-                        }
-                    }
-                }
-            }
-            
             return bundleNode;
         }
 
@@ -305,6 +216,59 @@ namespace Dot.Asset
             filePath = $"{assetRootDir}/{assetPath}";
 
             return false;
+        }
+
+        protected internal override void UnloadUnusedAsset()
+        {
+            UnloadAssetNode();
+            UnloadBundleNode();
+        }
+
+        private void UnloadAssetNode()
+        {
+            string[] assetPaths = assetNodeDic.Keys.ToArray();
+            foreach (var assetPath in assetPaths)
+            {
+                if (assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode) && !assetNode.IsAlive())
+                {
+                    assetNodeDic.Remove(assetPath);
+                    assetNodePool.Release(assetNode as BundleAssetNode);
+                }
+            }
+        }
+
+        private void UnloadBundleNode()
+        {
+            string[] bundlePaths = bundleNodeDic.Keys.ToArray();
+            foreach (var bundlePath in bundlePaths)
+            {
+                if (bundleNodeDic.TryGetValue(bundlePath, out BundleNode bundleNode) && bundleNode.RefCount == 0)
+                {
+                    bundleNodeDic.Remove(bundlePath);
+                    bundleNodePool.Release(bundleNode);
+                }
+            }
+        }
+
+        protected override void UnloadAsset(string assetPath)
+        {
+            if (!string.IsNullOrEmpty(assetPath) && assetNodeDic.TryGetValue(assetPath, out AAssetNode assetNode))
+            {
+                BundleAssetNode bundleAssetNode = assetNode as BundleAssetNode;
+                if (!assetNode.IsAlive() || bundleAssetNode.IsScene)
+                {
+                    assetNodeDic.Remove(assetPath);
+                    assetNodePool.Release(assetNode as BundleAssetNode);
+                    if (bundleAssetNode.IsScene)
+                    {
+                        UnloadBundleNode();
+                    }
+                }
+            }
+            else
+            {
+                LogUtil.LogError(AssetConst.LOGGER_NAME, "BundleLoader::UnloadAsset->asset not found by address,assetPath = " + assetPath);
+            }
         }
 
         protected internal override UnityObject InstantiateAsset(string address, UnityObject asset)

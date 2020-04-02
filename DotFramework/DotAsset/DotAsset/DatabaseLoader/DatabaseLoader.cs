@@ -44,7 +44,7 @@ namespace Dot.Asset
                 {
                     if (!string.IsNullOrEmpty(path))
                     {
-                        assetNodeDic[path].Release();
+                        assetNodeDic[path].ReleaseRef();
                     }
                 }
             }
@@ -64,7 +64,7 @@ namespace Dot.Asset
                     if (assetNode.IsDone())
                     {
                         data.DoComplete(i, assetNode);
-                        assetNode.Release();
+                        assetNode.ReleaseRef();
                     }
                     else
                     {
@@ -131,7 +131,7 @@ namespace Dot.Asset
                 {
                     assetNode = CreateAssetNode(assetPath);
                 }
-                assetNode.Retain();
+                assetNode.RetainRef();
             }
         }
 
