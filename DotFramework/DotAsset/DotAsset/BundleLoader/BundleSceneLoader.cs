@@ -4,7 +4,7 @@ namespace Dot.Asset
 {
     public class BundleSceneLoader : ASceneLoader
     {
-        private static readonly float ASSET_LOADING_RATE = 0.9f;
+        private static readonly float ASSET_LOADING_RATE = 0.95f;
 
         private AssetHandler assetHandler = null;
         public BundleSceneLoader(AAssetLoader loader) : base(loader)

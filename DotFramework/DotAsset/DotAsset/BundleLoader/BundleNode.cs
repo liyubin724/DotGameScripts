@@ -73,6 +73,7 @@ namespace Dot.Asset
             }
         }
 
+        //用于判断当前Bundle是否被场景使用，如果被场景使用，则卸载时将会使用Unload(false)
         private bool isUsedByScene = false;
         internal void SetUsedByScene(bool isScene)
         {
