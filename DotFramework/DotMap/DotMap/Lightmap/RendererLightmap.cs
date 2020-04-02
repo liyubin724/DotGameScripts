@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Dot.Map.Lightmap
 {
     [Serializable]
-    public class RendererLightmapData
+    public class RendererLightmap
     {
         public int rendererIndex;
         public int lightmapIndex;

@@ -31,9 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotLibs\DotAsset.dll</HintPath>
+    </Reference>
     <Reference Include="DotCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotLibs\DotCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DotLog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,15 +57,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapBehaviour.cs" />
+    <Compile Include="MapRootBehaviour.cs" />
+    <Compile Include="MapConst.cs" />
     <Compile Include="MapLightmapData.cs" />
     <Compile Include="MapManager.cs" />
-    <Compile Include="Item\DynamicItemData.cs" />
-    <Compile Include="Item\ItemBehaviour.cs" />
-    <Compile Include="Lightmap\SceneLightmapData.cs" />
-    <Compile Include="Item\ItemPlacementData.cs" />
-    <Compile Include="Lightmap\RendererLightmapData.cs" />
-    <Compile Include="Item\StaticItemData.cs" />
+    <Compile Include="Lightmap\SceneLightmap.cs" />
+    <Compile Include="Lightmap\RendererLightmap.cs" />
+    <Compile Include="Objects\DynamicObjectData.cs" />
+    <Compile Include="Objects\ObjectBehaviour.cs" />
+    <Compile Include="Objects\ObjectPlacementData.cs" />
+    <Compile Include="Objects\StaticObjectData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
