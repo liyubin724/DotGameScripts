@@ -248,6 +248,7 @@ namespace Dot.Asset
             return assetNode;
         }
 
+        //获取或者创建资源所在的Bundle的BundleNode
         private BundleNode GetOrCreateMainBundleNode(string mainBundlePath,bool isScene)
         {
             string[] depends = bundleConfig.GetDependencies(mainBundlePath);
@@ -286,6 +287,7 @@ namespace Dot.Asset
             return bundleNode;
         }
 
+        //根据指定的Bundle的路径，创建BundleNode及Bundle的异步加载操作
         private BundleNode CreateBundleNode(string bundlePath)
         {
             BundleNode bundleNode = new BundleNode();

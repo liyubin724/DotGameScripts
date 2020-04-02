@@ -17,7 +17,7 @@ namespace Dot.Asset.Datas
             bundleDetailDic = new Dictionary<string, AssetBundleDetail>();
             foreach (var detail in details)
             {
-                bundleDetailDic.Add(detail.name, detail);
+                bundleDetailDic.Add(detail.path, detail);
             }
         }
         
@@ -41,10 +41,13 @@ namespace Dot.Asset.Datas
     /// </summary>
     public class AssetBundleDetail
     {
-        public string name;
+        public string path;
         public string hash;
         public string crc;
         public string md5;
+        /// <summary>
+        /// AssetBundle依赖的所有的Bundle
+        /// </summary>
         public string[] dependencies = new string[0];
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DotEditor.Core;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -17,7 +18,8 @@ namespace DotEditor.Asset.AssetAddress
         SerializedProperty filters = null;
 
         ReorderableList filterRList = null;
-
+        List<string> filterResList = new List<string>();
+        ReorderableList filterResRList = null;
         private void OnEnable()
         {
             groupName = serializedObject.FindProperty("groupName");
@@ -61,6 +63,22 @@ namespace DotEditor.Asset.AssetAddress
                   }
                   
               };
+
+            filterResRList = new ReorderableList(filterResList, typeof(string), false, true, false, false);
+            filterResRList.elementHeight = EditorGUIUtility.singleLineHeight;
+            filterResRList.drawHeaderCallback = (rect) =>
+            {
+                EditorGUI.LabelField(rect, new GUIContent("Filter Res List"));
+            };
+            filterResRList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                string assetPath = filterResList[index];
+                EGUI.BeginLabelWidth(40);
+                {
+                    EditorGUI.TextField(rect, "" + index, assetPath);
+                }
+                EGUI.EndLableWidth();
+            };
         }
 
         public override void OnInspectorGUI()
@@ -88,11 +106,23 @@ namespace DotEditor.Asset.AssetAddress
 
             serializedObject.ApplyModifiedProperties();
 
-            if(GUILayout.Button("Execute",GUILayout.Height(40)))
+            if (GUILayout.Button("Execute",GUILayout.Height(40)))
             {
                 AssetAddressUtil.UpdateConfigByGroup(target as AssetAddressGroup);
                 EditorUtility.DisplayDialog("Finished", "Finished", "OK");
             }
+
+            if (GUILayout.Button("Filter", GUILayout.Height(40)))
+            {
+                filterResList.Clear();
+                AssetAddressGroup group = target as AssetAddressGroup;
+                foreach (var filter in group.filters)
+                {
+                    filterResList.AddRange(filter.Filter());
+                }
+            }
+
+            filterResRList.DoLayoutList();
         }
     }
 }
