@@ -1,4 +1,6 @@
-﻿using log4net.Appender;
+﻿#if !RUN_NOT_UNITY
+
+using log4net.Appender;
 using log4net.Core;
 using UnityEngine;
 
@@ -31,3 +33,4 @@ namespace Dot.Log
         }
     }
 }
+#endif
