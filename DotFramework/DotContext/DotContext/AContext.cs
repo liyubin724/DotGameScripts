@@ -1,89 +1,100 @@
-﻿using Dot.Core.Pool;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemObject = System.Object;
 
 namespace Dot.Context
 {
-    internal class ContextPoolItem<T> : IObjectPoolItem
+    public class AContext<K> : IContext<K>
     {
-        public T key = default;
-        public object value = null;
-        public bool isNeverClear = false;
+        private Dictionary<K, SystemObject> itemDic = new Dictionary<K, SystemObject>();
+        private List<K> neverClearKeyList = new List<K>();
 
-        public void OnGet()
+        public SystemObject this[K key]
         {
+            get
+            {
+                return Get(key);
+            }
+            set
+            {
+                AddOrUpdate(key, value);
+            }
         }
 
-        public void OnNew()
+        public void Add(K key, SystemObject value)
         {
+            Add(key, value, false);
         }
 
-        public virtual void OnRelease()
+        public void Add(K key, SystemObject value, bool isNeverClear)
         {
-            key = default;
-            value = null;
-            isNeverClear = false;
-        }
-    }
-
-    public class AContext<T> : IContext<T>
-    {
-        private ObjectPool<ContextPoolItem<T>> poolItems = new ObjectPool<ContextPoolItem<T>>();
-        private Dictionary<T, ContextPoolItem<T>> itemDic = new Dictionary<T, ContextPoolItem<T>>();
-
-        public void Add(T key, object value, bool isNeverClear)
-        {
-            if (Contains(key))
+            if (ContainsKey(key))
             {
                 throw new Exception($"AContext::Add->The key has been saved into dictionry.you can use 'AddOrUpdate' to changed it.key = {key.ToString()}");
             }
 
-            ContextPoolItem<T> item = poolItems.Get();
-            item.key = key;
-            item.value = value;
-            item.isNeverClear = isNeverClear;
-
-            itemDic.Add(key, item);
+            itemDic.Add(key, value);
+            if(isNeverClear)
+            {
+                neverClearKeyList.Add(key);
+            }
         }
 
-        public void AddOrUpdate(T key, object value, bool isNeverClear)
+        public void AddOrUpdate(K key,SystemObject value)
         {
-            ContextPoolItem<T> item = null;
-            if (Contains(key))
+            if (ContainsKey(key))
             {
-                item = itemDic[key];
+                itemDic[key] = value;
+            }
+            else
+            {
+                itemDic.Add(key, value);
+            }
+        }
+
+        public void AddOrUpdate(K key, SystemObject value, bool isNeverClear)
+        {
+            bool cachedIsNeverClear = false;
+            if(ContainsKey(key))
+            {
+                itemDic[key] = value;
+                cachedIsNeverClear = neverClearKeyList.Contains(key);
             }else
             {
-                item = poolItems.Get();
-                itemDic.Add(key, item);
+                itemDic.Add(key, value);
             }
-            item.key = key;
-            item.value = value;
-            item.isNeverClear = isNeverClear;
-        }
 
-        public void Clear(bool isForce)
-        {
-            T[] keys = itemDic.Keys.ToArray();
-            foreach(var key in keys)
+            if(cachedIsNeverClear!=isNeverClear)
             {
-                ContextPoolItem<T> item = itemDic[key];
-                if(!isForce && item.isNeverClear)
+                if(isNeverClear)
                 {
-                    continue;
+                    neverClearKeyList.Add(key);
+                }else
+                {
+                    neverClearKeyList.Remove(key);
                 }
-                itemDic.Remove(key);
-                poolItems.Release(item);
             }
         }
 
-        public bool Contains(T key)
+        public void Update(K key, SystemObject value)
+        {
+            if (itemDic.TryGetValue(key, out SystemObject item))
+            {
+                itemDic[key] = item;
+            }
+            else
+            {
+                throw new Exception($"AContext::Update->Key not found.key = {key}");
+            }
+        }
+
+        public bool ContainsKey(K key)
         {
             return itemDic.ContainsKey(key);
         }
 
-        public object Get(T key)
+        public SystemObject Get(K key)
         {
             if(TryGet(key,out object v))
             {
@@ -92,9 +103,9 @@ namespace Dot.Context
             return null;
         }
 
-        public V Get<V>(T key)
+        public V Get<V>(K key)
         {
-            object obj = Get(key);
+            SystemObject obj = Get(key);
             if(obj!=null)
             {
                 return (V)obj;
@@ -102,23 +113,26 @@ namespace Dot.Context
             return default;
         }
 
-        public void Remove(T key)
+        public void Remove(K key)
         {
-            if(itemDic.TryGetValue(key,out ContextPoolItem<T> item))
+            if(ContainsKey(key))
             {
                 itemDic.Remove(key);
-                poolItems.Release(item);
-            }else
+                if(neverClearKeyList.Contains(key))
+                {
+                    neverClearKeyList.Remove(key);
+                }
+            }
+            else
             {
                 throw new Exception($"AContext::Remove->Key not found.key = {key}");
             }
         }
 
-        public bool TryGet(T key, out object value)
+        public bool TryGet(K key, out SystemObject value)
         {
-            if (itemDic.TryGetValue(key, out ContextPoolItem<T> item))
+            if (itemDic.TryGetValue(key, out value))
             {
-                value = item.value;
                 return true;
             }
 
@@ -126,26 +140,41 @@ namespace Dot.Context
             return false;
         }
 
-        public bool TryGet<V>(T key, out V value)
+        public bool TryGet<V>(K key, out V value)
         {
-            if(itemDic.TryGetValue(key,out ContextPoolItem<T> item))
+            if(itemDic.TryGetValue(key,out SystemObject item))
             {
-                value = (V)item.value;
+                value = (V)item;
                 return true;
             }
             value = default;
             return false;
         }
 
-        public void Update(T key, object value)
+        public void Clear()
         {
-            if (itemDic.TryGetValue(key, out ContextPoolItem<T> item))
+            Clear(false);
+        }
+
+        public void Clear(bool isForce)
+        {
+            if (isForce)
             {
-                item.value = value;
-            }else
+                neverClearKeyList.Clear();
+                itemDic.Clear();
+            }
+            else
             {
-                throw new Exception($"AContext::Update->Key not found.key = {key}");
+                K[] keys = itemDic.Keys.ToArray();
+                foreach (var key in keys)
+                {
+                    if (!neverClearKeyList.Contains(key))
+                    {
+                        itemDic.Remove(key);
+                    }
+                }
             }
         }
+
     }
 }

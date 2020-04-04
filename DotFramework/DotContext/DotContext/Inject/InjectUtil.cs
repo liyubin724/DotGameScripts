@@ -84,7 +84,7 @@ namespace Dot.Context.Inject
                     object fieldValue = field.GetValue(extractObj);
                     if (!attr.Optional)
                     {
-                        if (context.Contains(attr.InjectName))
+                        if (context.ContainsKey(attr.InjectName))
                         {
                             context.Update(attr.InjectName, fieldValue);
                         }
@@ -95,7 +95,7 @@ namespace Dot.Context.Inject
                     }
                     else if (fieldValue != null)
                     {
-                        if (context.Contains(attr.InjectName))
+                        if (context.ContainsKey(attr.InjectName))
                         {
                             context.Update(attr.InjectName, fieldValue);
                         }
@@ -155,7 +155,7 @@ namespace Dot.Context.Inject
                     object fieldValue = field.GetValue(obj);
                     if (!attr.Optional)
                     {
-                        if(context.Contains(fieldType))
+                        if(context.ContainsKey(fieldType))
                         {
                             context.Update(fieldType, fieldValue);
                         }else
@@ -165,7 +165,7 @@ namespace Dot.Context.Inject
                     }
                     else if (fieldValue != null)
                     {
-                        if (context.Contains(fieldType))
+                        if (context.ContainsKey(fieldType))
                         {
                             context.Update(fieldType, fieldValue);
                         }

@@ -1,16 +1,27 @@
 ﻿namespace Dot.Context
 {
-    public interface IContext<T>
+    public interface IContext<K>
     {
-        bool Contains(T key);
-        object Get(T key);
-        V Get<V>(T key);
-        void Add(T key, object value,bool isNeverClear);
-        void Update(T key, object value);
-        void AddOrUpdate(T key, object value, bool isNeverClear);
-        void Remove(T key);
-        bool TryGet(T key, out object value);
-        bool TryGet<V>(T key, out V value);
+        object this[K key] { get;set; }
+
+        bool ContainsKey(K key);
+
+        object Get(K key);
+        V Get<V>(K key);
+
+        void Add(K key, object value);
+        void Add(K key, object value,bool isNeverClear);
+
+        void Update(K key, object value);
+        void AddOrUpdate(K key, object value);
+        void AddOrUpdate(K key, object value, bool isNeverClear);
+
+        void Remove(K key);
+
+        bool TryGet(K key, out object value);
+        bool TryGet<V>(K key, out V value);
+
+        void Clear();
         void Clear(bool isForce);
     }
 }

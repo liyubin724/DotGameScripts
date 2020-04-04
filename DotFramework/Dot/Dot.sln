@@ -69,6 +69,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotUI", "..\DotUI\DotUI\Dot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotUIEditor", "..\DotUI\DotUIEditor\DotUIEditor.csproj", "{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{889E7837-496F-4E56-A234-9055628B2514}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTemplateEngine", "..\DotTemplateEngine\DotTemplateEngine\DotTemplateEngine.csproj", "{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +155,10 @@ Global
 		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +183,7 @@ Global
 		{7A4432FC-8A44-4EEA-94F0-B5A586BB15BD} = {01805268-CACF-47F0-B731-8E0C4346F44F}
 		{E8B86E93-50F2-4302-9110-0A80785D168C} = {9C49A70C-CB13-4E06-B57B-262D555B78D1}
 		{1A172D5E-71EB-43BA-87B6-9BCB51D8B52E} = {9C49A70C-CB13-4E06-B57B-262D555B78D1}
+		{AC81F97B-6C91-46AE-8D98-C2ACDEC8311B} = {889E7837-496F-4E56-A234-9055628B2514}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47FC44EA-F87D-4456-A8D2-E6113377EC98}
