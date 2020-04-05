@@ -21,18 +21,22 @@ namespace <%=protoConfig.SpaceName%>
         {
 <%foreach(var messageGroup in protoGroup.MessageGroups){%>
 <%foreach(var message in messageGroup.Messages){%>
+<%if(message.Enable){%>
             serverNetListener.RegisterMessageParser(<%=protoGroup.Name%>.<%=message.Name%>,Parse_<%=message.ClassName%>);
+<%}%>
 <%}%>
 <%}%>
         }
 
 <%foreach(var messageGroup in protoGroup.MessageGroups){%>
 <%foreach(var message in messageGroup.Messages){%>
+<%if(message.Enable){%>
         private static object Parse_<%=message.ClassName%>(int messageID,byte[] msgBytes)
         {
             return <%=message.ClassName%>.Parser.ParseFrom(msgBytes);
         }
 
+<%}%>
 <%}%>
 <%}%>
     }

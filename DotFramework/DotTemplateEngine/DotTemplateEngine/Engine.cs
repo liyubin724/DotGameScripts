@@ -5,6 +5,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace Dot.TemplateEngine
 {
@@ -72,6 +73,10 @@ namespace Dot.TemplateEngine
                             {
                                 Chunk chunk = new Chunk(TokenType.Using, snippet.Substring(index + 1, endIndex - index - 1));
                                 chunks.Add(chunk);
+                            }else if(symbolChar == '-')
+                            {
+                                Chunk chunk = new Chunk(TokenType.Ignore, snippet.Substring(index + 1, endIndex - index - 1));
+                                chunks.Add(chunk);
                             }
                             else
                             {
@@ -100,6 +105,13 @@ namespace Dot.TemplateEngine
             "using Dot.Context;",
             "using System.Text;",
         };
+
+        private static string[] DefaultAssemblies = new string[]
+        {
+            typeof(StringContext).Assembly.Location,
+            typeof(StringBuilder).Assembly.Location,
+        };
+
         private static string ScriptStart =
 @"public static class TemplateRunner {
     public static string Run(StringContext context){
@@ -113,7 +125,20 @@ namespace Dot.TemplateEngine
         public static string Execute(StringContext context,string template, string[] assemblies)
         {
             string code = GenerateCode(template);
-            Assembly assembly = CompileCode(assemblies, code);
+
+            System.IO.File.WriteAllText("D:\\t.cs", code);
+
+            List<string> assemblyList = new List<string>(DefaultAssemblies);
+            if(assemblies!=null && assemblies.Length>0)
+            {
+                assemblyList.AddRange(assemblies);
+            }
+
+            Assembly assembly = CompileCode(assemblyList.Distinct().ToArray(), code);
+            if(assembly == null)
+            {
+                return null;
+            }
             Type type = assembly.GetType("TemplateRunner");
             MethodInfo mInfo = type.GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
             object result = mInfo.Invoke(null, new object[] { context });
@@ -151,8 +176,9 @@ namespace Dot.TemplateEngine
             StringBuilder scriptSB = new StringBuilder();
             scriptSB.AppendLine(ScriptStart);
 
-            foreach (var chunk in chunks)
+            for(int i =0;i<chunks.Count;++i)
             {
+                var chunk = chunks[i];
                 if (chunk.Type == TokenType.Code)
                 {
                     scriptSB.AppendLine(chunk.Text);
@@ -163,13 +189,23 @@ namespace Dot.TemplateEngine
                 }
                 else if (chunk.Type == TokenType.Text)
                 {
-                    scriptSB.AppendLine($"sb.Append(\"{EscapeSpecialCharacterToLiteral(chunk.Text)}\");");
-                }else if(chunk.Type == TokenType.Using)
+                    string text = chunk.Text;
+                    if(i!=0 && chunks[i-1].Type == TokenType.Code &&text.StartsWith("\r\n"))
+                    {
+                        text = text.Substring(2);
+                    }
+                    scriptSB.AppendLine($"sb.Append(\"{EscapeSpecialCharacterToLiteral(text)}\");");
+                }
+                else if (chunk.Type == TokenType.Using)
                 {
-                    if(usingList.IndexOf(chunk.Text)<0)
+                    if (usingList.IndexOf(chunk.Text) < 0)
                     {
                         usingList.Add(chunk.Text);
                     }
+                }
+                else if (chunk.Type == TokenType.Ignore)
+                {
+                    continue;
                 }
             }
 

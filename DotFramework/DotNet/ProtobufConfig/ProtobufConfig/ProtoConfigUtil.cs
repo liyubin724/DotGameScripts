@@ -1,24 +1,9 @@
-﻿using Dot.Tool.Proto.Writer;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
 namespace Dot.Tool.Proto
 {
-    public enum ProtoWriterType
-    {
-        CSharp,
-        Lua,
-        CPlusPlus,
-    }
-
-    public enum ProtoPlatformType
-    {
-        None = 0,
-        Client,
-        Server,
-    }
-
     public static class ProtoConfigUtil
     {
         public static ProtoConfig ReadConfig(string path, bool createIfNot = false)
@@ -56,29 +41,6 @@ namespace Dot.Tool.Proto
                 
             }
             return false;
-        }
-
-        public static void RecognizeMessage(ProtoConfig config,string rootDir, ProtoWriterType writerType)
-        {
-            if(writerType == ProtoWriterType.CSharp)
-            {
-                CSharpMessageRecognizer.CreateRecognizerScript(rootDir, config);
-            }
-        }
-
-        public static void ParseMessage(ProtoConfig config,string rootDir,ProtoWriterType writerType, ProtoPlatformType platformType)
-        {
-            if(writerType == ProtoWriterType.CSharp)
-            {
-                if(platformType == ProtoPlatformType.Server)
-                {
-                    CSharpServerMessageParser.CreateParserScript(rootDir, config);
-                }
-                else
-                {
-                    CSharpClientMessageParser.CreateParserScript(rootDir, config);
-                }
-            }
         }
     }
 }

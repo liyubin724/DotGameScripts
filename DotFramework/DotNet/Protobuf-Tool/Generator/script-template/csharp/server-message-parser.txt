@@ -5,11 +5,8 @@ Please don't change it manually!!!
 Please don't change it manually!!!
 -----------------------------------------------
 */
-
-using Dot.Net.Client;
-
+using Dot.Net.Server;
 <%+using Dot.Tool.Proto;%>
-
 <%ProtoConfig protoConfig = context.Get<ProtoConfig>("protoConfig");%>
 <%ProtoGroup protoGroup = context.Get<ProtoGroup>("protoGroup");%>
 
@@ -17,12 +14,12 @@ namespace <%=protoConfig.SpaceName%>
 {
     public static class <%=protoGroup.Name%>_Parser
     {
-        public static void RegisterParser(ClientNet clientNet)
+        public static void RegisterParser(ServerNetListener serverNetListener)
         {
 <%foreach(var messageGroup in protoGroup.MessageGroups){%>
 <%foreach(var message in messageGroup.Messages){%>
 <%if(message.Enable){%>
-            clientNet.RegisterMessageParser(<%=protoGroup.Name%>.<%=message.Name%>,Parse_<%=message.ClassName%>);
+            serverNetListener.RegisterMessageParser(<%=protoGroup.Name%>.<%=message.Name%>,Parse_<%=message.ClassName%>);
 <%}%>
 <%}%>
 <%}%>

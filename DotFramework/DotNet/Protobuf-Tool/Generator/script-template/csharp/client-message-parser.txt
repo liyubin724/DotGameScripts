@@ -5,11 +5,8 @@ Please don't change it manually!!!
 Please don't change it manually!!!
 -----------------------------------------------
 */
-
 using Dot.Net.Client;
-
 <%+using Dot.Tool.Proto;%>
-
 <%ProtoConfig protoConfig = context.Get<ProtoConfig>("protoConfig");%>
 <%ProtoGroup protoGroup = context.Get<ProtoGroup>("protoGroup");%>
 

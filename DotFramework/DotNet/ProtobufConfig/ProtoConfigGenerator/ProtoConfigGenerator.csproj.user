@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>-c D:\WorkSpace\DotGameProject\DotGameScripts\DotFramework\DotNet\Protobuf-Tool\proto-config.xml -t D:\WorkSpace\DotGameProject\DotGameScripts\DotFramework\DotNet\Protobuf-Tool\Generator\script_template.xml -o D:\ZTest -l CSharp -p Client</StartArguments>
   </PropertyGroup>
 </Project>

@@ -3,6 +3,7 @@
     public enum TokenType
     {
         None = 0,
+        Ignore,
         Using,
         Code,
         Eval,

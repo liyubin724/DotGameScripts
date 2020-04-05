@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <template language="CSharp">
+        <recognizer client="script-template/csharp/message-recognizer.txt" server="script-template/csharp/message-recognizer.txt"/>
+        <parser client="script-template/csharp/client-message-parser.txt" server="script-template/csharp/server-message-parser.txt"/>
+    </template>
+
+</templates>

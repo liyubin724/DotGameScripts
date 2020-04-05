@@ -41,6 +41,9 @@ namespace Dot.Tool.Proto
     [Serializable]
     public class ProtoMessage
     {
+        [XmlAttribute("enable")]
+        public bool Enable { get; set; }
+
         [XmlAttribute("name")]
         public string Name { get; set; }
 
@@ -53,7 +56,5 @@ namespace Dot.Tool.Proto
         [XmlAttribute("class")]
         public string ClassName { get; set; }
 
-        [XmlAttribute("enable")]
-        public bool Enable { get; set; }
     }
 }

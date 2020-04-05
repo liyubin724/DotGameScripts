@@ -1,3 +1,4 @@
+@ECHO OFF
 
 rem ProtoConfigGenerator.exe所在的位置
 SET GeneratorPath=Generator\ProtoConfigGenerator.exe
