@@ -1,0 +1,13 @@
+/*The file was created by tool.
+-----------------------------------------------
+Please don't change it manually!!!
+Please don't change it manually!!!
+Please don't change it manually!!!
+-----------------------------------------------
+*/
+<%+using System.Collections.Generic;%>
+<%List<string> names = (List<string>)context.Get("names");%>
+
+<%for(int i = 0;i<names.Count;++i){%>
+Console.Print(<%=names[i]%>);
+<%}%>

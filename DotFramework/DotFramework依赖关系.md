@@ -10,13 +10,11 @@ DotCoreEditor
     -> ReflectionMagic
 
 DotContext
-    -> DotCore
 
 DotAI
     -> DotContext
 
 DotCrypto
-    ->
 
 DotTimer
     -> DotCore
@@ -32,7 +30,6 @@ DotGOPool
     ->DotTimer
 
 DotSnappy
-    ->
 
 DotNet
     -> DotCore
