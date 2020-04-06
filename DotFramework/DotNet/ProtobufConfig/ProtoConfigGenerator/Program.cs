@@ -48,7 +48,6 @@ namespace Dot.Tool.ProtoGenerator
                     return;
                 }
                
-
                 TemplateConfig templateConfig = ReadConfig<TemplateConfig>(option.InputTemplatePath);
                 if (templateConfig == null)
                 {
@@ -93,7 +92,7 @@ namespace Dot.Tool.ProtoGenerator
             {
                 Console.WriteLine("The parameter in option is error");
             }
-            Console.ReadKey();
+           // Console.ReadKey();
         }
 
         static T ReadConfig<T>(string configPath) where T:class
@@ -104,7 +103,7 @@ namespace Dot.Tool.ProtoGenerator
                 return default;
             }
 
-            T config = null;
+            T config;
             try
             {
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
