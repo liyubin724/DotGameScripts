@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTimeline", "DotTimeline\DotTimeline.csproj", "{6EC75AEB-9EEF-4C0D-8DA4-6839F42C0071}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTimelineEditor", "DotTimelineEditor\DotTimelineEditor.csproj", "{34C9A33A-956C-44CE-BC0A-6EC067D75417}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EC75AEB-9EEF-4C0D-8DA4-6839F42C0071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC75AEB-9EEF-4C0D-8DA4-6839F42C0071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC75AEB-9EEF-4C0D-8DA4-6839F42C0071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC75AEB-9EEF-4C0D-8DA4-6839F42C0071}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C9A33A-956C-44CE-BC0A-6EC067D75417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C9A33A-956C-44CE-BC0A-6EC067D75417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C9A33A-956C-44CE-BC0A-6EC067D75417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C9A33A-956C-44CE-BC0A-6EC067D75417}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22B84D58-96A4-4A44-A7E3-75C37C60088A}
+	EndGlobalSection
+EndGlobal
