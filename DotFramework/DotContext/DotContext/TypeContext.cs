@@ -2,7 +2,7 @@
 
 namespace Dot.Context
 {
-    public class TypeContext : AContext<Type>
+    public class TypeContext : EnvContext<Type>
     {
     }
 }

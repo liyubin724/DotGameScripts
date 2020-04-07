@@ -1,6 +1,6 @@
 ﻿namespace Dot.Context
 {
-    public class StringContext : AContext<string>
+    public class StringContext : EnvContext<string>
     {
     }
 }

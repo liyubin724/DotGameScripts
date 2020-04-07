@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AContext.cs" />
+    <Compile Include="EnvContext.cs" />
     <Compile Include="Inject\InjectAttribute.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="Inject\InjectUtil.cs" />

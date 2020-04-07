@@ -1,6 +1,6 @@
 ﻿namespace Dot.Context
 {
-    public class IntContext : AContext<int>
+    public class IntContext : EnvContext<int>
     {
     }
 }

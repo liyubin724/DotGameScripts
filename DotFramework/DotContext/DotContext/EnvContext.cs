@@ -5,7 +5,7 @@ using SystemObject = System.Object;
 
 namespace Dot.Context
 {
-    public class AContext<K> : IContext<K>
+    public class EnvContext<K> : IContext<K>
     {
         private Dictionary<K, SystemObject> itemDic = new Dictionary<K, SystemObject>();
         private List<K> neverClearKeyList = new List<K>();
