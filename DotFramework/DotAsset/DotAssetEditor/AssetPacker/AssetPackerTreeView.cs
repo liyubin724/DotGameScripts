@@ -1,6 +1,6 @@
 ﻿using DotEditor.Core;
 using DotEditor.Core.TreeGUI;
-using DotEditor.Core.Util;
+using DotEditor.Core.Utilities;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -165,7 +165,7 @@ namespace DotEditor.Asset.AssetPacker
 
             if (GUI.Button(drawRect,"Select"))
             {
-                SelectionUtil.PingObject(addressData.assetPath);
+                SelectionUtility.PingObject(addressData.assetPath);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using DotEditor.Core.Util;
+﻿using DotEditor.Core.Utilities;
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -47,7 +47,7 @@ namespace DotEditor.Core
                     string folderPath = EditorUtility.OpenFolderPanel("folder", property.stringValue, "");
                     if (!string.IsNullOrEmpty(folderPath))
                     {
-                        property.stringValue = PathUtil.GetAssetPath(folderPath);
+                        property.stringValue = PathUtility.GetAssetPath(folderPath);
                     }
                 }
                 if (GUILayout.Button("\u2716", GUILayout.Width(20), GUILayout.Height(20)))
@@ -74,7 +74,7 @@ namespace DotEditor.Core
                     string folderPath = EditorUtility.OpenFolderPanel("folder", folder, "");
                     if (!string.IsNullOrEmpty(folderPath))
                     {
-                        folder = PathUtil.GetAssetPath(folderPath);
+                        folder = PathUtility.GetAssetPath(folderPath);
                     }
                 }
                 if (GUILayout.Button("\u2716", GUILayout.Width(20), GUILayout.Height(20)))

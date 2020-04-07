@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class SpriteAtlasUtil
+    public static class SpriteAtlasUtility
     {
         public static string[] GetDependAssets(SpriteAtlas atlas)
         {
@@ -25,7 +25,7 @@ namespace DotEditor.Core.Util
                 else if (obj.GetType() == typeof(DefaultAsset))
                 {
                     string folderPath = AssetDatabase.GetAssetPath(obj);
-                    string[] assets = AssetDatabaseUtil.FindAssetInFolder<Sprite>(folderPath);
+                    string[] assets = AssetDatabaseUtility.FindAssetInFolder<Sprite>(folderPath);
                     spriteAssetPathList.AddRange(assets);
                 }
             }

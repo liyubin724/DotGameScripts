@@ -10,9 +10,9 @@ using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class AssetDatabaseUtil
+    public static class AssetDatabaseUtility
     {
         #region FindAssets
 
@@ -30,7 +30,7 @@ namespace DotEditor.Core.Util
         /// </summary>
         /// <param name="searchFolders">设定筛选的目录</param>
         /// <returns></returns>
-        public static string[] FindScenesInFolders(string name,string[] searchFolders)
+        public static string[] FindScenesInFolders(string name, string[] searchFolders)
         {
             return FindAssets(name, null, typeof(Scene), null, searchFolders);
         }
@@ -41,7 +41,7 @@ namespace DotEditor.Core.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="folderPath"></param>
         /// <returns></returns>
-        public static T[] FindInstancesInFolder<T>(string folderPath) where T:UnityEngine.Object
+        public static T[] FindInstancesInFolder<T>(string folderPath) where T : UnityEngine.Object
         {
             string[] assetPaths = FindAssetInFolder<T>(folderPath);
             if (assetPaths == null || assetPaths.Length == 0)
@@ -64,18 +64,18 @@ namespace DotEditor.Core.Util
         /// <returns></returns>
         public static string[] FindAssetInFolder<T>(string folderPath)
         {
-            return FindAssets(null, null, typeof(T), null,string.IsNullOrEmpty(folderPath) ? null : new string[] { folderPath });
+            return FindAssets(null, null, typeof(T), null, string.IsNullOrEmpty(folderPath) ? null : new string[] { folderPath });
         }
 
         public static T[] FindInstances<T>() where T : UnityEngine.Object
         {
             string[] assetPaths = FindAssets<T>();
-            if(assetPaths == null || assetPaths.Length == 0)
+            if (assetPaths == null || assetPaths.Length == 0)
             {
                 return null;
             }
             T[] result = new T[assetPaths.Length];
-            for(int i =0;i<assetPaths.Length;++i)
+            for (int i = 0; i < assetPaths.Length; ++i)
             {
                 result[i] = AssetDatabase.LoadAssetAtPath<T>(assetPaths[i]);
             }
@@ -89,7 +89,7 @@ namespace DotEditor.Core.Util
         /// <returns></returns>
         public static string[] FindAssets<T>() where T : UnityEngine.Object
         {
-            return FindAssets(null, null, typeof(T), null,null);
+            return FindAssets(null, null, typeof(T), null, null);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DotEditor.Core.Util
         /// <param name="bundleName">根据设定的Bundle的名称进行资源筛选</param>
         /// <param name="searchFolders">设定筛选的目录</param>
         /// <returns>返回资源的路径</returns>
-        private static string[] FindAssets(string name, string label, Type type, string bundleName,string[] searchFolders)
+        private static string[] FindAssets(string name, string label, Type type, string bundleName, string[] searchFolders)
         {
             StringBuilder searchPattern = new StringBuilder();
             if (!string.IsNullOrEmpty(name))
@@ -125,9 +125,9 @@ namespace DotEditor.Core.Util
                 searchPattern.Append($"t:{type.Name}");
             }
 
-            if(!string.IsNullOrEmpty(bundleName))
+            if (!string.IsNullOrEmpty(bundleName))
             {
-                if(searchPattern.Length>0)
+                if (searchPattern.Length > 0)
                 {
                     searchPattern.Append(" ");
                 }
@@ -182,21 +182,23 @@ namespace DotEditor.Core.Util
             }
 
             string folderPath = string.Empty;
-            if(string.IsNullOrEmpty(assetFolder))
+            if (string.IsNullOrEmpty(assetFolder))
             {
-                string[] folders = SelectionUtil.GetSelectionDirs();
-                if(folders == null || folders.Length == 0)
+                string[] folders = SelectionUtility.GetSelectionDirs();
+                if (folders == null || folders.Length == 0)
                 {
                     folderPath = "Assets";
-                }else
+                }
+                else
                 {
                     folderPath = folders[0];
                 }
-            }else
+            }
+            else
             {
                 folderPath = assetFolder;
             }
-            
+
             var asset = ScriptableObject.CreateInstance<T>();
             string assetPath = $"{folderPath}/{fileName}.asset";
             assetPath = AssetDatabase.GenerateUniqueAssetPath(assetPath);

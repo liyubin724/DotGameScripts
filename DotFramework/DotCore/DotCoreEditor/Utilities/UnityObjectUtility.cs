@@ -5,9 +5,9 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using System.Reflection;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class UnityObjectUtil
+    public static class UnityObjectUtility
     {
         public static string GetHierarchyName(Transform t)
         {
@@ -69,7 +69,7 @@ namespace DotEditor.Core.Util
             GameObject[] gos = scene.GetRootGameObjects();
             foreach (var go in gos)
             {
-                if (UnityObjectUtil.IsMissingScript(go, out string[] paths, false))
+                if (UnityObjectUtility.IsMissingScript(go, out string[] paths, false))
                 {
                     missingPathList.AddRange(paths);
                 }

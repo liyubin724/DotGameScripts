@@ -1,7 +1,7 @@
 ﻿using DotEditor.Asset.AssetAddress;
 using DotEditor.Core;
 using DotEditor.Core.TreeGUI;
-using DotEditor.Core.Util;
+using DotEditor.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -65,7 +65,7 @@ namespace DotEditor.Asset.AssetPacker
                 }
             }
 
-            if (PlayerSettingsUtil.HasScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL))
+            if (PlayerSettingsUtility.HasScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL))
             {
                 runMode = RunMode.AssetBundle;
             }
@@ -155,11 +155,11 @@ namespace DotEditor.Asset.AssetPacker
                     GenericMenu menu = new GenericMenu();
                     menu.AddItem(new GUIContent(RunMode.AssetDatabase.ToString()), runMode == RunMode.AssetDatabase, () =>
                      {
-                         PlayerSettingsUtil.RemoveScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
+                         PlayerSettingsUtility.RemoveScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
                      });
                     menu.AddItem(new GUIContent(RunMode.AssetBundle.ToString()), runMode == RunMode.AssetBundle, () =>
                     {
-                        PlayerSettingsUtil.AddScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
+                        PlayerSettingsUtility.AddScriptingDefineSymbol(ASSET_BUNDLE_SYMBOL);
                     });
                     menu.DropDown(menuRect);
                 }

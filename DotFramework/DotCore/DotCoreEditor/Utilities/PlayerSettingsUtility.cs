@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class PlayerSettingsUtil
+    public static class PlayerSettingsUtility
     {
         public static bool HasScriptingDefineSymbol(string symbol)
         {

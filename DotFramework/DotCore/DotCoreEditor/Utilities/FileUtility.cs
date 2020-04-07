@@ -2,9 +2,9 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class FileUtil
+    public static class FileUtility
     {
         /// <summary>
         /// 获取文件所在的所有目录的名称

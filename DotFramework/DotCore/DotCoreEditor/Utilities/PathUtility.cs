@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class PathUtil
+    public static class PathUtility
     {
         public static string GetAssetPath(string dirPath)
         {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotGUIEditor
+namespace DotEditor.GUI
 {
-    public class Class1
+    class EditorToolbar
     {
     }
 }

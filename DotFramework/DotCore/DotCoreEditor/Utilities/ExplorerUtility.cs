@@ -1,6 +1,6 @@
-﻿namespace DotEditor.Core.Util
+﻿namespace DotEditor.Core.Utilities
 {
-    public static class ExplorerUtil
+    public static class ExplorerUtility
     {
         public static void OpenExplorerFolder(string dirPath)
         {

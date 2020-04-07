@@ -4,9 +4,9 @@ using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class PrefabUtil
+    public static class PrefabUtility
     {
         public static bool IsPrefab(string assetPath)
         {
@@ -69,10 +69,10 @@ namespace DotEditor.Core.Util
         {
             if(IsInPrefabStage())
             {
-                Type changeType = AssemblyUtil.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager+Analytics+ChangeType");
+                Type changeType = AssemblyUtility.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager+Analytics+ChangeType");
                 var changeTypeValue = Enum.Parse(changeType, "NavigateBackViaHierarchyHeaderLeftArrow");
 
-                Type type = AssemblyUtil.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager");
+                Type type = AssemblyUtility.GetTypeByFullName("UnityEditor.SceneManagement.StageNavigationManager");
                 dynamic typeDynamic = type.AsDynamicType();
                 var snMgr = typeDynamic.instance;
                 snMgr.NavigateBack(changeTypeValue);

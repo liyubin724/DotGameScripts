@@ -3,9 +3,9 @@ using System.IO;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class SelectionUtil
+    public static class SelectionUtility
     {
         public static string[] GetSelectionDirs()
         {
@@ -17,7 +17,7 @@ namespace DotEditor.Core.Util
                 {
                     string assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
-                    string diskPath = PathUtil.GetDiskPath(assetPath);
+                    string diskPath = PathUtility.GetDiskPath(assetPath);
                     if(File.Exists(diskPath))
                     {
                         assetPath = Path.GetDirectoryName(assetPath).Replace("\\","/");

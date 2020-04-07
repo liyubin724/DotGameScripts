@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class AssemblyUtil
+    public static class AssemblyUtility
     {
         public static Type GetTypeByFullName(string typeFullName)
         {
@@ -29,14 +29,14 @@ namespace DotEditor.Core.Util
         {
             if(string.IsNullOrEmpty(genericTypeFullName) || paramTypeFullNames == null || paramTypeFullNames.Length ==0)
             {
-                LogUtil.LogError(typeof(AssemblyUtil), "AssemblyUtil::GetGenericType->Arg is Null");
+                LogUtil.LogError(typeof(AssemblyUtility), "AssemblyUtil::GetGenericType->Arg is Null");
                 return null;
             }
 
             Type genericType = GetTypeByFullName(genericTypeFullName);
             if(genericType == null)
             {
-                LogUtil.LogError(typeof(AssemblyUtil), $"AssemblyUtil::GetGenericType->Type Not Found.Type = {genericTypeFullName}");
+                LogUtil.LogError(typeof(AssemblyUtility), $"AssemblyUtil::GetGenericType->Type Not Found.Type = {genericTypeFullName}");
                 return null;
             }
 
@@ -46,13 +46,13 @@ namespace DotEditor.Core.Util
                 string typeStr = paramTypeFullNames[i];
                 if (string.IsNullOrEmpty(typeStr))
                 {
-                    LogUtil.LogError(typeof(AssemblyUtil), "AssemblyUtil::GetGenericType->Param Type Is NUll");
+                    LogUtil.LogError(typeof(AssemblyUtility), "AssemblyUtil::GetGenericType->Param Type Is NUll");
                     return null;
                 }
                 Type t = GetTypeByFullName(paramTypeFullNames[i]);
                 if(t == null)
                 {
-                    LogUtil.LogError(typeof(AssemblyUtil), $"AssemblyUtil::GetGenericType->Param Type Not Found.Type = {paramTypeFullNames[i]}");
+                    LogUtil.LogError(typeof(AssemblyUtility), $"AssemblyUtil::GetGenericType->Param Type Not Found.Type = {paramTypeFullNames[i]}");
                 }
                 types[i] = t;
             }

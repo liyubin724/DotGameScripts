@@ -1,6 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Asset.Datas;
-using DotEditor.Core.Util;
+using DotEditor.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -14,7 +14,7 @@ namespace DotEditor.Asset.AssetAddress
         [MenuItem("Game/Asset/Create Address Group",priority =0)]
         public static void CreateGroupAsset()
         {
-            string[] dirs = SelectionUtil.GetSelectionDirs();
+            string[] dirs = SelectionUtility.GetSelectionDirs();
             if(dirs!=null && dirs.Length>0)
             {
                 string filePath = $"{dirs[0]}/asset_address_group.asset";

@@ -2,7 +2,7 @@
 using Dot.Asset.Datas;
 using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
-using DotEditor.Core.Util;
+using DotEditor.Core.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -257,7 +257,7 @@ namespace DotEditor.Asset.AssetPacker
         public static void PackAssetBundle(AssetPackerConfig packerConfig, BundleBuildConfig buildConfig)
         {
             IAssetBundlePacker bundlePacker = null;
-            Type[] bundlePackerTypes = AssemblyUtil.GetDerivedTypes(typeof(IAssetBundlePacker));
+            Type[] bundlePackerTypes = AssemblyUtility.GetDerivedTypes(typeof(IAssetBundlePacker));
             if(bundlePackerTypes!=null && bundlePackerTypes.Length>0)
             {
                 bundlePacker = (IAssetBundlePacker)Activator.CreateInstance(bundlePackerTypes[0]);

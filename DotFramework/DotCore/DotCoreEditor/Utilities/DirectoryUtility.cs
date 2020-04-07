@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class DirectoryUtil
+    public static class DirectoryUtility
     {
         /// <summary>
         /// 查找指定的目标下资源
@@ -16,14 +16,14 @@ namespace DotEditor.Core.Util
         /// <returns></returns>
         public static string[] GetAsset(string assetDir, bool isIncludeSubfolder,bool isIgnoreMeta)
         {
-            string diskDir = PathUtil.GetDiskPath(assetDir);
+            string diskDir = PathUtility.GetDiskPath(assetDir);
             string[] files = Directory.GetFiles(diskDir, "*.*", isIncludeSubfolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             if(files!=null && files.Length>0)
             {
                 return (
                         from file in files 
                         where !isIgnoreMeta ||( isIgnoreMeta && Path.GetExtension(file).ToLower() != ".meta")
-                        select PathUtil.GetAssetPath(file.Replace("\\", "/"))
+                        select PathUtility.GetAssetPath(file.Replace("\\", "/"))
                         ).ToArray();
             }
             return null;

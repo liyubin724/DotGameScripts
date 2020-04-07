@@ -1,4 +1,4 @@
-﻿using DotEditor.Core.Util;
+﻿using DotEditor.Core.Utilities;
 using System;
 
 namespace DotEditor.Asset.AssetAddress
@@ -13,7 +13,7 @@ namespace DotEditor.Asset.AssetAddress
 
         public string[] Filter()
         {
-            return DirectoryUtil.GetAsset(assetFolder, isIncludeSubfolder, fileRegex);
+            return DirectoryUtility.GetAsset(assetFolder, isIncludeSubfolder, fileRegex);
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotEditor.Core.Util
+namespace DotEditor.Core.Utilities
 {
-    public static class TypeUtil
+    public static class TypeUtility
     {
         /// <summary>
         /// 扩展方法，用于判断能否从当前类型转换到指定的类型
