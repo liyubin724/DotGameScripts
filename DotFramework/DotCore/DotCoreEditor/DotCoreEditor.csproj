@@ -32,10 +32,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotLog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DotLibs\DotLog.dll</HintPath>
-    </Reference>
     <Reference Include="ReflectionMagic">
       <HintPath>..\..\DotDependLibs\Editor\ReflectionMagic.dll</HintPath>
     </Reference>
@@ -82,6 +78,11 @@
     <Compile Include="Window\DraggablePopupWindow.cs" />
     <Compile Include="Window\PopupWindow.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\DotLog\DotLog\DotLog.csproj">
+      <Project>{7c57ebb0-164b-4df9-b6d5-b3096930b1e7}</Project>
+      <Name>DotLog</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
