@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define EDITOR_TOOLBAR_GIZMO
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,19 +11,59 @@ using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.EGUI.Toolbar
 {
-    public enum EditorToolbarItemOrientation
+    public enum EditorToolbarOrientation
     {
         Left,
         Right,
     }
 
-    public class EditorToolbarItemGroup
+    public class EditorToolbarGroup
     {
         internal EditorToolbarItem[] Items { get; private set; }
 
-        public EditorToolbarItemGroup(EditorToolbarItem[] items)
+        public EditorToolbarGroup(EditorToolbarButton[] btns)
         {
-            Items = items;
+            Items = btns;
+        }
+
+        internal bool IsToggleGroup { get; private set; }
+        public EditorToolbarGroup(EditorToolbarToggleButton[] btns)
+        {
+            Items = btns;
+            IsToggleGroup = true;
+            foreach(var btn in btns)
+            {
+                btn.OnSelectedAction = OnSelectedChanged;
+            }
+        }
+
+        private void OnSelectedChanged(EditorToolbarToggleButton btn)
+        {
+            foreach(var item in Items)
+            {
+                if(item !=btn)
+                {
+                    (item as EditorToolbarToggleButton).IsSelected = false;
+                }
+            }
+        }
+
+        internal static EditorToolbarGroup CreateGroup(EditorToolbarItem item)
+        {
+            if(item == null)
+            {
+                return null;
+            }
+
+            if(item.GetType() == typeof(EditorToolbarButton))
+            {
+                return new EditorToolbarGroup(new EditorToolbarButton[] { item as EditorToolbarButton });
+            }else if(item .GetType() == typeof(EditorToolbarToggleButton))
+            {
+                return new EditorToolbarGroup(new EditorToolbarToggleButton[] { item as EditorToolbarToggleButton });
+            }
+
+            return null;
         }
     }
 
@@ -73,7 +115,7 @@ namespace DotEditor.EGUI.Toolbar
 
             if (leftRect.width > 0)
             {
-                DrawerToolbar(leftRect, EditorToolbarItemOrientation.Left, leftItemGroups);
+                DrawerToolbar(leftRect, EditorToolbarOrientation.Left, leftGroups);
             }
 
             var rightRect = new Rect(0, 0, screenWidth, Styles.TOOLBAR_HEIGHT);
@@ -85,66 +127,81 @@ namespace DotEditor.EGUI.Toolbar
 
             if (rightRect.width > 0)
             {
-                DrawerToolbar(rightRect, EditorToolbarItemOrientation.Right, rightItemGroups);
+                DrawerToolbar(rightRect, EditorToolbarOrientation.Right, rightGroups);
             }
         }
 
-        private static List<EditorToolbarItemGroup> leftItemGroups = new List<EditorToolbarItemGroup>();
-        private static List<EditorToolbarItemGroup> rightItemGroups = new List<EditorToolbarItemGroup>();
+        private static List<EditorToolbarGroup> leftGroups = new List<EditorToolbarGroup>();
+        private static List<EditorToolbarGroup> rightGroups = new List<EditorToolbarGroup>();
 
-        private static void DrawerToolbar(Rect rect, EditorToolbarItemOrientation orientation, List<EditorToolbarItemGroup> itemGroups)
+        private static float GetItemWidth(EditorToolbarItem item)
+        {
+            float itemWidth = item.GetItemWidth();
+            if(item.GetType() == typeof(EditorToolbarButton) && itemWidth <Styles.STAND_BUTTON_WIDTH)
+            {
+                itemWidth = Styles.STAND_BUTTON_WIDTH;
+            }
+            return itemWidth;
+        }
+
+        private static float GetGroupWidth(EditorToolbarGroup itemGroup)
+        {
+            return (from item in itemGroup.Items select GetItemWidth(item)).ToArray().Sum();
+        }
+
+        private static void DrawerToolbar(Rect rect, EditorToolbarOrientation orientation, List<EditorToolbarGroup> itemGroups)
         {
             if (itemGroups.Count == 0) return;
 
-            DotEditor.Core.EGUI.DrawAreaLine(rect, Color.blue);
+#if EDITOR_TOOLBAR_GIZMO
+            DEGUI.DrawAreaLine(rect, Color.blue);
+#endif
 
-            Rect remainingRect = rect;
+            float groupStartX = rect.x;
+            if(orientation == EditorToolbarOrientation.Left)
+            {
+                groupStartX = rect.x + rect.width;
+            }
             foreach (var itemGroup in itemGroups)
             {
-                float groupWidth = (from item in itemGroup.Items select item.GetItemWidth()).ToArray().Sum();
-                if (rect.width < groupWidth)
+                float groupWidth = GetGroupWidth(itemGroup);
+                Rect groupRect = new Rect(groupStartX, rect.y, groupWidth, rect.height);
+                if (orientation == EditorToolbarOrientation.Left)
                 {
-                    if (GUI.Button(remainingRect, "...", Styles.commandStyle))
-                    {
-                    }
-                    break;
+                    groupStartX -= groupWidth;
+                    groupRect.x = groupStartX;
+                }else if(orientation == EditorToolbarOrientation.Right)
+                {
+                    groupStartX += groupWidth;
                 }
 
-                Rect groupRect = remainingRect;
-                groupRect.width = groupWidth;
-                if (orientation == EditorToolbarItemOrientation.Left)
-                {
-                    groupRect.x = remainingRect.x + remainingRect.width - groupWidth;
-                }
-                else if (orientation == EditorToolbarItemOrientation.Right)
-                {
-                    groupRect.x = remainingRect.x;
-                }
+#if EDITOR_TOOLBAR_GIZMO
+                DEGUI.DrawAreaLine(groupRect, Color.yellow);
+#endif
 
-                float startX = 0.0f;
-                if (orientation == EditorToolbarItemOrientation.Left)
+                float itemStartX = groupRect.x;
+                if(orientation == EditorToolbarOrientation.Left)
                 {
-                    startX = groupRect.x + groupRect.width;
+                    itemStartX = groupRect.x + groupRect.width;
                 }
-                else if (orientation == EditorToolbarItemOrientation.Right)
-                {
-                    startX = groupRect.x;
-                }
-                Rect itemRect = new Rect(startX, groupRect.y, 0, groupRect.height);
-                for (int i = 0; i < itemGroup.Items.Length; ++i)
+                for(int i =0;i<itemGroup.Items.Length;++i)
                 {
                     var item = itemGroup.Items[i];
-                    itemRect.width = item.GetItemWidth();
-                    itemRect.x = startX;
-                    if (orientation == EditorToolbarItemOrientation.Left)
+                    float itemWidth = item.GetItemWidth();
+                    Rect itemRect = new Rect(itemStartX, groupRect.y, itemWidth, groupRect.height);
+                    if (orientation == EditorToolbarOrientation.Left)
                     {
-                        startX -= itemRect.width;
-                        itemRect.x = startX;
+                        itemStartX -= itemWidth;
+                        itemRect.x = itemStartX;
                     }
-                    else if (orientation == EditorToolbarItemOrientation.Right)
+                    else if (orientation == EditorToolbarOrientation.Right)
                     {
-                        startX += itemRect.width;
+                        itemStartX += itemWidth;
                     }
+
+#if EDITOR_TOOLBAR_GIZMO
+                    DEGUI.DrawAreaLine(itemRect, Color.green);
+#endif
 
                     GUIStyle style = null;
                     if (item.GetType() == typeof(EditorToolbarButton))
@@ -157,22 +214,22 @@ namespace DotEditor.EGUI.Toolbar
                         {
                             if (i == 0)
                             {
-                                if (orientation == EditorToolbarItemOrientation.Left)
+                                if (orientation == EditorToolbarOrientation.Left)
                                 {
                                     style = Styles.commandRightStyle;
                                 }
-                                else if (orientation == EditorToolbarItemOrientation.Right)
+                                else if (orientation == EditorToolbarOrientation.Right)
                                 {
                                     style = Styles.commandLeftStyle;
                                 }
                             }
                             else if (i == itemGroup.Items.Length - 1)
                             {
-                                if (orientation == EditorToolbarItemOrientation.Left)
+                                if (orientation == EditorToolbarOrientation.Left)
                                 {
                                     style = Styles.commandLeftStyle;
                                 }
-                                else if (orientation == EditorToolbarItemOrientation.Right)
+                                else if (orientation == EditorToolbarOrientation.Right)
                                 {
                                     style = Styles.commandRightStyle;
                                 }
@@ -183,59 +240,57 @@ namespace DotEditor.EGUI.Toolbar
                             }
                         }
                     }
-
                     item.OnItemGUI(itemRect, style);
                 }
 
-                remainingRect.width -= groupRect.width;
-                if (orientation == EditorToolbarItemOrientation.Right)
+                if (orientation == EditorToolbarOrientation.Left)
                 {
-                    remainingRect.width -= Styles.ITEM_GROUP_SPACE;
+                    groupStartX -= Styles.ITEM_GROUP_SPACE;
                 }
-                else if (orientation == EditorToolbarItemOrientation.Right)
+                else if (orientation == EditorToolbarOrientation.Right)
                 {
-                    remainingRect.x = remainingRect.x + groupRect.width + Styles.ITEM_GROUP_SPACE;
+                    groupStartX += Styles.ITEM_GROUP_SPACE;
                 }
             }
         }
 
-        public static void AddItemGroup(EditorToolbarItemGroup itemGroup, EditorToolbarItemOrientation orientation)
+        public static void AddItemGroup(EditorToolbarGroup itemGroup, EditorToolbarOrientation orientation)
         {
-            if (orientation == EditorToolbarItemOrientation.Left)
+            if (orientation == EditorToolbarOrientation.Left)
             {
-                leftItemGroups.Add(itemGroup);
+                leftGroups.Add(itemGroup);
             }
-            else if (orientation == EditorToolbarItemOrientation.Right)
+            else if (orientation == EditorToolbarOrientation.Right)
             {
-                rightItemGroups.Add(itemGroup);
-            }
-        }
-
-        public static void AddItem(EditorToolbarItem item, EditorToolbarItemOrientation orientation)
-        {
-            if (orientation == EditorToolbarItemOrientation.Left)
-            {
-                leftItemGroups.Add(new EditorToolbarItemGroup(new EditorToolbarItem[] { item }));
-            }
-            else if (orientation == EditorToolbarItemOrientation.Right)
-            {
-                rightItemGroups.Add(new EditorToolbarItemGroup(new EditorToolbarItem[] { item }));
+                rightGroups.Add(itemGroup);
             }
         }
 
-        public static void RemoveItem(EditorToolbarItem item, EditorToolbarItemOrientation orientation)
+        public static void AddItem(EditorToolbarItem item, EditorToolbarOrientation orientation)
+        {
+            if (orientation == EditorToolbarOrientation.Left)
+            {
+                leftGroups.Add(EditorToolbarGroup.CreateGroup(item));
+            }
+            else if (orientation == EditorToolbarOrientation.Right)
+            {
+                rightGroups.Add(EditorToolbarGroup.CreateGroup(item));
+            }
+        }
+
+        public static void RemoveItem(EditorToolbarItem item, EditorToolbarOrientation orientation)
         {
 
         }
 
-        public static void ClearAll(EditorToolbarItemOrientation orientation)
+        public static void ClearAll(EditorToolbarOrientation orientation)
         {
-            if(orientation == EditorToolbarItemOrientation.Left)
+            if(orientation == EditorToolbarOrientation.Left)
             {
-                leftItemGroups.Clear();
-            }else if(orientation == EditorToolbarItemOrientation.Right)
+                leftGroups.Clear();
+            }else if(orientation == EditorToolbarOrientation.Right)
             {
-                rightItemGroups.Clear();
+                rightGroups.Clear();
             }
         }
 

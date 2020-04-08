@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.EGUI.SearchField
 {
-    public class DEGUIToolbarSearchField
+    public class ToolbarSearchField
     {
         private static readonly int FIELD_WIDTH = 160;
         private static readonly int FIELD_HEIGHT = 16;
@@ -16,7 +16,7 @@ namespace DotEditor.EGUI.SearchField
         private Action<string> onTextChanged = null;
         private Action<string> onCategoryChagned = null;
 
-        public DEGUIToolbarSearchField(Action<string> textChangedCallback, Action<string> categoryChangedCallback)
+        public ToolbarSearchField(Action<string> textChangedCallback, Action<string> categoryChangedCallback)
         {
             onTextChanged = textChangedCallback;
             onCategoryChagned = categoryChangedCallback;

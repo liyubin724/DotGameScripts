@@ -20,14 +20,9 @@ namespace DotEditor.EGUI.Toolbar
 
         protected EditorToolbarItem(Action onClick,Texture icon,string tooltip):this(onClick,new GUIContent(icon,tooltip))
         {
-
         }
 
-        public virtual float GetItemWidth()
-        {
-            return 32;
-        }
-
+        protected internal abstract float GetItemWidth();
         protected internal abstract void OnItemGUI(Rect rect, GUIStyle style);
     }
 
@@ -50,6 +45,68 @@ namespace DotEditor.EGUI.Toolbar
             if(GUI.Button(rect,LabelContent,style))
             {
                 OnClickAction?.Invoke();
+            }
+        }
+
+        protected internal override float GetItemWidth()
+        {
+            return 32.0f;
+        }
+    }
+
+    public class EditorToolbarToggleButton : EditorToolbarItem
+    {
+        public bool IsSelected { get; set; } = false;
+        public GUIContent SelectedLabelContent { get; set; }
+
+        internal Action<EditorToolbarToggleButton> OnSelectedAction { get; set; } = null;
+        public EditorToolbarToggleButton(Action onClick,GUIContent normalLabel,GUIContent selectedLabel,bool isSelcted) : base(onClick,normalLabel)
+        {
+            SelectedLabelContent = selectedLabel;
+            IsSelected = isSelcted;
+        }
+
+        public EditorToolbarToggleButton(Action onClick,string normalLabel,string selectedLabel,bool isSelected)
+            :this(onClick,new GUIContent(normalLabel),new GUIContent(selectedLabel),isSelected)
+        {
+
+        }
+
+        public EditorToolbarToggleButton(Action onClick, string normalLabel,string normalTooltip, string selectedLabel,string selectedTooltip, bool isSelected)
+            : this(onClick, new GUIContent(normalLabel,normalTooltip), new GUIContent(selectedLabel,selectedTooltip), isSelected)
+        {
+
+        }
+
+        public EditorToolbarToggleButton(Action onClick, Texture normalIcon, Texture selectedIcon, bool isSelected)
+            : this(onClick, new GUIContent(normalIcon), new GUIContent(selectedIcon), isSelected)
+        {
+
+        }
+
+        public EditorToolbarToggleButton(Action onClick, Texture normalIcon, string normalTooltip, Texture selectedIcon, string selectedTooltip, bool isSelected)
+            : this(onClick, new GUIContent(normalIcon, normalTooltip), new GUIContent(selectedIcon, selectedTooltip), isSelected)
+        {
+
+        }
+
+
+        protected internal override float GetItemWidth()
+        {
+            return 32.0f;
+        }
+
+        protected internal override void OnItemGUI(Rect rect, GUIStyle style)
+        {
+            if(GUI.Button(rect,IsSelected?SelectedLabelContent:LabelContent))
+            {
+                if(!IsSelected)
+                {
+                    IsSelected = true;
+                    OnClickAction?.Invoke();
+
+                    OnSelectedAction?.Invoke(this);
+                }
             }
         }
     }
