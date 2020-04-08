@@ -50,6 +50,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DEGUI.cs" />
+    <Compile Include="DEGUILayout.cs" />
+    <Compile Include="DEGUIResources.cs" />
+    <Compile Include="DEGUIStyles.cs" />
+    <Compile Include="SearchField\DEGUIToolbarSearchField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolbar\EditorToolbarExtend.cs" />
     <Compile Include="Toolbar\EditorToolbarItem.cs" />

@@ -25,7 +25,7 @@ namespace DotEditor.EGUI.Toolbar
 
         public virtual float GetItemWidth()
         {
-            return 24f;
+            return 32;
         }
 
         protected internal abstract void OnItemGUI(Rect rect, GUIStyle style);

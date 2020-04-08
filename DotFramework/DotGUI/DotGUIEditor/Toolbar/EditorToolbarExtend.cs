@@ -63,7 +63,6 @@ namespace DotEditor.EGUI.Toolbar
         private static void OnGUIHandler()
         {
             var screenWidth = EditorGUIUtility.currentViewWidth;
-            var screenHeight = Screen.height;
 
             var leftRect = new Rect(2, 0, screenWidth, Styles.TOOLBAR_HEIGHT);
             leftRect.y += Styles.PADDING;
@@ -74,7 +73,7 @@ namespace DotEditor.EGUI.Toolbar
 
             if (leftRect.width > 0)
             {
-                DrawLeftToolbarItems(leftRect);
+                DrawerToolbar(leftRect, EditorToolbarItemOrientation.Left, leftItemGroups);
             }
 
             var rightRect = new Rect(0, 0, screenWidth, Styles.TOOLBAR_HEIGHT);
@@ -86,36 +85,27 @@ namespace DotEditor.EGUI.Toolbar
 
             if (rightRect.width > 0)
             {
-                DrawRightToolbarItems(rightRect);
+                DrawerToolbar(rightRect, EditorToolbarItemOrientation.Right, rightItemGroups);
             }
         }
 
         private static List<EditorToolbarItemGroup> leftItemGroups = new List<EditorToolbarItemGroup>();
         private static List<EditorToolbarItemGroup> rightItemGroups = new List<EditorToolbarItemGroup>();
 
-        private static void DrawLeftToolbarItems(Rect rect)
+        private static void DrawerToolbar(Rect rect, EditorToolbarItemOrientation orientation, List<EditorToolbarItemGroup> itemGroups)
         {
-            DrawerToolbar(rect, EditorToolbarItemOrientation.Left, leftItemGroups);
-        }
+            if (itemGroups.Count == 0) return;
 
-        private static void DrawRightToolbarItems(Rect rect)
-        {
-            DrawerToolbar(rect, EditorToolbarItemOrientation.Right, rightItemGroups);
-        }
-
-        private static void DrawerToolbar(Rect rect, EditorToolbarItemOrientation orientation, List<EditorToolbarItemGroup> items)
-        {
-            if (items.Count == 0) return;
+            DotEditor.Core.EGUI.DrawAreaLine(rect, Color.blue);
 
             Rect remainingRect = rect;
-            foreach (var itemGroup in items)
+            foreach (var itemGroup in itemGroups)
             {
                 float groupWidth = (from item in itemGroup.Items select item.GetItemWidth()).ToArray().Sum();
                 if (rect.width < groupWidth)
                 {
                     if (GUI.Button(remainingRect, "...", Styles.commandStyle))
                     {
-
                     }
                     break;
                 }
@@ -238,6 +228,17 @@ namespace DotEditor.EGUI.Toolbar
 
         }
 
+        public static void ClearAll(EditorToolbarItemOrientation orientation)
+        {
+            if(orientation == EditorToolbarItemOrientation.Left)
+            {
+                leftItemGroups.Clear();
+            }else if(orientation == EditorToolbarItemOrientation.Right)
+            {
+                rightItemGroups.Clear();
+            }
+        }
+
         private class Styles
         {
             internal static readonly float SPACEING = 10;
@@ -250,6 +251,8 @@ namespace DotEditor.EGUI.Toolbar
             internal static readonly float RIGHT_FROM_STRIP_OFFSET_X = 36.0f;
 
             internal static readonly float ITEM_GROUP_SPACE = 10.0f;
+
+            internal static readonly float STAND_BUTTON_WIDTH = 32.0f;
 
             internal static readonly GUIStyle commandStyle = new GUIStyle("Command")
             {

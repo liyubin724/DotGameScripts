@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core
+namespace DotEditor.EGUI
 {
-    public static class EGUIResources
+    public static class DEGUIResources
     {
         #region 灰色系
         public static Color32 lightGray = new Color32(211, 211, 211,255);
