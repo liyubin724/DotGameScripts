@@ -7,6 +7,44 @@ namespace DotEditor.EGUI
 {
     public static class DEGUI
     {
+        #region Draw line
+        /// <summary>
+        /// 在指定的区域内绘制水平线
+        /// </summary>
+        /// <param name="rect"></param>
+        public static void DrawHorizontalLine(Rect rect)
+        {
+            DrawHorizontalLine(rect, DEGUIResources.gray);
+        }
+
+        /// <summary>
+        /// 在指定的区域内绘制水平线
+        /// </summary>
+        /// <param name="rect">绘制区域</param>
+        /// <param name="thickness">线宽</param>
+        /// <param name="padding">与上方的间距</param>
+        /// <param name="color">绘制使用的颜色</param>
+        public static void DrawHorizontalLine(Rect rect , Color color , float thickness = 0.75f,float padding = 6.0f)
+        {
+            rect.y += padding * 0.5f;
+            rect.height = thickness;
+            EditorGUI.DrawRect(rect, color);
+        }
+
+        public static void DrawVerticalLine(Rect rect)
+        {
+            DrawVerticalLine(rect, DEGUIResources.gray);
+        }
+
+        public static void DrawVerticalLine(Rect rect, Color color, float thickness = 0.75f, float padding = 6.0f )
+        {
+            rect.x += padding * 0.5f;
+            rect.width = thickness;
+            EditorGUI.DrawRect(rect, color);
+        }
+
+        #endregion
+
         public static void DrawAreaLine(Rect rect, Color color)
         {
             Handles.color = color;

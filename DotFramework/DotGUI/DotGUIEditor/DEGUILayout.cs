@@ -8,6 +8,33 @@ namespace DotEditor.EGUI
 {
     public static class DEGUILayout
     {
+        #region DrawLine
+        public static void DrawHorizontalLine()
+        {
+            DrawHorizontalLine(DEGUIResources.gray);
+        }
+
+        public static void DrawHorizontalLine(Color color,float thickness = 0.75f, float padding = 6.0f)
+        {
+            Rect rect = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness),GUILayout.ExpandWidth(true));
+            DEGUI.DrawHorizontalLine(rect, color,thickness, padding);
+        }
+
+        public static void DrawVerticalLine()
+        {
+            DrawVerticalLine(DEGUIResources.gray);
+        }
+
+        public static void DrawVerticalLine(Color color,float thickness = 0.75f, float padding = 6.0f )
+        {
+            Rect rect = EditorGUILayout.GetControlRect(GUILayout.Width(padding + thickness),GUILayout.ExpandHeight(true));
+            DEGUI.DrawVerticalLine(rect, color,thickness, padding);
+        }
+
+        #endregion
+
+
+
         public static void DrawScript(UnityObject target)
         {
             Type targetType = target.GetType();
