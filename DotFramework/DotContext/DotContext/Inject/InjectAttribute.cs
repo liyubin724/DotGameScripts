@@ -9,7 +9,7 @@ namespace Dot.Context
         Out,
     }
 
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field,AllowMultiple =false,Inherited =true)]
     public class StringInjectField : Attribute
     {
         public InjectUsage Usage { get; set; } = InjectUsage.InOut;
