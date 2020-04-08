@@ -4,7 +4,7 @@ namespace Dot.Core.Log
 {
     public enum LogLevelType
     {
-        Verbose = 0,
+        Debug = 0,
         Info,
         Warning,
         Error,
@@ -20,12 +20,12 @@ namespace Dot.Core.Log
         void LogFormat(LogLevelType levelType, Type tagType, string msgFormat, params object[] values);
         void LogFormat(LogLevelType levelType, string tagName, string msgFormat, params object[] values);
 
-        void LogVerbose(string msg);
-        void LogVerbose(Type tagType, string msg);
-        void LogVerbose(string tagName, string msg);
-        void LogVerboseFormat(string msgFormat, params object[] args);
-        void LogVerboseFormat(Type tagType, string msgFormat, params object[] args);
-        void LogVerboseFormat(string tagName, string msgFormat, params object[] args);
+        void LogDebug(string msg);
+        void LogDebug(Type tagType, string msg);
+        void LogDebug(string tagName, string msg);
+        void LogDebugFormat(string msgFormat, params object[] args);
+        void LogDebugFormat(Type tagType, string msgFormat, params object[] args);
+        void LogDebugFormat(string tagName, string msgFormat, params object[] args);
 
         void LogInfo(string msg);
         void LogInfo(Type tagType, string msg);

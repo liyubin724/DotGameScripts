@@ -1,4 +1,4 @@
-﻿using Dot.Log;
+﻿using Dot.Core.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;

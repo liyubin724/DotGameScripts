@@ -27,20 +27,20 @@ namespace Dot.Core.Log
             }
         }
 
-        #region Verbose
-        public static void LogVerbose(string tagName, string msg)
+        #region Debug
+        public static void LogDebug(string tagName, string msg)
         {
-            if (logger != null && logLevel <= LogLevelType.Verbose)
+            if (logger != null && logLevel <= LogLevelType.Debug)
             {
-                logger.LogVerbose(tagName, msg);
+                logger.LogDebug(tagName, msg);
             }
         }
 
         public static void LogDebug(Type tagType, string msg)
         {
-            if (logger != null && logLevel <= LogLevelType.Verbose)
+            if (logger != null && logLevel <= LogLevelType.Debug)
             {
-                logger.LogVerbose(tagType, msg);
+                logger.LogDebug(tagType, msg);
             }
         }
         #endregion

@@ -2,13 +2,23 @@
 using System;
 using System.IO;
 using System.Text;
-using IDotLog = Dot.Log.ILog;
+using Dot.Core.Log;
+using IDotLog = Dot.Core.Log.ILog;
 using ILog4NetLog = log4net.ILog;
 
 namespace Dot.Log
 {
     public class Logger : IDotLog
     {
+        public static void Initalize(string xmlConfig, LogLevelType level = LogLevelType.Info)
+        {
+            Logger logger = new Logger();
+            if(logger.InitLogger(xmlConfig))
+            {
+                LogUtil.SetLogger(logger, level);
+            }
+        }
+
         private static string DEFAULT_LOGGER_NAME = "Log";
         private bool isInited = false;
 
@@ -111,38 +121,6 @@ namespace Dot.Log
         }
         #endregion
 
-        #region Info
-        public void LogInfo(string msg)
-        {
-            LogInfo(DEFAULT_LOGGER_NAME, msg);
-        }
-
-        public void LogInfo(Type tagType, string msg)
-        {
-            LogInfo(tagType?.Name, msg);
-        }
-
-        public void LogInfo(string tagName, string msg)
-        {
-            GetLogger(tagName)?.Info(msg);
-        }
-
-        public void LogInfoFormat(string msgFormat, params object[] args)
-        {
-            LogInfoFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
-        }
-
-        public void LogInfoFormat(Type tagType, string msgFormat, params object[] args)
-        {
-            LogInfoFormat(tagType?.Name, msgFormat, args);
-        }
-
-        public void LogInfoFormat(string tagName, string msgFormat, params object[] args)
-        {
-            GetLogger(tagName)?.InfoFormat(msgFormat, args);
-        }
-        #endregion
-
         #region Debug
         public void LogDebug(string msg)
         {
@@ -172,6 +150,38 @@ namespace Dot.Log
         public void LogDebugFormat(string tagName, string msgFormat, params object[] args)
         {
             GetLogger(tagName)?.DebugFormat(msgFormat, args);
+        }
+        #endregion
+
+        #region Info
+        public void LogInfo(string msg)
+        {
+            LogInfo(DEFAULT_LOGGER_NAME, msg);
+        }
+
+        public void LogInfo(Type tagType, string msg)
+        {
+            LogInfo(tagType?.Name, msg);
+        }
+
+        public void LogInfo(string tagName, string msg)
+        {
+            GetLogger(tagName)?.Info(msg);
+        }
+
+        public void LogInfoFormat(string msgFormat, params object[] args)
+        {
+            LogInfoFormat(DEFAULT_LOGGER_NAME, msgFormat, args);
+        }
+
+        public void LogInfoFormat(Type tagType, string msgFormat, params object[] args)
+        {
+            LogInfoFormat(tagType?.Name, msgFormat, args);
+        }
+
+        public void LogInfoFormat(string tagName, string msgFormat, params object[] args)
+        {
+            GetLogger(tagName)?.InfoFormat(msgFormat, args);
         }
         #endregion
 
