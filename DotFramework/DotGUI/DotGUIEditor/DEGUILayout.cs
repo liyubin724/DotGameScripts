@@ -33,7 +33,24 @@ namespace DotEditor.EGUI
 
         #endregion
 
-
+        public static void DrawAssetPreview(UnityObject uObj,float width = 64,float height = 64)
+        {
+            var previewTexture = AssetPreview.GetAssetPreview(uObj);
+            if(previewTexture!=null)
+            {
+                var style = new GUIStyle();
+                style.normal.background = previewTexture;
+                width = Mathf.Clamp(width, 0, previewTexture.width);
+                height = Mathf.Clamp(height, 0, previewTexture.height);
+                var previewOptions = new GUILayoutOption[]
+                {
+                    GUILayout.MaxWidth(width),
+                    GUILayout.MaxHeight(height),
+                };
+                Rect rect = EditorGUILayout.GetControlRect(true, height, previewOptions);
+                EditorGUI.LabelField(rect, GUIContent.none, style);
+            }
+        }
 
         public static void DrawScript(UnityObject target)
         {

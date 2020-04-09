@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.EGUI
 {
     public static class DEGUI
     {
-        #region Draw line
+        #region Draw lines
         /// <summary>
         /// 在指定的区域内绘制水平线
         /// </summary>
@@ -31,6 +32,10 @@ namespace DotEditor.EGUI
             EditorGUI.DrawRect(rect, color);
         }
 
+        /// <summary>
+        /// 在指定区域内绘制垂直水平线
+        /// </summary>
+        /// <param name="rect"></param>
         public static void DrawVerticalLine(Rect rect)
         {
             DrawVerticalLine(rect, DEGUIResources.gray);
@@ -42,8 +47,6 @@ namespace DotEditor.EGUI
             rect.width = thickness;
             EditorGUI.DrawRect(rect, color);
         }
-
-        #endregion
 
         public static void DrawAreaLine(Rect rect, Color color)
         {
@@ -61,6 +64,24 @@ namespace DotEditor.EGUI
             };
 
             Handles.DrawLines(points, indexies);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 绘制对象的预览图
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="uObj"></param>
+        public static void DrawAssetPreview(Rect rect,UnityObject uObj)
+        {
+            var previewTexture = AssetPreview.GetAssetPreview(uObj);
+            if(previewTexture!=null)
+            {
+                GUIStyle style = new GUIStyle();
+                style.normal.background = previewTexture;
+                EditorGUI.LabelField(rect, GUIContent.none, style);
+            }
         }
 
         private static Stack<float> labelWidthStack = new Stack<float>();
