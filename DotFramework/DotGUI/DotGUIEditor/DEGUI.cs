@@ -78,9 +78,7 @@ namespace DotEditor.EGUI
             var previewTexture = AssetPreview.GetAssetPreview(uObj);
             if(previewTexture!=null)
             {
-                GUIStyle style = new GUIStyle();
-                style.normal.background = previewTexture;
-                EditorGUI.LabelField(rect, GUIContent.none, style);
+                EditorGUI.LabelField(rect, GUIContent.none, DEGUIStyles.GetTextureStyle(previewTexture));
             }
         }
 
@@ -88,6 +86,11 @@ namespace DotEditor.EGUI
         {
             GUIStyle boxStyle = DEGUIStyles.BoxStyle;
             boxStyle.Draw(rect, false, false, false, false);
+        }
+
+        public static void DrawHeader(Rect rect,string label)
+        {
+            EditorGUI.LabelField(rect, label, DEGUIStyles.HeaderStyle);
         }
 
         private static Stack<float> labelWidthStack = new Stack<float>();

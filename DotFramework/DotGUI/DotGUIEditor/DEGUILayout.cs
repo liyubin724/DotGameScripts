@@ -38,8 +38,6 @@ namespace DotEditor.EGUI
             var previewTexture = AssetPreview.GetAssetPreview(uObj);
             if(previewTexture!=null)
             {
-                var style = new GUIStyle();
-                style.normal.background = previewTexture;
                 width = Mathf.Clamp(width, 0, previewTexture.width);
                 height = Mathf.Clamp(height, 0, previewTexture.height);
                 var previewOptions = new GUILayoutOption[]
@@ -48,8 +46,18 @@ namespace DotEditor.EGUI
                     GUILayout.MaxHeight(height),
                 };
                 Rect rect = EditorGUILayout.GetControlRect(true, height, previewOptions);
-                EditorGUI.LabelField(rect, GUIContent.none, style);
+                EditorGUI.LabelField(rect, GUIContent.none, DEGUIStyles.GetTextureStyle(previewTexture));
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="options"></param>
+        public static void DrawHeader(string label,params GUILayoutOption[] options)
+        {
+            EditorGUILayout.LabelField(label, DEGUIStyles.HeaderStyle,options);
         }
 
         public static void DrawScript(UnityObject target)

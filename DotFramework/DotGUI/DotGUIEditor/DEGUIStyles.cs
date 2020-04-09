@@ -65,5 +65,30 @@ namespace DotEditor.EGUI
                 return boxStyle;
             }
         }
+
+        private static GUIStyle headerStyle = null;
+        public static GUIStyle HeaderStyle
+        {
+            get
+            {
+                if(headerStyle == null)
+                {
+                    headerStyle = new GUIStyle(GUI.skin.box)
+                    {
+                        fontSize = 12,
+                        alignment = TextAnchor.MiddleLeft,
+                        fontStyle = FontStyle.Bold,
+                    };
+                }
+                return headerStyle;
+            }
+        }
+
+        public static GUIStyle GetTextureStyle(Texture2D texture)
+        {
+            GUIStyle style = new GUIStyle();
+            style.normal.background = texture;
+            return style;
+        }
     }
 }
