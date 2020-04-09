@@ -6,12 +6,17 @@ namespace DotEditor.Core.Utilities
 {
     public static class PathUtility
     {
-        public static string GetAssetPath(string dirPath)
+        /// <summary>
+        /// 将相对磁盘的完整路径转换为相对于Assets的路径
+        /// </summary>
+        /// <param name="diskPath"></param>
+        /// <returns></returns>
+        public static string GetAssetPath(string diskPath)
         {
-            dirPath = dirPath.Replace("\\", "/");
-            if (dirPath.StartsWith(Application.dataPath))
+            diskPath = diskPath.Replace("\\", "/");
+            if (diskPath.StartsWith(Application.dataPath))
             {
-                return "Assets" + dirPath.Replace(Application.dataPath, "");
+                return diskPath.Replace(Application.dataPath, "Assets");
             }
             return string.Empty;
         }

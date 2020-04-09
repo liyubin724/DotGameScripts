@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DEEUtility.cs" />
     <Compile Include="DEGUI.cs" />
     <Compile Include="DEGUILayout.cs" />
     <Compile Include="DEGUIResources.cs" />

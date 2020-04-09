@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -16,6 +17,16 @@ namespace DotEditor.EGUI
         public static Color32 dodgerBlue = new Color32(30, 144, 255, 255);
         public static Color32 cornflowerBlue = new Color32(100, 149, 225, 255);
 
+        public static T GetEGUIAsset<T>(string assetName) where T: UnityObject
+        {
+            if(string.IsNullOrEmpty(DEEUtility.AssetRelativePath))
+            {
+                return default;
+            }
+
+            string assetPath = $"{DEEUtility.AssetRelativePath}/{assetName}";
+            return AssetDatabase.LoadAssetAtPath<T>(assetPath);
+        }
 
         private static Color32 gridLineColor = new Color(0.45f, 0.45f, 0.45f);
         private static Color32 gridBgColor = new Color(0.18f, 0.18f, 0.18f);

@@ -52,5 +52,18 @@ namespace DotEditor.EGUI
                 return middleLeftLabelStyle;
             }
         }
+
+        private static GUIStyle boxStyle = null;
+        public static GUIStyle BoxStyle
+        {
+            get
+            {
+                if(boxStyle == null)
+                {
+                    boxStyle = new GUIStyle(GUI.skin.box);
+                }
+                return boxStyle;
+            }
+        }
     }
 }

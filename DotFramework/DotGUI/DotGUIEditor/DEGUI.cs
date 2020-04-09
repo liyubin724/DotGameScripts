@@ -84,6 +84,12 @@ namespace DotEditor.EGUI
             }
         }
 
+        public static void DrawBox(Rect rect)
+        {
+            GUIStyle boxStyle = DEGUIStyles.BoxStyle;
+            boxStyle.Draw(rect, false, false, false, false);
+        }
+
         private static Stack<float> labelWidthStack = new Stack<float>();
         public static void BeginLabelWidth(float labelWidth)
         {
