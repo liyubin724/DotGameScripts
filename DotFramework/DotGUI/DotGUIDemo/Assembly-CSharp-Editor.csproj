@@ -286,20 +286,20 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="DotGUI">
-      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/DotGUI.dll</HintPath>
-    </Reference>
     <Reference Include="DotCore">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/DotCore.dll</HintPath>
     </Reference>
-    <Reference Include="ReflectionMagic">
-      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/Editor/ReflectionMagic.dll</HintPath>
+    <Reference Include="DotGUI">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/DotGUI.dll</HintPath>
     </Reference>
     <Reference Include="DotCoreEditor">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/Editor/DotCoreEditor.dll</HintPath>
     </Reference>
     <Reference Include="DotGUIEditor">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/Editor/DotGUIEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="ReflectionMagic">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Assets/Dot EGUI/Scripts/Editor/ReflectionMagic.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramework/DotGUI/DotGUIDemo/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

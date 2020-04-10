@@ -71,6 +71,7 @@
     <Compile Include="Utilities\PathUtility.cs" />
     <Compile Include="Utilities\PlayerSettingsUtility.cs" />
     <Compile Include="Utilities\PrefabUtility.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
     <Compile Include="Utilities\SelectionUtility.cs" />
     <Compile Include="Utilities\SpriteAtlasUtility.cs" />
     <Compile Include="Utilities\TypeUtility.cs" />
