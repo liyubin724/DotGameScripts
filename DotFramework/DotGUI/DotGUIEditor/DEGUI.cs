@@ -88,9 +88,9 @@ namespace DotEditor.EGUI
             boxStyle.Draw(rect, false, false, false, false);
         }
 
-        public static void DrawHeader(Rect rect,string label)
+        public static void DrawBoxHeader(Rect rect,string label)
         {
-            EditorGUI.LabelField(rect, label, DEGUIStyles.HeaderStyle);
+            EditorGUI.LabelField(rect, label, DEGUIStyles.BoxedHeaderStyle);
         }
 
         private static Stack<float> labelWidthStack = new Stack<float>();

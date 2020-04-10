@@ -66,21 +66,21 @@ namespace DotEditor.EGUI
             }
         }
 
-        private static GUIStyle headerStyle = null;
-        public static GUIStyle HeaderStyle
+        private static GUIStyle boxedHeaderStyle = null;
+        public static GUIStyle BoxedHeaderStyle
         {
             get
             {
-                if(headerStyle == null)
+                if(boxedHeaderStyle == null)
                 {
-                    headerStyle = new GUIStyle(GUI.skin.box)
+                    boxedHeaderStyle = new GUIStyle(GUI.skin.box)
                     {
                         fontSize = 12,
                         alignment = TextAnchor.MiddleLeft,
                         fontStyle = FontStyle.Bold,
                     };
                 }
-                return headerStyle;
+                return boxedHeaderStyle;
             }
         }
 
