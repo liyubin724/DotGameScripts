@@ -53,7 +53,7 @@
     <Compile Include="ColorfullFolders\FolderConfig.cs" />
     <Compile Include="ColorfullFolders\FolderCategory.cs" />
     <Compile Include="ColorfullFolders\FolderIcon.cs" />
-    <Compile Include="DEEUtility.cs" />
+    <Compile Include="DEUtility.cs" />
     <Compile Include="DEGUI.cs" />
     <Compile Include="DEGUILayout.cs" />
     <Compile Include="DEGUIResources.cs" />

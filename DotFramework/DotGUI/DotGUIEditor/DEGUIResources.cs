@@ -18,12 +18,12 @@ namespace DotEditor.EGUI
 
         public static T GetResource<T>(string relativePath) where T: UnityObject
         {
-            if(string.IsNullOrEmpty(DEEUtility.AssetRelativePath))
+            if(string.IsNullOrEmpty(DEUtility.AssetRelativePath))
             {
                 return default;
             }
 
-            string assetPath = $"{DEEUtility.AssetRelativePath}/{relativePath}";
+            string assetPath = $"{DEUtility.AssetRelativePath}/{relativePath}";
             return AssetDatabase.LoadAssetAtPath<T>(assetPath);
         }
 

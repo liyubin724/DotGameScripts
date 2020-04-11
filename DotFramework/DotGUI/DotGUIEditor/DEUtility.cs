@@ -10,7 +10,7 @@ using System.IO;
 
 namespace DotEditor.EGUI
 {
-    public static class DEEUtility
+    public static class DEUtility
     {
         private static string EGUI_ROOT_FOLDER_NAME = "Dot EGUI";
         private static string EGUI_ASSET_FOLDER_NAME = "Editor Resources";
