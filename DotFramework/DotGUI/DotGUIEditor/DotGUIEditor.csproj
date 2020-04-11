@@ -50,9 +50,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorfullFolders\FolderConfig.cs" />
-    <Compile Include="ColorfullFolders\FolderCategory.cs" />
-    <Compile Include="ColorfullFolders\FolderIcon.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolderConfig.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolderConfigEditor.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolder\FavouriteFolderAsset.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolder\FavouriteFolderColor.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolder\FavouriteFolderPlatform.cs" />
+    <Compile Include="ColorfullFolders\FavouriteFolder\FavouriteFolderTag.cs" />
     <Compile Include="DEUtility.cs" />
     <Compile Include="DEGUI.cs" />
     <Compile Include="DEGUILayout.cs" />

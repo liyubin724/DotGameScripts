@@ -16,7 +16,7 @@ public class DemoWin : EditorWindow
     {
         //EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
         {
-            DEGUILayout.DrawHeader("Just for Test",GUILayout.ExpandWidth(true));
+            DEGUILayout.DrawBoxHeader("Just for Test",GUILayout.ExpandWidth(true));
         }
         //EditorGUILayout.EndVertical();
     }

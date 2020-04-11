@@ -63,16 +63,20 @@ namespace DotEditor.EGUI
         public static void DrawScript(UnityObject target)
         {
             Type targetType = target.GetType();
-            if(typeof(MonoBehaviour).IsAssignableFrom(targetType))
+            EditorGUI.BeginDisabledGroup(true);
             {
-                EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), typeof(MonoScript), false);
-            }else if(typeof(ScriptableObject).IsAssignableFrom(targetType))
-            {
-                EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ScriptableObject)target), typeof(MonoScript), false);
-            }else
-            {
-                EditorGUILayout.LabelField("Script", targetType.FullName);
+                if(typeof(MonoBehaviour).IsAssignableFrom(targetType))
+                {
+                    EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), typeof(MonoScript), false);
+                }else if(typeof(ScriptableObject).IsAssignableFrom(targetType))
+                {
+                    EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ScriptableObject)target), typeof(MonoScript), false);
+                }else
+                {
+                    EditorGUILayout.LabelField("Script", targetType.FullName);
+                }
             }
+            EditorGUI.EndDisabledGroup();
         }
 
         public static T DrawPopup<T>(string label, string[] contents, T[] values, T selectedValue)

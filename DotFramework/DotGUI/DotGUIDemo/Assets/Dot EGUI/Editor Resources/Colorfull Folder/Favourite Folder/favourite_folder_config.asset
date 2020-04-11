@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1502487900, guid: 3539bc14953d8494ebefc3d194a99cf9, type: 3}
+  m_Name: favourite_folder_config
+  m_EditorClassIdentifier: 
+  colorFolders:
+  - Name: 0
+    SmallIcon: {fileID: 2800000, guid: a65c70fcbe9ac0b4fbcbac4a0b67e64f, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 3d8f946e891cc8f4e81b1a296f8fb6be, type: 3}
+  - Name: 1
+    SmallIcon: {fileID: 2800000, guid: 0b7e8970cd9b4d548883dc5b4f4997c0, type: 3}
+    LargeIcon: {fileID: 2800000, guid: ca744735eea12d84b8369b456104295c, type: 3}
+  - Name: 2
+    SmallIcon: {fileID: 2800000, guid: bc1d6bab13fce1c448e2b0870277ce43, type: 3}
+    LargeIcon: {fileID: 2800000, guid: a257b7f6126c9e74f86c966b806ffbf7, type: 3}
+  - Name: 3
+    SmallIcon: {fileID: 2800000, guid: e4d497fd8f72b5241b762a7ed649ee83, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 0532ea3a1890c8946b6d842beeab51b8, type: 3}
+  - Name: 4
+    SmallIcon: {fileID: 2800000, guid: d7aa3931d4836f94ea17a3b67c2754b7, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 8033ba50d6a678f41bf129dd6a31ee12, type: 3}
+  - Name: 5
+    SmallIcon: {fileID: 2800000, guid: 1395baad88220534f9a77e6e628f04c3, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 30971d38931ab5c4ea6ac4124bebfac4, type: 3}
+  - Name: 6
+    SmallIcon: {fileID: 2800000, guid: 0379f5bc653a23045a15e41eb54d6db8, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 575f900c4ff32fa42a779d65da794c83, type: 3}
+  - Name: 7
+    SmallIcon: {fileID: 2800000, guid: 6ecc649ba46fa2c448d60a663be30ffd, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 7ce51c638aeaa3840ab61c4a4af3885b, type: 3}
+  - Name: 8
+    SmallIcon: {fileID: 2800000, guid: 191188601401d7f4ca9105e13b350e00, type: 3}
+    LargeIcon: {fileID: 2800000, guid: b5aa5103c69828e42a9ff77db820f2a6, type: 3}
+  - Name: 9
+    SmallIcon: {fileID: 2800000, guid: 996ce5f7498be3b47ad13c2557bef293, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 06303b4e77878d243b511b8f0c8bfc69, type: 3}
+  - Name: 10
+    SmallIcon: {fileID: 2800000, guid: 6afa87a5a70f8e54a82e85637cec0904, type: 3}
+    LargeIcon: {fileID: 2800000, guid: b84c63ef648173140b8fa6c05aef2768, type: 3}
+  - Name: 11
+    SmallIcon: {fileID: 2800000, guid: f14480b09218f3047a15b5ded872de28, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 38dec0c9e1ada504d98f8a0f4959a215, type: 3}
+  platformFolders:
+  - Name: 0
+    SmallIcon: {fileID: 2800000, guid: 6858fce162a9b4744baedb1357e0b690, type: 3}
+    LargeIcon: {fileID: 2800000, guid: c1e5c2a549b1b8048a04987738bb9c52, type: 3}
+  - Name: 1
+    SmallIcon: {fileID: 2800000, guid: 25e93be6802c63c408e62e4bdfa4e91f, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 6888916ad986e2944a731fd320e5f566, type: 3}
+  - Name: 2
+    SmallIcon: {fileID: 2800000, guid: 54a92a89ce169714a9a00aebb271cdd6, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 80ea8e29a9c225e4291234d6ba25a868, type: 3}
+  - Name: 3
+    SmallIcon: {fileID: 2800000, guid: b8e8a328d6527a14783473666c1f8a08, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 010e6d817952d434197d318f48b2f16a, type: 3}
+  - Name: 4
+    SmallIcon: {fileID: 2800000, guid: 277aff0709e51d2418b61f0c82cb277f, type: 3}
+    LargeIcon: {fileID: 2800000, guid: c34025bbb220b844a8e633a414c63632, type: 3}
+  tagFolders:
+  - Name: 0
+    SmallIcon: {fileID: 2800000, guid: 92b0bc9ddf47e7c439b816e4f3358617, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 3e9903716db29884db10c4761158194a, type: 3}
+  - Name: 1
+    SmallIcon: {fileID: 2800000, guid: 9af651017422eb342bb70580d772e446, type: 3}
+    LargeIcon: {fileID: 2800000, guid: fb4c037eb733ab444a6c2ba07227da11, type: 3}
+  - Name: 2
+    SmallIcon: {fileID: 2800000, guid: aa9fc7071d5eb1c429b697ac0a038a80, type: 3}
+    LargeIcon: {fileID: 2800000, guid: ef55849a2ae927d458e203080c8ee6ad, type: 3}
+  - Name: 3
+    SmallIcon: {fileID: 2800000, guid: e34b40e8541b43e489676304cd7843f6, type: 3}
+    LargeIcon: {fileID: 2800000, guid: dfb7e52f2da69994c8a075a6f1028f7f, type: 3}
+  - Name: 4
+    SmallIcon: {fileID: 2800000, guid: c307d00979506dc42b55246945eca05b, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 14852ef2c0a992545b421612b34b7a8c, type: 3}
+  - Name: 5
+    SmallIcon: {fileID: 2800000, guid: 7f6371776b8d941479f39606318f5588, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 6bcb6e1c12881c34e8fe83ad6d5166d6, type: 3}
+  - Name: 6
+    SmallIcon: {fileID: 2800000, guid: 9e571ae94ec295840a1977c7f4d8c9c9, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 3252a088bf949e04db52d745a29d4cee, type: 3}
+  - Name: 7
+    SmallIcon: {fileID: 2800000, guid: 1fc61058e5717b24eab0060b7ff80a64, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 7b3237bbdd8514e49982b36ac8cefdf3, type: 3}
+  - Name: 8
+    SmallIcon: {fileID: 2800000, guid: 5eab31a003af25741a7dca4d2affaded, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 71714604046a7f1438ccf60800ba9eca, type: 3}
+  - Name: 9
+    SmallIcon: {fileID: 2800000, guid: bd871a1c68938b848adc74c50bb04a4d, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 980ffdf13df9e86469913858907674fd, type: 3}
+  - Name: 10
+    SmallIcon: {fileID: 2800000, guid: f3e2d724e55ac464bab917fb41e5f3a5, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 2c15a1b0d7c0f7e4a96a4c07104da9db, type: 3}
+  - Name: 11
+    SmallIcon: {fileID: 2800000, guid: 4604f75e19797b44880551dc47c0a657, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 0d0ce6157355db044aa688963c5eb699, type: 3}
+  assetFolders:
+  - Name: 0
+    SmallIcon: {fileID: 2800000, guid: 503e5265129814a4e937355b90e9cfeb, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 9f7180faea7005049b1ff73e9f52c09e, type: 3}
+  - Name: 1
+    SmallIcon: {fileID: 2800000, guid: dd6925f5057826347acfe91852756a78, type: 3}
+    LargeIcon: {fileID: 2800000, guid: df3827e96ea14cd4e8fbce45d4506a4c, type: 3}
+  - Name: 2
+    SmallIcon: {fileID: 2800000, guid: 376e34d58a3b192409867eda7da6fa15, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 4a3f6dbef53cb214ca696a65ce299dd0, type: 3}
+  - Name: 3
+    SmallIcon: {fileID: 2800000, guid: e04dfbc522283694aa8b9589508c31b3, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 8cb44a7141e962a45a6cbbd90d3094ee, type: 3}
+  - Name: 4
+    SmallIcon: {fileID: 2800000, guid: f97bd104cc440e646bf18434d0aadeb0, type: 3}
+    LargeIcon: {fileID: 2800000, guid: e8a857b49156ee04c8c2ea0d1d2459a4, type: 3}
+  - Name: 5
+    SmallIcon: {fileID: 2800000, guid: 27421c939b5662c45a375e3a40829608, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 3f3f6d9dc2f9be44b857d88fe0b497b8, type: 3}
+  - Name: 6
+    SmallIcon: {fileID: 2800000, guid: 76449e26c003fc4489753f8e7427a949, type: 3}
+    LargeIcon: {fileID: 2800000, guid: a79598b054a22044ab539b61ec0a5efc, type: 3}
+  - Name: 7
+    SmallIcon: {fileID: 2800000, guid: 2c45d17199a7fd7409a703cbc5a6ce00, type: 3}
+    LargeIcon: {fileID: 2800000, guid: f30cba5de1dbdcd46897ab97cbd60261, type: 3}
+  - Name: 8
+    SmallIcon: {fileID: 2800000, guid: 34a97b2fe7264a5409a2108742bf9a26, type: 3}
+    LargeIcon: {fileID: 2800000, guid: fdaebb580fb338e42b2fadb953d7d1ff, type: 3}
+  - Name: 9
+    SmallIcon: {fileID: 2800000, guid: 3462b17dd0a242c418879a45ca807211, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 9be141afa7d993e4abdcabeaa3c566d0, type: 3}
+  - Name: 10
+    SmallIcon: {fileID: 2800000, guid: ec2951dbd8c22234c8fdf92529d860fd, type: 3}
+    LargeIcon: {fileID: 2800000, guid: ad4412933c34d994a9a6daafb8202f4a, type: 3}
+  - Name: 11
+    SmallIcon: {fileID: 2800000, guid: 97efd597cd18c564aadb45280476b23a, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 650a564eae901434e86dcb456fcc046a, type: 3}
+  - Name: 12
+    SmallIcon: {fileID: 2800000, guid: 3dfdaf74a756b3e4caf2dfcd11e1f5cf, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 9e8569722fa4b9144988ebbd6d0b0e83, type: 3}
+  - Name: 13
+    SmallIcon: {fileID: 2800000, guid: 5fe56ba3278c12447bd1c6829ee28cd7, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 789dd6d5002cea54ab0ef8d6a0a5b8a2, type: 3}
+  - Name: 14
+    SmallIcon: {fileID: 2800000, guid: b50a71349492e5144872b4ed26ddb071, type: 3}
+    LargeIcon: {fileID: 2800000, guid: 39a585e62bd9f16459ae8dfb121cb1b0, type: 3}
