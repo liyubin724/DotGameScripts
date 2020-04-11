@@ -41,7 +41,7 @@ namespace DotEditor.EGUI.ColorfullFolders
             ReorderableList rList = new ReorderableList(serializedObject, property, true, true, true, true);
             rList.drawHeaderCallback = (rect) =>
               {
-                  EditorGUI.LabelField(rect, propertyName, DEGUIStyles.MiddleLeftLabelStyle);
+                  EditorGUI.LabelField(rect, ObjectNames.NicifyVariableName(propertyName), DEGUIStyles.MiddleLeftLabelStyle);
               };
             rList.elementHeight = Styles.LIST_HEIGHT;
             rList.onAddCallback = (list) =>

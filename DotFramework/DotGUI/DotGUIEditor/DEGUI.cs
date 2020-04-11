@@ -203,4 +203,40 @@ namespace DotEditor.EGUI
             }
         }
     }
+
+    public class LabelWidthScope : GUI.Scope
+    {
+        private float cachedLabelWidth;
+        public LabelWidthScope(float labelWidth)
+        {
+            cachedLabelWidth = EditorGUIUtility.labelWidth;
+
+            EditorGUIUtility.labelWidth = labelWidth;
+        }
+
+        protected override void CloseScope()
+        {
+            EditorGUIUtility.labelWidth = cachedLabelWidth;
+        }
+    }
+
+    public class IndentScope : GUI.Scope
+    {
+        private int indent = 1;
+        public IndentScope()
+        {
+            EditorGUI.indentLevel += indent;
+        }
+
+        public IndentScope(int indent)
+        {
+            this.indent = indent;
+            EditorGUI.indentLevel += indent;
+        }
+
+        protected override void CloseScope()
+        {
+            EditorGUI.indentLevel -= indent;
+        }
+    }
 }

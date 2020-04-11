@@ -141,6 +141,45 @@ namespace DotEditor.EGUI
             }
         }
 
+        private static Texture2D infoIcon = null;
+        public static Texture2D InfoIcon
+        {
+            get
+            {
+                if(infoIcon == null)
+                {
+                    infoIcon = EditorGUIUtility.FindTexture("console.infoicon");
+                }
+                return infoIcon;
+            }
+        }
+
+        private static Texture2D warningIcon = null;
+        public static Texture2D WarningIcon
+        {
+            get
+            {
+                if(warningIcon ==null)
+                {
+                    warningIcon = EditorGUIUtility.FindTexture("console.warnicon");
+                }
+                return warningIcon;
+            }
+        }
+
+        private static Texture2D errorIcon = null;
+        public static Texture2D ErrorIcon
+        {
+            get
+            {
+                if (errorIcon == null)
+                {
+                    errorIcon = EditorGUIUtility.FindTexture("console.erroricon");
+                }
+                return errorIcon;
+            }
+        }
+
         public static Texture2D GetAssetPreviewIcon(string assetPath)
         {
             UnityObject uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
