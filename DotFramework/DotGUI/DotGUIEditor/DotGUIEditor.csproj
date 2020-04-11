@@ -50,6 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorfullFolders\FolderConfig.cs" />
+    <Compile Include="ColorfullFolders\FolderCategory.cs" />
+    <Compile Include="ColorfullFolders\FolderIcon.cs" />
     <Compile Include="DEEUtility.cs" />
     <Compile Include="DEGUI.cs" />
     <Compile Include="DEGUILayout.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolbar\EditorToolbarExtend.cs" />
     <Compile Include="Toolbar\EditorToolbarItem.cs" />
+    <Compile Include="Windows\PopupWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />

@@ -162,7 +162,7 @@ namespace DotEditor.EGUI
             }
             EditorGUI.EndDisabledGroup();
 
-            if (GUI.Button(new Rect(rect.x + rect.width - 40, rect.y, 20, rect.height), new GUIContent(DEGUIResources.FolderIcon)))
+            if (GUI.Button(new Rect(rect.x + rect.width - 40, rect.y, 20, rect.height), new GUIContent(DEGUIResources.DefaultFolderIcon)))
             {
                 string folderPath = EditorUtility.OpenFolderPanel("folder", folder, "");
                 if (!string.IsNullOrEmpty(folderPath))
@@ -188,7 +188,7 @@ namespace DotEditor.EGUI
 
             drawRect.x += drawRect.width;
             drawRect.width = rect.height;
-            if (GUI.Button(drawRect,new GUIContent(DEGUIResources.FolderIcon)))
+            if (GUI.Button(drawRect,new GUIContent(DEGUIResources.DefaultFolderIcon)))
             {
                 string folderPath = EditorUtility.OpenFolderPanel("folder", property.stringValue, "");
                 if (!string.IsNullOrEmpty(folderPath))

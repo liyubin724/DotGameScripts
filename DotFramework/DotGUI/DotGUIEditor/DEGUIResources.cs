@@ -1,5 +1,4 @@
-﻿using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
@@ -17,14 +16,14 @@ namespace DotEditor.EGUI
         public static Color32 dodgerBlue = new Color32(30, 144, 255, 255);
         public static Color32 cornflowerBlue = new Color32(100, 149, 225, 255);
 
-        public static T GetEGUIAsset<T>(string assetName) where T: UnityObject
+        public static T GetResource<T>(string relativePath) where T: UnityObject
         {
             if(string.IsNullOrEmpty(DEEUtility.AssetRelativePath))
             {
                 return default;
             }
 
-            string assetPath = $"{DEEUtility.AssetRelativePath}/{assetName}";
+            string assetPath = $"{DEEUtility.AssetRelativePath}/{relativePath}";
             return AssetDatabase.LoadAssetAtPath<T>(assetPath);
         }
 
@@ -129,16 +128,16 @@ namespace DotEditor.EGUI
             }
         }
 
-        private static Texture2D folderIcon = null;
-        public static Texture2D FolderIcon
+        private static Texture2D defaultFolderIcon = null;
+        public static Texture2D DefaultFolderIcon
         {
             get
             {
-                if (folderIcon == null)
+                if (defaultFolderIcon == null)
                 {
-                    folderIcon = EditorGUIUtility.FindTexture("Folder Icon");
+                    defaultFolderIcon = EditorGUIUtility.FindTexture("Folder Icon");
                 }
-                return folderIcon;
+                return defaultFolderIcon;
             }
         }
 

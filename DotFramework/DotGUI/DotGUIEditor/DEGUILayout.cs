@@ -94,7 +94,7 @@ namespace DotEditor.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(DEGUIResources.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DEGUIResources.DefaultFolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     string folderPath = EditorUtility.OpenFolderPanel("folder", property.stringValue, "");
                     if (!string.IsNullOrEmpty(folderPath))
@@ -121,7 +121,7 @@ namespace DotEditor.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(DEGUIResources.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DEGUIResources.DefaultFolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     string folderPath = EditorUtility.OpenFolderPanel("folder", folder, "");
                     if (!string.IsNullOrEmpty(folderPath))
@@ -148,7 +148,7 @@ namespace DotEditor.EGUI
                 }
                 EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button(new GUIContent(DEGUIResources.FolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(new GUIContent(DEGUIResources.DefaultFolderIcon), GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     diskFolder = EditorUtility.OpenFolderPanel("folder", diskFolder, "");
                 }
