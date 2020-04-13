@@ -93,6 +93,7 @@ namespace DotEditor.EGUI
             EditorGUI.LabelField(rect, label, DEGUIStyles.BoxedHeaderStyle);
         }
 
+        #region Label Width
         private static Stack<float> labelWidthStack = new Stack<float>();
         public static void BeginLabelWidth(float labelWidth)
         {
@@ -105,6 +106,9 @@ namespace DotEditor.EGUI
             if (labelWidthStack.Count > 0)
                 EditorGUIUtility.labelWidth = labelWidthStack.Pop();
         }
+        #endregion
+
+        #region GUI Color
 
         private static Stack<Color> guiColorStack = new Stack<Color>();
         public static void BeginGUIColor(Color color)
@@ -117,7 +121,9 @@ namespace DotEditor.EGUI
             if (guiColorStack.Count > 0)
                 GUI.color = guiColorStack.Pop();
         }
+        #endregion
 
+        #region GUI Background Color
         private static Stack<Color> guiBgColorStack = new Stack<Color>();
         public static void BeginGUIBackgroundColor(Color color)
         {
@@ -130,6 +136,9 @@ namespace DotEditor.EGUI
                 GUI.backgroundColor = guiBgColorStack.Pop();
         }
 
+        #endregion
+
+        #region GUI Content Color
         private static Stack<Color> guiContentColorStack = new Stack<Color>();
         public static void BeginGUIContentColor(Color color)
         {
@@ -142,6 +151,9 @@ namespace DotEditor.EGUI
                 GUI.contentColor = guiContentColorStack.Pop();
         }
 
+        #endregion
+
+        #region Indent
         public static void BeginIndent()
         {
             EditorGUI.indentLevel++;
@@ -151,6 +163,7 @@ namespace DotEditor.EGUI
         {
             EditorGUI.indentLevel--;
         }
+        #endregion
 
         public static string DrawAssetFolderSelection(Rect rect, string label, string assetFolder, bool isReadonly = true)
         {
@@ -237,6 +250,22 @@ namespace DotEditor.EGUI
         protected override void CloseScope()
         {
             EditorGUI.indentLevel -= indent;
+        }
+    }
+
+    public class GUIColorSope : GUI.Scope
+    {
+        private Color cachedGUIColor;
+        public GUIColorSope(Color color)
+        {
+            cachedGUIColor = GUI.color;
+
+            GUI.color = color;
+        }
+
+        protected override void CloseScope()
+        {
+            GUI.color = cachedGUIColor;
         }
     }
 }

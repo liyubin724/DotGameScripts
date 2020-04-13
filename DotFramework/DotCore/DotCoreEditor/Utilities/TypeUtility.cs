@@ -81,6 +81,30 @@ namespace DotEditor.Core.Utilities
             else return type.ToString();
         }
 
+        public static bool IsArrayOrList(this Type listType)
+        {
+            if (listType.IsArray)
+            {
+                return true;
+            }
+            else if (listType.IsGenericType && listType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                return true;
+            }
+            return false;
+        }
 
+        public static Type GetArrayOrListElementType(this Type listType)
+        {
+            if (listType.IsArray)
+            {
+                return listType.GetElementType();
+            }
+            else if (listType.IsGenericType && listType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                return listType.GetGenericArguments()[0];
+            }
+            return null;
+        }
     }
 }

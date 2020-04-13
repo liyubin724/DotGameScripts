@@ -47,9 +47,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\EGUIPropertyAttribute.cs" />
-    <Compile Include="Attributes\PropertyAttributes\AssetPreviewAttribute.cs" />
-    <Compile Include="DotPropertyAttribute.cs" />
+    <Compile Include="Attributes\ConditionAttribute.cs" />
+    <Compile Include="Attributes\Condition\DisableAttribute.cs" />
+    <Compile Include="Attributes\Condition\DisableIfAttribute.cs" />
+    <Compile Include="Attributes\Condition\HideAttribute.cs" />
+    <Compile Include="Attributes\Condition\HideIfAttribute.cs" />
+    <Compile Include="Attributes\Condition\JudgementConditionAttribute.cs" />
+    <Compile Include="Attributes\Condition\ShowAttribute.cs" />
+    <Compile Include="Attributes\Condition\ShowIfAttribute.cs" />
+    <Compile Include="Attributes\DecoratorAttribute.cs" />
+    <Compile Include="Attributes\Decorator\HeaderAreaAttribute.cs" />
+    <Compile Include="Attributes\Decorator\HorizontalAttribute.cs" />
+    <Compile Include="Attributes\Decorator\GroupAttribute.cs" />
+    <Compile Include="Attributes\Decorator\IndentAttribute.cs" />
+    <Compile Include="Attributes\Decorator\LineAreaAttribute.cs" />
+    <Compile Include="Attributes\Decorator\SpaceAreaAttribute.cs" />
+    <Compile Include="Attributes\Property\BoxedHeaderAttribute.cs" />
+    <Compile Include="Attributes\Verify\NotNullAttribute.cs" />
+    <Compile Include="EGUIDrawerAttribute.cs" />
+    <Compile Include="EGUIAttribute.cs" />
+    <Compile Include="Attributes\PropertyAttribute.cs" />
+    <Compile Include="Attributes\VerifyAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
