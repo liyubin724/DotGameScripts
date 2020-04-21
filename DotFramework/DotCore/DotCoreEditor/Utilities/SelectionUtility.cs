@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
@@ -7,7 +8,21 @@ namespace DotEditor.Core.Utilities
 {
     public static class SelectionUtility
     {
-        public static string[] GetSelectionDirs()
+        /// <summary>
+        /// 获取选中的目录或者文件所在的目录，如果没有任何选中则返回null
+        /// </summary>
+        /// <returns></returns>
+        public static string GetSelectionDir()
+        {
+            string[] selectedDirs = GetSelectionDirs();
+            if(selectedDirs!=null && selectedDirs.Length>0)
+            {
+                return selectedDirs[0];
+            }
+            return null;
+        }
+
+        public static string[] GetSelectionDirs(bool removeRepeat = true)
         {
             List<string> dirs = new List<string>();
             string[] guids = Selection.assetGUIDs;
@@ -26,7 +41,13 @@ namespace DotEditor.Core.Utilities
                 }
             }
 
-            return dirs.ToArray();
+            if(removeRepeat)
+            {
+                return dirs.Distinct().ToArray();
+            }else
+            {
+                return dirs.ToArray();
+            }
         }
 
         public static void PingObject(UnityObject uObj)

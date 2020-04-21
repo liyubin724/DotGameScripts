@@ -161,7 +161,23 @@ namespace DotEditor.Core.Utilities
 
         #endregion
 
+        public static T CreateAsset<T>() where T: ScriptableObject
+        {
+            string selectedDir = SelectionUtility.GetSelectionDir();
+            if(string.IsNullOrEmpty(selectedDir))
+            {
+                selectedDir = "Assets";
+            }
 
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath($"{selectedDir}/{typeof(T).Name.ToLower()}.asset");
+            T asset = ScriptableObject.CreateInstance<T>();
+            AssetDatabase.CreateAsset(asset, assetPath);
+            AssetDatabase.SaveAssets();
+
+            AssetDatabase.ImportAsset(assetPath);
+            SelectionUtility.ActiveObject(asset);
+            return asset;
+        }
 
         /// <summary>
         /// 在Project中创建指定类型的资源
