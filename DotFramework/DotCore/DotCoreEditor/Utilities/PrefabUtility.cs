@@ -1,4 +1,5 @@
-﻿using ReflectionMagic;
+﻿using Dot.Core.Utilities;
+using ReflectionMagic;
 using System;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;

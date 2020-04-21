@@ -62,7 +62,6 @@
     <Compile Include="TreeGUI\TreeElementUtility.cs" />
     <Compile Include="TreeGUI\TreeModel.cs" />
     <Compile Include="TreeGUI\TreeViewWithTreeModel.cs" />
-    <Compile Include="Utilities\AssemblyUtility.cs" />
     <Compile Include="Utilities\AssetDatabaseUtility.cs" />
     <Compile Include="Utilities\DirectoryUtility.cs" />
     <Compile Include="Utilities\ExplorerUtility.cs" />
@@ -71,7 +70,6 @@
     <Compile Include="Utilities\PathUtility.cs" />
     <Compile Include="Utilities\PlayerSettingsUtility.cs" />
     <Compile Include="Utilities\PrefabUtility.cs" />
-    <Compile Include="Utilities\ReflectionUtility.cs" />
     <Compile Include="Utilities\SelectionUtility.cs" />
     <Compile Include="Utilities\SpriteAtlasUtility.cs" />
     <Compile Include="Utilities\TypeUtility.cs" />

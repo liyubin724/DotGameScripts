@@ -191,5 +191,37 @@ namespace DotEditor.EGUI
             UnityObject uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath);
             return AssetPreview.GetMiniThumbnail(uObj);
         }
+
+        public static Texture2D MakeColorTexture(int width,int height,Color color)
+        {
+            Color[] pixel = new Color[width * height];
+            for(int i =0;i<pixel.Length;++i)
+            {
+                pixel[i] = color;
+            }
+
+            Texture2D texture = new Texture2D(width, height);
+            texture.SetPixels(pixel);
+            texture.Apply();
+
+            return texture;
+        }
+
+        public static GUIContent MakeContent(string text,string tooltip = "",string icon = "")
+        {
+            GUIContent content;
+            if(!string.IsNullOrEmpty(icon))
+            {
+                content = EditorGUIUtility.IconContent(icon);
+            }else
+            {
+                content = new GUIContent();
+            }
+
+            content.text = text;
+            content.tooltip = tooltip;
+
+            return content;
+        }
     }
 }

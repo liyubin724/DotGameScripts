@@ -10,5 +10,7 @@ namespace Dot.Map
     public class MapManager : Singleton<MapManager>
     {
         private MapRootBehaviour itemBehaviour = null;
+
+        
     }
 }

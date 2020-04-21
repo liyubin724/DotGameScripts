@@ -90,5 +90,16 @@ namespace DotEditor.EGUI
             style.normal.background = texture;
             return style;
         }
+
+        public static GUIStyle MakeStyle(Color color,int size,TextAnchor anchor,FontStyle fontStyle = FontStyle.Normal)
+        {
+            GUIStyle style = new GUIStyle();
+            style.alignment = anchor;
+            style.fontStyle = fontStyle;
+            style.fontSize = size;
+            style.normal.textColor = color;
+
+            return style;
+        }
     }
 }

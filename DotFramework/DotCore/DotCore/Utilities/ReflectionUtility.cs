@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotEditor.Core.Utilities
+namespace Dot.Core.Utilities
 {
     public static class ReflectionUtility
     {

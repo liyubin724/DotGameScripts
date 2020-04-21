@@ -63,10 +63,13 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\BitUtil.cs" />
-    <Compile Include="Util\DontDestoryBehaviour.cs" />
-    <Compile Include="Util\DontDestroyHandler.cs" />
-    <Compile Include="Util\MathUtil.cs" />
+    <Compile Include="Utilities\ArrayUtility.cs" />
+    <Compile Include="Utilities\AssemblyUtility.cs" />
+    <Compile Include="Utilities\BitUtil.cs" />
+    <Compile Include="Utilities\DontDestoryBehaviour.cs" />
+    <Compile Include="Utilities\DontDestroyHandler.cs" />
+    <Compile Include="Utilities\MathUtil.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
