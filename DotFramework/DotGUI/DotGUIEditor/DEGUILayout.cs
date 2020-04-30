@@ -199,5 +199,15 @@ namespace DotEditor.EGUI
             }
             return selected;
         }
+
+         public static bool ToolbarButton(string text,float width = 60)
+        {
+            return ToolbarButton(new GUIContent(text), width);
+        }
+
+        public static bool ToolbarButton(GUIContent content,float width = 60)
+        {
+            return GUILayout.Button(content, EditorStyles.toolbarButton, GUILayout.Width(width));
+        }
     }
 }

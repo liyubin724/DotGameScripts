@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58A493EC-9621-4800-8C87-D393F373324F}</ProjectGuid>
+    <ProjectGuid>{6E6F9AAD-D818-47D6-BABF-9474E68383CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dot.GUI</RootNamespace>
-    <AssemblyName>DotGUI</AssemblyName>
+    <RootNamespace>Dot.Line</RootNamespace>
+    <AssemblyName>DotLine</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -39,38 +39,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEditor">
-      <HintPath>..\..\DotDependLibs\Editor\UnityEditor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\DotDependLibs\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawer\ConditionDrawerAttribute.cs" />
-    <Compile Include="Drawer\Condition\CompareAttribute.cs" />
-    <Compile Include="Drawer\Condition\DisableAttribute.cs" />
-    <Compile Include="Drawer\Condition\DisableIfAttribute.cs" />
-    <Compile Include="Drawer\Condition\HideAttribute.cs" />
-    <Compile Include="Drawer\Condition\HideIfAttribute.cs" />
-    <Compile Include="Drawer\Condition\ShowAttribute.cs" />
-    <Compile Include="Drawer\Condition\ShowIfAttribute.cs" />
-    <Compile Include="Drawer\DecoratorDrawerAttribute.cs" />
-    <Compile Include="Drawer\Decorator\BeginGroupAttribute.cs" />
-    <Compile Include="Drawer\Decorator\BeginHorizontalAttribute.cs" />
-    <Compile Include="Drawer\Decorator\BeginIndentAttribute.cs" />
-    <Compile Include="Drawer\Decorator\EndGroupAttribute.cs" />
-    <Compile Include="Drawer\Decorator\EndHorizontalAttribute.cs" />
-    <Compile Include="Drawer\Decorator\EndIndentAttribute.cs" />
-    <Compile Include="Drawer\Decorator\HelpAttribute.cs" />
-    <Compile Include="Drawer\ObjectDrawerAttribute.cs" />
-    <Compile Include="Drawer\PropertyDrawerAttribute.cs" />
-    <Compile Include="Drawer\Property\ButtonAttribute.cs" />
-    <Compile Include="Drawer\Property\EnumButtonAttribute.cs" />
-    <Compile Include="Drawer\VerificationDrawerAttribute.cs" />
-    <Compile Include="Drawer\Verification\NotNullAttribute.cs" />
+    <Compile Include="Bezier\BezierUtility.cs" />
+    <Compile Include="CatmullRom\CatmullRomUtility.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

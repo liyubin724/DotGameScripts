@@ -79,6 +79,10 @@
       <Project>{fb339ec9-55a6-4789-a316-b6b7f7055161}</Project>
       <Name>DotCoreEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DotCore\DotCore\DotCore.csproj">
+      <Project>{13725F38-BA86-4378-BA49-DD41BB638322}</Project>
+      <Name>DotCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotGUI\DotGUI.csproj">
       <Project>{58a493ec-9621-4800-8c87-d393f373324f}</Project>
       <Name>DotGUI</Name>
