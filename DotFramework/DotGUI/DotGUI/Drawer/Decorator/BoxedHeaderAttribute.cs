@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dot.GUI.Drawer.Condition
+namespace Dot.GUI.Drawer.Decorator
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
-    public class HideIfAttribute : CompareAttribute
+    public class BoxedHeaderAttribute : DecoratorAttribute
     {
-        public HideIfAttribute(string comparedName, object comparedValue) : base(comparedName, comparedValue)
+        public string Header { get; private set; }
+
+        public BoxedHeaderAttribute(string header)
         {
+            Header = header;
         }
     }
 }

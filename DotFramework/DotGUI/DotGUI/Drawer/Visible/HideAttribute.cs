@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Dot.GUI.Drawer.Condition
+namespace Dot.GUI.Drawer.Visible
 {
     [AttributeUsage(AttributeTargets.Field,AllowMultiple =false,Inherited =true)]
-    public class DisableAttribute : ConditionDrawerAttribute
+    public class HideAttribute : VisiableAtrribute
     {
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Dot.GUI.Drawer.Condition
+namespace Dot.GUI.Drawer.Layout
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class ShowAttribute : ConditionDrawerAttribute
+    public class BeginHorizontalAttribute : LayoutAttribute
     {
     }
 }

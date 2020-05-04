@@ -66,6 +66,7 @@
     <Compile Include="DEGUIStyles.cs" />
     <Compile Include="DEGUIUtility.cs" />
     <Compile Include="Drawer\DEPropertyDrawer.cs" />
+    <Compile Include="Drawer\ObjectDrawer.cs" />
     <Compile Include="SearchField\ToolbarSearchField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolbar\EditorToolbarExtend.cs" />

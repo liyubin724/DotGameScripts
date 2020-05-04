@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dot.GUI.Drawer
+namespace Dot.GUI.Drawer.Layout
 {
-    public class DecoratorDrawerAttribute : ObjectDrawerAttribute
+    public abstract class LayoutAttribute : DrawerAttribute
     {
     }
 }

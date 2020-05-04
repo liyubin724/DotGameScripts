@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dot.GUI.Drawer
 {
-    public abstract class PropertyDrawerAttribute : ObjectDrawerAttribute
+    public abstract class DrawerAttribute : Attribute
     {
     }
 }

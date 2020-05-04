@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dot.GUI.Drawer.Property
+namespace DotEditor.EGUI.Drawer
 {
-    public class EnumButtonAttribute : PropertyDrawerAttribute
+    public abstract class ObjectDrawer 
     {
     }
 }
