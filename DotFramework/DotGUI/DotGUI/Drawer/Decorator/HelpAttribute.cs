@@ -6,16 +6,16 @@ namespace Dot.GUI.Drawer.Decorator
     public class HelpAttribute : DecoratorAttribute
     {
         public string Text { get; private set; }
-        public MessageType Type { get; private set; }
+        public HelpMessageType MessageType { get; private set; }
 
-        public HelpAttribute(string text, MessageType type = MessageType.None)
+        public HelpAttribute(string text, HelpMessageType messageType = HelpMessageType.None)
         {
             Text = text;
-            Type = type;
+            MessageType = messageType;
         }
     }
 
-    public enum MessageType
+    public enum HelpMessageType
     {
         None,
         Info,

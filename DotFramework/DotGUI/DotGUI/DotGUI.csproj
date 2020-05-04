@@ -59,6 +59,11 @@
     <Compile Include="Drawer\Layout\EndHorizontalAttribute.cs" />
     <Compile Include="Drawer\Layout\EndIndentAttribute.cs" />
     <Compile Include="Drawer\Layout\LayoutAttribute.cs" />
+    <Compile Include="Drawer\Property\EnumButtonAttribute.cs" />
+    <Compile Include="Drawer\Property\Label\HideLabelAttribute.cs" />
+    <Compile Include="Drawer\Property\Label\NewLabelAttribute.cs" />
+    <Compile Include="Drawer\Property\Control\IndentAttribute.cs" />
+    <Compile Include="Drawer\Property\Control\ReadonlyAttribute.cs" />
     <Compile Include="Drawer\Property\PropertyAttribute.cs" />
     <Compile Include="Drawer\Verification\NotNullAttribute.cs" />
     <Compile Include="Drawer\Verification\VerificationAttribute.cs" />
