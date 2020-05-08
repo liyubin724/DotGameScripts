@@ -4,11 +4,11 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.EGUI.Drawer.Layout
+namespace DotEditor.GUIExtension.Drawer.Layout
 {
     public class BeginGroupDrawer : LayoutDrawer
     {
-        public BeginGroupDrawer(object data, FieldInfo field, NativeDrawerAttribute attr) : base(data, field, attr)
+        public BeginGroupDrawer(object data, FieldInfo field, DrawerAttribute attr) : base(data, field, attr)
         {
         }
 
@@ -20,7 +20,7 @@ namespace DotEditor.EGUI.Drawer.Layout
                 EditorGUILayout.BeginHorizontal(Styles.headerBackgroundStyle);
                 EditorGUILayout.LabelField(attr.Label, Styles.headerStyle);
                 EditorGUILayout.EndHorizontal();
-                GUILayout.Space(-Styles.spacing * 2);
+                UnityEngine.GUILayout.Space(-Styles.spacing * 2);
             }
 
             EditorGUILayout.BeginVertical(Styles.sectionBackgroundStyle);
@@ -43,8 +43,8 @@ namespace DotEditor.EGUI.Drawer.Layout
             static Styles()
             {
                 headerStyle = new GUIStyle(EditorStyles.boldLabel);
-                headerBackgroundStyle = new GUIStyle(GUI.skin.box);
-                sectionBackgroundStyle = new GUIStyle(GUI.skin.box)
+                headerBackgroundStyle = new GUIStyle(UnityEngine.GUI.skin.box);
+                sectionBackgroundStyle = new GUIStyle(UnityEngine.GUI.skin.box)
                 {
                     padding = new RectOffset(13, 12, 5, 5)
                 };

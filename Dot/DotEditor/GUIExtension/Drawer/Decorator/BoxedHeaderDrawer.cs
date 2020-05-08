@@ -3,12 +3,12 @@ using Dot.GUI.Drawer.Decorator;
 using System.Reflection;
 using UnityEngine;
 
-namespace DotEditor.EGUI.Drawer.Decorator
+namespace DotEditor.GUIExtension.Drawer.Decorator
 {
     [CustomDrawer(typeof(BoxedHeaderAttribute))]
     public class BoxedHeaderDrawer : DecoratorDrawer
     {
-        public BoxedHeaderDrawer(object data, FieldInfo field, NativeDrawerAttribute attr) : base(data, field, attr)
+        public BoxedHeaderDrawer(object data, FieldInfo field, DrawerAttribute attr) : base(data, field, attr)
         {
         }
 
@@ -17,7 +17,7 @@ namespace DotEditor.EGUI.Drawer.Decorator
             BoxedHeaderAttribute attr = GetAttr<BoxedHeaderAttribute>();
             if(attr!=null && !string.IsNullOrEmpty(attr.Header))
             {
-                DEGUILayout.DrawBoxHeader(attr.Header,GUILayout.ExpandWidth(true));
+                EGUILayout.DrawBoxHeader(attr.Header, UnityEngine.GUILayout.ExpandWidth(true));
             }
         }
     }

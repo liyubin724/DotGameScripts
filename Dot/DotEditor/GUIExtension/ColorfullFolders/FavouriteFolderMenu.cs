@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dot.GUI.Drawer
+namespace DotEditor.GUIExtension.ColorfullFolders
 {
-    public abstract class ConditionDrawerAttribute : NativeDrawerAttribute
+    public class FavouriteFolderMenu
     {
+
     }
 }

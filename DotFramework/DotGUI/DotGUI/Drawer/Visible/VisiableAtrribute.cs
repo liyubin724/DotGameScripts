@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dot.GUI.Drawer.Visible
 {
-    public abstract class VisiableAtrribute : DrawerAttribute
+    public abstract class VisiableAtrribute : NativeDrawerAttribute
     {
     }
 

@@ -23,14 +23,14 @@ namespace DotEditor.Asset.AssetPacker
                             EditorGUILayout.LabelField("" + i,EGUIStyles.MiddleLeftLabelStyle, GUILayout.Width(20),GUILayout.Height(40));
                             EditorGUILayout.BeginVertical();
                             {
-                                EGUI.BeginLabelWidth(60);
+                                GUIExtension.BeginLabelWidth(60);
                                 {
                                     EditorGUILayout.TextField("Path : ", RepeatAddressDatas[i].assetPath);
 
                                     UnityObject uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(RepeatAddressDatas[i].assetPath);
                                     EditorGUILayout.ObjectField("Target:",uObj, typeof(UnityObject), false);
                                 }
-                                EGUI.EndLableWidth();
+                                GUIExtension.EndLableWidth();
                             }
                             EditorGUILayout.EndVertical();
                         }

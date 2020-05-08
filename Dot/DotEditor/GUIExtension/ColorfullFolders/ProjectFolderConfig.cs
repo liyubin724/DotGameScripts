@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Dot.GUI.Drawer
+namespace DotEditor.GUIExtension.ColorfullFolders
 {
-    public abstract class ConditionDrawerAttribute : NativeDrawerAttribute
+    public class ProjectFolderConfig : ScriptableObject
     {
+
     }
 }

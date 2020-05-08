@@ -6,20 +6,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEditor.EGUI.Drawer
+namespace DotEditor.GUIExtension.Drawer
 {
     public abstract class AttributeDrawer 
     {
         public object Data { get; private set; }
         public FieldInfo Field { get; private set; }
-        public NativeDrawerAttribute Attr { get; private set; }
+        public DrawerAttribute Attr { get; private set; }
 
-        public T GetAttr<T>() where T:NativeDrawerAttribute
+        public T GetAttr<T>() where T:DrawerAttribute
         {
             return (T)Attr;
         }    
 
-        protected AttributeDrawer(object data,FieldInfo field,NativeDrawerAttribute attr)
+        protected AttributeDrawer(object data,FieldInfo field,DrawerAttribute attr)
         {
             Data = data;
             Field = field;
@@ -29,7 +29,7 @@ namespace DotEditor.EGUI.Drawer
 
     public abstract class DecoratorDrawer : AttributeDrawer
     {
-        protected DecoratorDrawer(object data, FieldInfo field, NativeDrawerAttribute attr) : base(data, field, attr)
+        protected DecoratorDrawer(object data, FieldInfo field, DrawerAttribute attr) : base(data, field, attr)
         {
         }
 
@@ -38,7 +38,7 @@ namespace DotEditor.EGUI.Drawer
 
     public abstract class LayoutDrawer : AttributeDrawer
     {
-        protected LayoutDrawer(object data, FieldInfo field, NativeDrawerAttribute attr) : base(data, field, attr)
+        protected LayoutDrawer(object data, FieldInfo field, DrawerAttribute attr) : base(data, field, attr)
         {
         }
 

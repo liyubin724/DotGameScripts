@@ -4,6 +4,9 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
+using DGUI = DotEditor.GUIExtension.EGUI;
+using DGUILayout = DotEditor.GUIExtension.EGUILayout;
+
 namespace DotEditor.Asset.AssetAddress
 {
     [CustomEditor(typeof(AssetAddressGroup))]
@@ -73,11 +76,11 @@ namespace DotEditor.Asset.AssetAddress
             filterResRList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 string assetPath = filterResList[index];
-                EGUI.BeginLabelWidth(40);
+                DGUI.BeginLabelWidth(40);
                 {
                     EditorGUI.TextField(rect, "" + index, assetPath);
                 }
-                EGUI.EndLableWidth();
+                DGUI.EndLableWidth();
             };
         }
 
@@ -85,7 +88,7 @@ namespace DotEditor.Asset.AssetAddress
         {
             serializedObject.Update();
 
-            EGUILayout.DrawScript(target);
+            DGUILayout.DrawScript(target);
 
             EditorGUILayout.PropertyField(groupName);
             EditorGUILayout.PropertyField(isEnable);

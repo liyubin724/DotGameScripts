@@ -1,6 +1,6 @@
-﻿using Dot.Ini;
-using DotEditor.Core.EGUI;
-using DotEditor.EGUI.Window;
+﻿using Dot.Config.Ini;
+using DotEditor.GUIExtension;
+using DotEditor.Core.Window;
 using ReflectionMagic;
 using System;
 using System.Collections.Generic;

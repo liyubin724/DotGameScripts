@@ -249,7 +249,7 @@ namespace DotEditor.Asset.AssetPacker
 
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(160));
                 {
-                    EGUI.BeginGUIBackgroundColor(Color.red);
+                    GUIExtension.BeginGUIBackgroundColor(Color.red);
                     {
                         if (GUILayout.Button(Contents.OperationAutoBuildContent, GUILayout.ExpandHeight(true),GUILayout.ExpandWidth(true)))
                         {
@@ -263,7 +263,7 @@ namespace DotEditor.Asset.AssetPacker
                             };
                         }
                     }
-                    EGUI.EndGUIBackgroundColor();
+                    GUIExtension.EndGUIBackgroundColor();
                 }
                 EditorGUILayout.EndVertical();
             }

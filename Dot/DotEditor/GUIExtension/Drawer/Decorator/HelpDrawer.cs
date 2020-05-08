@@ -3,12 +3,12 @@ using Dot.GUI.Drawer.Decorator;
 using System.Reflection;
 using UnityEditor;
 
-namespace DotEditor.EGUI.Drawer.Decorator
+namespace DotEditor.GUIExtension.Drawer.Decorator
 {
     [CustomDrawer(typeof(HelpAttribute))]
     public class HelpDrawer : DecoratorDrawer
     {
-        public HelpDrawer(object data, FieldInfo field, NativeDrawerAttribute attr) : base(data, field, attr)
+        public HelpDrawer(object data, FieldInfo field, DrawerAttribute attr) : base(data, field, attr)
         {
         }
 

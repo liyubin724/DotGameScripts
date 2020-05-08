@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dot.GUI.Drawer.Layout
 {
-    public abstract class LayoutAttribute : DrawerAttribute
+    public abstract class LayoutAttribute : NativeDrawerAttribute
     {
     }
 }

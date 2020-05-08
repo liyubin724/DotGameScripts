@@ -23,7 +23,7 @@ namespace DotEditor.Asset.AssetAddress
             Rect curRect = position;
             curRect.height = EditorGUIUtility.singleLineHeight;
 
-            EGUI.DrawAssetFolderSelection(curRect, assetFolder);
+            GUIExtension.DrawAssetFolderSelection(curRect, assetFolder);
             
             curRect.y += curRect.height;
             EditorGUI.PropertyField(curRect, isIncludeSubfolder);

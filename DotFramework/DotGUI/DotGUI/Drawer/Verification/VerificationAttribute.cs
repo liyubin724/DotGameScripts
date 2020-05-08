@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dot.GUI.Drawer.Verification
 {
-    public abstract class VerificationAttribute : DrawerAttribute
+    public abstract class VerificationAttribute : NativeDrawerAttribute
     {
     }
     public abstract class VerificationCompareAttribute : ConditionDrawerAttribute

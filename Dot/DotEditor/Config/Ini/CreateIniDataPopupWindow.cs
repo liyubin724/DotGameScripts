@@ -1,6 +1,6 @@
 ﻿using Dot.Config.Ini;
-using DotEditor.Core.EGUI;
-using DotEditor.EGUI.Window;
+using DotEditor.GUIExtension;
+using DotEditor.GUIExtension.Windows;
 using System;
 using System.Collections.Generic;
 using UnityEditor;

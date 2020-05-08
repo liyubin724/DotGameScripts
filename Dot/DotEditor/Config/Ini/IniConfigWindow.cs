@@ -1,7 +1,6 @@
-﻿using Dot.Ini;
-using DotEditor.Core.EGUI;
-using DotEditor.EGUI;
-using DotEditor.Util;
+﻿using Dot.Config.Ini;
+using DotEditor.Core;
+using DotEditor.Core.Utilities;
 using ReflectionMagic;
 using System.Collections.Generic;
 using UnityEditor;
@@ -59,7 +58,7 @@ namespace DotEditor.Config.Ini
             string filePath = EditorUtility.OpenFilePanel(Contents.OpenStr, Application.dataPath, "txt");
             if(!string.IsNullOrEmpty(filePath))
             {
-                ConfigAssetPath = PathUtil.GetAssetPath(filePath);
+                ConfigAssetPath = PathUtility.GetAssetPath(filePath);
             }
         }
 
@@ -75,11 +74,11 @@ namespace DotEditor.Config.Ini
                 string filePath = EditorUtility.SaveFilePanel(Contents.SaveStr, Application.dataPath, "ini_config", "txt");
                 if(!string.IsNullOrEmpty(filePath))
                 {
-                    configAssetPath = PathUtil.GetAssetPath(filePath);
+                    configAssetPath = PathUtility.GetAssetPath(filePath);
                 }
             }
 
-            iniConfig.Save(PathUtil.GetDiskPath(ConfigAssetPath));
+            iniConfig.Save(PathUtility.GetDiskPath(ConfigAssetPath));
             AssetDatabase.ImportAsset(ConfigAssetPath);
         }
 
@@ -128,35 +127,35 @@ namespace DotEditor.Config.Ini
         private string searchText = string.Empty;
         private void DrawToolbar()
         {
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar,GUILayout.ExpandWidth(true));
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, UnityEngine.GUILayout.ExpandWidth(true));
             {
-                if(GUILayout.Button(Contents.OpenStr,EditorStyles.toolbarButton,GUILayout.Width(40)))
+                if(UnityEngine.GUILayout.Button(Contents.OpenStr, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(40)))
                 {
                     OpenIniConfig();
                 }
                 
-                if (GUILayout.Button(Contents.NewStr, EditorStyles.toolbarButton, GUILayout.Width(40)))
+                if (UnityEngine.GUILayout.Button(Contents.NewStr, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(40)))
                 {
                     NewIniConfig();
                 }
                 if(iniConfig!=null)
                 {
-                    if (GUILayout.Button(Contents.SaveStr, EditorStyles.toolbarButton, GUILayout.Width(40)))
+                    if (UnityEngine.GUILayout.Button(Contents.SaveStr, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(40)))
                     {
                         SaveIniConfig();
                     }
                 }
 
-                GUILayout.FlexibleSpace();
+                UnityEngine.GUILayout.FlexibleSpace();
                 if(iniConfig!=null)
                 {
-                    if (GUILayout.Button(Contents.AddGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
+                    if (UnityEngine.GUILayout.Button(Contents.AddGroupContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
                     {
                         Vector2 size = new Vector2(300, 150);
                         Rect rect = new Rect(position.position + 0.5f * position.size - size * 0.5f, size);
-                        CreateIniGroupPopupWindow.ShowWin(iniConfig, (name)=>
+                        CreateIniGroupPopupWindow.ShowWin(iniConfig, (object name)=>
                         {
-                        },rect);
+                        }, rect);
                     }
                 }
                 if(searchField == null)
@@ -179,19 +178,19 @@ namespace DotEditor.Config.Ini
                 {
                     EditorGUILayout.LabelField(new GUIContent(group.Name, group.Comment));
 
-                    if (GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
+                    if (UnityEngine.GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
                     {
                         deleteData = new DeleteData() { groupName = group.Name };
                     }
 
-                    if (GUILayout.Button(Contents.AddDataContent,EditorStyles.toolbarButton,GUILayout.Width(80)))
+                    if (UnityEngine.GUILayout.Button(Contents.AddDataContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
                     {
-                        Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
+                        Vector2 pos = UnityEngine.GUIUtility.GUIToScreenPoint(Input.mousePosition);
                         Vector2 size = new Vector2(300, 200);
-                        Rect rect = new Rect(position.position + 0.5f*position.size - size * 0.5f, size);
-                        CreateIniDataPopupWindow.ShowWin(group, (groupName,dataKey)=>
+                        Rect rect = new Rect(position.position + 0.5f* position.size - size * 0.5f, size);
+                        CreateIniDataPopupWindow.ShowWin(group, (object groupName, object dataKey)=>
                         {
-                        },rect);
+                        }, rect);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -223,7 +222,7 @@ namespace DotEditor.Config.Ini
                     value = EditorGUILayout.TextField(new GUIContent(data.Key, data.Comment), data.Value);
                 }
 
-                if(GUILayout.Button(Contents.DeleteContent,GUILayout.Width(20)))
+                if(UnityEngine.GUILayout.Button(Contents.DeleteContent, UnityEngine.GUILayout.Width(20)))
                 {
                     deleteData = new DeleteData() { groupName = group.Name, dataKey = data.Key };
                 }
