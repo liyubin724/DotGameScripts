@@ -1,0 +1,31 @@
+/*The file was created by tool.
+-----------------------------------------------
+Please don't change it manually!!!
+Please don't change it manually!!!
+Please don't change it manually!!!
+-----------------------------------------------
+*/
+<%+using Dot.Tool.Proto;%>
+<%ProtoConfig protoConfig = context.Get<ProtoConfig>("protoConfig");%>
+<%ProtoGroup protoGroup = context.Get<ProtoGroup>("protoGroup");%>
+namespace <%=protoConfig.SpaceName%>
+{
+    public static class <%=protoGroup.Name%>
+    {
+<%for(int i =0;i<protoGroup.MessageGroups.Count;++i){%>
+<%ProtoMessageGroup messageGroup = protoGroup.MessageGroups[i];%>
+        #region Start ----<%=messageGroup.Name%>----
+<%for(int j =0;j<messageGroup.Messages.Count;++j){%>
+<%ProtoMessage message = messageGroup.Messages[j];%>
+<%if(message.Enable){%>
+<%if(!string.IsNullOrEmpty(message.Comment)){%>
+        //<%=message.Comment%>
+<%}%>
+        public static readonly int <%=message.Name%> = <%=message.Value%>;
+<%}%>
+<%}%>
+        #endregion End ----<%=messageGroup.Name%>----
+        
+<%}%>        
+    }
+}

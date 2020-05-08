@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9EA39C16-1026-4A32-82C1-74B18D7C1667}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dot</RootNamespace>
+    <AssemblyName>DotEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\libs\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\libs\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AI\FSM\StateBase.cs" />
+    <Compile Include="AI\FSM\StateEventArgs.cs" />
+    <Compile Include="AI\FSM\StateMachine.cs" />
+    <Compile Include="AI\FSM\Token.cs" />
+    <Compile Include="AssetUtil.cs" />
+    <Compile Include="Asset\AssetBridge.cs" />
+    <Compile Include="Asset\AssetConst.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetLoader.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetNode.cs" />
+    <Compile Include="Asset\AssetLoader\AAsyncOperation.cs" />
+    <Compile Include="Asset\AssetLoader\AssetHandler.cs" />
+    <Compile Include="Asset\AssetLoader\AssetLoaderData.cs" />
+    <Compile Include="Asset\AssetManager.cs" />
+    <Compile Include="Asset\AssetManager_Clean.cs" />
+    <Compile Include="Asset\AssetManager_Scene.cs" />
+    <Compile Include="Asset\AssetUtil.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAssetNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAsyncOperation.cs" />
+    <Compile Include="Asset\BundleLoader\BundleLoader.cs" />
+    <Compile Include="Asset\BundleLoader\BundleNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleSceneLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAssetNode.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAsyncOperation.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseSceneLoader.cs" />
+    <Compile Include="Asset\Datas\AssetAddressConfig.cs" />
+    <Compile Include="Asset\Datas\AssetBundleConfig.cs" />
+    <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
+    <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
+    <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
+    <Compile Include="Config\Ini\IniConfig.cs" />
+    <Compile Include="Context\EnvContext.cs" />
+    <Compile Include="Context\IContext.cs" />
+    <Compile Include="Context\Inject\InjectAttribute.cs" />
+    <Compile Include="Context\Inject\InjectUtil.cs" />
+    <Compile Include="Context\IntContext.cs" />
+    <Compile Include="Context\StringContext.cs" />
+    <Compile Include="Context\TypeContext.cs" />
+    <Compile Include="Crypto\AESCrypto.cs" />
+    <Compile Include="Crypto\CryptoHelper.cs" />
+    <Compile Include="Crypto\DESCrypto.cs" />
+    <Compile Include="Crypto\MD5Crypto.cs" />
+    <Compile Include="Dispatch\EventData.cs" />
+    <Compile Include="Dispatch\EventDispatcher.cs" />
+    <Compile Include="Dispatch\EventManager.cs" />
+    <Compile Include="Dispose\ADisposable.cs" />
+    <Compile Include="Dispose\IDispose.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartData.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartInstance.cs" />
+    <Compile Include="Entity\Avatar\AvatarPrefabPartData.cs" />
+    <Compile Include="Entity\Avatar\AvatarRendererPartData.cs" />
+    <Compile Include="Entity\Avatar\AvatarUtil.cs" />
+    <Compile Include="Entity\Node\NodeBehaviour.cs" />
+    <Compile Include="Entity\Node\NodeData.cs" />
+    <Compile Include="Entity\Node\NodeType.cs" />
+    <Compile Include="Extension\StringExtensions.cs" />
+    <Compile Include="Extension\TransformExtensions.cs" />
+    <Compile Include="Extension\UnityObjectExtensions.cs" />
+    <Compile Include="Generic\ListDictionary.cs" />
+    <Compile Include="Generic\UniqueID.cs" />
+    <Compile Include="Generic\UniqueIntID.cs" />
+    <Compile Include="GOPool\GameObjectPool.cs" />
+    <Compile Include="GOPool\GameObjectPoolConst.cs" />
+    <Compile Include="GOPool\GameObjectPoolGroup.cs" />
+    <Compile Include="GOPool\GameObjectPoolItem.cs" />
+    <Compile Include="GOPool\GameObjectPoolManager.cs" />
+    <Compile Include="GUI\Drawer\ConditionDrawerAttribute.cs" />
+    <Compile Include="GUI\Drawer\Decorator\BoxedHeaderAttribute.cs" />
+    <Compile Include="GUI\Drawer\Decorator\DecoratorAttribute.cs" />
+    <Compile Include="GUI\Drawer\Decorator\HelpAttribute.cs" />
+    <Compile Include="GUI\Drawer\DrawerAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\BeginGroupAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\BeginHorizontalAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\BeginIndentAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\EndGroupAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\EndHorizontalAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\EndIndentAttribute.cs" />
+    <Compile Include="GUI\Drawer\Layout\LayoutAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\Control\IndentAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\Control\ReadonlyAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\EnumButtonAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\Label\HideLabelAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\Label\NewLabelAttribute.cs" />
+    <Compile Include="GUI\Drawer\Property\PropertyAttribute.cs" />
+    <Compile Include="GUI\Drawer\Verification\NotNullAttribute.cs" />
+    <Compile Include="GUI\Drawer\Verification\VerificationAttribute.cs" />
+    <Compile Include="GUI\Drawer\Visible\HideAttribute.cs" />
+    <Compile Include="GUI\Drawer\Visible\HideIfAttribute.cs" />
+    <Compile Include="GUI\Drawer\Visible\ShowAttribute.cs" />
+    <Compile Include="GUI\Drawer\Visible\ShowIfAttribute.cs" />
+    <Compile Include="GUI\Drawer\Visible\VisiableAtrribute.cs" />
+    <Compile Include="Log\ILog.cs" />
+    <Compile Include="Line\Bezier\BezierUtility.cs" />
+    <Compile Include="Line\CatmullRom\CatmullRomUtility.cs" />
+    <Compile Include="Log\Log4Net\LogExceptions.cs" />
+    <Compile Include="Log\Log4Net\Logger.cs" />
+    <Compile Include="Log\LogUtil.cs" />
+    <Compile Include="Log\Log4Net\UnityConsoleAppender.cs" />
+    <Compile Include="Map\Lightmap\RendererLightmap.cs" />
+    <Compile Include="Map\Lightmap\SceneLightmap.cs" />
+    <Compile Include="Map\MapConst.cs" />
+    <Compile Include="Map\MapLightmapData.cs" />
+    <Compile Include="Map\MapManager.cs" />
+    <Compile Include="Map\MapRootBehaviour.cs" />
+    <Compile Include="Net\Client\ClientNet.cs" />
+    <Compile Include="Net\Client\ClientNetConst.cs" />
+    <Compile Include="Net\Client\ClientNetSession.cs" />
+    <Compile Include="Net\Client\ClientNet_Json.cs" />
+    <Compile Include="Net\Client\ClientNet_PB.cs" />
+    <Compile Include="Net\Message\Compressor\SnappyMessageCompressor.cs" />
+    <Compile Include="Net\Message\Crypto\AESMessageCrypto.cs" />
+    <Compile Include="Net\Message\IMessageCompressor.cs" />
+    <Compile Include="Net\Message\IMessageCrypto.cs" />
+    <Compile Include="Net\Message\MessageConst.cs" />
+    <Compile Include="Net\Message\MessageReader.cs" />
+    <Compile Include="Net\Message\MessageWriter.cs" />
+    <Compile Include="Net\NetConst.cs" />
+    <Compile Include="Net\NetManager.cs" />
+    <Compile Include="Net\NetManager_Client.cs" />
+    <Compile Include="Net\NetManager_Server.cs" />
+    <Compile Include="Net\Server\ServerNet.cs" />
+    <Compile Include="Net\Server\ServerNetConst.cs" />
+    <Compile Include="Net\Server\ServerNetListener.cs" />
+    <Compile Include="Net\Server\ServerNetListener_Json.cs" />
+    <Compile Include="Net\Server\ServerNetListener_PB.cs" />
+    <Compile Include="Net\Server\ServerNetSession.cs" />
+    <Compile Include="Net\Stream\BufferStream.cs" />
+    <Compile Include="Net\Stream\MemoryStreamEx.cs" />
+    <Compile Include="Pool\ObjectPool.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\UpdateProxy.cs" />
+    <Compile Include="Serialize\Binary\BinarySerializeReader.cs" />
+    <Compile Include="Serialize\Binary\BinarySerializeWriter.cs" />
+    <Compile Include="Serialize\Lua\LuaSerializeWriter.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="SingletonBehaviour.cs" />
+    <Compile Include="Timer\HierarchicalTimerWheel.cs" />
+    <Compile Include="Timer\TimerManager.cs" />
+    <Compile Include="Timer\TimerTask.cs" />
+    <Compile Include="Timer\TimerWheel.cs" />
+    <Compile Include="Utilities\ArrayUtility.cs" />
+    <Compile Include="Utilities\AssemblyUtility.cs" />
+    <Compile Include="Utilities\BitUtil.cs" />
+    <Compile Include="Utilities\DontDestoryBehaviour.cs" />
+    <Compile Include="Utilities\DontDestroyHandler.cs" />
+    <Compile Include="Utilities\MathUtil.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Timeline\" />
+    <Folder Include="UI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotTools\DotSnappy\DotSnappy\DotSnappy.csproj">
+      <Project>{dd329d5d-d18d-4390-99e4-17439e8ad4d7}</Project>
+      <Name>DotSnappy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotTools\PriorityQueue\PriorityQueue\PriorityQueue.csproj">
+      <Project>{ecbdfa0f-fed1-40ab-883d-f4a28245e418}</Project>
+      <Name>PriorityQueue</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
