@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Dot.Core.Extension
+namespace Dot.Utilities
 {
-    public static class StringExtensions
+    public static class StringUtility
     {
         /// <summary>
         /// 替换部分特殊字符为指定的字符串

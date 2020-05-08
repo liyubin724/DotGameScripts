@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.GUIExtension.SearchField
+namespace DotEditor.GUIExtension
 {
     public class ToolbarSearchField
     {

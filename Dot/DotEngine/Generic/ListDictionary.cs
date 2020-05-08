@@ -13,7 +13,11 @@ namespace Dot.Core.Generic
         {
             get
             {
-                return dataDic[key];
+                if(dataDic.TryGetValue(key,out V v))
+                {
+                    return v;
+                }
+                return default(V);
             }
             set
             {
