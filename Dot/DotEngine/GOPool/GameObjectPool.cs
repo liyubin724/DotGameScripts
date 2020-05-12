@@ -1,11 +1,10 @@
-﻿using Dot.Core.Asset;
+﻿using Dot.Asset;
 using Dot.Core.Extension;
 using Dot.Core.Log;
 using Dot.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
@@ -228,14 +227,7 @@ namespace Dot.Pool
             }
             else
             {
-                //在使用DotAsset进行资源加载时，AssetUtil会接管Instantiate的行为
-                if(AssetUtil.InstanceAsset !=null)
-                {
-                    item = AssetUtil.InstanceAsset(uniqueName, instanceOrPrefabTemplate);
-                }else
-                {
-                    item = GameObject.Instantiate(instanceOrPrefabTemplate);
-                }
+                item = (GameObject)AssetUtil.InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
             }
 
             if (item != null)

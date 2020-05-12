@@ -60,7 +60,6 @@
     <Compile Include="AI\FSM\StateEventArgs.cs" />
     <Compile Include="AI\FSM\StateMachine.cs" />
     <Compile Include="AI\FSM\Token.cs" />
-    <Compile Include="AssetUtil.cs" />
     <Compile Include="Asset\AssetBridge.cs" />
     <Compile Include="Asset\AssetConst.cs" />
     <Compile Include="Asset\AssetLoader\AAssetLoader.cs" />
