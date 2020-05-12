@@ -74,10 +74,6 @@
     <Compile Include="Config\Ini\CreateDataPopupContent.cs" />
     <Compile Include="Config\Ini\CreateGroupPopupContent.cs" />
     <Compile Include="Config\Ini\IniConfigWindow.cs" />
-    <Compile Include="EGUILayout.cs" />
-    <Compile Include="EGUIResources.cs" />
-    <Compile Include="EGUIStyles.cs" />
-    <Compile Include="EGUIToolbarSearchField.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfigEditor.cs" />
