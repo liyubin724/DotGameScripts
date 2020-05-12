@@ -100,7 +100,7 @@ namespace Dot.Config.Ini
             string comment = null;
             string[] optionValues = null;
 
-            for(int i =2;i<lines.Length;++i)
+            for(int i =1;i<lines.Length;++i)
             {
                 string trimLine = lines[i].Trim();
                 //空行及注释行会被忽略
@@ -160,10 +160,10 @@ namespace Dot.Config.Ini
                     if(!string.IsNullOrEmpty(key))
                     {
                         group.AddData(key, value, comment, optionValues);
-                        comment = null;
-                        optionValues = null;
                     }
                 }
+                comment = null;
+                optionValues = null;
             }
         }
 
@@ -323,11 +323,11 @@ namespace Dot.Config.Ini
             for(int i =0;i<groups.Count;++i)
             {
                 IniGroup group = groups[i];
-                configSB.AppendLine($"#{group.Name}");
                 if(!string.IsNullOrEmpty(group.Comment))
                 {
                     configSB.AppendLine($"-{group.Comment}");
                 }
+                configSB.AppendLine($"#{group.Name}");
 
                 string[] keys = group.Keys;
                 for(int j = 0;j<keys.Length;++j)

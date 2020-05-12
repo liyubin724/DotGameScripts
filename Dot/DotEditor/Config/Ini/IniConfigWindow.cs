@@ -137,6 +137,7 @@ namespace DotEditor.Config.Ini
         {
             assetPath = null;
             iniConfig = new IniConfig();
+            iniConfig.IsReadonly = false;
         }
 
         private void DrawGroup(IniGroup group)
