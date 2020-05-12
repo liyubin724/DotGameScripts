@@ -118,8 +118,6 @@
     <Compile Include="Utilities\SpriteAtlasUtility.cs" />
     <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />
-    <Compile Include="Window\DraggablePopupWindow.cs" />
-    <Compile Include="Window\PopupWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DotEngine\DotEngine.csproj">
