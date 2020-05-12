@@ -71,8 +71,8 @@
     <Compile Include="Asset\AssetPacker\BundleBuildConfig.cs" />
     <Compile Include="Asset\AssetPacker\BundleBuildPipeline.cs" />
     <Compile Include="Asset\AssetPacker\IAssetBundlePacker.cs" />
-    <Compile Include="Config\Ini\CreateIniDataPopupWindow.cs" />
-    <Compile Include="Config\Ini\CreateIniGroupPopupWindow.cs" />
+    <Compile Include="Config\Ini\CreateDataPopupContent.cs" />
+    <Compile Include="Config\Ini\CreateGroupPopupContent.cs" />
     <Compile Include="Config\Ini\IniConfigWindow.cs" />
     <Compile Include="EGUILayout.cs" />
     <Compile Include="EGUIResources.cs" />

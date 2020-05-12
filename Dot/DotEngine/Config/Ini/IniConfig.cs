@@ -97,8 +97,6 @@ namespace Dot.Config.Ini
             }
 
             IniGroup group = null;
-            IniData data = null;
-
             string comment = null;
             string[] optionValues = null;
 
@@ -120,7 +118,6 @@ namespace Dot.Config.Ini
                             group.Comment = comment;
 
                             comment = null;
-                            data = null;
                             optionValues = null;
 
                             groups.Add(group.Name, group);

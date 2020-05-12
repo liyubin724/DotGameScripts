@@ -1,6 +1,6 @@
-﻿using DotEditor.Core;
-using DotEditor.Core.TreeGUI;
+﻿using DotEditor.Core.TreeGUI;
 using DotEditor.Core.Utilities;
+using DotEditor.GUIExtension;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -137,16 +137,16 @@ namespace DotEditor.Asset.AssetPacker
             drawRect.width = (contentRect.width - drawRect.x - contentRect.height - 20)*.5f;
             drawRect.height = EditorGUIUtility.singleLineHeight;
 
-            GUIExtension.BeginLabelWidth(80);
+            EGUI.BeginLabelWidth(80);
             {
                 EditorGUI.TextField(drawRect,"address", addressData.assetAddress);
             }
-            GUIExtension.EndLableWidth();
+            EGUI.EndLableWidth();
 
             drawRect.x += drawRect.width+5;
             drawRect.height = EditorGUIUtility.singleLineHeight;
 
-            GUIExtension.BeginLabelWidth(80);
+            EGUI.BeginLabelWidth(80);
             {
                 EditorGUI.TextField(drawRect, "path", addressData.assetPath);
                 drawRect.y += drawRect.height;
@@ -156,7 +156,7 @@ namespace DotEditor.Asset.AssetPacker
                 drawRect.y += drawRect.height;
                 EditorGUI.TextField(drawRect, "labels", string.Join(",", addressData.labels));
             }
-            GUIExtension.EndLableWidth();
+            EGUI.EndLableWidth();
 
             drawRect = contentRect;
             drawRect.x += contentRect.width - contentRect.height - 20;

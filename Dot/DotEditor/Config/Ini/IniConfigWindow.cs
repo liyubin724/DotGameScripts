@@ -1,8 +1,8 @@
 ﻿using Dot.Config.Ini;
-using DotEditor.GUIExtension;
+using Dot.Core.Generic;
 using DotEditor.Core.Utilities;
+using DotEditor.GUIExtension;
 using ReflectionMagic;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,34 +25,15 @@ namespace DotEditor.Config.Ini
         private void OnGUI()
         {
             DrawToolbar();
+
             if (iniConfig != null)
             {
                 dynamic config = iniConfig.AsDynamic();
-                Dictionary<string, IniGroup> groupDic = config.groupDic;
+                ListDictionary<string, IniGroup> groups = config.groups;
 
-                if (deleteData != null)
+                for(int i =0;i<groups.Count;++i)
                 {
-                    if (string.IsNullOrEmpty(deleteData.dataKey))
-                    {
-                        if (groupDic.ContainsKey(deleteData.groupName))
-                        {
-                            groupDic.Remove(deleteData.groupName);
-                        }
-                    }
-                    else
-                    {
-                        if (groupDic.TryGetValue(deleteData.groupName, out IniGroup g))
-                        {
-                            g.RemoveData(deleteData.dataKey);
-                        }
-                    }
-
-                    deleteData = null;
-                }
-
-                foreach (var kvp in groupDic)
-                {
-                    DrawGroup(kvp.Value);
+                    DrawGroup(groups[i]);
                 }
             }
         }
@@ -90,9 +71,8 @@ namespace DotEditor.Config.Ini
                     {
                         Vector2 size = new Vector2(300, 150);
                         Rect rect = new Rect(position.position + 0.5f * position.size - size * 0.5f, size);
-                        CreateIniGroupPopupWindow.ShowWin(iniConfig, (object name) =>
-                        {
-                        }, rect);
+
+                        CreateGroupPopupContent.ShowWin(iniConfig,rect);
                     }
                     if (searchField == null)
                     {
@@ -159,8 +139,6 @@ namespace DotEditor.Config.Ini
             iniConfig = new IniConfig();
         }
 
-        private DeleteData deleteData = null;
-        
         private void DrawGroup(IniGroup group)
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -169,31 +147,31 @@ namespace DotEditor.Config.Ini
                 {
                     EditorGUILayout.LabelField(new GUIContent(group.Name, group.Comment));
 
-                    if (UnityEngine.GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
+                    if(GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
                     {
-                        deleteData = new DeleteData() { groupName = group.Name };
+                        iniConfig.DeleteGroup(group.Name);
+                        GUIUtility.ExitGUI();
+                        Repaint();
                     }
 
-                    if (UnityEngine.GUILayout.Button(Contents.AddDataContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
+                    if (GUILayout.Button(Contents.AddDataContent, EditorStyles.toolbarButton, UnityEngine.GUILayout.Width(80)))
                     {
-                        Vector2 pos = UnityEngine.GUIUtility.GUIToScreenPoint(Input.mousePosition);
+                        //Vector2 pos = UnityEngine.GUIUtility.GUIToScreenPoint(Input.mousePosition);
                         Vector2 size = new Vector2(300, 200);
                         Rect rect = new Rect(position.position + 0.5f* position.size - size * 0.5f, size);
-                        CreateIniDataPopupWindow.ShowWin(group, (object groupName, object dataKey)=>
-                        {
-                        }, rect);
+                        CreateDataPopupContent.ShowWin(group, rect);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
 
-                foreach(var dKVP in group.dataDic)
+                ListDictionary<string, IniData> datas = group.AsDynamic().datas;
+                for(int i =0;i<datas.Count;++i)
                 {
-                    if(string.IsNullOrEmpty(searchText))
+                    IniData data = datas[i];
+
+                    if(string.IsNullOrEmpty(searchText) || data.Key.ToLower().IndexOf(searchText)>=0)
                     {
-                        DrawData(group, dKVP.Value);
-                    }else if(dKVP.Key.ToLower().IndexOf(searchText) >= 0)
-                    {
-                        DrawData(group, dKVP.Value);
+                        DrawData(group, data);
                     }
                 }
             }
@@ -207,15 +185,17 @@ namespace DotEditor.Config.Ini
             {
                 if(data.OptionValues!=null && data.OptionValues.Length>0)
                 {
-                    value = DotEditorGUILayout.StringPopup(new GUIContent(data.Key,data.Comment), data.Value, data.OptionValues);
+                    value = EGUILayout.StringPopup(new GUIContent(data.Key,data.Comment), data.Value, data.OptionValues);
                 }else
                 {
                     value = EditorGUILayout.TextField(new GUIContent(data.Key, data.Comment), data.Value);
                 }
 
-                if(UnityEngine.GUILayout.Button(Contents.DeleteContent, UnityEngine.GUILayout.Width(20)))
+                if(GUILayout.Button(Contents.DeleteContent, GUILayout.Width(20)))
                 {
-                    deleteData = new DeleteData() { groupName = group.Name, dataKey = data.Key };
+                    group.RemoveData(data.Key);
+                    GUIUtility.ExitGUI();
+                    Repaint();
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -223,12 +203,6 @@ namespace DotEditor.Config.Ini
             {
                 data.Value = value;
             }
-        }
-
-        class DeleteData
-        {
-            public string groupName;
-            public string dataKey;
         }
 
         static class Contents

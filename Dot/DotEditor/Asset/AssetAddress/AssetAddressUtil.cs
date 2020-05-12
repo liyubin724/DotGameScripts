@@ -28,7 +28,7 @@ namespace DotEditor.Asset.AssetAddress
         [MenuItem("Game/Asset/Build Address", priority = 1)]
         public static void BuildAssetAddressConfig()
         {
-            AssetAddressGroup[] groups = AssetDatabaseUtil.FindInstances<AssetAddressGroup>();
+            AssetAddressGroup[] groups = AssetDatabaseUtility.FindInstances<AssetAddressGroup>();
             if(groups!=null && groups.Length>0)
             {
                 AssetAddressConfig config = GetOrCreateConfig();
@@ -87,7 +87,7 @@ namespace DotEditor.Asset.AssetAddress
 
         public static AssetAddressConfig GetOrCreateConfig()
         {
-            AssetAddressConfig[] configs = AssetDatabaseUtil.FindInstances<AssetAddressConfig>();
+            AssetAddressConfig[] configs = AssetDatabaseUtility.FindInstances<AssetAddressConfig>();
 
             AssetAddressConfig config;
             if (configs == null || configs.Length == 0)

@@ -1,4 +1,4 @@
-﻿using DotEditor.Core;
+﻿using DotEditor.GUIExtension;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -23,14 +23,14 @@ namespace DotEditor.Asset.AssetPacker
                             EditorGUILayout.LabelField("" + i,EGUIStyles.MiddleLeftLabelStyle, GUILayout.Width(20),GUILayout.Height(40));
                             EditorGUILayout.BeginVertical();
                             {
-                                GUIExtension.BeginLabelWidth(60);
+                                EGUI.BeginLabelWidth(60);
                                 {
                                     EditorGUILayout.TextField("Path : ", RepeatAddressDatas[i].assetPath);
 
                                     UnityObject uObj = AssetDatabase.LoadAssetAtPath<UnityObject>(RepeatAddressDatas[i].assetPath);
                                     EditorGUILayout.ObjectField("Target:",uObj, typeof(UnityObject), false);
                                 }
-                                GUIExtension.EndLableWidth();
+                                EGUI.EndLableWidth();
                             }
                             EditorGUILayout.EndVertical();
                         }

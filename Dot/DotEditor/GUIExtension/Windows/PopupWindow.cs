@@ -13,10 +13,12 @@ namespace DotEditor.GUIExtension.Windows
 
     public class PopupWindow : EditorWindow
     {
-        public static void ShowWin(Rect rect,PopupWindowContent content,bool isDrag = false,bool isCloseWhenLostFocus = false)
+        public static PopupWindow ShowWin(Rect rect,PopupWindowContent content,bool isDrag = false,bool isCloseWhenLostFocus = false)
         {
             var popupWin = EditorWindow.GetWindow<PopupWindow>();
             popupWin.Init(rect, content, isDrag, isCloseWhenLostFocus);
+
+            return popupWin;
         }
 
         private PopupWindowContent windowContent;

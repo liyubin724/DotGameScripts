@@ -1,7 +1,7 @@
 ﻿using DotEditor.Asset.AssetAddress;
-using DotEditor.Core;
 using DotEditor.Core.TreeGUI;
 using DotEditor.Core.Utilities;
+using DotEditor.GUIExtension;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -31,7 +31,7 @@ namespace DotEditor.Asset.AssetPacker
         
         private bool isExpandAll = false;
 
-        private EGUIToolbarSearchField searchField = null;
+        private ToolbarSearchField searchField = null;
         public string[] SearchCategories = new string[]
         {
             "All",
@@ -168,7 +168,7 @@ namespace DotEditor.Asset.AssetPacker
 
                 if(searchField == null)
                 {
-                    searchField = new EGUIToolbarSearchField((text) =>
+                    searchField = new ToolbarSearchField((text) =>
                     {
                         if(searchText!=text)
                         {
@@ -249,7 +249,7 @@ namespace DotEditor.Asset.AssetPacker
 
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(160));
                 {
-                    GUIExtension.BeginGUIBackgroundColor(Color.red);
+                    EGUI.BeginGUIBackgroundColor(Color.red);
                     {
                         if (GUILayout.Button(Contents.OperationAutoBuildContent, GUILayout.ExpandHeight(true),GUILayout.ExpandWidth(true)))
                         {
@@ -263,7 +263,7 @@ namespace DotEditor.Asset.AssetPacker
                             };
                         }
                     }
-                    GUIExtension.EndGUIBackgroundColor();
+                    EGUI.EndGUIBackgroundColor();
                 }
                 EditorGUILayout.EndVertical();
             }

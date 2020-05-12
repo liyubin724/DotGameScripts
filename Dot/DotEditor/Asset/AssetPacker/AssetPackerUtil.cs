@@ -1,5 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Asset.Datas;
+using Dot.Core.Utilities;
 using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
 using DotEditor.Core.Utilities;
@@ -22,7 +23,7 @@ namespace DotEditor.Asset.AssetPacker
         {
             AssetPackerConfig packerConfig = new AssetPackerConfig();
 
-            AssetAddressGroup[] groups = AssetDatabaseUtil.FindInstances<AssetAddressGroup>();
+            AssetAddressGroup[] groups = AssetDatabaseUtility.FindInstances<AssetAddressGroup>();
             if(groups!=null && groups.Length>0)
             {
                 foreach(var group in groups)
@@ -52,7 +53,7 @@ namespace DotEditor.Asset.AssetPacker
             {
                 RemoveAddressGroup(assetPackerConfig);
 
-                string[] assetPaths = AssetDatabaseUtil.FindAssets<AssetAddressConfig>();
+                string[] assetPaths = AssetDatabaseUtility.FindAssets<AssetAddressConfig>();
                 if (assetPaths == null || assetPaths.Length == 0)
                 {
                     Debug.LogError("AssetPackUtil::AddAddressGroup->AssetAddressConfig is not found!");
@@ -241,7 +242,7 @@ namespace DotEditor.Asset.AssetPacker
                     else if (obj.GetType() == typeof(DefaultAsset))
                     {
                         string folderPath = AssetDatabase.GetAssetPath(obj);
-                        string[] assets = AssetDatabaseUtil.FindAssetInFolder<Sprite>(folderPath);
+                        string[] assets = AssetDatabaseUtility.FindAssetInFolder<Sprite>(folderPath);
                         spriteAssetPathList.AddRange(assets);
                     }
                 }

@@ -48,7 +48,7 @@ namespace DotEditor.GUIExtension.Drawer
 
     public abstract class VerificationDrawer : AttributeDrawer
     {
-        protected VerificationDrawer(object data, FieldInfo field) : base(data, field)
+        protected VerificationDrawer(object data, FieldInfo field) : base(data, field,null)
         {
         }
 
@@ -57,7 +57,7 @@ namespace DotEditor.GUIExtension.Drawer
 
     public abstract class VisibleDrawer : AttributeDrawer
     {
-        protected VisibleDrawer(object data, FieldInfo field) : base(data, field)
+        protected VisibleDrawer(object data, FieldInfo field) : base(data, field,null)
         {
         }
 
