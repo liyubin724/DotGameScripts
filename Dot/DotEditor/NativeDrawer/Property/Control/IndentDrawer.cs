@@ -11,13 +11,13 @@ namespace DotEditor.NativeDrawer.Property
         {
         }
 
-        public override void BeginDoLayoutGUI()
+        public override void OnLayoutGUIStart()
         {
             IndentAttribute attr = GetAttr<IndentAttribute>();
             EditorGUI.indentLevel += attr.Indent;
         }
 
-        public override void EndDoLayoutGUI()
+        public override void OnLayoutGUIEnd()
         {
             IndentAttribute attr = GetAttr<IndentAttribute>();
             EditorGUI.indentLevel -= attr.Indent;

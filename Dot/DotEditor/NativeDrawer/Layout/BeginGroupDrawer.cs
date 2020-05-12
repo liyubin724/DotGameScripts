@@ -9,7 +9,7 @@ namespace DotEditor.NativeDrawer.Layout
     [CustomAttDrawerLink(typeof(BeginGroupAttribute))]
     public class BeginGroupDrawer : LayoutDrawer
     {
-        public BeginGroupDrawer(NativeDrawerAttribute attr) : base(attr)
+        public BeginGroupDrawer(LayoutAttribute attr) : base(attr)
         {
         }
 

@@ -1,12 +1,10 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Visible;
-using System.Reflection;
+﻿using Dot.NativeDrawer.Visible;
 
 namespace DotEditor.NativeDrawer.Visible
 {
     public abstract class VisibleDrawer : AttrNativeDrawer
     {
-        public VisibleDrawer(VisiableAtrribute attr) : base(attr)
+        public VisibleDrawer(VisibleAtrribute attr) : base(attr)
         {
             
         }
@@ -14,9 +12,9 @@ namespace DotEditor.NativeDrawer.Visible
         public abstract bool IsVisible();
     }
 
-    public abstract class ConditionVisibleDrawer : CompareAttrNativeDrawer
+    public abstract class VisibleCompareDrawer : CompareAttrNativeDrawer
     {
-        protected ConditionVisibleDrawer(object target, VisiableCompareAttribute attr) : base(target, attr)
+        protected VisibleCompareDrawer(object target, VisibleCompareAttribute attr) : base(target, attr)
         {
         }
 

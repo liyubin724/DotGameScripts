@@ -11,8 +11,8 @@ namespace DotEditor.NativeDrawer.Property
         {
         }
 
-        public abstract void BeginDoLayoutGUI();
-        public abstract void EndDoLayoutGUI();
+        public abstract void OnLayoutGUIStart();
+        public abstract void OnLayoutGUIEnd();
     }
 
     public abstract class PropertyLabelDrawer : AttrNativeDrawer
@@ -35,7 +35,7 @@ namespace DotEditor.NativeDrawer.Property
             Field = field;
         }
 
-        public void DoLayoutGUI(string label)
+        public void OnLayoutGUI(string label)
         {
             if(IsValid())
             {

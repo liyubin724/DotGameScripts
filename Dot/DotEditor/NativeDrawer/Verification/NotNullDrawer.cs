@@ -7,7 +7,7 @@ namespace DotEditor.NativeDrawer.Verification
     [CustomAttDrawerLink(typeof(NotNullAttribute))]
     public class NotNullDrawer : VerificationDrawer
     {
-        public NotNullDrawer(object target, CompareDrawerAttribute attr) : base(target, attr)
+        public NotNullDrawer(object target, VerificationCompareAttribute attr) : base(target, attr)
         {
         }
 

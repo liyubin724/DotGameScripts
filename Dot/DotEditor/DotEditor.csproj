@@ -101,6 +101,16 @@
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\CustomTypeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoundsDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultFloatDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultIntDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultRectDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultStringDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector2Drawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector3Drawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\TypeDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginGroupDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginHorizontalDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginIndentDrawer.cs" />
@@ -109,6 +119,8 @@
     <Compile Include="NativeDrawer\Layout\EndIndentDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\LayoutDrawer.cs" />
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
+    <Compile Include="NativeDrawer\NativeFieldInfo.cs" />
+    <Compile Include="NativeDrawer\NativeObjectInfo.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />

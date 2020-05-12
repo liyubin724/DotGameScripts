@@ -1,5 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Layout;
+﻿using Dot.NativeDrawer.Layout;
 using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Layout
@@ -7,7 +6,7 @@ namespace DotEditor.NativeDrawer.Layout
     [CustomAttDrawerLink(typeof(EndHorizontalAttribute))]
     public class EndHorizontalDrawer : LayoutDrawer
     {
-        public EndHorizontalDrawer(NativeDrawerAttribute attr) : base(attr)
+        public EndHorizontalDrawer(LayoutAttribute attr) : base(attr)
         {
         }
 

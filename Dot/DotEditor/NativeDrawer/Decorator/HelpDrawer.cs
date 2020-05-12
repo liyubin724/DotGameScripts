@@ -1,5 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Decorator;
+﻿using Dot.NativeDrawer.Decorator;
 using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Decorator
@@ -7,7 +6,7 @@ namespace DotEditor.NativeDrawer.Decorator
     [CustomAttDrawerLink(typeof(HelpAttribute))]
     public class HelpDrawer : DecoratorDrawer
     {
-        public HelpDrawer(NativeDrawerAttribute attr) : base(attr)
+        public HelpDrawer(DecoratorAttribute attr) : base(attr)
         {
         }
 

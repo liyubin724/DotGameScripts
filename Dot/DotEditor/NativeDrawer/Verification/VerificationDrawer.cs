@@ -1,10 +1,10 @@
-﻿using Dot.NativeDrawer;
+﻿using Dot.NativeDrawer.Verification;
 
 namespace DotEditor.NativeDrawer.Verification
 {
     public abstract class VerificationDrawer : CompareAttrNativeDrawer
     {
-        protected VerificationDrawer(object target, CompareDrawerAttribute attr) : base(target, attr)
+        protected VerificationDrawer(object target, VerificationCompareAttribute attr) : base(target, attr)
         {
         }
 

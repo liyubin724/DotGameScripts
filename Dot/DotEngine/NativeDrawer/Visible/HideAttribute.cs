@@ -3,7 +3,7 @@
 namespace Dot.NativeDrawer.Visible
 {
     [AttributeUsage(AttributeTargets.Field,AllowMultiple =false,Inherited =true)]
-    public class HideAttribute : VisiableAtrribute
+    public class HideAttribute : VisibleAtrribute
     {
     }
 }

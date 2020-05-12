@@ -5,6 +5,7 @@ using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
 using DotEditor.NativeDrawer.Decorator;
+using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
 using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
@@ -19,6 +20,8 @@ namespace DotEditor.NativeDrawer
     public static class NativeDrawerUtility
     {
         private static Dictionary<Type, Type> attrDrawerDic = new Dictionary<Type, Type>();
+
+        private static Dictionary<Type, Type> defaultTypeDrawerDic = new Dictionary<Type, Type>();
 
         [UnityEditor.InitializeOnLoadMethod]
         public static void OnDrawerInited()
@@ -39,7 +42,36 @@ namespace DotEditor.NativeDrawer
                         attrDrawerDic.Add(attr.AttrType, type);
                     }
                 }
+
+                types = (
+                                from type in assembly.GetTypes()
+                                where !type.IsAbstract && !type.IsInterface && typeof(TypeDrawer).IsAssignableFrom(type)
+                                select type
+                                ).ToArray();
+                foreach(var type in types)
+                {
+                    CustomTypeDrawerAttribute attr = type.GetCustomAttribute<CustomTypeDrawerAttribute>();
+                    if(attr!=null)
+                    {
+                        defaultTypeDrawerDic.Add(attr.Target, type);
+                    }
+                }
             }
+        }
+
+        public static TypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
+        {
+            Type fieldType = field.FieldType;
+            if(fieldType.IsEnum)
+            {
+                fieldType = typeof(Enum);
+            }
+
+            if(defaultTypeDrawerDic.TryGetValue(fieldType, out Type drawerType))
+            {
+                return (TypeDrawer)Activator.CreateInstance(drawerType, new object[] { target, field });
+            }
+            return null;
         }
 
         public static DecoratorDrawer CreateDecoratorDrawer(DecoratorAttribute attr)
@@ -69,7 +101,7 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
-        public static VisibleDrawer CreateVisibleDrawer(VisiableAtrribute attr)
+        public static VisibleDrawer CreateVisibleDrawer(VisibleAtrribute attr)
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
@@ -78,11 +110,11 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
-        public static ConditionVisibleDrawer CreateConditionVisibleDrawer(object target, VisiableCompareAttribute attr)
+        public static VisibleCompareDrawer CreateVisibleCompareDrawer(object target, VisibleCompareAttribute attr)
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (ConditionVisibleDrawer)Activator.CreateInstance(drawerType, new object[] { target,attr });
+                return (VisibleCompareDrawer)Activator.CreateInstance(drawerType, new object[] { target,attr });
             }
             return null;
         }

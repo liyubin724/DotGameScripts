@@ -135,7 +135,7 @@
     <Compile Include="NativeDrawer\Visible\HideIfAttribute.cs" />
     <Compile Include="NativeDrawer\Visible\ShowAttribute.cs" />
     <Compile Include="NativeDrawer\Visible\ShowIfAttribute.cs" />
-    <Compile Include="NativeDrawer\Visible\VisiableAtrribute.cs" />
+    <Compile Include="NativeDrawer\Visible\VisibleAtrribute.cs" />
     <Compile Include="Proxy\StartupProxy.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Extension\TransformExtensions.cs" />

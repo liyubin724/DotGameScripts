@@ -5,7 +5,7 @@ namespace DotEditor.NativeDrawer.Layout
 {
     public abstract class LayoutDrawer : AttrNativeDrawer
     {
-        protected LayoutDrawer(NativeDrawerAttribute attr) : base(attr)
+        protected LayoutDrawer(LayoutAttribute attr) : base(attr)
         {
         }
 

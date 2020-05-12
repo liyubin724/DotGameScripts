@@ -3,9 +3,9 @@
 namespace DotEditor.NativeDrawer.Visible
 {
     [CustomAttDrawerLink(typeof(HideIfAttribute))]
-    public class HideIfDrawer : ConditionVisibleDrawer
+    public class HideIfDrawer : VisibleCompareDrawer
     {
-        public HideIfDrawer(object target, VisiableCompareAttribute attr) : base(target, attr)
+        public HideIfDrawer(object target, VisibleCompareAttribute attr) : base(target, attr)
         {
         }
 
