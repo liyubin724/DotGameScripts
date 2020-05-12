@@ -1,7 +1,6 @@
-﻿using Dot.Core;
-using Dot.Core.Util;
-using Dot.Core.Log;
+﻿using Dot.Log;
 using Dot.Timer;
+using Dot.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 

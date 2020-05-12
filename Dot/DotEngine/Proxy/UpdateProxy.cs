@@ -1,4 +1,4 @@
-﻿namespace Dot.Core.Proxy
+﻿namespace Dot.Proxy
 {
     public delegate void UpdateHandle(float deltaTime);
     public delegate void LateUpdateHandle();

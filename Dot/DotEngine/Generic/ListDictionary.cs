@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Dot.Core.Generic
+namespace Dot.Generic
 {
     public class ListDictionary<K, V>
     {

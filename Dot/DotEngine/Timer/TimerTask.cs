@@ -1,5 +1,5 @@
-﻿using Dot.Core.Util;
-using Dot.Core.Pool;
+﻿using Dot.Utilities;
+using Dot.Pool;
 
 namespace Dot.Timer
 {

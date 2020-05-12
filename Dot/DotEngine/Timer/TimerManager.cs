@@ -1,5 +1,4 @@
-﻿using Dot.Core;
-using Dot.Core.Proxy;
+﻿using Dot.Proxy;
 
 namespace Dot.Timer
 {

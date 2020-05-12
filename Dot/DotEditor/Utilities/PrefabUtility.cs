@@ -1,4 +1,4 @@
-﻿using Dot.Core.Utilities;
+﻿using Dot.Utilities;
 using ReflectionMagic;
 using System;
 using UnityEditor;

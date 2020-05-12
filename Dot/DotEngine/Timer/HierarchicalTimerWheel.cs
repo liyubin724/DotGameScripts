@@ -1,6 +1,6 @@
-﻿using Dot.Core.Generic;
-using Dot.Core.Util;
-using Dot.Core.Pool;
+﻿using Dot.Generic;
+using Dot.Utilities;
+using Dot.Pool;
 using System;
 using System.Collections.Generic;
 

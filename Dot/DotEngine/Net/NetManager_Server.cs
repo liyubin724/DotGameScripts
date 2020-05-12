@@ -1,5 +1,4 @@
-﻿using Dot.Core;
-using Dot.Core.Log;
+﻿using Dot.Log;
 using Dot.Net.Message;
 using Dot.Net.Server;
 using System.Collections.Generic;

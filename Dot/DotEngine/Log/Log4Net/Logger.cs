@@ -2,8 +2,8 @@
 using System;
 using System.IO;
 using System.Text;
-using Dot.Core.Log;
-using IDotLog = Dot.Core.Log.ILog;
+
+using IDotLog = Dot.Log.ILog;
 using ILog4NetLog = log4net.ILog;
 
 namespace Dot.Log

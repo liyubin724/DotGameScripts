@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using Priority_Queue;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;

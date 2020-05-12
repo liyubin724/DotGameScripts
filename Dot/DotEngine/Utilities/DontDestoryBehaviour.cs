@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Core.Util
+namespace Dot.Utilities
 {
     public class DontDestoryBehaviour : MonoBehaviour
     {

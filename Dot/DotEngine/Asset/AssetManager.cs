@@ -1,6 +1,5 @@
-﻿using Dot.Core;
-using Dot.Core.Proxy;
-using Dot.Core.Log;
+﻿using Dot.Proxy;
+using Dot.Log;
 using System;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;

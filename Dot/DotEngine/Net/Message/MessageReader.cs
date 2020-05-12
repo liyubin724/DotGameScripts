@@ -1,4 +1,4 @@
-﻿using Dot.Core.Util;
+﻿using Dot.Utilities;
 using Dot.Net.Stream;
 using System.Net;
 

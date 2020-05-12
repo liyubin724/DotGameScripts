@@ -1,6 +1,6 @@
 ﻿using Dot.Core.Dispose;
-using Dot.Core.Generic;
-using Dot.Core.Pool;
+using Dot.Generic;
+using Dot.Pool;
 using System.Collections.Generic;
 using System.Linq;
 using SystemObject = System.Object;

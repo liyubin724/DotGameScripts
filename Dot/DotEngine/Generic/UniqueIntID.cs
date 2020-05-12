@@ -1,4 +1,4 @@
-﻿namespace Dot.Core.Generic
+﻿namespace Dot.Generic
 {
     public class UniqueIntID
     {

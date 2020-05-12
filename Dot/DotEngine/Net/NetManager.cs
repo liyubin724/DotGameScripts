@@ -1,6 +1,5 @@
-﻿using Dot.Core;
-using Dot.Core.Generic;
-using Dot.Core.Proxy;
+﻿using Dot.Generic;
+using Dot.Proxy;
 
 namespace Dot.Net
 {

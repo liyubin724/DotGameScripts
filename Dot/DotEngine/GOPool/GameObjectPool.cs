@@ -1,6 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Core.Extension;
-using Dot.Core.Log;
+using Dot.Log;
 using Dot.Timer;
 using System;
 using System.Collections.Generic;

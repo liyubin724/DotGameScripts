@@ -1,4 +1,4 @@
-﻿using Dot.Core.Generic;
+﻿using Dot.Generic;
 
 namespace Dot.Timer
 {

@@ -1,4 +1,4 @@
-﻿using Dot.Core.Log;
+﻿using Dot.Log;
 using UnityEngine;
 
 namespace Dot.Asset

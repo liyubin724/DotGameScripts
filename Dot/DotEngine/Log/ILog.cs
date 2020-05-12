@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.Core.Log
+namespace Dot.Log
 {
     public enum LogLevelType
     {

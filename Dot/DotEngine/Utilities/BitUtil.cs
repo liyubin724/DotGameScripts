@@ -1,4 +1,4 @@
-﻿namespace Dot.Core.Util
+﻿namespace Dot.Utilities
 {
     public static class BitUtil
     {

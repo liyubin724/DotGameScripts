@@ -1,8 +1,8 @@
 ﻿using Dot.Core.Dispose;
-using Dot.Core.Generic;
-using Dot.Core.Log;
+using Dot.Generic;
+using Dot.Log;
 using Dot.Net.Message;
-using Dot.Core.Pool;
+using Dot.Pool;
 using System;
 using System.Collections.Generic;
 using System.Net;

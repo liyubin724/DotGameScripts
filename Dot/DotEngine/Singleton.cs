@@ -1,5 +1,5 @@
 ﻿
-namespace Dot.Core
+namespace Dot
 {
     public abstract class Singleton <T> where T :Singleton<T>, new()
     {

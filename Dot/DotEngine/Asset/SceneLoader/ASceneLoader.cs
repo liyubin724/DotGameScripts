@@ -1,4 +1,4 @@
-﻿using Dot.Core.Log;
+﻿using Dot.Log;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;

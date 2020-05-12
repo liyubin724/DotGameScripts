@@ -1,5 +1,5 @@
 ﻿using Dot.Config.Ini;
-using Dot.Core.Generic;
+using Dot.Generic;
 using DotEditor.Core.Utilities;
 using DotEditor.GUIExtension;
 using ReflectionMagic;

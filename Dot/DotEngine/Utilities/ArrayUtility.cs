@@ -1,4 +1,4 @@
-﻿namespace Dot.Core.Utilities
+﻿namespace Dot.Utilities
 {
     public static class ArrayUtility
     {

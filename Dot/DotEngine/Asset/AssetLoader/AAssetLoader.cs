@@ -1,7 +1,7 @@
 ﻿using Dot.Asset.Datas;
-using Dot.Core.Generic;
-using Dot.Core.Pool;
-using Dot.Core.Log;
+using Dot.Generic;
+using Dot.Pool;
+using Dot.Log;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;

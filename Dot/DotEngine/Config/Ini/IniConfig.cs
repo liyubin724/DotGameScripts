@@ -1,4 +1,4 @@
-﻿using Dot.Core.Generic;
+﻿using Dot.Generic;
 using Dot.Utilities;
 using System;
 using System.Collections.Generic;

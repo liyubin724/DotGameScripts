@@ -1,5 +1,5 @@
-﻿using Dot.Core.Pool;
-using Dot.Core.Log;
+﻿using Dot.Log;
+using Dot.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 

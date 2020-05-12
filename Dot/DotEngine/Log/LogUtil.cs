@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Dot.Core.Log
+namespace Dot.Log
 {
     public static class LogUtil
     {

@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset

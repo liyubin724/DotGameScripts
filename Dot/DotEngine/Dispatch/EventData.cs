@@ -1,4 +1,4 @@
-﻿using Dot.Core.Pool;
+﻿using Dot.Pool;
 using SystemObject = System.Object;
 
 namespace Dot.Dispatch

@@ -1,5 +1,5 @@
 ﻿using Dot.Core.Dispose;
-using Dot.Core.Log;
+using Dot.Log;
 using Dot.Net.Message;
 using System.Collections.Generic;
 

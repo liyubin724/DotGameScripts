@@ -1,6 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Asset.Datas;
-using Dot.Core.Utilities;
+using Dot.Utilities;
 using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
 using DotEditor.Core.Utilities;

@@ -1,5 +1,4 @@
-﻿using Dot.Asset.Datas;
-using Dot.Core.Log;
+﻿using Dot.Log;
 using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 
