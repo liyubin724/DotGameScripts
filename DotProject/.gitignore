@@ -1,0 +1,17 @@
+Library
+Logs
+Temp
+obj
+bin
+.vs
+Assets/ArtRes
+Assets/ArtRes.meta
+Assets/Scripts
+Assets/Scripts.meta
+AssetConfig
+
+.idea
+*.sln
+*.csproj
+*.iml
+*.iml.meta
