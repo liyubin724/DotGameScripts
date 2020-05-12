@@ -110,6 +110,7 @@
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="Entity\Node\NodeData.cs" />
     <Compile Include="Entity\Node\NodeType.cs" />
+    <Compile Include="Proxy\StartupProxy.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Extension\TransformExtensions.cs" />
     <Compile Include="Extension\UnityObjectExtensions.cs" />
