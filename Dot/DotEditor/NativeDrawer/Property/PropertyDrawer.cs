@@ -1,4 +1,5 @@
 ﻿using Dot.NativeDrawer;
+using Dot.NativeDrawer.Property;
 using System.Reflection;
 using UnityEditor;
 
@@ -6,7 +7,7 @@ namespace DotEditor.NativeDrawer.Property
 {
     public abstract class PropertyControlDrawer : AttrNativeDrawer
     {
-        protected PropertyControlDrawer(NativeDrawerAttribute attr) : base(attr)
+        protected PropertyControlDrawer(PropertyControlAttribute attr) : base(attr)
         {
         }
 
@@ -16,7 +17,7 @@ namespace DotEditor.NativeDrawer.Property
 
     public abstract class PropertyLabelDrawer : AttrNativeDrawer
     {
-        protected PropertyLabelDrawer(NativeDrawerAttribute attr) : base(attr)
+        protected PropertyLabelDrawer(PropertyLabelAttribute attr) : base(attr)
         {
         }
 

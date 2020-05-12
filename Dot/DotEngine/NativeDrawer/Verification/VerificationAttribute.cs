@@ -1,8 +1,8 @@
 ﻿namespace Dot.NativeDrawer.Verification
 {
-    public abstract class VerificationAttribute : NativeDrawerAttribute
-    {
-    }
+    //public abstract class VerificationAttribute : NativeDrawerAttribute
+    //{
+    //}
 
     public abstract class VerificationCompareAttribute : CompareDrawerAttribute
     {

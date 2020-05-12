@@ -2,6 +2,7 @@
 using Dot.NativeDrawer.Property;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Property
 {
@@ -21,7 +22,15 @@ namespace DotEditor.NativeDrawer.Property
             float value = (float)Field.GetValue(Target);
             EditorGUI.BeginChangeCheck();
             {
-                value = EditorGUILayout.Slider(label,value, attr.LeftValue, attr.RightValue);
+                EditorGUILayout.BeginHorizontal();
+                {
+                    value = EditorGUILayout.Slider(label,value, attr.LeftValue, attr.RightValue);
+                    if(attr.ShowTextField)
+                    {
+                        value = EditorGUILayout.FloatField(value, GUILayout.Width(40));
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
             }
             if(EditorGUI.EndChangeCheck())
             {

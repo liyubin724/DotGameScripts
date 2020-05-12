@@ -7,10 +7,12 @@ namespace Dot.NativeDrawer.Property
     {
         public float LeftValue { get; private set; }
         public float RightValue { get; private set; }
-        public FloatSliderAttribute(float leftValue,float rightValue)
+        public bool ShowTextField { get; private set; }
+        public FloatSliderAttribute(float leftValue,float rightValue,bool showTextField = true)
         {
             LeftValue = leftValue;
             RightValue = rightValue;
+            ShowTextField = showTextField;
         }
     }
 }

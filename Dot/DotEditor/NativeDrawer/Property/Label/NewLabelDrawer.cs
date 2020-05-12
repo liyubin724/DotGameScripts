@@ -6,7 +6,7 @@ namespace DotEditor.NativeDrawer.Property
     [CustomAttDrawerLink(typeof(NewLabelAttribute))]
     public class NewLabelDrawer : PropertyLabelDrawer
     {
-        public NewLabelDrawer(NativeDrawerAttribute attr) : base(attr)
+        public NewLabelDrawer(PropertyLabelAttribute attr) : base(attr)
         {
         }
 

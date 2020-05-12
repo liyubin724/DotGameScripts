@@ -6,7 +6,7 @@ namespace DotEditor.NativeDrawer.Visible
 {
     public abstract class VisibleDrawer : AttrNativeDrawer
     {
-        public VisibleDrawer(NativeDrawerAttribute attr) : base(attr)
+        public VisibleDrawer(VisiableAtrribute attr) : base(attr)
         {
             
         }
