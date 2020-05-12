@@ -106,5 +106,18 @@ namespace DotEditor.Core.Utilities
             }
             return null;
         }
+
+        public static Type[] GetAllBasedTypes(this Type type)
+        {
+            var types = new List<Type>() { type };
+            while (types.Last().BaseType != null)
+            {
+                types.Add(types.Last().BaseType);
+            }
+
+            types.Reverse();
+
+            return types.ToArray();
+        }
     }
 }
