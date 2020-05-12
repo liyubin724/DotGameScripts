@@ -119,7 +119,8 @@
     <Compile Include="NativeDrawer\Layout\EndIndentDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\LayoutDrawer.cs" />
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
-    <Compile Include="NativeDrawer\NativeFieldInfo.cs" />
+    <Compile Include="NativeDrawer\NativeValueInfo.cs" />
+    <Compile Include="NativeDrawer\NativeInfo.cs" />
     <Compile Include="NativeDrawer\NativeObjectInfo.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />

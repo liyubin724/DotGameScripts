@@ -14,11 +14,8 @@ using System.Reflection;
 
 namespace DotEditor.NativeDrawer
 {
-    public class NativeFieldInfo
+    public class NativeValueInfo : NativeInfo
     {
-        public object Target { get; private set; }
-        public FieldInfo Field { get; private set; }
-
         private List<DecoratorDrawer> decoratorDrawers = new List<DecoratorDrawer>();
         private List<LayoutDrawer> layoutDrawers = new List<LayoutDrawer>();
         private List<VerificationDrawer> verificationDrawers = new List<VerificationDrawer>();
@@ -31,13 +28,12 @@ namespace DotEditor.NativeDrawer
 
         private TypeDrawer defaultTypeDrawer = null;
 
-        public NativeFieldInfo(object target,FieldInfo field)
+        public NativeValueInfo(object target,FieldInfo field) : base(target,field)
         {
-            Target = target;
-            Field = field;
+            InitDrawers();
         }
 
-        public void DoLayoutGUI()
+        public override void OnLayoutGUI()
         {
             bool isVisible = IsVisible();
 
