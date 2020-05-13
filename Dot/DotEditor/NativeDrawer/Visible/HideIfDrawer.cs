@@ -11,7 +11,7 @@ namespace DotEditor.NativeDrawer.Visible
 
         public override bool IsVisible()
         {
-            return IsValid();
+            return !IsValid();
         }
     }
 }
