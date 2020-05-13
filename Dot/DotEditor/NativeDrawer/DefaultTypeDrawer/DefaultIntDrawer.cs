@@ -4,7 +4,7 @@ using UnityEditor;
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
     [CustomTypeDrawer(typeof(int))]
-    public class DefaultIntDrawer : TypeDrawer
+    public class DefaultIntDrawer : NativeTypeDrawer
     {
         public DefaultIntDrawer(object target, FieldInfo field) : base(target, field)
         {

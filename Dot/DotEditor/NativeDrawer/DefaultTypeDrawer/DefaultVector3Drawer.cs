@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
     [CustomTypeDrawer(typeof(Vector3))]
-    public class DefaultVector3Drawer : TypeDrawer
+    public class DefaultVector3Drawer : NativeTypeDrawer
     {
         public DefaultVector3Drawer(object target, FieldInfo field) : base(target, field)
         {

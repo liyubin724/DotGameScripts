@@ -45,7 +45,7 @@ namespace DotEditor.NativeDrawer
 
                 types = (
                                 from type in assembly.GetTypes()
-                                where !type.IsAbstract && !type.IsInterface && typeof(TypeDrawer).IsAssignableFrom(type)
+                                where !type.IsAbstract && !type.IsInterface && typeof(NativeTypeDrawer).IsAssignableFrom(type)
                                 select type
                                 ).ToArray();
                 foreach(var type in types)
@@ -59,7 +59,7 @@ namespace DotEditor.NativeDrawer
             }
         }
 
-        public static TypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
+        public static NativeTypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
         {
             Type fieldType = field.FieldType;
             if(fieldType.IsEnum)
@@ -69,7 +69,7 @@ namespace DotEditor.NativeDrawer
 
             if(defaultTypeDrawerDic.TryGetValue(fieldType, out Type drawerType))
             {
-                return (TypeDrawer)Activator.CreateInstance(drawerType, new object[] { target, field });
+                return (NativeTypeDrawer)Activator.CreateInstance(drawerType, new object[] { target, field });
             }
             return null;
         }

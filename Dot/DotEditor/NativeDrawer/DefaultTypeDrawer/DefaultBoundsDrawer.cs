@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
     [CustomTypeDrawer(typeof(Bounds))]
-    public class DefaultBoundsDrawer : TypeDrawer
+    public class DefaultBoundsDrawer : NativeTypeDrawer
     {
         public DefaultBoundsDrawer(object target, FieldInfo field) : base(target, field)
         {

@@ -26,7 +26,7 @@ namespace DotEditor.NativeDrawer
         private List<PropertyControlDrawer> propertyControlDrawers = new List<PropertyControlDrawer>();
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
 
-        private TypeDrawer defaultTypeDrawer = null;
+        private NativeTypeDrawer defaultTypeDrawer = null;
 
         public NativeValueInfo(object target,FieldInfo field) : base(target,field)
         {

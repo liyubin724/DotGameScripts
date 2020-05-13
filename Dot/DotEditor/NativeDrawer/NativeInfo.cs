@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using DotEditor.NativeDrawer.DefaultTypeDrawer;
+using System;
+using System.Reflection;
 
 namespace DotEditor.NativeDrawer
 {
@@ -6,11 +8,41 @@ namespace DotEditor.NativeDrawer
     {
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
+        public object Value
+        {
+            get
+            {
+                if (Field == null)
+                {
+                    return Target;
+                } else
+                {
+                    return Field.GetValue(Target);
+                }
+            }
+            set
+            {
+                if(Field == null)
+                {
+                    Target = value;
+                }else
+                {
+                    Field.SetValue(Target, value);
+                }
+            }
+        }
+
+        protected NativeTypeDrawer defaultTypeDrawer = null;
 
         protected NativeInfo(object target,FieldInfo field)
         {
             Target = target;
             Field = field;
+
+            if(field!=null)
+            {
+                defaultTypeDrawer = NativeDrawerUtility.CreateDefaultTypeDrawer(target, field);
+            }
         }
 
         public abstract void OnLayoutGUI();

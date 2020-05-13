@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    public abstract class TypeDrawer
+    public abstract class NativeTypeDrawer
     {
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
 
-        protected TypeDrawer(object target,FieldInfo field)
+        protected NativeTypeDrawer(object target,FieldInfo field)
         {
             Target = target;
             Field = field;

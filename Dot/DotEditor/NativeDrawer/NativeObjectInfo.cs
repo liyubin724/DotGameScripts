@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotEditor.NativeDrawer.DefaultTypeDrawer;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -6,7 +7,7 @@ namespace DotEditor.NativeDrawer
 {
     public class NativeObjectInfo : NativeInfo
     {
-        private List<NativeValueInfo> fields = new List<NativeValueInfo>();
+        private List<NativeInfo> fields = new List<NativeInfo>();
         private bool isFoldout = false;
 
         public NativeObjectInfo(object target):this(target,null)
@@ -20,12 +21,12 @@ namespace DotEditor.NativeDrawer
 
         public override void OnLayoutGUI()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void InitField()
         {
-
+            
         }
 
         
