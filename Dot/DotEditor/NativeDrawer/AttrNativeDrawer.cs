@@ -37,8 +37,8 @@ namespace DotEditor.NativeDrawer
             }
 
             FieldInfo fieldInfo = Target.GetType().GetField(attr.MemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            object comparedValue = null;
-            if(fieldInfo!=null)
+            object comparedValue;
+            if (fieldInfo!=null)
             {
                 comparedValue = fieldInfo.GetValue(Target);
             }else
@@ -76,33 +76,30 @@ namespace DotEditor.NativeDrawer
                 return false;
             }
 
-            if(attr.Symbol == CompareSymbol.Eq)
+            if (TypeUtility.IsCastableTo(comparedValue.GetType(), typeof(IComparable)))
             {
-                return comparedValue == attr.Value;
-            }else
-            {
-                if(TypeUtility.IsCastableTo(comparedValue.GetType(),typeof(IComparable)))
+                int compared = ((IComparable)comparedValue).CompareTo((IComparable)attr.Value);
+                if (compared == 0 && (attr.Symbol == CompareSymbol.Gte || attr.Symbol == CompareSymbol.Lte || attr.Symbol == CompareSymbol.Eq))
                 {
-                    int compared = ((IComparable)comparedValue).CompareTo((IComparable)attr.Value);
-                    if(compared == 0 && (attr.Symbol == CompareSymbol.Gte || attr.Symbol == CompareSymbol.Lte))
-                    {
-                        return true;
-                    }else if(compared >0 &&(attr.Symbol == CompareSymbol.Lt || attr.Symbol == CompareSymbol.Lte))
-                    {
-                        return true;
-                    }else if(compared < 0 && (attr.Symbol == CompareSymbol.Gt || attr.Symbol == CompareSymbol.Gte))
-                    {
-                        return true;
-                    }else
-                    {
-                        return false;
-                    }
-                }else
+                    return true;
+                }
+                else if (compared > 0 && (attr.Symbol == CompareSymbol.Lt || attr.Symbol == CompareSymbol.Lte))
+                {
+                    return true;
+                }
+                else if (compared < 0 && (attr.Symbol == CompareSymbol.Gt || attr.Symbol == CompareSymbol.Gte))
+                {
+                    return true;
+                }
+                else
                 {
                     return false;
                 }
             }
-
+            else
+            {
+                return false;
+            }
         }
 
     }
