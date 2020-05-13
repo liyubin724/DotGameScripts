@@ -17,7 +17,7 @@ namespace DotEditor.NativeDrawer
     public class NativeObjectInfo : NativeInfo
     {
         private List<NativeTypeData> allTypeFields = new List<NativeTypeData>();
-        private bool isFoldout = false;
+        private bool isFoldout = true;
 
         public bool IsRoot 
         { 
@@ -41,23 +41,24 @@ namespace DotEditor.NativeDrawer
             if(!IsRoot)
             {
                 isFoldout = EditorGUILayout.Foldout(isFoldout, Field.Name, true);
-                if(!isFoldout)
+                if(isFoldout)
                 {
                     EditorGUI.indentLevel++;
                 }
             }
 
-            foreach(var d in allTypeFields)
+            if(isFoldout)
             {
-                EGUILayout.DrawBoxHeader(d.type.Name,GUILayout.ExpandWidth(true));
-                foreach(var field in d.fields)
+                foreach(var d in allTypeFields)
                 {
-                    field.OnLayoutGUI();
+                    foreach(var field in d.fields)
+                    {
+                        field.OnLayoutGUI();
+                    }
                 }
-                EGUILayout.DrawHorizontalLine();
             }
 
-            if(!IsRoot && !isFoldout)
+            if(!IsRoot && isFoldout)
             {
                 EditorGUI.indentLevel--;
             }

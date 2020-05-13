@@ -102,6 +102,7 @@
     <Compile Include="NativeDrawer\Decorator\DecoratorDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\CustomTypeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoolDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoundsDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultFloatDrawer.cs" />

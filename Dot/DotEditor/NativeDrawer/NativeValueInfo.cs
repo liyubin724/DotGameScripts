@@ -132,7 +132,7 @@ namespace DotEditor.NativeDrawer
                 propertyControlDrawers.Add(NativeDrawerUtility.CreatePropertyControlDrawer(attr));
             }
 
-            var propertyAttrEnumerable = Field.GetCustomAttributes<PropertyAttribute>();
+            var propertyAttrEnumerable = Field.GetCustomAttributes<PropertyDrawerAttribute>();
             foreach(var attr in propertyAttrEnumerable)
             {
                 propertyDrawers.Add(NativeDrawerUtility.CreatePropertyDrawer(Target, Field, attr));

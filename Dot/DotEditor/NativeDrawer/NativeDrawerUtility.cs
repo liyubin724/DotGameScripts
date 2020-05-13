@@ -1,5 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Decorator;
+﻿using Dot.NativeDrawer.Decorator;
 using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
@@ -120,7 +119,7 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
-        public static PropertyDrawer CreatePropertyDrawer(object target, FieldInfo field, NativeDrawerAttribute attr)
+        public static PropertyDrawer CreatePropertyDrawer(object target, FieldInfo field, PropertyDrawerAttribute attr)
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
@@ -149,7 +148,7 @@ namespace DotEditor.NativeDrawer
 
         private static Type[] valueTypes = new Type[]
         {
-            typeof(int),typeof(float),typeof(string),typeof(Vector3),typeof(Vector2),typeof(Rect),typeof(Bounds),
+            typeof(bool),typeof(int),typeof(float),typeof(string),typeof(Vector3),typeof(Vector2),typeof(Rect),typeof(Bounds),
         };
         public static bool IsValueType(Type type)
         {

@@ -17,7 +17,7 @@ namespace DotEditor.NativeDrawer.Layout
         {
             BeginGroupAttribute attr = GetAttr<BeginGroupAttribute>();
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.ExpandWidth(true));
             if(!string.IsNullOrEmpty(attr.Label))
             {
                 EGUILayout.DrawBoxHeader(attr.Label, GUILayout.ExpandWidth(true));
