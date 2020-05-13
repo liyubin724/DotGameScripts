@@ -109,6 +109,22 @@ namespace DotEditor.Core.Utilities
 
         public static Type[] GetAllBasedTypes(this Type type,Type blockType = null)
         {
+            if(typeof(List<>).IsAssignableFrom(type))
+            {
+                return new Type[] { type };
+            }else if(type.IsValueType && !type.IsPrimitive)
+            {
+                return new Type[] { type };
+            }else if(type.IsArray)
+            {
+                return new Type[] { type };
+            }
+            
+            if(blockType == null)
+            {
+                blockType = typeof(object);
+            }
+
             var types = new List<Type>() { type };
             while (types.Last().BaseType != blockType)
             {

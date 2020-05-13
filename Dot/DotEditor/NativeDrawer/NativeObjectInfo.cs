@@ -64,7 +64,7 @@ namespace DotEditor.NativeDrawer
 
         private void InitField()
         {
-            Type[] allTypes = TypeUtility.GetAllBasedTypes(ValueType,typeof(object));
+            Type[] allTypes = TypeUtility.GetAllBasedTypes(ValueType);
             if(allTypes!=null)
             {
                 foreach(var type in allTypes)
@@ -83,6 +83,9 @@ namespace DotEditor.NativeDrawer
                             {
                                 Value = Activator.CreateInstance(ValueType);
                             }
+
+
+
                             data.fields.Add(new NativeObjectInfo(Value, field));
                         }
                     }

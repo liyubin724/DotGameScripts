@@ -1,51 +1,88 @@
-﻿using System;
+﻿using DotEditor.GUIExtension;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditorInternal;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(IList))]
+    [CustomTypeDrawer(typeof(List<>))]
     public class DefaultListDrawer : NativeTypeDrawer
     {
         private IList list = null;
-        private ReorderableList rList = null;
         public DefaultListDrawer(object target, FieldInfo field) : base(target, field)
         {
-            
+            list = GetValue<IList>();
+            if (list == null)
+            {
+                Value = Activator.CreateInstance(ValueType);
+                list = GetValue<IList>();
+            }
         }
 
         protected override bool IsValid()
         {
-            return typeof(IList).IsAssignableFrom(ValueType);
+            return ValueType.IsGenericType && ValueType.GetGenericTypeDefinition() == typeof(List<>);
         }
 
         protected override void OnDraw(string label)
         {
-            if(rList == null)
+            EditorGUILayout.BeginVertical(EGUIStyles.BoxStyle);
             {
-                list = GetValue<IList>();
-                if(list == null)
+                EGUILayout.DrawBoxHeader(label, GUILayout.ExpandWidth(true));
+                Rect lastRect = GUILayoutUtility.GetLastRect();
+                Rect clearBtnRect = new Rect(lastRect.x + lastRect.width - 40, lastRect.y + 2, 40, lastRect.height - 4);
+                if(GUI.Button(clearBtnRect,"clear"))
                 {
-                    Value = Activator.CreateInstance(ValueType);
-                    list = GetValue<IList>();
+                    list.Clear();
+                    EditorGUIUtility.ExitGUI();
                 }
 
-                rList = new ReorderableList(list, ValueType.GenericTypeArguments[0], true, true, true, true);
-                rList.drawHeaderCallback = (rect) =>
+                for (int i = 0; i < list.Count; ++i)
                 {
-                    EditorGUI.LabelField(rect,Field.Name);
-                };
-                rList.drawElementCallback = (rect, index, isActive, isFocused) =>
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        DoDrawElement(list[i], i);
+                        if (GUILayout.Button("-", GUILayout.Width(20)))
+                        {
+                            DoRemove(i);
+                            EditorGUIUtility.ExitGUI();
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    EGUILayout.DrawHorizontalLine();
+                }
+                Rect addBtnRect = GUILayoutUtility.GetRect(lastRect.width, 20);
+                addBtnRect.x += addBtnRect.width - 40;
+                addBtnRect.width = 40;
+                if(GUI.Button(addBtnRect,"+"))
                 {
-                    
-                };
+                    DoAdd();
+                }
             }
+            EditorGUILayout.EndVertical();
+        }
+
+        protected virtual void DoClear()
+        {
+            list.Clear();
+        }
+
+        protected virtual void DoDrawElement(object value,int index)
+        {
+            EditorGUILayout.LabelField("" + index, "Test");
+        }
+
+        protected virtual void DoAdd()
+        {
+            list.Add(Activator.CreateInstance(ValueType.GenericTypeArguments[0]));
+        }
+
+        protected virtual void DoRemove(int index)
+        {
+            list.RemoveAt(index);
         }
     }
 }

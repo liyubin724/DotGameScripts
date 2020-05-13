@@ -10,6 +10,7 @@ using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
 using DotEditor.NativeDrawer.Visible;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -72,6 +73,10 @@ namespace DotEditor.NativeDrawer
             if(fieldType.IsEnum)
             {
                 fieldType = typeof(Enum);
+            }
+            if(fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                fieldType = typeof(List<>);
             }
 
             if(defaultTypeDrawerDic.TryGetValue(fieldType, out Type drawerType))
@@ -170,6 +175,11 @@ namespace DotEditor.NativeDrawer
             if(type.IsValueType && !type.IsPrimitive)
             {
                 return false;
+            }
+
+            if(typeof(IList).IsAssignableFrom(type) && !type.IsArray)
+            {
+                return true;
             }
 
             if(type.IsClass && !typeof(Delegate).IsAssignableFrom(type))
