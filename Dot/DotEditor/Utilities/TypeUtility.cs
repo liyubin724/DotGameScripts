@@ -107,10 +107,10 @@ namespace DotEditor.Core.Utilities
             return null;
         }
 
-        public static Type[] GetAllBasedTypes(this Type type)
+        public static Type[] GetAllBasedTypes(this Type type,Type blockType = null)
         {
             var types = new List<Type>() { type };
-            while (types.Last().BaseType != null)
+            while (types.Last().BaseType != blockType)
             {
                 types.Add(types.Last().BaseType);
             }

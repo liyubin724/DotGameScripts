@@ -45,10 +45,10 @@ namespace DotEditor.NativeDrawer
                 }
 
                 types = (
-                                from type in assembly.GetTypes()
-                                where !type.IsAbstract && !type.IsInterface && typeof(NativeTypeDrawer).IsAssignableFrom(type)
-                                select type
-                                ).ToArray();
+                        from type in assembly.GetTypes()
+                        where !type.IsAbstract && !type.IsInterface && typeof(NativeTypeDrawer).IsAssignableFrom(type)
+                        select type
+                        ).ToArray();
                 foreach(var type in types)
                 {
                     CustomTypeDrawerAttribute attr = type.GetCustomAttribute<CustomTypeDrawerAttribute>();
@@ -70,7 +70,7 @@ namespace DotEditor.NativeDrawer
 
             if(defaultTypeDrawerDic.TryGetValue(fieldType, out Type drawerType))
             {
-                return (NativeTypeDrawer)Activator.CreateInstance(drawerType, new object[] { target, field });
+                return (NativeTypeDrawer)Activator.CreateInstance(drawerType, target, field);
             }
             return null;
         }
@@ -79,7 +79,7 @@ namespace DotEditor.NativeDrawer
         {
             if(attrDrawerDic.TryGetValue(attr.GetType(),out Type drawerType))
             {
-                return (DecoratorDrawer)Activator.CreateInstance(drawerType, new object[] { attr });
+                return (DecoratorDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
         }
@@ -88,7 +88,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (LayoutDrawer)Activator.CreateInstance(drawerType, new object[] { attr });
+                return (LayoutDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
         }
@@ -97,7 +97,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (VerificationDrawer)Activator.CreateInstance(drawerType, new object[] { target,attr });
+                return (VerificationDrawer)Activator.CreateInstance(drawerType, target,attr);
             }
             return null;
         }
@@ -106,7 +106,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (VisibleDrawer)Activator.CreateInstance(drawerType, new object[] {attr });
+                return (VisibleDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
         }
@@ -115,7 +115,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (VisibleCompareDrawer)Activator.CreateInstance(drawerType, new object[] { target,attr });
+                return (VisibleCompareDrawer)Activator.CreateInstance(drawerType,target,attr);
             }
             return null;
         }
@@ -124,7 +124,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (PropertyDrawer)Activator.CreateInstance(drawerType, new object[] { target, field,attr });
+                return (PropertyDrawer)Activator.CreateInstance(drawerType, target, field,attr );
             }
             return null;
         }
@@ -133,7 +133,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (PropertyLabelDrawer)Activator.CreateInstance(drawerType, new object[] { attr });
+                return (PropertyLabelDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
         }
@@ -142,7 +142,7 @@ namespace DotEditor.NativeDrawer
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (PropertyControlDrawer)Activator.CreateInstance(drawerType, new object[] { attr });
+                return (PropertyControlDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
         }

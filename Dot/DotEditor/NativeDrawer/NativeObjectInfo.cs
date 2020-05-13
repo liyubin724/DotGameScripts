@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
@@ -48,7 +49,7 @@ namespace DotEditor.NativeDrawer
 
             foreach(var d in allTypeFields)
             {
-                EGUILayout.DrawBoxHeader(d.type.Name);
+                EGUILayout.DrawBoxHeader(d.type.Name,GUILayout.ExpandWidth(true));
                 foreach(var field in d.fields)
                 {
                     field.OnLayoutGUI();
@@ -64,7 +65,7 @@ namespace DotEditor.NativeDrawer
 
         private void InitField()
         {
-            Type[] allTypes = TypeUtility.GetAllBasedTypes(ValueType);
+            Type[] allTypes = TypeUtility.GetAllBasedTypes(ValueType,typeof(object));
             if(allTypes!=null)
             {
                 foreach(var type in allTypes)
@@ -86,10 +87,9 @@ namespace DotEditor.NativeDrawer
                             data.fields.Add(new NativeObjectInfo(Value, field));
                         }
                     }
+                    allTypeFields.Add(data);
                 }
             }
         }
-
-        
     }
 }

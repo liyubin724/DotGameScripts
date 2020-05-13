@@ -7,7 +7,7 @@ namespace DotEditor.NativeDrawer.Property
     [CustomAttDrawerLink(typeof(IndentAttribute))]
     public class IndentDrawer : PropertyControlDrawer
     {
-        public IndentDrawer(NativeDrawerAttribute attr) : base(attr)
+        public IndentDrawer(PropertyControlAttribute attr) : base(attr)
         {
         }
 

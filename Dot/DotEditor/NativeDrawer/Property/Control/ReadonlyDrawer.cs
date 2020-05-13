@@ -7,7 +7,7 @@ namespace DotEditor.NativeDrawer.Property
     [CustomAttDrawerLink(typeof(ReadonlyAttribute))]
     public class ReadonlyDrawer : PropertyControlDrawer
     {
-        public ReadonlyDrawer(NativeDrawerAttribute attr) : base(attr)
+        public ReadonlyDrawer(PropertyControlAttribute attr) : base(attr)
         {
         }
 
