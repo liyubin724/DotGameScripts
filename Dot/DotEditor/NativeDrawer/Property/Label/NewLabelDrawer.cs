@@ -1,5 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Property;
+﻿using Dot.NativeDrawer.Property;
 
 namespace DotEditor.NativeDrawer.Property
 {

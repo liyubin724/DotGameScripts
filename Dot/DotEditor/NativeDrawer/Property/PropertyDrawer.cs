@@ -29,7 +29,7 @@ namespace DotEditor.NativeDrawer.Property
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
 
-        protected PropertyDrawer(object target,FieldInfo field ,NativeDrawerAttribute attr) : base(attr)
+        protected PropertyDrawer(object target,FieldInfo field , PropertyDrawerAttribute attr) : base(attr)
         {
             Target = target;
             Field = field;
@@ -37,7 +37,7 @@ namespace DotEditor.NativeDrawer.Property
 
         public void OnLayoutGUI(string label)
         {
-            if(IsValid())
+            if(!IsValid())
             {
                 OnInvalidProperty(label);
             }else
