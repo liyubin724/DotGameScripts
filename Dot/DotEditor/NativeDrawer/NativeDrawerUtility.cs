@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
@@ -144,6 +145,31 @@ namespace DotEditor.NativeDrawer
                 return (PropertyControlDrawer)Activator.CreateInstance(drawerType, new object[] { attr });
             }
             return null;
+        }
+
+        private static Type[] valueTypes = new Type[]
+        {
+            typeof(int),typeof(float),typeof(string),typeof(Vector3),typeof(Vector2),typeof(Rect),typeof(Bounds),
+        };
+        public static bool IsValueType(Type type)
+        {
+            if(Array.IndexOf(valueTypes,type)>=0)
+            {
+                return true;
+            }
+            if(type.IsEnum)
+            {
+                return true;
+            }
+            if(type.IsValueType && !type.IsPrimitive)
+            {
+                return false;
+            }
+            if(type.IsClass && !typeof(Delegate).IsAssignableFrom(type))
+            {
+                return false;
+            }
+            throw new Exception("Unknown type.type = " + type.FullName);
         }
     }
 }

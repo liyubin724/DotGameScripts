@@ -31,6 +31,19 @@ namespace DotEditor.NativeDrawer
                 }
             }
         }
+        public Type ValueType
+        {
+            get
+            {
+                if(Field == null)
+                {
+                    return Target.GetType();
+                }else
+                {
+                    return Field.FieldType;
+                }
+            }
+        }
 
         protected NativeTypeDrawer defaultTypeDrawer = null;
 
