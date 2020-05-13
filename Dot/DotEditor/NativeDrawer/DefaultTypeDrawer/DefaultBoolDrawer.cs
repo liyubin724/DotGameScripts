@@ -10,18 +10,23 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
         {
         }
 
-        public override void OnLayoutGUI(string label)
+        protected override void OnDraw(string label)
         {
             label = label ?? "";
-            bool value = (bool)Field.GetValue(Target);
+            bool value = GetValue<bool>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.Toggle(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Field.SetValue(Target, value);
+                Value = value;
             }
+        }
+
+        protected override bool IsValid()
+        {
+            return ValueType == typeof(bool);
         }
     }
 }

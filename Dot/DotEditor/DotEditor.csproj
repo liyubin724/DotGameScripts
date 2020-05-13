@@ -107,6 +107,7 @@
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultFloatDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultIntDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultListDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultRectDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultStringDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector2Drawer.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="NativeDrawer\Layout\EndIndentDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\LayoutDrawer.cs" />
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
-    <Compile Include="NativeDrawer\NativeValueInfo.cs" />
     <Compile Include="NativeDrawer\NativeInfo.cs" />
     <Compile Include="NativeDrawer\NativeObjectInfo.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />

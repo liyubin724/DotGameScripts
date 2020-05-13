@@ -11,18 +11,23 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
         {
         }
 
-        public override void OnLayoutGUI(string label)
+        protected override void OnDraw(string label)
         {
             label = label ?? "";
-            Enum value = (Enum)Field.GetValue(Target);
+            Enum value = GetValue<Enum>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.EnumPopup(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Field.SetValue(Target, value);
+                Value = value;
             }
+        }
+
+        protected override bool IsValid()
+        {
+            return ValueType == typeof(Enum);
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using DotEditor.Core.Utilities;
-using DotEditor.GUIExtension;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
-using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
@@ -36,7 +34,7 @@ namespace DotEditor.NativeDrawer
             InitField();
         }
 
-        public override void OnLayoutGUI()
+        protected override void OnDrawerProperty()
         {
             if(!IsRoot)
             {
@@ -78,7 +76,7 @@ namespace DotEditor.NativeDrawer
                     {
                         if(NativeDrawerUtility.IsValueType(field.FieldType))
                         {
-                            data.fields.Add(new NativeValueInfo(Value, field));
+                            data.fields.Add(new NativeInfo(Value, field));
                         }else
                         {
                             if(Value == null)

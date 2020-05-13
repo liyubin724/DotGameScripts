@@ -1,7 +1,9 @@
 ﻿using Dot.NativeDrawer;
 using Dot.NativeDrawer.Property;
+using DotEditor.GUIExtension;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Property
 {
@@ -49,7 +51,11 @@ namespace DotEditor.NativeDrawer.Property
         protected abstract void OnProperty(string label);
         protected virtual void OnInvalidProperty(string label)
         {
-            EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, "Invalid");
+            EGUI.BeginGUIColor(Color.red);
+            {
+                EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, "Invalid");
+            }
+            EGUI.EndGUIColor();
         }
 
         protected virtual bool IsValid()

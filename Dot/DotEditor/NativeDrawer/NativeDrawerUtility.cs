@@ -61,7 +61,14 @@ namespace DotEditor.NativeDrawer
 
         public static NativeTypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
         {
-            Type fieldType = field.FieldType;
+            Type fieldType;
+            if (field == null)
+            {
+                fieldType = target.GetType();
+            }else
+            {
+                fieldType = field.FieldType;
+            }
             if(fieldType.IsEnum)
             {
                 fieldType = typeof(Enum);
@@ -164,6 +171,7 @@ namespace DotEditor.NativeDrawer
             {
                 return false;
             }
+
             if(type.IsClass && !typeof(Delegate).IsAssignableFrom(type))
             {
                 return false;
