@@ -30,6 +30,11 @@ namespace DotEditor.NativeDrawer
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach(var assembly in assemblies)
             {
+                string assemblyName = assembly.GetName().Name;
+                if(assemblyName.StartsWith("Unity") || assemblyName.StartsWith("System") || assemblyName.StartsWith("Mono") )
+                {
+                    continue;
+                }
                 Type[] types = (
                                 from type in assembly.GetTypes() 
                                 where !type.IsAbstract && !type.IsInterface && typeof(AttrNativeDrawer).IsAssignableFrom(type) 
