@@ -1,32 +1,31 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(Bounds))]
+    [CustomDefaultTypeDrawer(typeof(Bounds))]
     public class DefaultBoundsDrawer : NativeTypeDrawer
     {
-        public DefaultBoundsDrawer(object target, FieldInfo field) : base(target, field)
+        public DefaultBoundsDrawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(Bounds);
+            return DrawerProperty.ValueType == typeof(Bounds);
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            Bounds value = GetValue<Bounds>();
+            Bounds value = DrawerProperty.GetValue<Bounds>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.BoundsField(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
     }

@@ -1,32 +1,31 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(Vector3))]
+    [CustomDefaultTypeDrawer(typeof(Vector3))]
     public class DefaultVector3Drawer : NativeTypeDrawer
     {
-        public DefaultVector3Drawer(object target, FieldInfo field) : base(target, field)
+        public DefaultVector3Drawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(Vector3);
+            return DrawerProperty.ValueType == typeof(Vector3);
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            Vector3 value = GetValue<Vector3>();
+            Vector3 value = DrawerProperty.GetValue<Vector3>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.Vector3Field(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
     }

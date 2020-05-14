@@ -58,13 +58,36 @@ namespace DotEditor.NativeDrawer
                         ).ToArray();
                 foreach(var type in types)
                 {
-                    CustomTypeDrawerAttribute attr = type.GetCustomAttribute<CustomTypeDrawerAttribute>();
+                    CustomDefaultTypeDrawerAttribute attr = type.GetCustomAttribute<CustomDefaultTypeDrawerAttribute>();
                     if(attr!=null)
                     {
                         defaultTypeDrawerDic.Add(attr.Target, type);
                     }
                 }
             }
+        }
+
+        public static Type GetDefaultType(Type type)
+        {
+            if(type.IsEnum)
+            {
+                return typeof(Enum);
+            }
+            if(TypeUtility.IsArrayOrList(type))
+            {
+                return typeof(IList);
+            }
+            return type;
+        }
+
+        public static NativeTypeDrawer CreateDefaultTypeDrawer(NativeDrawerProperty property)
+        {
+            Type type = GetDefaultType(property.ValueType);
+            if (defaultTypeDrawerDic.TryGetValue(type, out Type drawerType))
+            {
+                return (NativeTypeDrawer)Activator.CreateInstance(drawerType, property);
+            }
+            return null;
         }
 
         public static NativeTypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
@@ -206,7 +229,7 @@ namespace DotEditor.NativeDrawer
                 {
                     if(types[i] == blockType)
                     {
-                        ArrayUtility.Sub<Type>(ref types, 0, i);
+                        ArrayUtility.Sub<Type>(ref types, i+1);
                         break;
                     }
                 }

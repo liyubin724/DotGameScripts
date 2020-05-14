@@ -1,6 +1,4 @@
 ﻿using DotEditor.GUIExtension;
-using System;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,54 +6,29 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
     public abstract class NativeTypeDrawer
     {
-        public object Target { get; private set; }
-        public FieldInfo Field { get; private set; }
-        public object Value
+        public NativeDrawerProperty DrawerProperty { get; private set; }
+
+        protected NativeTypeDrawer(NativeDrawerProperty property)
         {
-            get
-            {
-                return Field.GetValue(Target);
-            }
-            set
-            {
-                Field.SetValue(Target, value);
-            }
-        }
-        public Type ValueType
-        {
-            get
-            {
-                return Field.FieldType;
-            }
+            DrawerProperty = property;
         }
 
-        public T GetValue<T>()
-        {
-            return (T)Value;
-        }
+        protected abstract bool IsValidProperty();
 
-        protected NativeTypeDrawer(object target,FieldInfo field)
+        public void OnGUILayout(string label)
         {
-            Target = target;
-            Field = field;
-        }
-
-        protected abstract bool IsValid();
-
-        public void OnLayoutGUI(string label)
-        {
-            if(Target == null || Field == null || !IsValid())
+            if(DrawerProperty == null || !IsValidProperty())
             {
-                OnInvalidDraw(label);
+                OnDrawInvalidProperty(label);
             }else
             {
-                OnDraw(label);
+                OnDrawProperty(label);
             }
         }
 
-        protected abstract void OnDraw(string label);
+        protected abstract void OnDrawProperty(string label);
 
-        protected virtual void OnInvalidDraw(string label)
+        protected virtual void OnDrawInvalidProperty(string label)
         {
             EGUI.BeginGUIColor(Color.red);
             {

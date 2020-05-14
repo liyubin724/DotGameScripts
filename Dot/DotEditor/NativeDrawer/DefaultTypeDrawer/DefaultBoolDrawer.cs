@@ -1,32 +1,31 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(bool))]
+    [CustomDefaultTypeDrawer(typeof(bool))]
     public class DefaultBoolDrawer : NativeTypeDrawer
     {
-        public DefaultBoolDrawer(object target, FieldInfo field) : base(target, field)
+        public DefaultBoolDrawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            bool value = GetValue<bool>();
+            bool value = DrawerProperty.GetValue<bool>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.Toggle(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(bool);
+            return DrawerProperty.ValueType == typeof(bool);
         }
     }
 }

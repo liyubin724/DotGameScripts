@@ -3,14 +3,13 @@ using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
-using DotEditor.Core.Utilities;
 using DotEditor.NativeDrawer.Decorator;
+using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
 using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
 using DotEditor.NativeDrawer.Visible;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -20,32 +19,12 @@ namespace DotEditor.NativeDrawer
     {
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
-        public bool IsArrayOrList
-        {
-            get
-            {
-                return TypeUtility.IsArrayOrList(ValueType);
-            }
-        }
-        public int IndexOfArrayOrList { get; private set; } = -1;
-        public bool IsStructOrClass
-        {
-            get
-            {
-                return TypeUtility.IsStructOrClass(ValueType);
-            }
-        }
-
+        
         public Type ValueType
         {
             get
             {
-                Type valueType = Field.FieldType;
-                if(TypeUtility.IsArrayOrList(valueType) && IndexOfArrayOrList>0)
-                {
-                    return TypeUtility.GetArrayOrListElementType(valueType);
-                }
-                return valueType;
+                return Field.FieldType;
             }
         }
 
@@ -53,36 +32,28 @@ namespace DotEditor.NativeDrawer
         {
             get
             {
-                var value = Field.GetValue(Target);
-                if(IsArrayOrList && IndexOfArrayOrList >0)
+                object value = Field.GetValue(Target);
+                if(value == null)
                 {
-                    if(value == null)
-                    {
-                        return null;
-                    }else
-                    {
-                        IList list = (IList)value;
-                        return list[IndexOfArrayOrList];
-                    }
+                    value = Activator.CreateInstance(ValueType);
+                    Field.SetValue(Target, value);
                 }
+
                 return value;
             }
             set
             {
-                if(IsArrayOrList && IndexOfArrayOrList>0)
+                if(value == null)
                 {
-                    IList list = (IList)value;
-                    list[IndexOfArrayOrList] = value;
+                    value = Activator.CreateInstance(ValueType);
                 }
-                else
-                {
-                    if(value == null)
-                    {
-                        value = Activator.CreateInstance(ValueType);
-                    }
-                    Field.SetValue(Target, value);
-                }
+                Field.SetValue(Target, value);
             }
+        }
+
+        internal T GetValue<T>()
+        {
+            return (T)Value;
         }
 
         private List<DecoratorDrawer> decoratorDrawers = new List<DecoratorDrawer>();
@@ -95,7 +66,8 @@ namespace DotEditor.NativeDrawer
         private List<PropertyControlDrawer> propertyControlDrawers = new List<PropertyControlDrawer>();
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
 
-        private List<NativeDrawerObject> childDrawerObject = new List<NativeDrawerObject>();
+        private NativeDrawerObject childDrawerObject = null;
+        private NativeTypeDrawer typeDrawer = null;
         internal NativeDrawerProperty(object propertyObject,FieldInfo field)
         {
             Target = propertyObject;
@@ -105,6 +77,8 @@ namespace DotEditor.NativeDrawer
         internal void Init()
         {
             InitFieldAttr();
+
+            typeDrawer = NativeDrawerUtility.CreateDefaultTypeDrawer(this);
         }
 
         private void InitFieldAttr()
@@ -187,7 +161,10 @@ namespace DotEditor.NativeDrawer
                 string label = GetFieldLabel();
                 if (propertyDrawers.Count == 0)
                 {
-                    
+                    if(typeDrawer !=null)
+                    {
+                        typeDrawer.OnGUILayout(label);
+                    }
                 }
                 else
                 {

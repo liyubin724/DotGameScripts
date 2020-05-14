@@ -1,31 +1,30 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(string))]
+    [CustomDefaultTypeDrawer(typeof(string))]
     public class DefaultStringDrawer : NativeTypeDrawer
     {
-        public DefaultStringDrawer(object target, FieldInfo field) : base(target, field)
+        public DefaultStringDrawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(string);
+            return DrawerProperty.ValueType == typeof(string);
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            string value = GetValue<string>();
+            string value = DrawerProperty.GetValue<string>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.TextField(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
     }

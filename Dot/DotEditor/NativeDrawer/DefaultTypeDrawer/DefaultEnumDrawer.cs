@@ -1,33 +1,32 @@
 ﻿using System;
-using System.Reflection;
 using UnityEditor;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(Enum))]
+    [CustomDefaultTypeDrawer(typeof(Enum))]
     public class DefaultEnumDrawer : NativeTypeDrawer
     {
-        public DefaultEnumDrawer(object target, FieldInfo field) : base(target, field)
+        public DefaultEnumDrawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            Enum value = GetValue<Enum>();
+            Enum value = DrawerProperty.GetValue<Enum>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.EnumPopup(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(Enum);
+            return typeof(Enum).IsAssignableFrom(DrawerProperty.ValueType);
         }
     }
 }

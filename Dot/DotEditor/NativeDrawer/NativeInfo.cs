@@ -200,7 +200,7 @@ namespace DotEditor.NativeDrawer
                     }
                     if (defaultTypeDrawer != null)
                     {
-                        defaultTypeDrawer.OnLayoutGUI(label);
+                        defaultTypeDrawer.OnGUILayout(label);
                     }else
                     {
                         OnDrawerProperty();

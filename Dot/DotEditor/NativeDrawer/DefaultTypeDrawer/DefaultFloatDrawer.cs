@@ -1,31 +1,30 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomTypeDrawer(typeof(float))]
+    [CustomDefaultTypeDrawer(typeof(float))]
     public class DefaultFloatDrawer : NativeTypeDrawer
     {
-        public DefaultFloatDrawer(object target, FieldInfo field) : base(target, field)
+        public DefaultFloatDrawer(NativeDrawerProperty property) : base(property)
         {
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return ValueType == typeof(float);
+            return DrawerProperty.ValueType == typeof(float);
         }
 
-        protected override void OnDraw(string label)
+        protected override void OnDrawProperty(string label)
         {
             label = label ?? "";
-            float value = GetValue<float>();
+            float value = DrawerProperty.GetValue<float>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.FloatField(label, value);
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Value = value;
+                DrawerProperty.Value = value;
             }
         }
     }
