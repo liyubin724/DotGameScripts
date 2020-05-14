@@ -123,8 +123,6 @@
     <Compile Include="NativeDrawer\NativeDrawerObject.cs" />
     <Compile Include="NativeDrawer\NativeDrawerProperty.cs" />
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
-    <Compile Include="NativeDrawer\NativeInfo.cs" />
-    <Compile Include="NativeDrawer\NativeObjectInfo.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />

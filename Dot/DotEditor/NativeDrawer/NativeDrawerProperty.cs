@@ -3,6 +3,7 @@ using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
+using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
@@ -12,6 +13,7 @@ using DotEditor.NativeDrawer.Visible;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
@@ -66,7 +68,6 @@ namespace DotEditor.NativeDrawer
         private List<PropertyControlDrawer> propertyControlDrawers = new List<PropertyControlDrawer>();
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
 
-        private NativeDrawerObject childDrawerObject = null;
         private NativeTypeDrawer typeDrawer = null;
         internal NativeDrawerProperty(object propertyObject,FieldInfo field)
         {
@@ -159,11 +160,22 @@ namespace DotEditor.NativeDrawer
                 }
 
                 string label = GetFieldLabel();
+                if(!string.IsNullOrEmpty(label))
+                {
+                    label = UnityEditor.ObjectNames.NicifyVariableName(label);
+                }
                 if (propertyDrawers.Count == 0)
                 {
                     if(typeDrawer !=null)
                     {
                         typeDrawer.OnGUILayout(label);
+                    }else
+                    {
+                        EGUI.BeginGUIColor(Color.red);
+                        {
+                            UnityEditor.EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, "Unknown Drawer");
+                        }
+                        EGUI.EndGUIColor();
                     }
                 }
                 else
