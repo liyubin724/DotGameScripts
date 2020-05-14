@@ -236,36 +236,5 @@ namespace DotEditor.NativeDrawer
             }
             return types;
         }
-
-        private static Type[] valueTypes = new Type[]
-        {
-            typeof(bool),typeof(int),typeof(float),typeof(string),typeof(Vector3),typeof(Vector2),typeof(Rect),typeof(Bounds),
-        };
-        public static bool IsValueType(Type type)
-        {
-            if(Array.IndexOf(valueTypes,type)>=0)
-            {
-                return true;
-            }
-            if(type.IsEnum)
-            {
-                return true;
-            }
-            if(type.IsValueType && !type.IsPrimitive)
-            {
-                return false;
-            }
-
-            if(typeof(IList).IsAssignableFrom(type) && !type.IsArray)
-            {
-                return true;
-            }
-
-            if(type.IsClass && !typeof(Delegate).IsAssignableFrom(type))
-            {
-                return false;
-            }
-            throw new Exception("Unknown type.type = " + type.FullName);
-        }
     }
 }
