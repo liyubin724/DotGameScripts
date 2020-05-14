@@ -107,26 +107,32 @@ namespace DotEditor.Core.Utilities
             return null;
         }
 
-        public static Type[] GetAllBasedTypes(this Type type,Type blockType = null)
+        public static bool IsDelegate(this Type type)
         {
-            if(typeof(List<>).IsAssignableFrom(type))
-            {
-                return new Type[] { type };
-            }else if(type.IsValueType && !type.IsPrimitive)
-            {
-                return new Type[] { type };
-            }else if(type.IsArray)
-            {
-                return new Type[] { type };
-            }
-            
-            if(blockType == null)
-            {
-                blockType = typeof(object);
-            }
+            return typeof(Delegate).IsAssignableFrom(type);
+        }
 
+        public static bool IsStructOrClass(this Type type)
+        {
+            if(type.IsValueType && !type.IsPrimitive)
+            {
+                return true;
+            }
+            if(type.IsValueType)
+            {
+                return false;
+            }
+            if(type.IsClass && !type.IsArrayOrList() && !IsDelegate(type))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static Type[] GetAllBasedTypes(this Type type)
+        {
             var types = new List<Type>() { type };
-            while (types.Last().BaseType != blockType)
+            while (types.Last().BaseType != null)
             {
                 types.Add(types.Last().BaseType);
             }

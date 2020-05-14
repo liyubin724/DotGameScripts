@@ -120,6 +120,8 @@
     <Compile Include="NativeDrawer\Layout\EndHorizontalDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\EndIndentDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\LayoutDrawer.cs" />
+    <Compile Include="NativeDrawer\NativeDrawerObject.cs" />
+    <Compile Include="NativeDrawer\NativeDrawerProperty.cs" />
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
     <Compile Include="NativeDrawer\NativeInfo.cs" />
     <Compile Include="NativeDrawer\NativeListInfo.cs" />

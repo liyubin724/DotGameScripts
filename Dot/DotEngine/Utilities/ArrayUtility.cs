@@ -39,5 +39,26 @@
             }
             System.Array.Resize(ref list, list.Length - (end - start + 1));
         }
+
+        public static void Sub<T>(ref T[] list,int start)
+        {
+            Sub<T>(ref list, start, list.Length - start);
+        }
+
+        public static void Sub<T>(ref T[] list,int start,int length)
+        {
+            if(list.Length<(start+length))
+            {
+                length = list.Length - start;
+            }
+            if(length<0)
+            {
+                length = 0;
+            }
+
+            var sub = new T[length];
+            System.Array.Copy(list, start, sub, 0, length);
+            list = sub;
+        }
     }
 }

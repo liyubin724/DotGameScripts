@@ -3,6 +3,8 @@ using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
+using Dot.Utilities;
+using DotEditor.Core.Utilities;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
@@ -161,6 +163,55 @@ namespace DotEditor.NativeDrawer
                 return (PropertyControlDrawer)Activator.CreateInstance(drawerType, attr);
             }
             return null;
+        }
+
+        public static Type[] GetAllBaseTypes(Type type)
+        {
+            if(type.IsValueType)
+            {
+                return new Type[] { type };
+            }
+            if(type.IsArray)
+            {
+                return new Type[] { type };
+            }
+            if(type.IsEnum)
+            {
+                return new Type[] { type};
+            }
+            if (typeof(List<>).IsAssignableFrom(type))
+            {
+                return new Type[] { type };
+            }
+
+            Type[] types = type.GetAllBasedTypes();
+            if(types!=null && types.Length>0)
+            {
+                Type blockType;
+                if(type.IsSubclassOf(typeof(MonoBehaviour)))
+                {
+                    blockType = typeof(MonoBehaviour);
+                }else if(type.IsSubclassOf(typeof(ScriptableObject)))
+                {
+                    blockType = typeof(ScriptableObject);
+                }else if(type.IsSubclassOf(typeof(UnityEngine.Object)))
+                {
+                    blockType = typeof(UnityEngine.Object);
+                }else
+                {
+                    blockType = typeof(System.Object);
+                }
+
+                for(int i =0;i<types.Length;++i)
+                {
+                    if(types[i] == blockType)
+                    {
+                        ArrayUtility.Sub<Type>(ref types, 0, i);
+                        break;
+                    }
+                }
+            }
+            return types;
         }
 
         private static Type[] valueTypes = new Type[]
