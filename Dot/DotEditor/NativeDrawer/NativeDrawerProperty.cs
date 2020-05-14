@@ -85,8 +85,6 @@ namespace DotEditor.NativeDrawer
             }
         }
 
-        private List<NativeDrawerProperty> childProperties = new List<NativeDrawerProperty>();
-
         private List<DecoratorDrawer> decoratorDrawers = new List<DecoratorDrawer>();
         private List<LayoutDrawer> layoutDrawers = new List<LayoutDrawer>();
         private List<VerificationDrawer> verificationDrawers = new List<VerificationDrawer>();
@@ -97,16 +95,16 @@ namespace DotEditor.NativeDrawer
         private List<PropertyControlDrawer> propertyControlDrawers = new List<PropertyControlDrawer>();
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
 
+        private List<NativeDrawerObject> childDrawerObject = new List<NativeDrawerObject>();
         internal NativeDrawerProperty(object propertyObject,FieldInfo field)
         {
             Target = propertyObject;
             Field = field;
         }
 
-        
-        private void InitChildProperty()
+        internal void Init()
         {
-            
+            InitFieldAttr();
         }
 
         private void InitFieldAttr()
