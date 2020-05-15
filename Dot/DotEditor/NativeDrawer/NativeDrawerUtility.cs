@@ -4,7 +4,6 @@ using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
 using Dot.Utilities;
-using DotEditor.Core.Utilities;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
@@ -67,6 +66,19 @@ namespace DotEditor.NativeDrawer
             }
         }
 
+        public static object CreateDefaultInstance(Type type)
+        {
+            if(type.IsArray)
+            {
+                return Array.CreateInstance(TypeUtility.GetArrayOrListElementType(type), 0);
+            }
+            if(type == typeof(string))
+            {
+                return string.Empty;
+            }
+            return Activator.CreateInstance(type);
+        }
+
         public static Type GetDefaultType(Type type)
         {
             if(type.IsEnum)
@@ -86,32 +98,6 @@ namespace DotEditor.NativeDrawer
             if (defaultTypeDrawerDic.TryGetValue(type, out Type drawerType))
             {
                 return (NativeTypeDrawer)Activator.CreateInstance(drawerType, property);
-            }
-            return null;
-        }
-
-        public static NativeTypeDrawer CreateDefaultTypeDrawer(object target,FieldInfo field)
-        {
-            Type fieldType;
-            if (field == null)
-            {
-                fieldType = target.GetType();
-            }else
-            {
-                fieldType = field.FieldType;
-            }
-            if(fieldType.IsEnum)
-            {
-                fieldType = typeof(Enum);
-            }
-            if(fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
-            {
-                fieldType = typeof(List<>);
-            }
-
-            if(defaultTypeDrawerDic.TryGetValue(fieldType, out Type drawerType))
-            {
-                return (NativeTypeDrawer)Activator.CreateInstance(drawerType, target, field);
             }
             return null;
         }

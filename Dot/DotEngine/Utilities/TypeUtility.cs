@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotEditor.Core.Utilities
+namespace Dot.Utilities
 {
     public static class TypeUtility
     {
@@ -23,13 +23,6 @@ namespace DotEditor.Core.Utilities
                         m.Name == "op_Explicit")
                 );
             return methods.Count() > 0;
-        }
-
-        public static string NicifyVariableName(this Type type)
-        {
-            string typeName = type.Name;
-            typeName = UnityEditor.ObjectNames.NicifyVariableName(typeName);
-            return typeName;
         }
 
         /// <summary>

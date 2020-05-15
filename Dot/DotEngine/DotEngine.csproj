@@ -204,6 +204,7 @@
     <Compile Include="Utilities\DontDestroyHandler.cs" />
     <Compile Include="Utilities\MathUtil.cs" />
     <Compile Include="Utilities\ReflectionUtility.cs" />
+    <Compile Include="Utilities\TypeUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GUI\" />

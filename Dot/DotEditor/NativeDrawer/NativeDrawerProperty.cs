@@ -3,6 +3,7 @@ using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
+using Dot.Utilities;
 using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.DefaultTypeDrawer;
@@ -11,6 +12,7 @@ using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
 using DotEditor.NativeDrawer.Visible;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -37,7 +39,7 @@ namespace DotEditor.NativeDrawer
                 object value = Field.GetValue(Target);
                 if(value == null)
                 {
-                    value = Activator.CreateInstance(ValueType);
+                    value = NativeDrawerUtility.CreateDefaultInstance(ValueType);
                     Field.SetValue(Target, value);
                 }
 
@@ -47,7 +49,7 @@ namespace DotEditor.NativeDrawer
             {
                 if(value == null)
                 {
-                    value = Activator.CreateInstance(ValueType);
+                    value = NativeDrawerUtility.CreateDefaultInstance(ValueType); 
                 }
                 Field.SetValue(Target, value);
             }
@@ -217,6 +219,58 @@ namespace DotEditor.NativeDrawer
                 label = drawer.GetLabel();
             }
             return label ?? "";
+        }
+
+        internal void ClearArrayElement()
+        {
+            if (TypeUtility.IsArrayOrList(ValueType))
+            {
+                if (ValueType.IsArray)
+                {
+                    Value = NativeDrawerUtility.CreateDefaultInstance(ValueType);
+                }
+                else
+                {
+                    ((IList)Value).Clear();
+                }
+            }
+        }
+
+        internal void AddArrayElement()
+        {
+            if (TypeUtility.IsArrayOrList(ValueType))
+            {
+                object element = NativeDrawerUtility.CreateDefaultInstance(TypeUtility.GetArrayOrListElementType(ValueType));
+                if (ValueType.IsArray)
+                {
+                    Array array = (Array)Value;
+                    ArrayUtility.Add(ref array,element);
+
+                    Value = array;
+                }
+                else
+                {
+                    ((IList)Value).Add(element);
+                }
+            }
+        }
+
+        internal void RemoveArrayElementAtIndex(int index)
+        {
+            if(TypeUtility.IsArrayOrList(ValueType))
+            {
+                if(ValueType.IsArray)
+                {
+                    Array array = (Array)Value;
+                    ArrayUtility.Remove(ref array, index);
+
+                    Value = array;
+                }
+                else
+                {
+                    ((IList)Value).RemoveAt(index);
+                }
+            }
         }
     }
 }

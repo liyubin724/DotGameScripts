@@ -1,7 +1,36 @@
-﻿namespace Dot.Utilities
+﻿using System;
+
+namespace Dot.Utilities
 {
     public static class ArrayUtility
     {
+        public static void Add(ref Array array,object newone)
+        {
+            Insert(ref array, newone, array.Length);
+        }
+
+        public static void Insert(ref Array array,object newone,int at)
+        {
+            Array expanded = Array.CreateInstance(TypeUtility.GetArrayOrListElementType(array.GetType()),array.Length+1);
+            Array.Copy(array, expanded, at);
+            Array.Copy(array, at, expanded, at + 1, array.Length - at);
+            expanded.SetValue(newone, at);
+            array = expanded;
+        }
+
+        public static void Remove(ref Array array,int at)
+        {
+            Array expanded = Array.CreateInstance(TypeUtility.GetArrayOrListElementType(array.GetType()), array.Length-1);
+            Array.Copy(array, expanded, at);
+            Array.Copy(array, at+1, expanded, at, array.Length - at-1);
+            array = expanded;
+        }
+
+        public static void Add<T>(ref T[] list,T newone)
+        {
+            Insert(ref list, newone, list.Length);
+        }
+
         public static void Insert<T>(ref T[] list, T newone, int at)
         {
             var expanded = new T[list.Length + 1];
@@ -60,5 +89,6 @@
             System.Array.Copy(list, start, sub, 0, length);
             list = sub;
         }
+
     }
 }

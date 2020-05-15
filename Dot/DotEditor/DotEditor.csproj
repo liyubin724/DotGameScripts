@@ -151,7 +151,6 @@
     <Compile Include="Utilities\PrefabUtility.cs" />
     <Compile Include="Utilities\SelectionUtility.cs" />
     <Compile Include="Utilities\SpriteAtlasUtility.cs" />
-    <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />
   </ItemGroup>
   <ItemGroup>

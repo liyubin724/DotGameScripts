@@ -1,5 +1,5 @@
 ﻿using Dot.NativeDrawer;
-using DotEditor.Core.Utilities;
+using Dot.Utilities;
 using System;
 using System.Reflection;
 
@@ -98,7 +98,7 @@ namespace DotEditor.NativeDrawer
             }
             else
             {
-                return false;
+                return comparedValue == attr.Value;
             }
         }
 
