@@ -15,6 +15,9 @@ using UnityEngine;
 
 public class TestData
 {
+    public TEnumType enumType = TEnumType.A;
+    public TFlagEnumType flagEnumType = TFlagEnumType.E;
+
     [Help("Test for it")]
     [Indent(2)]
     [BeginGroup("Test")]
@@ -44,6 +47,22 @@ public class InnerData
 {
     [Help("InnerData int Value")]
     public int iValue;
+}
+
+public enum TEnumType
+{
+    A,
+    B,
+    C,
+    D,
+}
+
+[Flags]
+public enum TFlagEnumType
+{
+    E = 1<<0,
+    F = 1<<1,
+    G = 1<<2,
 }
 
 

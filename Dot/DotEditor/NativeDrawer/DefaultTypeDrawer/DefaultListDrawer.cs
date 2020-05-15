@@ -42,10 +42,11 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 
             EditorGUILayout.BeginVertical(EGUIStyles.BoxStyle);
             {
-                EGUILayout.DrawBoxHeader(label, GUILayout.ExpandWidth(true));
+                EditorGUILayout.LabelField(GUIContent.none, EditorStyles.toolbar, GUILayout.ExpandWidth(true));
                 Rect lastRect = GUILayoutUtility.GetLastRect();
-                Rect clearBtnRect = new Rect(lastRect.x + lastRect.width - 40, lastRect.y + 2, 40, lastRect.height - 4);
-                if (GUI.Button(clearBtnRect, "C"))
+                EditorGUI.LabelField(lastRect, label, EGUIStyles.BoldLabelStyle);
+                Rect clearBtnRect = new Rect(lastRect.x + lastRect.width - 40, lastRect.y, 40, lastRect.height);
+                if (GUI.Button(clearBtnRect, "C",EditorStyles.toolbarButton))
                 {
                     DrawerProperty.ClearArrayElement();
                     InitList();

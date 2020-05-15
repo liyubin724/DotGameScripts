@@ -2,6 +2,14 @@
 
 namespace Dot.NativeDrawer.Decorator
 {
+    public enum HelpMessageType
+    {
+        None,
+        Info,
+        Warning,
+        Error,
+    }
+
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class HelpAttribute : DecoratorAttribute
     {
@@ -13,13 +21,5 @@ namespace Dot.NativeDrawer.Decorator
             Text = text;
             MessageType = messageType;
         }
-    }
-
-    public enum HelpMessageType
-    {
-        None,
-        Info,
-        Warning,
-        Error,
     }
 }

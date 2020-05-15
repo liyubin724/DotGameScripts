@@ -72,7 +72,7 @@ namespace DotEditor.NativeDrawer
             }
         }
 
-        internal T GetValue<T>()
+        public T GetValue<T>()
         {
             return (T)Value;
         }
@@ -184,9 +184,12 @@ namespace DotEditor.NativeDrawer
 
             if (isVisible)
             {
-                foreach (var drawer in decoratorDrawers)
+                if(NativeDrawerSetting.IsShowDecorator)
                 {
-                    drawer.OnLayoutGUI();
+                    foreach (var drawer in decoratorDrawers)
+                    {
+                        drawer.OnLayoutGUI();
+                    }
                 }
 
                 foreach (var drawer in verificationDrawers)
@@ -271,7 +274,6 @@ namespace DotEditor.NativeDrawer
             }
             return label ?? "";
         }
-
 
         internal void ClearArrayElement()
         {

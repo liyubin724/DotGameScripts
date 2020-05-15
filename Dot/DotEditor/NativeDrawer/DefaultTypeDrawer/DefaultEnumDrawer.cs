@@ -6,8 +6,15 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
     [CustomTypeDrawer(typeof(Enum))]
     public class DefaultEnumDrawer : NativeTypeDrawer
     {
+        private bool isFlagEnum = false;
         public DefaultEnumDrawer(NativeDrawerProperty property) : base(property)
         {
+            var flagAttrs = DrawerProperty.ValueType.GetCustomAttributes(typeof(FlagsAttribute),false);
+
+            if(flagAttrs!=null && flagAttrs.Length>0)
+            {
+                isFlagEnum = true;
+            }
         }
 
         protected override void OnDrawProperty(string label)
@@ -16,7 +23,13 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
             Enum value = DrawerProperty.GetValue<Enum>();
             EditorGUI.BeginChangeCheck();
             {
-                value = EditorGUILayout.EnumPopup(label, value);
+                if(isFlagEnum)
+                {
+                    value = EditorGUILayout.EnumFlagsField(label, value);
+                }else
+                {
+                    value = EditorGUILayout.EnumPopup(label, value);
+                }
             }
             if (EditorGUI.EndChangeCheck())
             {
