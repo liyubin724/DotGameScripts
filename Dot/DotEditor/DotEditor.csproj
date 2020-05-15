@@ -92,7 +92,6 @@
     <Compile Include="GUIExtension\SearchField\ToolbarSearchField.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarExtend.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarItem.cs" />
-    <Compile Include="GUIExtension\Utilities\PropertyUtility.cs" />
     <Compile Include="GUIExtension\Windows\PopupWindow.cs" />
     <Compile Include="Map\Item\ItemBehaviourEditor.cs" />
     <Compile Include="Map\Lightmap\SceneLightmapBaker.cs" />

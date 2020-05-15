@@ -6,7 +6,6 @@ using Dot.NativeDrawer.Visible;
 using Dot.Utilities;
 using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer.Decorator;
-using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
 using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
@@ -23,7 +22,6 @@ namespace DotEditor.NativeDrawer
     {
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
-
         public int ArrayElementIndex { get; private set; } = -1;
 
         public Type ValueType
