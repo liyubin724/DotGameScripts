@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer
 {
     public abstract class NativeTypeDrawer
     {

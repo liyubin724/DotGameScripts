@@ -112,7 +112,7 @@
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultStringDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector2Drawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector3Drawer.cs" />
-    <Compile Include="NativeDrawer\DefaultTypeDrawer\NativeTypeDrawer.cs" />
+    <Compile Include="NativeDrawer\NativeTypeDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginGroupDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginHorizontalDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginIndentDrawer.cs" />
