@@ -8,6 +8,6 @@ namespace DotEditor.NativeDrawer.Verification
         {
         }
 
-        public abstract void OnLayoutGUI();
+        public abstract void OnGUILayout();
     }
 }

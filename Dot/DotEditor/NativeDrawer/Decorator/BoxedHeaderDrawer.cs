@@ -11,7 +11,7 @@ namespace DotEditor.NativeDrawer.Decorator
         {
         }
 
-        public override void OnLayoutGUI()
+        public override void OnGUILayout()
         {
             BoxedHeaderAttribute attr = GetAttr<BoxedHeaderAttribute>();
             EGUILayout.DrawBoxHeader(attr.Header, GUILayout.ExpandWidth(true));

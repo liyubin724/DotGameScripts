@@ -10,7 +10,7 @@ namespace DotEditor.NativeDrawer.Decorator
         {
         }
 
-        public override void OnLayoutGUI()
+        public override void OnGUILayout()
         {
             HelpAttribute attr = GetAttr<HelpAttribute>();
             MessageType messageType = MessageType.None;

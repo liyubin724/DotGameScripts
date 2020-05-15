@@ -8,6 +8,6 @@ namespace DotEditor.NativeDrawer.Decorator
         {
         }
 
-        public abstract void OnLayoutGUI();
+        public abstract void OnGUILayout();
     }
 }

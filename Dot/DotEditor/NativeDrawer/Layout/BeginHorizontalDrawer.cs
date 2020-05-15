@@ -10,7 +10,7 @@ namespace DotEditor.NativeDrawer.Layout
         {
         }
 
-        public override void OnLayoutGUI()
+        public override void OnGUILayout()
         {
             EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
         }

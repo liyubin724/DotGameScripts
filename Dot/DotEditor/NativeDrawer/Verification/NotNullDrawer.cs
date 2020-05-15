@@ -11,7 +11,7 @@ namespace DotEditor.NativeDrawer.Verification
         {
         }
 
-        public override void OnLayoutGUI()
+        public override void OnGUILayout()
         {
             NotNullAttribute attr = GetAttr<NotNullAttribute>();
 

@@ -179,7 +179,7 @@ namespace DotEditor.NativeDrawer
 
             foreach (var drawer in layoutDrawers)
             {
-                drawer.OnLayoutGUI();
+                drawer.OnGUILayout();
             }
 
             if (isVisible)
@@ -188,13 +188,13 @@ namespace DotEditor.NativeDrawer
                 {
                     foreach (var drawer in decoratorDrawers)
                     {
-                        drawer.OnLayoutGUI();
+                        drawer.OnGUILayout();
                     }
                 }
 
                 foreach (var drawer in verificationDrawers)
                 {
-                    drawer.OnLayoutGUI();
+                    drawer.OnGUILayout();
                 }
 
                 foreach (var drawer in propertyControlDrawers)

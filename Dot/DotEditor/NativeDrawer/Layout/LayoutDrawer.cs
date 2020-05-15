@@ -9,6 +9,6 @@ namespace DotEditor.NativeDrawer.Layout
         {
         }
 
-        public abstract void OnLayoutGUI();
+        public abstract void OnGUILayout();
     }
 }
