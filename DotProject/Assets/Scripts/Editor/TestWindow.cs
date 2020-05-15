@@ -33,7 +33,8 @@ public class TestData
     private string strValue = "sss";
     [EndGroup]
     [HideIf("boolValue")]
-    public string strValue2 = "ddd";
+    [MultilineText]
+    public string strValue2 = "dddsssssssssssssssssssssssssssssssssss";
 
     [Help("Object Data")]
     public InnerData innerData = new InnerData();

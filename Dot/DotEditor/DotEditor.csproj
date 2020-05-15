@@ -128,6 +128,7 @@
     <Compile Include="NativeDrawer\Property\EnumButtonDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\MultilineTextDrawer.cs" />
     <Compile Include="NativeDrawer\Property\PropertyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\FloatSliderDrawer.cs" />
     <Compile Include="NativeDrawer\Verification\NotNullDrawer.cs" />

@@ -45,11 +45,14 @@ namespace DotEditor.NativeDrawer
             {
                 scrollPos = EditorGUILayout.BeginScrollView(scrollPos,GUILayout.ExpandHeight(false));
             }
-
-            foreach(var property in drawerProperties)
+            EditorGUILayout.BeginVertical();
             {
-                property.OnGUILayout();
+                foreach(var property in drawerProperties)
+                {
+                    property.OnGUILayout();
+                }
             }
+            EditorGUILayout.EndVertical();
             
             if(IsShowScroll)
             {
