@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
     public class NativeDrawerObject
     {
+        public bool IsShowScroll { get; set; } = false;
+
         private object drawerObject;
         private List<NativeDrawerProperty> drawerProperties = new List<NativeDrawerProperty>();
 
@@ -27,20 +31,31 @@ namespace DotEditor.NativeDrawer
                     foreach (var field in fields)
                     {
                         NativeDrawerProperty drawerProperty = new NativeDrawerProperty(drawerObject, field);
-                        drawerProperty.Init();
-
                         drawerProperties.Add(drawerProperty);
                     }
                 }
             }
         }
 
+        private Vector2 scrollPos = Vector2.zero;
+
         public void OnGUILayout()
         {
+            if(IsShowScroll)
+            {
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos,GUILayout.ExpandHeight(false));
+            }
+
             foreach(var property in drawerProperties)
             {
                 property.OnGUILayout();
             }
+            
+            if(IsShowScroll)
+            {
+                EditorGUILayout.EndScrollView();
+            }
+
         }
     }
 }

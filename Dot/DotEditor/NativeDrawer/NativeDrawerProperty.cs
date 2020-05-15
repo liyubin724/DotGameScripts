@@ -23,11 +23,18 @@ namespace DotEditor.NativeDrawer
     {
         public object Target { get; private set; }
         public FieldInfo Field { get; private set; }
-        
+
+        public int ArrayElementIndex { get; private set; } = -1;
+
         public Type ValueType
         {
             get
             {
+                if (ArrayElementIndex >= 0)
+                {
+                    return TypeUtility.GetArrayOrListElementType(Field.FieldType);
+                }
+
                 return Field.FieldType;
             }
         }
@@ -43,6 +50,11 @@ namespace DotEditor.NativeDrawer
                     Field.SetValue(Target, value);
                 }
 
+                if(ArrayElementIndex>=0)
+                {
+                    return ((IList)value)[ArrayElementIndex];
+                }
+
                 return value;
             }
             set
@@ -51,7 +63,14 @@ namespace DotEditor.NativeDrawer
                 {
                     value = NativeDrawerUtility.CreateDefaultInstance(ValueType); 
                 }
-                Field.SetValue(Target, value);
+                if(ArrayElementIndex>=0)
+                {
+                    IList list = (IList)Field.GetValue(Target);
+                    list[ArrayElementIndex] = value;
+                }else
+                {
+                    Field.SetValue(Target, value);
+                }
             }
         }
 
@@ -71,17 +90,38 @@ namespace DotEditor.NativeDrawer
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
 
         private NativeTypeDrawer typeDrawer = null;
+        private NativeDrawerObject drawerObject = null;
         internal NativeDrawerProperty(object propertyObject,FieldInfo field)
         {
             Target = propertyObject;
             Field = field;
+
+            Init();
+        }
+
+        internal NativeDrawerProperty(object propertyObject, FieldInfo field,int arrayElementIndex)
+        {
+            Target = propertyObject;
+            Field = field;
+            ArrayElementIndex = arrayElementIndex;
+            Init();
         }
 
         internal void Init()
         {
-            InitFieldAttr();
+            if(ArrayElementIndex<0)
+            {
+                InitFieldAttr();
+            }
 
             typeDrawer = NativeDrawerUtility.CreateDefaultTypeDrawer(this);
+            if(typeDrawer == null)
+            {
+                if(TypeUtility.IsStructOrClass(ValueType))
+                {
+                    drawerObject = new NativeDrawerObject(Value);
+                }
+            }
         }
 
         private void InitFieldAttr()
@@ -171,6 +211,14 @@ namespace DotEditor.NativeDrawer
                     if(typeDrawer !=null)
                     {
                         typeDrawer.OnGUILayout(label);
+                    }else if(drawerObject!=null)
+                    {
+                        UnityEditor.EditorGUILayout.LabelField(label);
+                        UnityEditor.EditorGUI.indentLevel++;
+                        {
+                            drawerObject.OnGUILayout();
+                        }
+                        UnityEditor.EditorGUI.indentLevel--;
                     }else
                     {
                         EGUI.BeginGUIColor(Color.red);
@@ -194,7 +242,7 @@ namespace DotEditor.NativeDrawer
 
         private bool IsVisible()
         {
-            if (Field == null)
+            if (ArrayElementIndex >= 0)
             {
                 return true;
             }
@@ -213,6 +261,11 @@ namespace DotEditor.NativeDrawer
 
         private string GetFieldLabel()
         {
+            if(ArrayElementIndex>=0)
+            {
+                return "" + ArrayElementIndex;
+            }
+
             string label = Field?.Name;
             foreach (var drawer in propertyLabelDrawers)
             {
@@ -220,6 +273,7 @@ namespace DotEditor.NativeDrawer
             }
             return label ?? "";
         }
+
 
         internal void ClearArrayElement()
         {

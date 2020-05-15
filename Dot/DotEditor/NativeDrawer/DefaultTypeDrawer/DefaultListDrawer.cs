@@ -1,6 +1,5 @@
 ﻿using Dot.Utilities;
 using DotEditor.GUIExtension;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -12,7 +11,7 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
     public class DefaultListDrawer : NativeTypeDrawer
     {
         private IList list = null;
-        private List<NativeDrawerObject> listObjects = new List<NativeDrawerObject>();
+        private List<NativeDrawerProperty> elementProperties = new List<NativeDrawerProperty>();
         public DefaultListDrawer(NativeDrawerProperty property) : base(property)
         {
             InitList();
@@ -21,14 +20,11 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
         private void InitList()
         {
             list = DrawerProperty.GetValue<IList>();
-            listObjects.Clear();
-            Type elementType = TypeUtility.GetArrayOrListElementType(DrawerProperty.ValueType);
-            if (TypeUtility.IsStructOrClass(elementType))
+
+            elementProperties.Clear();
+            for (int i = 0; i < list.Count; ++i)
             {
-                for (int i = 0; i < list.Count; ++i)
-                {
-                    listObjects.Add(new NativeDrawerObject(list[i]));
-                }
+                elementProperties.Add(new NativeDrawerProperty(DrawerProperty.Target,DrawerProperty.Field,i));
             }
         }
 
@@ -60,7 +56,11 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
                 {
                     EditorGUILayout.BeginHorizontal();
                     {
-                        DoDrawElement(list[i], i);
+                        EditorGUILayout.BeginVertical();
+                        {
+                            elementProperties[i].OnGUILayout();
+                        }
+                        EditorGUILayout.EndVertical();
                         if (GUILayout.Button("-", GUILayout.Width(20)))
                         {
                             DrawerProperty.RemoveArrayElementAtIndex(i);
@@ -81,11 +81,6 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
                 }
             }
             EditorGUILayout.EndVertical();
-        }
-
-        protected virtual void DoDrawElement(object value, int index)
-        {
-            EditorGUILayout.LabelField("" + index, "Test");
         }
     }
 }
