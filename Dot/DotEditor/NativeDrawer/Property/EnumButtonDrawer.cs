@@ -1,4 +1,5 @@
 ﻿using Dot.NativeDrawer.Property;
+using DotEditor.GUIExtension;
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace DotEditor.NativeDrawer.Property
     {
         public EnumButtonDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
         {
-            
+
         }
 
         protected override bool IsValidProperty()
@@ -26,57 +27,101 @@ namespace DotEditor.NativeDrawer.Property
             {
                 isFlagEnum = true;
             }
-            string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
 
             label = label ?? "";
             int value = DrawerProperty.GetValue<int>();
             EditorGUI.BeginChangeCheck();
             {
+                if(isFlagEnum)
+                {
+                    value = DrawFlagEnum(label,value);
+                }else
+                {
+                    value = DrawEnum(label,value);
+                }
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                DrawerProperty.Value = Enum.ToObject(DrawerProperty.ValueType, value);
+            }
+        }
+
+        private int DrawEnum(string label, int value)
+        {
+            string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(120));
+
+                for (int i = 0; i < enumNames.Length; ++i)
+                {
+                    int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
+
+                    bool isSelected = tValue == value;
+
+                    bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton);
+                    if (newIsSelected != isSelected && newIsSelected)
+                    {
+                        value = tValue;
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        private int DrawFlagEnum(string label, int value)
+        {
+            string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(120));
+                GUILayout.FlexibleSpace();
+                if(GUILayout.Button("Everything", EditorStyles.toolbarButton ,GUILayout.Width(120)))
+                {
+                    value = 0;
+                    for (int i = 0; i < enumNames.Length; ++i)
+                    {
+                        int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
+                        value |= tValue;
+                    }
+                }
+                if(GUILayout.Button("Nothing", EditorStyles.toolbarButton, GUILayout.Width(120)))
+                {
+                    value = 0;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            EGUI.BeginIndent();
+            {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    EditorGUILayout.LabelField(label,GUILayout.MaxWidth(120));
                     for (int i = 0; i < enumNames.Length; ++i)
                     {
                         int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
 
-                        bool isSelected = false;
-                        if (isFlagEnum)
-                        {
-                            isSelected = (value & tValue) > 0;
-                        }
-                        else
-                        {
-                            isSelected = tValue == value;
-                        }
-
+                        bool isSelected = (value & tValue) > 0;
                         bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton);
-                        if(newIsSelected!=isSelected)
+                        if (newIsSelected != isSelected)
                         {
                             if (newIsSelected)
                             {
-                                if(isFlagEnum)
-                                {
-                                    value |= tValue;
-                                }else
-                                {
-                                    value = tValue;
-                                }
-                            }else
+                                value |= tValue;
+                            }
+                            else
                             {
-                                if (isFlagEnum)
-                                {
-                                    value &= ~tValue;
-                                }
+                                value &= ~tValue;
                             }
                         }
                     }
                 }
                 EditorGUILayout.EndHorizontal();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                DrawerProperty.Value = Enum.ToObject(DrawerProperty.ValueType,value);
-            }
+            EGUI.EndIndent();
+
+            return value;
         }
     }
 }
