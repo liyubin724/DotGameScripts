@@ -125,6 +125,7 @@
     <Compile Include="NativeDrawer\NativeDrawerUtility.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\EnumButtonDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\PropertyDrawer.cs" />

@@ -169,7 +169,7 @@ namespace DotEditor.NativeDrawer
             var propertyAttrEnumerable = Field.GetCustomAttributes<PropertyDrawerAttribute>();
             foreach (var attr in propertyAttrEnumerable)
             {
-                propertyDrawers.Add(NativeDrawerUtility.CreatePropertyDrawer(Target, Field, attr));
+                propertyDrawers.Add(NativeDrawerUtility.CreatePropertyDrawer(this, attr));
             }
         }
 
@@ -199,7 +199,7 @@ namespace DotEditor.NativeDrawer
 
                 foreach (var drawer in propertyControlDrawers)
                 {
-                    drawer.OnLayoutGUIStart();
+                    drawer.OnStartGUILayout();
                 }
 
                 string label = GetFieldLabel();
@@ -231,12 +231,12 @@ namespace DotEditor.NativeDrawer
                 }
                 else
                 {
-                    propertyDrawers[0].OnLayoutGUI(label);
+                    propertyDrawers[0].OnGUILayout(label);
                 }
 
                 foreach (var drawer in propertyControlDrawers)
                 {
-                    drawer.OnLayoutGUIEnd();
+                    drawer.OnEndGUILayout();
                 }
             }
         }

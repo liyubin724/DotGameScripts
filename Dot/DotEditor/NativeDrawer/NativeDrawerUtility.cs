@@ -147,11 +147,11 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
-        public static PropertyDrawer CreatePropertyDrawer(object target, FieldInfo field, PropertyDrawerAttribute attr)
+        public static PropertyDrawer CreatePropertyDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr)
         {
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
-                return (PropertyDrawer)Activator.CreateInstance(drawerType, target, field,attr );
+                return (PropertyDrawer)Activator.CreateInstance(drawerType, drawerProperty, attr );
             }
             return null;
         }

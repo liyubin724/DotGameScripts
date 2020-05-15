@@ -1,7 +1,5 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Property;
+﻿using Dot.NativeDrawer.Property;
 using DotEditor.GUIExtension;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,8 +11,8 @@ namespace DotEditor.NativeDrawer.Property
         {
         }
 
-        public abstract void OnLayoutGUIStart();
-        public abstract void OnLayoutGUIEnd();
+        public abstract void OnStartGUILayout();
+        public abstract void OnEndGUILayout();
     }
 
     public abstract class PropertyLabelDrawer : AttrNativeDrawer
@@ -28,28 +26,29 @@ namespace DotEditor.NativeDrawer.Property
 
     public abstract class PropertyDrawer : AttrNativeDrawer
     {
-        public object Target { get; private set; }
-        public FieldInfo Field { get; private set; }
+        public NativeDrawerProperty DrawerProperty { get; private set; }
 
-        protected PropertyDrawer(object target,FieldInfo field , PropertyDrawerAttribute attr) : base(attr)
+        protected PropertyDrawer(NativeDrawerProperty drawerProperty,PropertyDrawerAttribute attr) : base(attr)
         {
-            Target = target;
-            Field = field;
+            DrawerProperty = drawerProperty;
         }
 
-        public void OnLayoutGUI(string label)
+        protected abstract bool IsValidProperty();
+
+        public void OnGUILayout(string label)
         {
-            if(!IsValid())
+            if(!IsValidProperty())
             {
-                OnInvalidProperty(label);
+                OnDrawInvalidProperty(label);
             }else
             {
-                OnProperty(label);
+                OnDrawProperty(label);
             }
         }
 
-        protected abstract void OnProperty(string label);
-        protected virtual void OnInvalidProperty(string label)
+        protected abstract void OnDrawProperty(string label);
+
+        protected virtual void OnDrawInvalidProperty(string label)
         {
             EGUI.BeginGUIColor(Color.red);
             {
@@ -58,9 +57,5 @@ namespace DotEditor.NativeDrawer.Property
             EGUI.EndGUIColor();
         }
 
-        protected virtual bool IsValid()
-        {
-            return true;
-        }
     }
 }

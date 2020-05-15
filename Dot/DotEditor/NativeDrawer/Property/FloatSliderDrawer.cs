@@ -1,6 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Property;
-using System.Reflection;
+﻿using Dot.NativeDrawer.Property;
 using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Property
@@ -8,30 +6,30 @@ namespace DotEditor.NativeDrawer.Property
     [CustomAttributeDrawer(typeof(FloatSliderAttribute))]
     public class FloatSliderDrawer : PropertyDrawer
     {
-        public FloatSliderDrawer(object target, FieldInfo field, PropertyDrawerAttribute attr) : base(target, field, attr)
+        public FloatSliderDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
         {
         }
 
-        protected override void OnProperty(string label)
+        protected override void OnDrawProperty(string label)
         {
             FloatSliderAttribute attr = GetAttr<FloatSliderAttribute>();
 
             label = label ?? "";
 
-            float value = (float)Field.GetValue(Target);
+            float value = DrawerProperty.GetValue<float>();
             EditorGUI.BeginChangeCheck();
             {
                 value = EditorGUILayout.Slider(label, value, attr.LeftValue, attr.RightValue);
             }
             if(EditorGUI.EndChangeCheck())
             {
-                Field.SetValue(Target, value);
+                DrawerProperty.Value = value;
             }
         }
 
-        protected override bool IsValid()
+        protected override bool IsValidProperty()
         {
-            return Field.FieldType == typeof(float);
+            return DrawerProperty.ValueType == typeof(float);
         }
     }
 }

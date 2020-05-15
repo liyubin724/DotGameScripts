@@ -10,12 +10,12 @@ namespace DotEditor.NativeDrawer.Property
         {
         }
 
-        public override void OnLayoutGUIStart()
+        public override void OnStartGUILayout()
         {
             EditorGUI.BeginDisabledGroup(true);
         }
 
-        public override void OnLayoutGUIEnd()
+        public override void OnEndGUILayout()
         {
             EditorGUI.EndDisabledGroup();
         }

@@ -15,7 +15,9 @@ using UnityEngine;
 
 public class TestData
 {
+    [EnumButton]
     public TEnumType enumType = TEnumType.A;
+    [EnumButton]
     public TFlagEnumType flagEnumType = TFlagEnumType.E;
 
     [Help("Test for it")]
@@ -79,6 +81,22 @@ public class TestWindow : EditorWindow
     private NativeDrawerObject drawerObject = null;
     private void OnGUI()
     {
+        //string[] enumNames = Enum.GetNames(typeof(TEnumType));
+        //Array arr = Enum.GetValues(typeof(TEnumType));
+        //EditorGUILayout.BeginHorizontal();
+        //{
+        //    foreach(var a in arr)
+        //    {
+        //        EditorGUILayout.LabelField(a.ToString()+"   "+a.GetType().ToString());
+        //    }
+        //    foreach(var en in enumNames)
+        //    {
+        //        GUILayout.Toggle(true, en,EditorStyles.toolbarButton);
+        //    }
+        //}
+        //EditorGUILayout.EndHorizontal();
+
+
         if (drawerObject == null)
         {
             drawerObject = new NativeDrawerObject(data);
