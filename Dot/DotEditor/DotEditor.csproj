@@ -97,11 +97,11 @@
     <Compile Include="Map\Item\ItemBehaviourEditor.cs" />
     <Compile Include="Map\Lightmap\SceneLightmapBaker.cs" />
     <Compile Include="NativeDrawer\AttrNativeDrawer.cs" />
-    <Compile Include="NativeDrawer\CustomAttDrawerLinkAttribute.cs" />
+    <Compile Include="NativeDrawer\CustomAttributeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
-    <Compile Include="NativeDrawer\DefaultTypeDrawer\CustomDefaultTypeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoolDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoundsDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />

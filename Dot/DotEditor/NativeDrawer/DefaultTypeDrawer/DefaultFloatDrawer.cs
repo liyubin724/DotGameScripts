@@ -2,7 +2,7 @@
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomDefaultTypeDrawer(typeof(float))]
+    [CustomTypeDrawer(typeof(float))]
     public class DefaultFloatDrawer : NativeTypeDrawer
     {
         public DefaultFloatDrawer(NativeDrawerProperty property) : base(property)

@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Property
 {
-    [CustomAttDrawerLink(typeof(FloatSliderAttribute))]
+    [CustomAttributeDrawer(typeof(FloatSliderAttribute))]
     public class FloatSliderDrawer : PropertyDrawer
     {
         public FloatSliderDrawer(object target, FieldInfo field, PropertyDrawerAttribute attr) : base(target, field, attr)

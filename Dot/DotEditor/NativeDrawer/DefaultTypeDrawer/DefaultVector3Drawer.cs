@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomDefaultTypeDrawer(typeof(Vector3))]
+    [CustomTypeDrawer(typeof(Vector3))]
     public class DefaultVector3Drawer : NativeTypeDrawer
     {
         public DefaultVector3Drawer(NativeDrawerProperty property) : base(property)

@@ -43,7 +43,7 @@ namespace DotEditor.NativeDrawer
                                 ).ToArray();
                 foreach(var type in types)
                 {
-                    CustomAttDrawerLinkAttribute attr = type.GetCustomAttribute<CustomAttDrawerLinkAttribute>();
+                    CustomAttributeDrawerAttribute attr = type.GetCustomAttribute<CustomAttributeDrawerAttribute>();
                     if(attr!=null)
                     {
                         attrDrawerDic.Add(attr.AttrType, type);
@@ -57,7 +57,7 @@ namespace DotEditor.NativeDrawer
                         ).ToArray();
                 foreach(var type in types)
                 {
-                    CustomDefaultTypeDrawerAttribute attr = type.GetCustomAttribute<CustomDefaultTypeDrawerAttribute>();
+                    CustomTypeDrawerAttribute attr = type.GetCustomAttribute<CustomTypeDrawerAttribute>();
                     if(attr!=null)
                     {
                         defaultTypeDrawerDic.Add(attr.Target, type);

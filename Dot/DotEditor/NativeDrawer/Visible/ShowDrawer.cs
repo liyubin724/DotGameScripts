@@ -3,7 +3,7 @@ using Dot.NativeDrawer.Visible;
 
 namespace DotEditor.NativeDrawer.Visible
 {
-    [CustomAttDrawerLink(typeof(ShowAttribute))]
+    [CustomAttributeDrawer(typeof(ShowAttribute))]
     public class ShowDrawer : VisibleDrawer
     {
         public ShowDrawer(VisibleAtrribute attr) : base(attr)

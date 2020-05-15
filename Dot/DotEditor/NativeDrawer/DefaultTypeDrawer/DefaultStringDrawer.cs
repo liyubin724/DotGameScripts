@@ -2,7 +2,7 @@
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomDefaultTypeDrawer(typeof(string))]
+    [CustomTypeDrawer(typeof(string))]
     public class DefaultStringDrawer : NativeTypeDrawer
     {
         public DefaultStringDrawer(NativeDrawerProperty property) : base(property)

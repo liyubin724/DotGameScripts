@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Property
 {
-    [CustomAttDrawerLink(typeof(ReadonlyAttribute))]
+    [CustomAttributeDrawer(typeof(ReadonlyAttribute))]
     public class ReadonlyDrawer : PropertyControlDrawer
     {
         public ReadonlyDrawer(PropertyControlAttribute attr) : base(attr)

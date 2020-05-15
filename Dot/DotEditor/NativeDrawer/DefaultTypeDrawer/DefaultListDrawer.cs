@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomDefaultTypeDrawer(typeof(IList))]
+    [CustomTypeDrawer(typeof(IList))]
     public class DefaultListDrawer : NativeTypeDrawer
     {
         private IList list = null;

@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace DotEditor.NativeDrawer.DefaultTypeDrawer
 {
-    [CustomDefaultTypeDrawer(typeof(Enum))]
+    [CustomTypeDrawer(typeof(Enum))]
     public class DefaultEnumDrawer : NativeTypeDrawer
     {
         public DefaultEnumDrawer(NativeDrawerProperty property) : base(property)

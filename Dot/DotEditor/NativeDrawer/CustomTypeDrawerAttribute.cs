@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer
 {
     [AttributeUsage(AttributeTargets.Class,AllowMultiple =false,Inherited =false)]
-    public class CustomDefaultTypeDrawerAttribute : Attribute
+    public class CustomTypeDrawerAttribute : Attribute
     {
         public Type Target { get; private set; }
-        public CustomDefaultTypeDrawerAttribute(Type target)
+        public CustomTypeDrawerAttribute(Type target)
         {
             Target = target;
         }

@@ -3,7 +3,7 @@ using DotEditor.GUIExtension;
 
 namespace DotEditor.NativeDrawer.Layout
 {
-    [CustomAttDrawerLink(typeof(BeginIndentAttribute))]
+    [CustomAttributeDrawer(typeof(BeginIndentAttribute))]
     public class BeginIndentDrawer : LayoutDrawer
     {
         public BeginIndentDrawer(LayoutAttribute attr) : base(attr)

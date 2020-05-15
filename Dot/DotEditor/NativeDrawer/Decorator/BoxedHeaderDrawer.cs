@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Decorator
 {
-    [CustomAttDrawerLink(typeof(BoxedHeaderAttribute))]
+    [CustomAttributeDrawer(typeof(BoxedHeaderAttribute))]
     public class BoxedHeaderDrawer : DecoratorDrawer
     {
         public BoxedHeaderDrawer(DecoratorAttribute attr) : base(attr)
