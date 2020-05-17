@@ -1,5 +1,6 @@
 ﻿using Dot.NativeDrawer.Decorator;
 using Dot.NativeDrawer.Layout;
+using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
@@ -7,6 +8,7 @@ using Dot.Utilities;
 using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.Layout;
+using DotEditor.NativeDrawer.Listener;
 using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
 using DotEditor.NativeDrawer.Visible;
@@ -69,6 +71,8 @@ namespace DotEditor.NativeDrawer
                 {
                     Field.SetValue(Target, value);
                 }
+
+                OnValueChanged();
             }
         }
 
@@ -86,6 +90,8 @@ namespace DotEditor.NativeDrawer
         private List<PropertyLabelDrawer> propertyLabelDrawers = new List<PropertyLabelDrawer>();
         private List<PropertyControlDrawer> propertyControlDrawers = new List<PropertyControlDrawer>();
         private List<PropertyDrawer> propertyDrawers = new List<PropertyDrawer>();
+
+        private List<ListenerDrawer> listenerDrawers = new List<ListenerDrawer>();
 
         private NativeTypeDrawer typeDrawer = null;
         private NativeDrawerObject drawerObject = null;
@@ -170,6 +176,12 @@ namespace DotEditor.NativeDrawer
             foreach (var attr in propertyAttrEnumerable)
             {
                 propertyDrawers.Add(NativeDrawerUtility.CreatePropertyDrawer(this, attr));
+            }
+
+            var listenerAttrEnumerable = Field.GetCustomAttributes<ListenerAttribute>();
+            foreach(var attr in listenerAttrEnumerable)
+            {
+                listenerDrawers.Add(NativeDrawerUtility.CreateListenerDrawer(Target, attr));
             }
         }
 
@@ -323,6 +335,17 @@ namespace DotEditor.NativeDrawer
                 else
                 {
                     ((IList)Value).RemoveAt(index);
+                }
+            }
+        }
+
+        private void OnValueChanged()
+        {
+            foreach(var drawer in listenerDrawers)
+            {
+                if(drawer.GetType() == typeof(OnValueChangedDrawer))
+                {
+                    ((OnValueChangedDrawer)drawer).Execute();
                 }
             }
         }

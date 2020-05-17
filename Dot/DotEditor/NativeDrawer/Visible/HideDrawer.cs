@@ -1,6 +1,4 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Visible;
-using System.Reflection;
+﻿using Dot.NativeDrawer.Visible;
 
 namespace DotEditor.NativeDrawer.Visible
 {

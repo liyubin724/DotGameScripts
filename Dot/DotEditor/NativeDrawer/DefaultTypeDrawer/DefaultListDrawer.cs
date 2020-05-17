@@ -50,7 +50,7 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
                 {
                     DrawerProperty.ClearArrayElement();
                     InitList();
-                    EditorGUIUtility.ExitGUI();
+                    //EditorGUIUtility.ExitGUI();
                 }
 
                 for (int i = 0; i < list.Count; ++i)
@@ -66,7 +66,7 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
                         {
                             DrawerProperty.RemoveArrayElementAtIndex(i);
                             InitList();
-                            EditorGUIUtility.ExitGUI();
+                            //EditorGUIUtility.ExitGUI();
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -79,6 +79,7 @@ namespace DotEditor.NativeDrawer.DefaultTypeDrawer
                 {
                     DrawerProperty.AddArrayElement();
                     InitList();
+                    //EditorGUIUtility.ExitGUI();
                 }
             }
             EditorGUILayout.EndVertical();

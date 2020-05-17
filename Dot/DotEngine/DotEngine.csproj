@@ -120,6 +120,8 @@
     <Compile Include="NativeDrawer\Layout\EndHorizontalAttribute.cs" />
     <Compile Include="NativeDrawer\Layout\EndIndentAttribute.cs" />
     <Compile Include="NativeDrawer\Layout\LayoutAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\ListenerAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\OnValueChangedAttribute.cs" />
     <Compile Include="NativeDrawer\NativeConditionDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\NativeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Control\IndentAttribute.cs" />

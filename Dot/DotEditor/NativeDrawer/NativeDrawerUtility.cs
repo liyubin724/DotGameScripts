@@ -1,12 +1,13 @@
 ﻿using Dot.NativeDrawer.Decorator;
 using Dot.NativeDrawer.Layout;
+using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Verification;
 using Dot.NativeDrawer.Visible;
 using Dot.Utilities;
 using DotEditor.NativeDrawer.Decorator;
-using DotEditor.NativeDrawer.DefaultTypeDrawer;
 using DotEditor.NativeDrawer.Layout;
+using DotEditor.NativeDrawer.Listener;
 using DotEditor.NativeDrawer.Property;
 using DotEditor.NativeDrawer.Verification;
 using DotEditor.NativeDrawer.Visible;
@@ -170,6 +171,15 @@ namespace DotEditor.NativeDrawer
             if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
             {
                 return (PropertyControlDrawer)Activator.CreateInstance(drawerType, attr);
+            }
+            return null;
+        }
+
+        public static ListenerDrawer CreateListenerDrawer(object target,ListenerAttribute attr)
+        {
+            if (attrDrawerDic.TryGetValue(attr.GetType(), out Type drawerType))
+            {
+                return (ListenerDrawer)Activator.CreateInstance(drawerType, target,attr);
             }
             return null;
         }

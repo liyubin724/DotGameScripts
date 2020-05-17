@@ -111,6 +111,8 @@
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultStringDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector2Drawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultVector3Drawer.cs" />
+    <Compile Include="NativeDrawer\Listener\ListenerDrawer.cs" />
+    <Compile Include="NativeDrawer\Listener\OnValueChangedDrawer.cs" />
     <Compile Include="NativeDrawer\NativeDrawerSetting.cs" />
     <Compile Include="NativeDrawer\NativeTypeDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginGroupDrawer.cs" />

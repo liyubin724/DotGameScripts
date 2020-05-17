@@ -80,6 +80,11 @@ public class TestWindow : EditorWindow
     private TestData data = new TestData();
 
     private NativeDrawerObject drawerObject = null;
+
+    private void Awake()
+    {
+        NativeDrawerSetting.IsShowDecorator = true;
+    }
     private void OnGUI()
     {
         //string[] enumNames = Enum.GetNames(typeof(TEnumType));
