@@ -108,8 +108,6 @@
     <Compile Include="Entity\Avatar\AvatarRendererPartData.cs" />
     <Compile Include="Entity\Avatar\AvatarUtil.cs" />
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
-    <Compile Include="Entity\Node\NodeData.cs" />
-    <Compile Include="Entity\Node\NodeType.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpAttribute.cs" />

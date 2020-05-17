@@ -8,15 +8,11 @@ namespace Dot.Asset
     {
         #region Init Mgr
         private static AssetManager assetMgr = null;
-#if UNITY_EDITOR
-
         public static void InitDatabaseLoader(Action<bool> initCallback)
         {
             assetMgr = AssetManager.GetInstance();
             assetMgr.InitManager(AssetLoaderMode.AssetDatabase, initCallback);
         }
-#endif
-
 
         public static void InitBundleLoader(Action<bool> initCallback,string bundleRootDir)
         {

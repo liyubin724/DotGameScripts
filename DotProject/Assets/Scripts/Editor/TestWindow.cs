@@ -1,5 +1,6 @@
 ﻿using Dot.NativeDrawer.Decorator;
 using Dot.NativeDrawer.Layout;
+using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Visible;
 using DotEditor.NativeDrawer;
@@ -16,7 +17,9 @@ using UnityEngine;
 public class TestData
 {
     [EnumButton]
+    [OnValueChanged("OnEnumTypeChanged")]
     public TEnumType enumType = TEnumType.A;
+    [Readonly]
     [EnumButton]
     public TFlagEnumType flagEnumType = TFlagEnumType.E;
 
@@ -29,10 +32,10 @@ public class TestData
     public float floatValue;
     public string nullStrValue;
     public bool boolValue = false;
-    [ShowIf("boolValue")]
+    [ShowIf("boolValue",true)]
     private string strValue = "sss";
     [EndGroup]
-    [HideIf("boolValue")]
+    [HideIf("boolValue",true)]
     [MultilineText]
     public string strValue2 = "dddsssssssssssssssssssssssssssssssssss";
 
@@ -44,6 +47,23 @@ public class TestData
 
     public List<int> intList = new List<int>();
     public int[] intArray = new int[0];
+
+    public void OnEnumTypeChanged()
+    {
+        if(enumType == TEnumType.A)
+        {
+            flagEnumType = TFlagEnumType.E;
+        }else if(enumType == TEnumType.B)
+        {
+            flagEnumType = TFlagEnumType.F;
+        }else if(enumType == TEnumType.C)
+        {
+            flagEnumType = TFlagEnumType.E | TFlagEnumType.F;
+        }else if(enumType == TEnumType.D)
+        {
+            flagEnumType = TFlagEnumType.G;
+        }
+    }
 }
 
 public class InnerData

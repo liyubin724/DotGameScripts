@@ -1,8 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Dot.Entity.Node
 {
+    public enum NodeType
+    {
+        BindNode,
+        SMRendererNode,
+        BoneNode,
+    }
+
+    [Serializable]
+    public class NodeData
+    {
+        public NodeType nodeType = NodeType.BindNode;
+        public string name = string.Empty;
+        public Transform transform = null;
+        public SkinnedMeshRenderer renderer = null;
+    }
+
     [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour
     {
