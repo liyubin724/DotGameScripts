@@ -1,6 +1,7 @@
 ﻿using Dot.NativeDrawer.Property;
 using DotEditor.GUIExtension;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,7 +12,6 @@ namespace DotEditor.NativeDrawer.Property
     {
         public EnumButtonDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
         {
-
         }
 
         protected override bool IsValidProperty()
@@ -59,7 +59,7 @@ namespace DotEditor.NativeDrawer.Property
 
                     bool isSelected = tValue == value;
 
-                    bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton);
+                    bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton, GetLayoutOptions());
                     if (newIsSelected != isSelected && newIsSelected)
                     {
                         value = tValue;
@@ -103,7 +103,7 @@ namespace DotEditor.NativeDrawer.Property
                         int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
 
                         bool isSelected = (value & tValue) > 0;
-                        bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton);
+                        bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton, GetLayoutOptions());
                         if (newIsSelected != isSelected)
                         {
                             if (newIsSelected)
@@ -122,6 +122,29 @@ namespace DotEditor.NativeDrawer.Property
             EGUI.EndIndent();
 
             return value;
+        }
+
+        private GUILayoutOption[] options = null;
+        private GUILayoutOption[] GetLayoutOptions()
+        {
+            if(options == null)
+            {
+                var attr = GetAttr<EnumButtonAttribute>();
+
+                List<GUILayoutOption> oList = new List<GUILayoutOption>();
+                if(attr.MaxWidth>0)
+                {
+                    oList.Add(GUILayout.MaxWidth(attr.MaxWidth));
+                }
+                if(attr.MinWidth>0)
+                {
+                    oList.Add(GUILayout.MinWidth(attr.MinWidth));
+                }
+
+                options = oList.ToArray();
+            }
+
+            return options;
         }
     }
 }

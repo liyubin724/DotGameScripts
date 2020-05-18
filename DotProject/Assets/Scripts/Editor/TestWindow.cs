@@ -18,8 +18,10 @@ public class TestData
 {
     [StringPopup(new string[] { "W","S","M"})]
     public string popupStringValue = "W";
-
-
+    [EnumButton(maxWidth:100)]
+    public TEnumType enumType = TEnumType.A;
+    [EnumButton(maxWidth: 100)]
+    public TFlagEnumType flagEnumType = TFlagEnumType.E;
     //[EnumButton]
     //[OnValueChanged("OnEnumTypeChanged")]
     //public TEnumType enumType = TEnumType.A;
