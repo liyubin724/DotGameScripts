@@ -55,7 +55,7 @@ namespace DotEditor.NativeDrawer.Property
 
                 for (int i = 0; i < enumNames.Length; ++i)
                 {
-                    int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
+                    int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
 
                     bool isSelected = tValue == value;
 
