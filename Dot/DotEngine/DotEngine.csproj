@@ -130,6 +130,7 @@
     <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />
     <Compile Include="NativeDrawer\Property\PropertyAttribute.cs" />
     <Compile Include="NativeDrawer\Property\FloatSliderAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\StringPopupAttribute.cs" />
     <Compile Include="NativeDrawer\Verification\NotNullAttribute.cs" />
     <Compile Include="NativeDrawer\Verification\VerificationAttribute.cs" />
     <Compile Include="NativeDrawer\Visible\HideAttribute.cs" />
