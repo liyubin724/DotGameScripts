@@ -51,7 +51,7 @@ namespace DotEditor.NativeDrawer.Property
             string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(120));
+                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(220));
 
                 for (int i = 0; i < enumNames.Length; ++i)
                 {
@@ -77,7 +77,7 @@ namespace DotEditor.NativeDrawer.Property
 
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(120));
+                EditorGUILayout.LabelField(label, GUILayout.MaxWidth(220));
                 GUILayout.FlexibleSpace();
                 if(GUILayout.Button("Everything", EditorStyles.toolbarButton ,GUILayout.Width(120)))
                 {
