@@ -27,7 +27,7 @@ namespace DotEditor.NativeDrawer
             {
                 foreach (var type in allTypes)
                 {
-                    FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
                     foreach (var field in fields)
                     {
                         NativeDrawerProperty drawerProperty = new NativeDrawerProperty(drawerObject, field);
