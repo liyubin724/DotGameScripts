@@ -29,7 +29,7 @@ namespace DotEditor.NativeDrawer.Property
             }
 
             label = label ?? "";
-            int value = DrawerProperty.GetValue<int>();
+            int value = Convert.ToInt32(DrawerProperty.Value);
             EditorGUI.BeginChangeCheck();
             {
                 if(isFlagEnum)
@@ -84,7 +84,7 @@ namespace DotEditor.NativeDrawer.Property
                     value = 0;
                     for (int i = 0; i < enumNames.Length; ++i)
                     {
-                        int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
+                        int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
                         value |= tValue;
                     }
                 }
@@ -100,7 +100,7 @@ namespace DotEditor.NativeDrawer.Property
                 {
                     for (int i = 0; i < enumNames.Length; ++i)
                     {
-                        int tValue = (int)Enum.Parse(DrawerProperty.ValueType, enumNames[i]);
+                        int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
 
                         bool isSelected = (value & tValue) > 0;
                         bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton);
