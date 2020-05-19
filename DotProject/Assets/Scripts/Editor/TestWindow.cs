@@ -18,7 +18,7 @@ using UnityEngine;
 public class TestData
 {
     public int intValue = 0;
-    [HideIf("intValue",5,CompareSymbol.Lt)]
+    [HideIf("intValue",0,CompareSymbol.Neq)]
     public string strValue = "sss";
 
     //[EnumButton]

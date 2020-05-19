@@ -15,11 +15,11 @@ namespace DotEditor.NativeDrawer.Verification
         {
             NotNullAttribute attr = GetAttr<NotNullAttribute>();
 
-            bool isNotNull = IsValid();
-            if(!isNotNull)
-            {
-                EditorGUILayout.HelpBox(string.IsNullOrEmpty(attr.UnvalidMsg) ? "" : attr.UnvalidMsg, MessageType.Error);
-            }
+            //bool isNotNull = IsValid();
+            //if(!isNotNull)
+            //{
+            //    EditorGUILayout.HelpBox(string.IsNullOrEmpty(attr.UnvalidMsg) ? "" : attr.UnvalidMsg, MessageType.Error);
+            //}
         }
     }
 }

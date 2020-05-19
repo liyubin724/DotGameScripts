@@ -8,6 +8,7 @@
     public enum CompareSymbol
     {
         Eq,
+        Neq,
         Lt,
         Gt,
         Lte,

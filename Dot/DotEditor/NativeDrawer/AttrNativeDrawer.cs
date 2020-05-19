@@ -1,7 +1,6 @@
 ﻿using Dot.NativeDrawer;
 using Dot.Utilities;
 using System;
-using System.Reflection;
 
 namespace DotEditor.NativeDrawer
 {
@@ -28,50 +27,24 @@ namespace DotEditor.NativeDrawer
             Target = target;
         }
 
-        public bool IsValid()
+        protected bool IsEqual()
         {
             CompareDrawerAttribute attr = GetAttr<CompareDrawerAttribute>();
-            if(string.IsNullOrEmpty(attr.MemberName))
+            if (string.IsNullOrEmpty(attr.MemberName))
             {
                 return true;
             }
 
-            FieldInfo fieldInfo = Target.GetType().GetField(attr.MemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            object comparedValue;
-            if (fieldInfo!=null)
-            {
-                comparedValue = fieldInfo.GetValue(Target);
-            }else
-            {
-                PropertyInfo propertyInfo = Target.GetType().GetProperty(attr.MemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if(propertyInfo!=null)
-                {
-                    comparedValue = propertyInfo.GetValue(Target);
-                }else
-                {
-                    MethodInfo methodInfo = Target.GetType().GetMethod(attr.MemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if(methodInfo!=null)
-                    {
-                        comparedValue = methodInfo.Invoke(Target,null);
-                    }else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            if(comparedValue==null && attr.Value == null)
+            object comparedValue = NativeDrawerUtility.GetMemberValue(attr.MemberName, Target);
+            if (comparedValue == null && attr.Value == null)
             {
                 return true;
-            }else if(comparedValue !=null && attr.Value == null)
-            {
-                return false;
-            }else if(comparedValue==null && attr.Value !=null)
+            } if (comparedValue == null || attr.Value == null)
             {
                 return false;
             }
 
-            if(comparedValue.GetType()!= attr.Value.GetType())
+            if (comparedValue.GetType() != attr.Value.GetType())
             {
                 return false;
             }
@@ -79,28 +52,53 @@ namespace DotEditor.NativeDrawer
             if (TypeUtility.IsCastableTo(comparedValue.GetType(), typeof(IComparable)))
             {
                 int compared = ((IComparable)comparedValue).CompareTo((IComparable)attr.Value);
-                if (compared == 0 && (attr.Symbol == CompareSymbol.Gte || attr.Symbol == CompareSymbol.Lte || attr.Symbol == CompareSymbol.Eq))
+
+                if(compared == 0)
                 {
-                    return true;
-                }
-                else if (compared > 0 && (attr.Symbol == CompareSymbol.Lt || attr.Symbol == CompareSymbol.Lte))
+                    if(attr.Symbol == CompareSymbol.Gte || attr.Symbol == CompareSymbol.Lte || attr.Symbol == CompareSymbol.Eq)
+                    {
+                        return true;
+                    }else
+                    {
+                        return false;
+                    }
+                }else
                 {
-                    return true;
-                }
-                else if (compared < 0 && (attr.Symbol == CompareSymbol.Gt || attr.Symbol == CompareSymbol.Gte))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    if(attr.Symbol == CompareSymbol.Neq)
+                    {
+                        return true;
+                    }else if(attr.Symbol == CompareSymbol.Eq)
+                    {
+                        return false;
+                    }
+
+                    if (compared > 0 && (attr.Symbol == CompareSymbol.Gt || attr.Symbol == CompareSymbol.Gte))
+                    {
+                        return true;
+                    }
+                    else if (compared < 0 && (attr.Symbol == CompareSymbol.Lt || attr.Symbol == CompareSymbol.Lte))
+                    {
+                        return true;
+                    }else
+                    {
+                        return false;
+                    }
                 }
             }
             else
             {
-                return comparedValue == attr.Value;
+                bool result = comparedValue == attr.Value;
+                if(result && (attr.Symbol == CompareSymbol.Eq || attr.Symbol == CompareSymbol.Lte || attr.Symbol == CompareSymbol.Gte))
+                {
+                    return true;
+                }else if(!result && (attr.Symbol == CompareSymbol.Neq))
+                {
+                    return true;
+                }else
+                {
+                    return false;
+                }
             }
         }
-
     }
 }
