@@ -196,19 +196,21 @@ namespace DotEditor.NativeDrawer
                 return null;
             }
 
-            FieldInfo fieldInfo = ReflectionUtility.GetField(target, memberName, true);
+            Type type = target.GetType();
+
+            FieldInfo fieldInfo = type.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (fieldInfo != null)
             {
                 return fieldInfo.GetValue(target);
             }
 
-            PropertyInfo propertyInfo = ReflectionUtility.GetProperty(target, memberName, true);
+            PropertyInfo propertyInfo = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (propertyInfo != null)
             {
                 return propertyInfo.GetValue(target);
             }
 
-            MethodInfo methodInfo = ReflectionUtility.GetMethod(target, memberName, true);
+            MethodInfo methodInfo = type.GetMethod(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (methodInfo != null)
             {
                 return methodInfo.Invoke(target, null);
