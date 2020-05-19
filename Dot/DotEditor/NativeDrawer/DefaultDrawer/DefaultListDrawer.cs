@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer.DefaultDrawer
 {
     [CustomTypeDrawer(typeof(IList))]
     public class DefaultListDrawer : NativeTypeDrawer

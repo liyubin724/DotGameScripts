@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEditor;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer.DefaultDrawer
 {
     [CustomTypeDrawer(typeof(Enum))]
     public class DefaultEnumDrawer : NativeTypeDrawer

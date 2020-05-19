@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer.DefaultDrawer
 {
     [CustomTypeDrawer(typeof(Rect))]
     public class DefaultRectDrawer : NativeTypeDrawer

@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace DotEditor.NativeDrawer.DefaultTypeDrawer
+namespace DotEditor.NativeDrawer.DefaultDrawer
 {
     [CustomTypeDrawer(typeof(int))]
     public class DefaultIntDrawer : NativeTypeDrawer
