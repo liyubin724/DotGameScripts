@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class SpriteAtlasUtility
     {

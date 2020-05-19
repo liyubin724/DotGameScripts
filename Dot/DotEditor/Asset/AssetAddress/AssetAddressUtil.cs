@@ -1,6 +1,6 @@
 ﻿using Dot.Asset;
 using Dot.Asset.Datas;
-using DotEditor.Core.Utilities;
+using DotEditor.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;

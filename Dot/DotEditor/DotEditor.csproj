@@ -89,7 +89,8 @@
     <Compile Include="GUIExtension\EGUIResources.cs" />
     <Compile Include="GUIExtension\EGUIStyles.cs" />
     <Compile Include="GUIExtension\EGUIUtility.cs" />
-    <Compile Include="GUIExtension\SearchField\ToolbarSearchField.cs" />
+    <Compile Include="GUIExtension\Search\SearchablePopup.cs" />
+    <Compile Include="GUIExtension\Search\ToolbarSearchField.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarExtend.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarItem.cs" />
     <Compile Include="GUIExtension\Windows\PopupWindow.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="NativeDrawer\Decorator\DecoratorDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
     <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SeparatorLineDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoolDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoundsDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\EnumButtonDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\FilePathDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextDrawer.cs" />

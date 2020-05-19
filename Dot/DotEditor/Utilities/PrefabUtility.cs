@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class PrefabUtility
     {

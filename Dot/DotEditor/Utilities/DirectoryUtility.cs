@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class DirectoryUtility
     {

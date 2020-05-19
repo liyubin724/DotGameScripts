@@ -3,7 +3,7 @@ using Dot.Asset.Datas;
 using Dot.Utilities;
 using Dot.Crypto;
 using DotEditor.Asset.AssetAddress;
-using DotEditor.Core.Utilities;
+using DotEditor.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

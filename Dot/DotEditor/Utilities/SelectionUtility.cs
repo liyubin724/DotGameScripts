@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class SelectionUtility
     {

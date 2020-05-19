@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class PlayerSettingsUtility
     {

@@ -1,5 +1,5 @@
 ﻿using DotEditor.Core.TreeGUI;
-using DotEditor.Core.Utilities;
+using DotEditor.Utilities;
 using DotEditor.GUIExtension;
 using System.Collections.Generic;
 using UnityEditor;

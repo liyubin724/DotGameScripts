@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class AssetDatabaseUtility
     {

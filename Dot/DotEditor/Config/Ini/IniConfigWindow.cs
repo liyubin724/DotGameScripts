@@ -1,7 +1,7 @@
 ﻿using Dot.Config.Ini;
 using Dot.Generic;
-using DotEditor.Core.Utilities;
 using DotEditor.GUIExtension;
+using DotEditor.Utilities;
 using ReflectionMagic;
 using UnityEditor;
 using UnityEngine;

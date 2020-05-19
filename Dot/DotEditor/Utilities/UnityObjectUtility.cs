@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using System.Reflection;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class UnityObjectUtility
     {

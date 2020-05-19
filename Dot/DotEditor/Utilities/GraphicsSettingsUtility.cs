@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityObject = UnityEngine.Object;
 
-namespace DotEditor.Core.Utilities
+namespace DotEditor.Utilities
 {
     public static class GraphicsSettingsUtility
     {
