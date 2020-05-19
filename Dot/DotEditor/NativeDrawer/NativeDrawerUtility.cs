@@ -184,6 +184,38 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
+        public static T GetMemberValue<T>(string memberName, object target)
+        {
+            return (T)GetMemberValue(memberName, target);
+        }
+
+        public static object GetMemberValue(string memberName,object target)
+        {
+            if (string.IsNullOrEmpty(memberName) || target == null)
+            {
+                return null;
+            }
+
+            FieldInfo fieldInfo = ReflectionUtility.GetField(target, memberName, true);
+            if (fieldInfo != null)
+            {
+                return fieldInfo.GetValue(target);
+            }
+
+            PropertyInfo propertyInfo = ReflectionUtility.GetProperty(target, memberName, true);
+            if (propertyInfo != null)
+            {
+                return propertyInfo.GetValue(target);
+            }
+
+            MethodInfo methodInfo = ReflectionUtility.GetMethod(target, memberName, true);
+            if (methodInfo != null)
+            {
+                return methodInfo.Invoke(target, null);
+            }
+            return null;
+        }
+
         public static Type[] GetAllBaseTypes(Type type)
         {
             if(type.IsValueType)

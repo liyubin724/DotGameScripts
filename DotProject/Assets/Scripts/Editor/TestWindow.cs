@@ -1,4 +1,5 @@
-﻿using Dot.NativeDrawer.Decorator;
+﻿using Dot.NativeDrawer;
+using Dot.NativeDrawer.Decorator;
 using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
@@ -16,12 +17,10 @@ using UnityEngine;
 
 public class TestData
 {
-    [StringPopup(new string[] { "W","S","M"})]
-    public string popupStringValue = "W";
-    [EnumButton(maxWidth:100)]
-    public TEnumType enumType = TEnumType.A;
-    [EnumButton(maxWidth: 100)]
-    public TFlagEnumType flagEnumType = TFlagEnumType.E;
+    public int intValue = 0;
+    [HideIf("intValue",5,CompareSymbol.Lt)]
+    public string strValue = "sss";
+
     //[EnumButton]
     //[OnValueChanged("OnEnumTypeChanged")]
     //public TEnumType enumType = TEnumType.A;
