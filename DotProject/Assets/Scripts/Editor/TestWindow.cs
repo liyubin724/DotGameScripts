@@ -4,6 +4,7 @@ using Dot.NativeDrawer.Layout;
 using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Visible;
+using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer;
 using DotEditor.NativeDrawer.Property;
 using System;
@@ -17,10 +18,25 @@ using UnityEngine;
 
 public class TestData
 {
-    public int intValue = 0;
-    [HideIf("intValue",0,CompareSymbol.Neq)]
-    public string strValue = "sss";
+    [OpenFilePath(IsAbsolute =false)]
+    public string filePath1;
+    [OpenFilePath(IsAbsolute = true)]
+    public string filePath2;
+    
+    [SpaceLine]
 
+    [SeparatorLine]
+    [OpenFilePath(IsAbsolute = false,Extension ="txt")]
+    public string filePath3;
+    [OpenFilePath(IsAbsolute = true,Extension ="txt")]
+    public string filePath4;
+    
+    [SeparatorLine]
+    [OpenFilePath(IsAbsolute = false,Filters =new string[] { "CSharp", "cs", "All Files", "*" })]
+    public string filePath5;
+    [OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    public string filePath6;
+    
     //[EnumButton]
     //[OnValueChanged("OnEnumTypeChanged")]
     //public TEnumType enumType = TEnumType.A;
@@ -126,6 +142,11 @@ public class TestWindow : EditorWindow
         //    }
         //}
         //EditorGUILayout.EndHorizontal();
+
+        if(GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon),GUIStyle.none,GUILayout.Width(20),GUILayout.Height(20)))
+        {
+
+        }
 
 
         if (drawerObject == null)

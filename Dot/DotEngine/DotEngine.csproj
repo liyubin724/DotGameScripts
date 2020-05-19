@@ -112,6 +112,7 @@
     <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\SeparatorLineAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SpaceLineAttribute.cs" />
     <Compile Include="NativeDrawer\Layout\BeginGroupAttribute.cs" />
     <Compile Include="NativeDrawer\Layout\BeginHorizontalAttribute.cs" />
     <Compile Include="NativeDrawer\Layout\BeginIndentAttribute.cs" />
@@ -126,7 +127,7 @@
     <Compile Include="NativeDrawer\Property\Control\IndentAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyAttribute.cs" />
     <Compile Include="NativeDrawer\Property\EnumButtonAttribute.cs" />
-    <Compile Include="NativeDrawer\Property\FilePathAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFilePathAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />

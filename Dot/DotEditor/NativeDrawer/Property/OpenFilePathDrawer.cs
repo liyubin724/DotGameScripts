@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Property
 {
-    [CustomAttributeDrawer(typeof(FilePathAttribute))]
-    public class FilePathDrawer : PropertyDrawer
+    [CustomAttributeDrawer(typeof(OpenFilePathAttribute))]
+    public class OpenFilePathDrawer : PropertyDrawer
     {
-        public FilePathDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
+        public OpenFilePathDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
         {
         }
 
@@ -21,7 +21,7 @@ namespace DotEditor.NativeDrawer.Property
         protected override void OnDrawProperty(string label)
         {
             string value = DrawerProperty.GetValue<string>();
-            var attr = GetAttr<FilePathAttribute>();
+            var attr = GetAttr<OpenFilePathAttribute>();
 
             EditorGUI.BeginChangeCheck();
             {
@@ -29,9 +29,17 @@ namespace DotEditor.NativeDrawer.Property
                 {
                     value = EditorGUILayout.TextField(label, value);
 
-                    if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon), GUILayout.Width(20)))
+                    if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon),GUIStyle.none ,GUILayout.Width(17),GUILayout.Height(17)))
                     {
-                        string filePath = EditorUtility.OpenFilePanel("Select file", value, null);
+                        string filePath;
+                        if (attr.Filters!=null && attr.Filters.Length>0)
+                        {
+                            filePath = EditorUtility.OpenFilePanelWithFilters("Select file", "", attr.Filters);
+                        }
+                        else
+                        {
+                            filePath = EditorUtility.OpenFilePanel("Select file", "", attr.Extension);
+                        }
                         if (!string.IsNullOrEmpty(filePath))
                         {
                             if (attr.IsAbsolute)
@@ -43,10 +51,6 @@ namespace DotEditor.NativeDrawer.Property
                                 value = PathUtility.GetAssetPath(filePath);
                             }
                         }
-                    }
-                    if (UnityEngine.GUILayout.Button("\u2716", UnityEngine.GUILayout.Width(20), UnityEngine.GUILayout.Height(20)))
-                    {
-                        value = "";
                     }
                 }
                 EditorGUILayout.EndHorizontal();

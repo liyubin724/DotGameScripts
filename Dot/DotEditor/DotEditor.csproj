@@ -74,6 +74,8 @@
     <Compile Include="Config\Ini\CreateDataPopupContent.cs" />
     <Compile Include="Config\Ini\CreateGroupPopupContent.cs" />
     <Compile Include="Config\Ini\IniConfigWindow.cs" />
+    <Compile Include="EditorStyleViewer\BuiltInResourcesWindow.cs" />
+    <Compile Include="EditorStyleViewer\EditorStyleViewer.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfigEditor.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
     <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\SeparatorLineDrawer.cs" />
+    <Compile Include="NativeDrawer\Decorator\SpaceLineDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoolDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultBoundsDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultTypeDrawer\DefaultEnumDrawer.cs" />
@@ -130,7 +133,7 @@
     <Compile Include="NativeDrawer\Property\Control\IndentDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\EnumButtonDrawer.cs" />
-    <Compile Include="NativeDrawer\Property\FilePathDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFilePathDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextDrawer.cs" />
