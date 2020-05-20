@@ -122,20 +122,9 @@ public class TestWindow : EditorWindow
 
     private NativeDrawerObject drawerObject = null;
 
-    private InnerTargetData innerTargetData = new InnerTargetData();
-    private InnerTargetData tempInnerTargetData;
-    
     private void Awake()
     {
         NativeDrawerSetting.IsShowDecorator = true;
-
-        using(FileStream fs = new FileStream("D:/t.bytes",FileMode.Create))
-        {
-            InnerTargetDataSerialize.Serialize(fs, innerTargetData);
-        }
-
-        tempInnerTargetData = InnerTargetDataSerialize.Deserialize(File.ReadAllBytes("D:/t.bytes"));
-        drawerObject = new NativeDrawerObject(tempInnerTargetData);
     }
     private void OnGUI()
     {
@@ -154,7 +143,17 @@ public class TestWindow : EditorWindow
         //}
         //EditorGUILayout.EndHorizontal();
 
+        if(GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon),GUIStyle.none,GUILayout.Width(20),GUILayout.Height(20)))
+        {
 
+        }
+
+
+        if (drawerObject == null)
+        {
+            drawerObject = new NativeDrawerObject(data);
+            drawerObject.IsShowScroll = true;
+        }
 
         drawerObject.OnGUILayout();
     }
