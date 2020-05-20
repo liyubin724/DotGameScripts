@@ -9,6 +9,8 @@ namespace Dot.NativeDrawer.Property
 
         public string MemberName { get; set; } = null;
 
+        public bool IsSearchable { get; set; } = false;
+
         public StringPopupAttribute()
         {
         }

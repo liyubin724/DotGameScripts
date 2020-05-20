@@ -18,24 +18,31 @@ using UnityEngine;
 
 public class TestData
 {
-    [OpenFilePath(IsAbsolute =false)]
-    public string filePath1;
-    [OpenFilePath(IsAbsolute = true)]
-    public string filePath2;
+    [StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
+    public string strValue = "A";
     
-    [SpaceLine]
+    
+    
+    //[OpenFilePath(IsAbsolute =false)]
+    //public string filePath1;
+    //[OpenFilePath(IsAbsolute = true)]
+    //public string filePath2;
+    
+    //[SpaceLine]
 
-    [SeparatorLine]
-    [OpenFilePath(IsAbsolute = false,Extension ="txt")]
-    public string filePath3;
-    [OpenFilePath(IsAbsolute = true,Extension ="txt")]
-    public string filePath4;
+    //[SeparatorLine]
+    //[OpenFilePath(IsAbsolute = false,Extension ="txt")]
+    //public string filePath3;
+    //[OpenFilePath(IsAbsolute = true,Extension ="txt")]
+    //public string filePath4;
     
-    [SeparatorLine]
-    [OpenFilePath(IsAbsolute = false,Filters =new string[] { "CSharp", "cs", "All Files", "*" })]
-    public string filePath5;
-    [OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
-    public string filePath6;
+    //[SeparatorLine]
+    //[OpenFilePath(IsAbsolute = false,Filters =new string[] { "CSharp", "cs", "All Files", "*" })]
+    //public string filePath5;
+    //[OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    //public string filePath6;
+
+
     
     //[EnumButton]
     //[OnValueChanged("OnEnumTypeChanged")]
@@ -115,7 +122,10 @@ public class TestWindow : EditorWindow
     [MenuItem("Test/Test")]
    static void ShowWin()
     {
-        EditorWindow.GetWindow<TestWindow>().Show();
+        var win =EditorWindow.GetWindow<TestWindow>();
+        win.wantsMouseMove = true;
+        win.Show();
+
     }
 
     private TestData data = new TestData();
@@ -125,36 +135,57 @@ public class TestWindow : EditorWindow
     private void Awake()
     {
         NativeDrawerSetting.IsShowDecorator = true;
+        drawerObject = new NativeDrawerObject(data);
+        drawerObject.IsShowScroll = true;
     }
+
+    public string strValue = "A";
+    private string[] options = new string[] { "A", "B", "C", "D", "E", };
+    private Rect ddbRect = Rect.zero;
     private void OnGUI()
     {
-        //string[] enumNames = Enum.GetNames(typeof(TEnumType));
-        //Array arr = Enum.GetValues(typeof(TEnumType));
-        //EditorGUILayout.BeginHorizontal();
-        //{
-        //    foreach(var a in arr)
-        //    {
-        //        EditorGUILayout.LabelField(a.ToString()+"   "+a.GetType().ToString());
-        //    }
-        //    foreach(var en in enumNames)
-        //    {
-        //        GUILayout.Toggle(true, en,EditorStyles.toolbarButton);
-        //    }
-        //}
-        //EditorGUILayout.EndHorizontal();
-
-        if(GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon),GUIStyle.none,GUILayout.Width(20),GUILayout.Height(20)))
-        {
-
-        }
-
-
-        if (drawerObject == null)
-        {
-            drawerObject = new NativeDrawerObject(data);
-            drawerObject.IsShowScroll = true;
-        }
-
         drawerObject.OnGUILayout();
+
+
+
+        //Vector2 mousePosition = EditorGUIUtility.GUIToScreenPoint(Event.current.mousePosition);
+        
+        //EditorGUILayout.LabelField("guiPosition" + Event.current.mousePosition + " screenPosition = " + mousePosition+"  dbb = "+ddbRect);
+        //string value = strValue;
+        //EditorGUI.BeginChangeCheck();
+        //{
+        //    EditorGUILayout.BeginHorizontal();
+        //    {
+        //        EditorGUILayout.PrefixLabel("StrValue" + "  " + mousePosition);
+        //        Rect lastRect = GUILayoutUtility.GetRect(new GUIContent(value), "dropdownbutton");
+        //        if(Event.current.type == EventType.Repaint)
+        //        {
+        //            ddbRect = lastRect;
+        //        }
+        //        if (EditorGUI.DropdownButton(lastRect,new GUIContent(value), FocusType.Keyboard))
+        //        {
+        //            try
+        //            {
+        //                SearchablePopup.Show(ddbRect, Array.IndexOf(options, value), options, (selected) =>
+        //                {
+        //                    value = options[selected];
+        //                    strValue = value;
+        //                    Repaint();
+        //                });
+        //            }
+        //            catch (ExitGUIException)
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //    }
+        //    EditorGUILayout.EndHorizontal();
+        //}
+        //if (EditorGUI.EndChangeCheck())
+        //{
+        //    strValue = value;
+        //}
+
+
     }
 }

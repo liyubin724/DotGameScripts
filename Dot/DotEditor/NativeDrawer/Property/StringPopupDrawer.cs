@@ -1,12 +1,16 @@
 ﻿using Dot.NativeDrawer.Property;
 using DotEditor.GUIExtension;
+using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Property
 {
     [CustomAttributeDrawer(typeof(StringPopupAttribute))]
     public class StringPopupDrawer : PropertyDrawer
     {
+        private static EditorWindow lastSearchableWindow;
+
         public StringPopupDrawer(NativeDrawerProperty drawerProperty, PropertyDrawerAttribute attr) : base(drawerProperty, attr)
         {
         }
@@ -30,13 +34,47 @@ namespace DotEditor.NativeDrawer.Property
 
             label = label ?? "";
 
-            EditorGUI.BeginChangeCheck();
+            if(attr.IsSearchable)
             {
-                value = EGUILayout.DrawPopup<string>(label, options, options, value);
+                EditorGUILayout.BeginHorizontal();
+                {
+                    EditorGUILayout.PrefixLabel(label);
+                    Rect btnRect = GUILayoutUtility.GetRect(new GUIContent(value), "dropdownbutton");
+
+                    if (EditorGUI.DropdownButton(btnRect,new GUIContent(value), FocusType.Keyboard))
+                    {
+                        try
+                        {
+                            SearchablePopup.Show(btnRect,new Vector2(200,400) ,Array.IndexOf(options, value), options, (selected) =>
+                            {
+                                DrawerProperty.Value = options[selected];
+                            });
+                        }
+                        catch (ExitGUIException)
+                        {
+                            lastSearchableWindow = EditorWindow.focusedWindow;
+                            throw;
+                        }
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+
+                if (lastSearchableWindow && lastSearchableWindow != EditorWindow.mouseOverWindow)
+                {
+                    if (Event.current.type == EventType.ScrollWheel)
+                        Event.current.Use();
+                }
             }
-            if (EditorGUI.EndChangeCheck())
+            else
             {
-                DrawerProperty.Value = value;
+                EditorGUI.BeginChangeCheck();
+                {
+                    value = EGUILayout.DrawPopup<string>(label, options, options, value);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    DrawerProperty.Value = value;
+                }
             }
         }
     }

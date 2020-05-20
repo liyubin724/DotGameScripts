@@ -14,9 +14,9 @@ namespace DotEditor.GUIExtension
     /// </summary>
     public class SearchablePopup : PopupWindowContent
     {
-        public static void Show(Rect activatorRect, int current, string[] options, Action<int> onSelect)
+        public static void Show(Rect activatorRect, Vector2 winSize,int current, string[] options, Action<int> onSelect)
         {
-            PopupWindow.Show(activatorRect, new SearchablePopup(options, current, onSelect));
+            PopupWindow.Show(activatorRect, new SearchablePopup(winSize,options, current, onSelect));
         }
 
 
@@ -36,14 +36,21 @@ namespace DotEditor.GUIExtension
         private Rect toolbarRect;
         private Rect contentRect;
 
-
-        private SearchablePopup(string[] options, int startIndex, Action<int> onSelect)
+        private Vector2 winSize;
+        private SearchablePopup(Vector2 winSize,string[] options, int startIndex, Action<int> onSelect)
         {
+            this.winSize = winSize;
+
             searchList = new SearchList(options);
             searchField = new SearchField();
 
             this.onSelect = onSelect;
             this.startIndex = startIndex;
+        }
+
+        public override Vector2 GetWindowSize()
+        {
+            return winSize;
         }
 
 
