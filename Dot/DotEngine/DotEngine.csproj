@@ -107,6 +107,16 @@
     <Compile Include="Entity\Avatar\AvatarPrefabPartData.cs" />
     <Compile Include="Entity\Avatar\AvatarRendererPartData.cs" />
     <Compile Include="Entity\Avatar\AvatarUtil.cs" />
+    <Compile Include="Entity\Controller\EntityAIController.cs" />
+    <Compile Include="Entity\Controller\EntityAnimatorController.cs" />
+    <Compile Include="Entity\Controller\EntityAvatarController.cs" />
+    <Compile Include="Entity\Controller\EntityBindController.cs" />
+    <Compile Include="Entity\Controller\EntityGameObjectController.cs" />
+    <Compile Include="Entity\Controller\EntityMotionController.cs" />
+    <Compile Include="Entity\EntityController.cs" />
+    <Compile Include="Entity\EntityEventConst.cs" />
+    <Compile Include="Entity\EntityManager.cs" />
+    <Compile Include="Entity\EntityObject.cs" />
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
