@@ -178,4 +178,10 @@
     <Folder Include="UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir)DotEditor.dll $(SolutionDir)..\DotProject\Assets\DotEngine\Editor /Y
+xcopy $(TargetDir)DotEditor.pdb $(SolutionDir)..\DotProject\Assets\DotEngine\Editor /Y
+xcopy $(TargetDir)DotEngine.dll $(SolutionDir)..\DotProject\Assets\DotEngine /Y
+xcopy $(TargetDir)DotEngine.pdb $(SolutionDir)..\DotProject\Assets\DotEngine /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
