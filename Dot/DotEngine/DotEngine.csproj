@@ -110,7 +110,7 @@
     <Compile Include="Entity\Controller\EntityAIController.cs" />
     <Compile Include="Entity\Controller\EntityAnimatorController.cs" />
     <Compile Include="Entity\Controller\EntityAvatarController.cs" />
-    <Compile Include="Entity\Controller\EntityBindController.cs" />
+    <Compile Include="Entity\Controller\EntityBindEntityController.cs" />
     <Compile Include="Entity\Controller\EntityGameObjectController.cs" />
     <Compile Include="Entity\Controller\EntityMotionController.cs" />
     <Compile Include="Entity\EntityController.cs" />

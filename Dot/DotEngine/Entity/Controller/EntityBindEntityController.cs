@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dot.Entity.Controller
 {
-    class EntityBindController
+    class EntityBindEntityController
     {
     }
 }

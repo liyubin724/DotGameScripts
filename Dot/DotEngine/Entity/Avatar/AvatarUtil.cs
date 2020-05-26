@@ -32,7 +32,7 @@ namespace Dot.Entity.Avatar
                 {
                     SkinnedMeshRenderer smRenderer = nodeData.renderer;
                     smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
-                    smRenderer.bones = nodeBehaviour.GetBoneByNames(rendererData.boneNames);
+                    smRenderer.bones = nodeBehaviour.GetBoneTransformByNames(rendererData.boneNames);
                     smRenderer.sharedMesh = rendererData.mesh;
                     smRenderer.sharedMaterials = rendererData.materials;
 

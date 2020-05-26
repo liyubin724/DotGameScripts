@@ -20,7 +20,6 @@ namespace Dot.Entity.Node
         public SkinnedMeshRenderer renderer = null;
     }
 
-    [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour
     {
         public NodeData[] bindNodes = new NodeData[0];
@@ -64,7 +63,22 @@ namespace Dot.Entity.Node
             return null;
         }
 
-        public Transform[] GetBoneByNames(string[] names)
+        public NodeData GetBindNode(string name)
+        {
+            return GetNode(NodeType.BindNode, name);
+        }
+
+        public NodeData GetBoneNode(string name)
+        {
+            return GetNode(NodeType.BoneNode, name);
+        }
+
+        public NodeData GetSMRendererNode(string name)
+        {
+            return GetNode(NodeType.SMRendererNode, name);
+        }
+
+        public Transform[] GetBoneTransformByNames(string[] names)
         {
             if (names == null || names.Length == 0)
                 return new Transform[0];

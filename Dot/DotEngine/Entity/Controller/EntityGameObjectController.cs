@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using Dot.Dispatch;
+using UnityEngine;
 
 namespace Dot.Entity.Controller
 {
     public class EntityGameObjectController : EntityController
     {
-        private GameObject gameObject;
-        private Transform transfrom;
-        private string name = "";
+        public GameObject RootGameObject { get; }
 
+        public Transform RootTransform { get; }
+
+        private string name = "";
         public string Name
         {
             get
@@ -19,8 +21,44 @@ namespace Dot.Entity.Controller
                 if(name !=value && !string.IsNullOrEmpty(value))
                 {
                     name = value;
-                    gameObject.name = name;
+                    RootGameObject.name = name;
                 }
+            }
+        }
+
+        public Vector3 Position
+        {
+            get
+            {
+                return RootTransform.position;
+            }
+            set
+            {
+                RootTransform.position = value;
+            }
+        }
+
+        public Vector3 Forward
+        {
+            get
+            {
+                return RootTransform.forward;
+            }
+            set
+            {
+                RootTransform.forward = value.normalized;
+            }
+        }
+
+        public Vector3 Rotation
+        {
+            get
+            {
+                return RootTransform.rotation.eulerAngles;
+            }
+            set
+            {
+                RootTransform.rotation = Quaternion.Euler(value);
             }
         }
 
@@ -30,8 +68,8 @@ namespace Dot.Entity.Controller
 
         public EntityGameObjectController(GameObject gameObject,string name)
         {
-            this.gameObject = gameObject;
-            transfrom = this.gameObject.transform;
+            RootGameObject = gameObject;
+            RootTransform = RootGameObject.transform;
             Name = name;
         }
 
@@ -40,40 +78,33 @@ namespace Dot.Entity.Controller
             
         }
 
-        public Vector3 Position
+        protected override void DoRegisterEvent()
         {
-            get
-            {
-                return transfrom.position;
-            }
-            set
-            {
-                transfrom.position = value;
-            }
+            RegisterEvent(EntityEventConst.ENTITY_POSITION_CHANGED, OnPositionChanged);
+            RegisterEvent(EntityEventConst.ENTITY_ROTATION_CHANGED, OnRotationChanged);
+            RegisterEvent(EntityEventConst.ENTITY_FORWARD_CHANGED, OnForwardChanged);
         }
 
-        public Vector3 Forward
+        protected override void DoUnregisterEvent()
         {
-            get
-            {
-                return transfrom.forward;
-            }
-            set
-            {
-                transfrom.forward = value.normalized;
-            }
+            UnregisterEvent(EntityEventConst.ENTITY_POSITION_CHANGED, OnPositionChanged);
+            UnregisterEvent(EntityEventConst.ENTITY_ROTATION_CHANGED, OnRotationChanged);
+            UnregisterEvent(EntityEventConst.ENTITY_FORWARD_CHANGED, OnForwardChanged);
         }
 
-        public Vector3 Rotation
+        private void OnPositionChanged(EventData eventData)
         {
-            get
-            {
-                return transfrom.rotation.eulerAngles;
-            }
-            set
-            {
-                transfrom.rotation = Quaternion.Euler(value);
-            }
+            Position = eventData.GetValue<Vector3>();
+        }
+
+        private void OnRotationChanged(EventData eventData)
+        {
+            Rotation = eventData.GetValue<Vector3>();
+        }
+
+        private void OnForwardChanged(EventData eventData)
+        {
+            Forward = eventData.GetValue<Vector3>();
         }
     }
 }
