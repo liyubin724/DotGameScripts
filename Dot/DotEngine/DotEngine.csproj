@@ -109,6 +109,7 @@
     <Compile Include="Entity\Avatar\AvatarUtil.cs" />
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\ButtonAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\SeparatorLineAttribute.cs" />

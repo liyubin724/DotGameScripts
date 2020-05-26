@@ -7,7 +7,7 @@ namespace DotEditor.NativeDrawer.Decorator
     [CustomAttributeDrawer(typeof(BoxedHeaderAttribute))]
     public class BoxedHeaderDrawer : DecoratorDrawer
     {
-        public BoxedHeaderDrawer(DecoratorAttribute attr) : base(attr)
+        public BoxedHeaderDrawer(NativeDrawerProperty property, DecoratorAttribute attr) : base(property, attr)
         {
         }
 

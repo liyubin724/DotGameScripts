@@ -6,7 +6,7 @@ namespace DotEditor.NativeDrawer.Decorator
     [CustomAttributeDrawer(typeof(HelpAttribute))]
     public class HelpDrawer : DecoratorDrawer
     {
-        public HelpDrawer(DecoratorAttribute attr) : base(attr)
+        public HelpDrawer(NativeDrawerProperty property, DecoratorAttribute attr) : base(property, attr)
         {
         }
 
