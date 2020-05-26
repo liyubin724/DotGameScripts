@@ -77,7 +77,51 @@ namespace DotEditor.NativeDrawer
             {
                 return string.Empty;
             }
-            return Activator.CreateInstance(type);
+            if(typeof(UnityEngine.Object).IsAssignableFrom(type))
+            {
+                if(typeof(ScriptableObject).IsAssignableFrom(type))
+                {
+                    return ScriptableObject.CreateInstance(type);
+                }
+                return null;
+            }
+
+            object instance;
+            try
+            {
+
+                instance = Activator.CreateInstance(type);
+            }
+            catch
+            {
+                instance = null;
+            }
+
+            return instance;
+        }
+
+        public static bool IsTypeSupported(Type type)
+        {
+            if(type.IsInterface)
+            {
+                return false;
+            }
+
+            if(type.IsDelegate())
+            {
+                return false;
+            }
+
+            if(type.IsClass && type.IsAbstract)
+            {
+                return false;
+            }
+
+            if(typeof(IDictionary).IsAssignableFrom(type))
+            {
+                return false;
+            }
+            return true;
         }
 
         public static Type GetDefaultType(Type type)
@@ -89,6 +133,11 @@ namespace DotEditor.NativeDrawer
             if(TypeUtility.IsArrayOrList(type))
             {
                 return typeof(IList);
+            }
+            
+            if(typeof(UnityEngine.Object).IsAssignableFrom(type))
+            {
+                return typeof(UnityEngine.Object);
             }
             return type;
         }

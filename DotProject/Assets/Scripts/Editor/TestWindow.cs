@@ -16,13 +16,23 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
+public class NullInnerData
+{
+    public int intValue;
+}
+
 public class TestData
 {
-    [StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
-    public string strValue = "A";
-    
-    
-    
+    //[StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
+    //public string strValue = "A";
+
+    //public GameObject gameObject;
+    //public Camera camera;
+    //public Transform transform;
+    //public NullInnerData innerData;
+
+    public Dictionary<int, string> dic = new Dictionary<int, string>();
+
     //[OpenFilePath(IsAbsolute =false)]
     //public string filePath1;
     //[OpenFilePath(IsAbsolute = true)]
@@ -145,8 +155,6 @@ public class TestWindow : EditorWindow
     private void OnGUI()
     {
         drawerObject.OnGUILayout();
-
-
 
         //Vector2 mousePosition = EditorGUIUtility.GUIToScreenPoint(Event.current.mousePosition);
         

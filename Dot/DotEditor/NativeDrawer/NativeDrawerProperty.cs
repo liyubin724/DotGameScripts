@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
 namespace DotEditor.NativeDrawer
 {
@@ -44,12 +43,6 @@ namespace DotEditor.NativeDrawer
             get
             {
                 object value = Field.GetValue(Target);
-                if(value == null)
-                {
-                    value = NativeDrawerUtility.CreateDefaultInstance(ValueType);
-                    Field.SetValue(Target, value);
-                }
-
                 if(ArrayElementIndex>=0)
                 {
                     return ((IList)value)[ArrayElementIndex];
@@ -59,10 +52,6 @@ namespace DotEditor.NativeDrawer
             }
             set
             {
-                if(value == null)
-                {
-                    value = NativeDrawerUtility.CreateDefaultInstance(ValueType); 
-                }
                 if(ArrayElementIndex>=0)
                 {
                     IList list = (IList)Field.GetValue(Target);
@@ -118,12 +107,20 @@ namespace DotEditor.NativeDrawer
                 InitFieldAttr();
             }
 
+            InitDrawer();
+        }
+
+        private void InitDrawer()
+        {
             typeDrawer = NativeDrawerUtility.CreateDefaultTypeDrawer(this);
-            if(typeDrawer == null)
+            if (typeDrawer == null)
             {
-                if(TypeUtility.IsStructOrClass(ValueType))
+                if(NativeDrawerUtility.IsTypeSupported(ValueType))
                 {
-                    drawerObject = new NativeDrawerObject(Value);
+                    if (TypeUtility.IsStructOrClass(ValueType) && Value != null)
+                    {
+                        drawerObject = new NativeDrawerObject(Value);
+                    }
                 }
             }
         }
@@ -221,7 +218,7 @@ namespace DotEditor.NativeDrawer
                 }
                 if (propertyDrawers.Count == 0)
                 {
-                    if(typeDrawer !=null)
+                    if(typeDrawer != null)
                     {
                         typeDrawer.OnGUILayout(label);
                     }else if(drawerObject!=null)
@@ -232,13 +229,35 @@ namespace DotEditor.NativeDrawer
                             drawerObject.OnGUILayout();
                         }
                         UnityEditor.EditorGUI.indentLevel--;
-                    }else
+                    }else if(drawerObject == null)
                     {
-                        EGUI.BeginGUIColor(Color.red);
+                        if(!NativeDrawerUtility.IsTypeSupported(ValueType))
                         {
-                            UnityEditor.EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, "Unknown Drawer");
+                            EGUI.BeginGUIColor(UnityEngine.Color.red);
+                            {
+                                UnityEditor.EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, $"The type isn't supported.type = {ValueType}");
+                            }
+                            EGUI.EndGUIColor();
+                        }else if(Value == null)
+                        {
+                            UnityEditor.EditorGUILayout.BeginHorizontal();
+                            {
+                                UnityEditor.EditorGUILayout.PrefixLabel(label);
+                                if (UnityEngine.GUILayout.Button("Create"))
+                                {
+                                    Value = NativeDrawerUtility.CreateDefaultInstance(ValueType);
+                                    InitDrawer();
+                                }
+                            }
+                            UnityEditor.EditorGUILayout.EndHorizontal();
+                        }else
+                        {
+                            EGUI.BeginGUIColor(UnityEngine.Color.red);
+                            {
+                                UnityEditor.EditorGUILayout.LabelField(string.IsNullOrEmpty(label) ? "" : label, "Unknown Drawer");
+                            }
+                            EGUI.EndGUIColor();
                         }
-                        EGUI.EndGUIColor();
                     }
                 }
                 else
