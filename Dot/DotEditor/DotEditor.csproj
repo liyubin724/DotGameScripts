@@ -101,6 +101,7 @@
     <Compile Include="NativeDrawer\AttrNativeDrawer.cs" />
     <Compile Include="NativeDrawer\CustomAttributeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderDrawer.cs" />
+    <Compile Include="NativeDrawer\Decorator\ButtonDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\DecoratorDrawer.cs" />
     <Compile Include="NativeDrawer\Decorator\HelpDrawer.cs" />
     <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />

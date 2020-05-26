@@ -130,7 +130,7 @@ namespace DotEditor.NativeDrawer
             var decoratorAttrEnumerable = Field.GetCustomAttributes<DecoratorAttribute>();
             foreach (var attr in decoratorAttrEnumerable)
             {
-                decoratorDrawers.Add(NativeDrawerUtility.CreateDecoratorDrawer(attr));
+                decoratorDrawers.Add(NativeDrawerUtility.CreateDecoratorDrawer(this,attr));
             }
 
             var layoutAttrEnumerable = Field.GetCustomAttributes<LayoutAttribute>();
@@ -193,12 +193,9 @@ namespace DotEditor.NativeDrawer
 
             if (isVisible)
             {
-                if(NativeDrawerSetting.IsShowDecorator)
+                foreach (var drawer in decoratorDrawers)
                 {
-                    foreach (var drawer in decoratorDrawers)
-                    {
-                        drawer.OnGUILayout();
-                    }
+                    drawer.OnGUILayout();
                 }
 
                 foreach (var drawer in verificationDrawers)
@@ -262,7 +259,10 @@ namespace DotEditor.NativeDrawer
                 }
                 else
                 {
-                    propertyDrawers[0].OnGUILayout(label);
+                    foreach(var drawer in propertyDrawers)
+                    {
+                        drawer.OnGUILayout(label);
+                    }
                 }
 
                 foreach (var drawer in propertyControlDrawers)

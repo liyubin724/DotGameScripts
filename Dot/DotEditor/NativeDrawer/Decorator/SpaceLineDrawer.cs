@@ -6,7 +6,7 @@ namespace DotEditor.NativeDrawer.Decorator
     [CustomAttributeDrawer(typeof(SpaceLineAttribute))]
     public class SpaceLineDrawer : DecoratorDrawer
     {
-        public SpaceLineDrawer(DecoratorAttribute attr) : base(attr)
+        public SpaceLineDrawer(NativeDrawerProperty property, DecoratorAttribute attr) : base(property, attr)
         {
         }
 

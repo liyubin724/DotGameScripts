@@ -152,11 +152,11 @@ namespace DotEditor.NativeDrawer
             return null;
         }
 
-        public static DecoratorDrawer CreateDecoratorDrawer(DecoratorAttribute attr)
+        public static DecoratorDrawer CreateDecoratorDrawer(NativeDrawerProperty drawerProperty, DecoratorAttribute attr)
         {
             if(attrDrawerDic.TryGetValue(attr.GetType(),out Type drawerType))
             {
-                return (DecoratorDrawer)Activator.CreateInstance(drawerType, attr);
+                return (DecoratorDrawer)Activator.CreateInstance(drawerType, drawerProperty, attr);
             }
             return null;
         }

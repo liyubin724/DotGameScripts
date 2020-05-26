@@ -23,6 +23,14 @@ public class NullInnerData
 
 public class TestData
 {
+    [Button("InvokeMethod",Size = ButtonSize.Big)]
+    public int value;
+
+    public void InvokeMethod()
+    {
+        value = 100;
+    }
+
     //[StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
     //public string strValue = "A";
 
@@ -31,7 +39,7 @@ public class TestData
     //public Transform transform;
     //public NullInnerData innerData;
 
-    public Dictionary<int, string> dic = new Dictionary<int, string>();
+    //public Dictionary<int, string> dic = new Dictionary<int, string>();
 
     //[OpenFilePath(IsAbsolute =false)]
     //public string filePath1;
@@ -144,7 +152,6 @@ public class TestWindow : EditorWindow
 
     private void Awake()
     {
-        NativeDrawerSetting.IsShowDecorator = true;
         drawerObject = new NativeDrawerObject(data);
         drawerObject.IsShowScroll = true;
     }
