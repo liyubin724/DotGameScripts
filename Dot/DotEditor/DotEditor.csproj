@@ -114,10 +114,12 @@
     <Compile Include="NativeDrawer\DefaultDrawer\DefaultListDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultDrawer\DefaultRectDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultDrawer\DefaultStringDrawer.cs" />
+    <Compile Include="NativeDrawer\DefaultDrawer\DefaultUnityObjectDrawer.cs" />
     <Compile Include="NativeDrawer\DefaultDrawer\DefaultVector2Drawer.cs" />
     <Compile Include="NativeDrawer\DefaultDrawer\DefaultVector3Drawer.cs" />
     <Compile Include="NativeDrawer\Listener\ListenerDrawer.cs" />
     <Compile Include="NativeDrawer\Listener\OnValueChangedDrawer.cs" />
+    <Compile Include="NativeDrawer\NativeDrawerEditor.cs" />
     <Compile Include="NativeDrawer\NativeDrawerSetting.cs" />
     <Compile Include="NativeDrawer\NativeTypeDrawer.cs" />
     <Compile Include="NativeDrawer\Layout\BeginGroupDrawer.cs" />
