@@ -104,8 +104,6 @@
     <Compile Include="Dispose\IDispose.cs" />
     <Compile Include="Entity\Avatar\AvatarPartData.cs" />
     <Compile Include="Entity\Avatar\AvatarPartInstance.cs" />
-    <Compile Include="Entity\Avatar\AvatarPrefabPartData.cs" />
-    <Compile Include="Entity\Avatar\AvatarRendererPartData.cs" />
     <Compile Include="Entity\Avatar\AvatarUtil.cs" />
     <Compile Include="Entity\Controller\EntityAIController.cs" />
     <Compile Include="Entity\Controller\EntityAnimatorController.cs" />

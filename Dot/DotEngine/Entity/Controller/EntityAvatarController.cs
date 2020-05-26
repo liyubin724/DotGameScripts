@@ -35,7 +35,7 @@ namespace Dot.Entity.Controller
 
         private void OnLoadSkeletonComplete()
         {
-
+            
         }
 
         public void LoadPart(string partAddress)
