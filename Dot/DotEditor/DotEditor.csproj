@@ -94,6 +94,7 @@
     <Compile Include="GUIExtension\EGUIResources.cs" />
     <Compile Include="GUIExtension\EGUIStyles.cs" />
     <Compile Include="GUIExtension\EGUIUtility.cs" />
+    <Compile Include="GUIExtension\ListView\SimpleListView.cs" />
     <Compile Include="GUIExtension\Search\SearchablePopup.cs" />
     <Compile Include="GUIExtension\Search\ToolbarSearchField.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarExtend.cs" />
