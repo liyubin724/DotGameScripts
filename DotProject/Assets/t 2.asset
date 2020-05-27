@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -399234650, guid: 850609f56be3c4e478dbc3e070431c7c, type: 3}
-  m_Name: t
+  m_Name: t 2
   m_EditorClassIdentifier: 
   skeletonData:
     outputFolder: 

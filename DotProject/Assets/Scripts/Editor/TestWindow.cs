@@ -31,6 +31,9 @@ public class TestData
         value = 100;
     }
 
+    [OpenFolderPath]
+    public string folderPath;
+
     //[StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
     //public string strValue = "A";
 

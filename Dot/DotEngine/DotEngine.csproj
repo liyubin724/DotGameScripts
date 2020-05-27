@@ -140,6 +140,7 @@
     <Compile Include="NativeDrawer\Property\Label\HideLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFolderPathAttribute.cs" />
     <Compile Include="NativeDrawer\Property\PropertyAttribute.cs" />
     <Compile Include="NativeDrawer\Property\FloatSliderAttribute.cs" />
     <Compile Include="NativeDrawer\Property\StringPopupAttribute.cs" />

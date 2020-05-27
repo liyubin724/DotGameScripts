@@ -9,16 +9,27 @@ namespace DotEditor.Entity.Avatar
     public class AvatarCreatorData : ScriptableObject
     {
         public SkeletonCreatorData skeletonData = new SkeletonCreatorData();
+        public PartOutputData partOutputData = new PartOutputData();
 
-        public List<PartCreatorData> partDatas = new List<PartCreatorData>();
+        public override string ToString()
+        {
+            return name;
+        }
 
         [Serializable]
         public class SkeletonCreatorData
         {
-            [OpenFilePath(Extension ="fbx")]
-            public string fbxPath = string.Empty;
-            
-            public string savedDir = string.Empty;
+            [OpenFolderPath]
+            public string outputFolder = string.Empty;
+            public GameObject fbx;
+        }
+
+        [Serializable]
+        public class PartOutputData
+        {
+            [OpenFolderPath]
+            public string outputFolder = string.Empty;
+            public List<PartCreatorData> partDatas = new List<PartCreatorData>();
         }
 
         [Serializable]
@@ -26,8 +37,9 @@ namespace DotEditor.Entity.Avatar
         {
             [EnumButton]
             public AvatarPartType partType = AvatarPartType.Body;
-            public List<PrefabCreatorData> prefabParts = new List<PrefabCreatorData>();
-            public List<SMRendererCreatorData> rendererParts = new List<SMRendererCreatorData>();
+
+            public List<SMRendererCreatorData> smRendererDatas = new List<SMRendererCreatorData>();
+            public List<PrefabCreatorData> prefabDatas = new List<PrefabCreatorData>();
         }
 
         [Serializable]
@@ -40,8 +52,7 @@ namespace DotEditor.Entity.Avatar
         [Serializable]
         public class SMRendererCreatorData
         {
-            [OpenFilePath(Extension = "fbx")]
-            public string fbxPath = string.Empty;
+            public GameObject partFbx;
         }
     }
 }

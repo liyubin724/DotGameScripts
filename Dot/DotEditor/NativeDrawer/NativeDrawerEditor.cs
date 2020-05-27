@@ -10,8 +10,13 @@ namespace DotEditor.NativeDrawer
         {
             drawerObject = new NativeDrawerObject(target)
             {
-                IsShowScroll = true,
+                IsShowScroll = IsShowScroll(),
             };
+        }
+
+        protected virtual bool IsShowScroll()
+        {
+            return true;
         }
 
         public override void OnInspectorGUI()
