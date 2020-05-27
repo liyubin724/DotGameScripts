@@ -60,16 +60,16 @@ public class LearnTreeView : EditorWindow
         {
             return EditorGUIUtility.singleLineHeight * 2;
         };
-        //sListView.OnDrawItem = (rect, data) =>
-        //{
-        //    Rect drawRect = rect;
-        //    drawRect.height = EditorGUIUtility.singleLineHeight;
+        sListView.OnDrawItem = (rect, data) =>
+        {
+            Rect drawRect = rect;
+            drawRect.height = EditorGUIUtility.singleLineHeight;
 
-        //    EditorGUI.IntField(drawRect, "id",data.id);
-        //    drawRect.y += drawRect.height;
+            EditorGUI.IntField(drawRect, "id", data.id);
+            drawRect.y += drawRect.height;
 
-        //    EditorGUI.LabelField(drawRect,"Name", data.name);
-        //};
+            EditorGUI.LabelField(drawRect, "Name", data.name);
+        };
         sListView.OnItemSelected = (data) =>
         {
             Debug.Log(data.name);
@@ -81,6 +81,20 @@ public class LearnTreeView : EditorWindow
     {
         if(GUILayout.Button("Reload"))
         {
+            sListView.Reload();
+        }
+        if(GUILayout.Button("Add"))
+        {
+            datas.Add(new TestListViewData()
+            {
+                id = 6,
+                name = "F",
+            });
+            sListView.Reload();
+        }
+        if (GUILayout.Button("Remove"))
+        {
+            datas.RemoveAt(1);
             sListView.Reload();
         }
         Rect rect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
