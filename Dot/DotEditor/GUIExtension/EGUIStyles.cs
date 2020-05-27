@@ -84,6 +84,25 @@ namespace DotEditor.GUIExtension
             }
         }
 
+        private static GUIStyle boxedHeaderCenterStyle = null;
+        public static GUIStyle BoxedHeaderCenterStyle
+        {
+            get
+            {
+                if (boxedHeaderCenterStyle == null)
+                {
+                    boxedHeaderCenterStyle = new GUIStyle(UnityEngine.GUI.skin.box)
+                    {
+                        fontSize = 12,
+                        alignment = TextAnchor.MiddleCenter,
+                        fontStyle = FontStyle.Bold,
+                        fixedHeight = 20,
+                    };
+                }
+                return boxedHeaderCenterStyle;
+            }
+        }
+
         public static GUIStyle GetTextureStyle(Texture2D texture)
         {
             GUIStyle style = new GUIStyle();

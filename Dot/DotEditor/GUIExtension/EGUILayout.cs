@@ -57,7 +57,12 @@ namespace DotEditor.GUIExtension
         /// <param name="options"></param>
         public static void DrawBoxHeader(string label,params GUILayoutOption[] options)
         {
-            EditorGUILayout.LabelField(label, EGUIStyles.BoxedHeaderStyle,options);
+            DrawBoxHeader(label, EGUIStyles.BoxedHeaderStyle,options);
+        }
+
+        public static void DrawBoxHeader(string label, GUIStyle style,params GUILayoutOption[] options)
+        {
+            EditorGUILayout.LabelField(label, style, options);
         }
 
         public static void DrawScript(UnityObject target)

@@ -1,23 +1,16 @@
 ﻿using DotEditor.GUIExtension.ListView;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-public class TestListViewData : ISimpleListViewItem
+public class TestListViewData
 {
     public string name;
     public int id;
 
-    public string GetDisplayName()
+    public override string ToString()
     {
-        return name;    
-    }
-
-    public int GetID()
-    {
-        return id;
+        return $"{id}:{name}";
     }
 }
 
@@ -67,16 +60,16 @@ public class LearnTreeView : EditorWindow
         {
             return EditorGUIUtility.singleLineHeight * 2;
         };
-        sListView.OnDrawItem = (rect, data) =>
-        {
-            Rect drawRect = rect;
-            drawRect.height = EditorGUIUtility.singleLineHeight;
+        //sListView.OnDrawItem = (rect, data) =>
+        //{
+        //    Rect drawRect = rect;
+        //    drawRect.height = EditorGUIUtility.singleLineHeight;
 
-            EditorGUI.IntField(drawRect, "id",data.id);
-            drawRect.y += drawRect.height;
+        //    EditorGUI.IntField(drawRect, "id",data.id);
+        //    drawRect.y += drawRect.height;
 
-            EditorGUI.LabelField(drawRect,"Name", data.name);
-        };
+        //    EditorGUI.LabelField(drawRect,"Name", data.name);
+        //};
         sListView.OnItemSelected = (data) =>
         {
             Debug.Log(data.name);
@@ -86,6 +79,12 @@ public class LearnTreeView : EditorWindow
 
     private void OnGUI()
     {
-        sListView.OnGUI(new Rect(0, 0, position.width, position.height));
+        if(GUILayout.Button("Reload"))
+        {
+            sListView.Reload();
+        }
+        Rect rect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+        sListView.OnGUI(rect);
     }
 }

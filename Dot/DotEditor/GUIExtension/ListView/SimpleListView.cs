@@ -5,39 +5,40 @@ using UnityEngine;
 
 namespace DotEditor.GUIExtension.ListView
 {
-    public interface ISimpleListViewItem
-    {
-        int GetID();
-        string GetDisplayName();
-    }
-
-    class SimpleListViewItem<T> : TreeViewItem where T : class,ISimpleListViewItem
+    class SimpleListViewItem<T> : TreeViewItem where T : class
     {
         public T ItemData { get; private set; }
-        public SimpleListViewItem(T itemData)
+
+        public static SimpleListViewItem<T> Root
+        {
+            get
+            {
+                return new SimpleListViewItem<T>(-1, null);
+            }
+        }
+
+        public SimpleListViewItem(int index, T itemData)
         {
             ItemData = itemData;
-
-            if (ItemData != null)
+            id = index;
+            if(ItemData != null)
             {
-                id = ItemData.GetID();
-                displayName = ItemData.GetDisplayName();
+                displayName = ItemData.ToString();
                 depth = 0;
-            }
-            else
+            }else
             {
+                displayName = "";
                 depth = -1;
-                id = -1;
             }
             children = new List<TreeViewItem>();
         }
     }
 
-    public delegate void OnSimpleListViewItemSelected<T>(T item) where T : class, ISimpleListViewItem;
-    public delegate void DrawSimpleListViewItem<T>(Rect rect, T item) where T : class, ISimpleListViewItem;
-    public delegate float GetSimpleListViewItemHeight<T>(T item) where T : class, ISimpleListViewItem;
+    public delegate void OnSimpleListViewItemSelected<T>(T item) where T : class;
+    public delegate void DrawSimpleListViewItem<T>(Rect rect, T item) where T : class;
+    public delegate float GetSimpleListViewItemHeight<T>(T item) where T : class;
 
-    public class SimpleListView<T> : TreeView where T : class,ISimpleListViewItem
+    public class SimpleListView<T> : TreeView where T : class
     {
         public OnSimpleListViewItemSelected<T> OnItemSelected{get; set;}
         public DrawSimpleListViewItem<T> OnDrawItem { get; set; }
@@ -57,13 +58,13 @@ namespace DotEditor.GUIExtension.ListView
 
         protected override TreeViewItem BuildRoot()
         {
-            SimpleListViewItem<T> root = new SimpleListViewItem<T>(null);
+            SimpleListViewItem<T> root = SimpleListViewItem<T>.Root;
 
             if (itemDatas != null && itemDatas.Count > 0)
             {
-                foreach (var item in itemDatas)
+                for(int i =0;i<itemDatas.Count;++i)
                 {
-                    SimpleListViewItem<T> element = new SimpleListViewItem<T>(item);
+                    SimpleListViewItem<T> element = new SimpleListViewItem<T>(i, itemDatas[i]);
                     root.AddChild(element);
                 }
             }
@@ -74,7 +75,8 @@ namespace DotEditor.GUIExtension.ListView
         protected override void RowGUI(RowGUIArgs args)
         {
             Rect rect = args.rowRect;
-            T itemData = (args.item as SimpleListViewItem<T>).ItemData;
+            SimpleListViewItem<T> viewItem = args.item as SimpleListViewItem<T>;
+            T itemData = viewItem.ItemData;
 
             if(ShowSeparator)
             {
@@ -83,7 +85,7 @@ namespace DotEditor.GUIExtension.ListView
 
             if(OnDrawItem == null)
             {
-                EditorGUI.LabelField(rect,itemData.GetDisplayName());
+                EditorGUI.LabelField(rect,viewItem.displayName);
             }else
             {
                 OnDrawItem(rect, itemData);
@@ -134,9 +136,9 @@ namespace DotEditor.GUIExtension.ListView
             Rect viewRect = rect;
             if(!string.IsNullOrEmpty(Header))
             {
-                EGUI.DrawBoxHeader(new Rect(rect.x, rect.y, rect.width, 30), Header);
-                viewRect.y += 30;
-                viewRect.height -= 30;
+                EGUI.DrawBoxHeader(new Rect(rect.x, rect.y, rect.width, 30), Header,EGUIStyles.BoxedHeaderCenterStyle);
+                viewRect.y += 20;
+                viewRect.height -= 20;
             }
             base.OnGUI(viewRect);
         }

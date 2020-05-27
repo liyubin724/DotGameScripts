@@ -90,7 +90,12 @@ namespace DotEditor.GUIExtension
 
         public static void DrawBoxHeader(Rect rect,string label)
         {
-            EditorGUI.LabelField(rect, label, EGUIStyles.BoxedHeaderStyle);
+            DrawBoxHeader(rect, label, EGUIStyles.BoxedHeaderStyle);
+        }
+
+        public static void DrawBoxHeader(Rect rect,string label,GUIStyle style)
+        {
+            EditorGUI.LabelField(rect, label, style);
         }
 
         #region Label Width
