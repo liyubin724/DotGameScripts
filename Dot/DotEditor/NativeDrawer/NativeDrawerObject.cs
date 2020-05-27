@@ -59,6 +59,13 @@ namespace DotEditor.NativeDrawer
                 EditorGUILayout.EndScrollView();
             }
 
+            if(drawerObject!=null && typeof(UnityEngine.Object).IsAssignableFrom(drawerObject.GetType()))
+            {
+                if(GUI.changed)
+                {
+                    EditorUtility.SetDirty((UnityEngine.Object)drawerObject);
+                }
+            }
         }
     }
 }
