@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -326584434, guid: 850609f56be3c4e478dbc3e070431c7c, type: 3}
+  m_Name: asset_address_group
+  m_EditorClassIdentifier: 
+  groupName: Asset Address Group
+  isEnable: 1
+  isMain: 0
+  isPreload: 0
+  isNeverDestroy: 0
+  operation:
+    packMode: 0
+    addressMode: 0
+    labels: 
+  filters:
+  - assetFolder: 
+    isIncludeSubfolder: 0
+    fileRegex: 

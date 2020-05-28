@@ -6,7 +6,6 @@ using DotEditor.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using static DotEditor.Entity.Avatar.AvatarCreatorData;
 using UnityObject = UnityEngine.Object;
@@ -41,10 +40,11 @@ namespace DotEditor.Entity.Avatar
 
             dataListView = new SimpleListView<string>(creatorDataFiles);
             dataListView.Header = "Data List";
-            dataListView.OnItemSelected = OnListViewItemSelected;
-            dataListView.OnDrawItem = (rect, data) =>
+            dataListView.OnSelectedChange = OnListViewItemSelected;
+            dataListView.OnDrawItem = (rect, index) =>
             {
-                EditorGUI.LabelField(rect, Path.GetFileNameWithoutExtension(data), EGUIStyles.BoldLabelStyle);
+                string assetPath = creatorDataFiles[index];
+                EditorGUI.LabelField(rect, Path.GetFileNameWithoutExtension(assetPath), EGUIStyles.BoldLabelStyle);
             };
             dataListView.Reload();
 
@@ -83,16 +83,21 @@ namespace DotEditor.Entity.Avatar
             PartCreatorDataDrawer.CreatePartBtnClick = null; 
         }
 
-        private void OnListViewItemSelected(string filePath)
+        private void OnListViewItemSelected(int index)
         {
             selectedPartCreatorDatas.Clear();
             currentCreatorData = null;
             skeletonCreatorDataDrawer = null;
             partOutputDataDrawer = null;
 
-            if (!string.IsNullOrEmpty(filePath))
+            string assetPath = "";
+            if (index >= 0 && index < creatorDataFiles.Count)
             {
-                currentCreatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(filePath);
+                assetPath = creatorDataFiles[index];
+            }
+            if (!string.IsNullOrEmpty(assetPath))
+            {
+                currentCreatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(assetPath);
 
                 skeletonCreatorDataDrawer = new NativeDrawerObject(currentCreatorData.skeletonData)
                 {
@@ -166,7 +171,7 @@ namespace DotEditor.Entity.Avatar
                             creatorDataFiles.Add(assetPath);
                             dataListView.Reload();
 
-                            dataListView.SetSelection(new int[] { selectedIndex },TreeViewSelectionOptions.FireSelectionChanged);
+                            dataListView.SetSelection(selectedIndex);
                         }
                     }
                     if(EGUILayout.ToolbarButton("Delete"))
@@ -179,7 +184,7 @@ namespace DotEditor.Entity.Avatar
 
                             DeleteCreatorData(currentCreatorData);
 
-                            OnListViewItemSelected(null);
+                            OnListViewItemSelected(-1);
                         }
                     }
                 }

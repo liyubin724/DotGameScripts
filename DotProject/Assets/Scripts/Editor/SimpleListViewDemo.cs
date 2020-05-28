@@ -63,22 +63,25 @@ public class SimpleListViewDemo : EditorWindow
 
         sListView = new SimpleListView<TestListViewData>(datas);
         sListView.Header = "Test Data List";
-        sListView.GetHeight = (TestListViewData data) =>
+        sListView.GetItemHeight = (index) =>
         {
             return EditorGUIUtility.singleLineHeight * 2;
         };
-        sListView.OnDrawItem = (rect, data) =>
+        sListView.OnDrawItem = (rect, index) =>
         {
             Rect drawRect = rect;
             drawRect.height = EditorGUIUtility.singleLineHeight;
+
+            var data = sListView.GetItem(index);
 
             EditorGUI.IntField(drawRect, "id", data.id);
             drawRect.y += drawRect.height;
 
             EditorGUI.LabelField(drawRect, "Name", data.name);
         };
-        sListView.OnItemSelected = (data) =>
+        sListView.OnSelectedChange = (index) =>
         {
+            var data = sListView.GetItem(index);
             Debug.Log(data.name);
         };
         sListView.Reload();

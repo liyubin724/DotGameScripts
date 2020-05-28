@@ -13,8 +13,14 @@ MonoBehaviour:
   m_Name: ch_pc_hou_006
   m_EditorClassIdentifier: 
   skeletonData:
-    outputFolder: 
-    fbx: {fileID: 0}
+    outputFolder: Assets/ArtRes/Characters/Player/Test01/Prefab
+    fbx: {fileID: 100062, guid: 7556dece0bd2244b59ff85ac005aeab3, type: 3}
   partOutputData:
-    outputFolder: 
-    partDatas: []
+    outputFolder: Assets/ArtRes/Characters/Player/Test01/Part
+    partDatas:
+    - name: ch_pc_hou_006_jiao
+      partType: 0
+      smRendererDatas:
+      - partFbx: {fileID: 100062, guid: 305be6428797d48bab3c7420ff9884be, type: 3}
+        IsCopyMesh: 1
+      prefabDatas: []

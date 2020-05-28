@@ -5,68 +5,143 @@ using UnityEngine;
 
 namespace DotEditor.GUIExtension.ListView
 {
-    class SimpleListViewItem<T> : TreeViewItem where T : class
-    {
-        public T ItemData { get; private set; }
+    public delegate void SimpleListViewSelectedChange(int index);
+    public delegate void SimpleListViewDrawItem(Rect rect, int index);
+    public delegate float SimpleListViewGetItemHeight(int index);
 
-        public static SimpleListViewItem<T> Root
+    public class SimpleListView<T>
+    {
+        public SimpleListViewSelectedChange OnSelectedChange { get; set; }
+        public SimpleListViewDrawItem OnDrawItem { get; set; }
+        public SimpleListViewGetItemHeight GetItemHeight { get; set; }
+
+        public string Header { get; set; } = null;
+        public bool ShowSeparator { get; set; } = true;
+
+        private List<T> itemDatas;
+
+        private SimpleListTreeView<T> listTreeView;
+
+        public SimpleListView(List<T> itemDatas)
         {
-            get
+            this.itemDatas = itemDatas ?? new List<T>() ;
+
+            listTreeView = new SimpleListTreeView<T>(this);
+        }
+
+        public int GetCount()
+        {
+            return itemDatas.Count;
+        }
+
+        public void AddItem(T itemData)
+        {
+            itemDatas.Add(itemData);
+
+            listTreeView.Reload();
+        }
+
+        public void InsertItem(int index,T itemData)
+        {
+            itemDatas.Insert(index, itemData);
+
+            listTreeView.Reload();
+        }
+
+        public void RemoveItem(T itemData)
+        {
+            itemDatas.Remove(itemData);
+
+            listTreeView.Reload();
+        }
+
+        public void RemoveAt(int index)
+        {
+            if(index>=0 && index<itemDatas.Count)
             {
-                return new SimpleListViewItem<T>(-1, null);
+                itemDatas.RemoveAt(index);
+
+                listTreeView.Reload();
             }
         }
 
-        public SimpleListViewItem(int index, T itemData)
+        public T GetItem(int index)
+        {
+            if (index >= 0 && index < itemDatas.Count)
+            {
+                return itemDatas[index];
+            }
+
+            return default;
+        }
+
+        public void SetSelection(int index)
+        {
+            listTreeView.SetSelection(new int[] { index }, TreeViewSelectionOptions.FireSelectionChanged);
+        }
+
+        public void Reload()
+        {
+            listTreeView.Reload();
+        }
+
+        public void OnGUI(Rect rect)
+        {
+            listTreeView.OnGUI(rect);
+        }
+    }
+
+    class SimpleListTreeViewItem<T> : TreeViewItem
+    { 
+        public static SimpleListTreeViewItem<T> DefaultRoot
+        {
+            get
+            {
+                return new SimpleListTreeViewItem<T>(-1,default);
+            }
+        }
+        
+        public T ItemData { get; private set; }
+
+        public SimpleListTreeViewItem(int index,T itemData)
         {
             ItemData = itemData;
+
             id = index;
-            if(ItemData != null)
+            if(id>=0)
             {
-                displayName = ItemData.ToString();
                 depth = 0;
             }else
             {
-                displayName = "";
                 depth = -1;
             }
+            displayName = ((object)itemData) != null ? itemData.ToString() : "";
             children = new List<TreeViewItem>();
         }
     }
 
-    public delegate void OnSimpleListViewItemSelected<T>(T item) where T : class;
-    public delegate void DrawSimpleListViewItem<T>(Rect rect, T item) where T : class;
-    public delegate float GetSimpleListViewItemHeight<T>(T item) where T : class;
-
-    public class SimpleListView<T> : TreeView where T : class
+    internal class SimpleListTreeView<T> : TreeView
     {
-        public OnSimpleListViewItemSelected<T> OnItemSelected{get; set;}
-        public DrawSimpleListViewItem<T> OnDrawItem { get; set; }
-        public GetSimpleListViewItemHeight<T> GetHeight { get; set; }
-        public bool ShowSeparator { get; set; } = true;
-        public string Header { get; set; } = null;
-
-        private List<T> itemDatas = null;
-        public SimpleListView(List<T> datas) : base(new TreeViewState())
+        private SimpleListView<T> listView = null;
+        public SimpleListTreeView(SimpleListView<T> listView) : base(new TreeViewState())
         {
-            itemDatas = datas;
+            this.listView = listView;
+
             showAlternatingRowBackgrounds = true;
             showBorder = true;
             useScrollView = true;
+
             Reload();
         }
 
         protected override TreeViewItem BuildRoot()
         {
-            SimpleListViewItem<T> root = SimpleListViewItem<T>.Root;
+            SimpleListTreeViewItem<T> root = SimpleListTreeViewItem<T>.DefaultRoot;
 
-            if (itemDatas != null && itemDatas.Count > 0)
+            for(int i =0;i<listView.GetCount();++i)
             {
-                for(int i =0;i<itemDatas.Count;++i)
-                {
-                    SimpleListViewItem<T> element = new SimpleListViewItem<T>(i, itemDatas[i]);
-                    root.AddChild(element);
-                }
+                SimpleListTreeViewItem<T> item = new SimpleListTreeViewItem<T>(i, listView.GetItem(i));
+                root.AddChild(item);
             }
 
             return root;
@@ -75,23 +150,23 @@ namespace DotEditor.GUIExtension.ListView
         protected override void RowGUI(RowGUIArgs args)
         {
             Rect rect = args.rowRect;
-            SimpleListViewItem<T> viewItem = args.item as SimpleListViewItem<T>;
-            T itemData = viewItem.ItemData;
+            SimpleListTreeViewItem<T> viewItem = args.item as SimpleListTreeViewItem<T>;
 
-            if(ShowSeparator)
+            if (listView.ShowSeparator)
             {
                 rect.height -= 6.0f;
             }
 
-            if(OnDrawItem == null)
+            if (listView.OnDrawItem == null)
             {
-                EditorGUI.LabelField(rect,viewItem.displayName);
-            }else
+                EditorGUI.LabelField(rect, viewItem.displayName);
+            }
+            else
             {
-                OnDrawItem(rect, itemData);
+                listView.OnDrawItem(rect, viewItem.id);
             }
 
-            if(ShowSeparator)
+            if (listView.ShowSeparator)
             {
                 EGUI.DrawHorizontalLine(new Rect(rect.x, rect.y + rect.height, rect.width, 6.0f));
             }
@@ -100,14 +175,15 @@ namespace DotEditor.GUIExtension.ListView
         protected override float GetCustomRowHeight(int row, TreeViewItem item)
         {
             float height = 0.0f;
-            if(GetHeight == null)
+            if (listView.GetItemHeight== null)
             {
                 height = EditorGUIUtility.singleLineHeight;
-            }else
-            {
-                height = GetHeight((item as SimpleListViewItem<T>).ItemData);
             }
-            if(ShowSeparator)
+            else
+            {
+                height = listView.GetItemHeight(item.id);
+            }
+            if (listView.ShowSeparator)
             {
                 height += 6.0f;
             }
@@ -126,17 +202,16 @@ namespace DotEditor.GUIExtension.ListView
             if (selectedIds.Count > 0)
             {
                 int selectedId = selectedIds[0];
-                SimpleListViewItem<T> viewItem = FindItem(selectedId, rootItem) as SimpleListViewItem<T>;
-                OnItemSelected?.Invoke(viewItem.ItemData);
+                listView.OnSelectedChange?.Invoke(selectedId);
             }
         }
 
         public override void OnGUI(Rect rect)
         {
             Rect viewRect = rect;
-            if(!string.IsNullOrEmpty(Header))
+            if (!string.IsNullOrEmpty(listView.Header))
             {
-                EGUI.DrawBoxHeader(new Rect(rect.x, rect.y, rect.width, 30), Header,EGUIStyles.BoxedHeaderCenterStyle);
+                EGUI.DrawBoxHeader(new Rect(rect.x, rect.y, rect.width, 30), listView.Header, EGUIStyles.BoxedHeaderCenterStyle);
                 viewRect.y += 20;
                 viewRect.height -= 20;
             }
