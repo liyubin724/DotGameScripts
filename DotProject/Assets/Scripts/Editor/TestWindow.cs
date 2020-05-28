@@ -48,7 +48,7 @@ public class TestData
     //public string filePath1;
     //[OpenFilePath(IsAbsolute = true)]
     //public string filePath2;
-    
+
     //[SpaceLine]
 
     //[SeparatorLine]
@@ -56,7 +56,7 @@ public class TestData
     //public string filePath3;
     //[OpenFilePath(IsAbsolute = true,Extension ="txt")]
     //public string filePath4;
-    
+
     //[SeparatorLine]
     //[OpenFilePath(IsAbsolute = false,Filters =new string[] { "CSharp", "cs", "All Files", "*" })]
     //public string filePath5;
@@ -64,13 +64,13 @@ public class TestData
     //public string filePath6;
 
 
-    
-    //[EnumButton]
+
+    [EnumButton]
     //[OnValueChanged("OnEnumTypeChanged")]
-    //public TEnumType enumType = TEnumType.A;
+    public TEnumType enumType = TEnumType.A;
     //[Readonly]
-    //[EnumButton]
-    //public TFlagEnumType flagEnumType = TFlagEnumType.E;
+    [EnumButton]
+    public TFlagEnumType flagEnumType = TFlagEnumType.E;
 
     //[Help("Test for it")]
     //[Indent(2)]
@@ -158,13 +158,15 @@ public class TestWindow : EditorWindow
         drawerObject = new NativeDrawerObject(data);
         drawerObject.IsShowScroll = true;
     }
-
-    public string strValue = "A";
-    private string[] options = new string[] { "A", "B", "C", "D", "E", };
-    private Rect ddbRect = Rect.zero;
+    private TEnumType enumType = TEnumType.A;
+    private TFlagEnumType flagsEnumType = TFlagEnumType.E;
     private void OnGUI()
     {
+        enumType = (TEnumType)EGUILayout.DrawEnumButton("EnumType", enumType);
+        flagsEnumType = (TFlagEnumType)EGUILayout.DrawEnumButton("FlagEnumType", flagsEnumType);
         drawerObject.OnGUILayout();
+
+
 
         //Vector2 mousePosition = EditorGUIUtility.GUIToScreenPoint(Event.current.mousePosition);
         

@@ -84,6 +84,110 @@ namespace DotEditor.GUIExtension
             EditorGUI.EndDisabledGroup();
         }
 
+        #region Draw Enum As Button
+        public static object DrawEnumButton(string label,Enum value,params GUILayoutOption[] options)
+        {
+            Type valueType = value.GetType();
+            var flagAttrs = valueType.GetCustomAttributes(typeof(FlagsAttribute), false);
+            bool isFlagEnum = false;
+            if (flagAttrs != null && flagAttrs.Length > 0)
+            {
+                isFlagEnum = true;
+            }
+
+            int enumValue = Convert.ToInt32(value);
+            if (!isFlagEnum)
+            {
+                enumValue = DrawEnumButton(label, valueType, enumValue,options);
+            }else
+            {
+                enumValue = DrawFlagsEnumButton(label, valueType, enumValue,options);
+            }
+
+            return Enum.ToObject(valueType, enumValue);
+        }
+
+
+        private static int DrawFlagsEnumButton(string label,Type valueType,int value, params GUILayoutOption[] options)
+        {
+            string[] enumNames = Enum.GetNames(valueType);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.PrefixLabel(label);
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("Everything", EditorStyles.toolbarButton, GUILayout.Width(120)))
+                {
+                    value = 0;
+                    for (int i = 0; i < enumNames.Length; ++i)
+                    {
+                        int tValue = Convert.ToInt32(Enum.Parse(valueType, enumNames[i]));
+                        value |= tValue;
+                    }
+                }
+                if (GUILayout.Button("Nothing", EditorStyles.toolbarButton, GUILayout.Width(120)))
+                {
+                    value = 0;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            EGUI.BeginIndent();
+            {
+                EditorGUILayout.BeginHorizontal();
+                {
+                    for (int i = 0; i < enumNames.Length; ++i)
+                    {
+                        int tValue = Convert.ToInt32(Enum.Parse(valueType, enumNames[i]));
+
+                        bool isSelected = (value & tValue) > 0;
+                        bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton,options);
+                        if (newIsSelected != isSelected)
+                        {
+                            if (newIsSelected)
+                            {
+                                value |= tValue;
+                            }
+                            else
+                            {
+                                value &= ~tValue;
+                            }
+                        }
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            EGUI.EndIndent();
+
+            return value;
+        }
+
+        private static int DrawEnumButton(string label, Type valueType, int value, params GUILayoutOption[] options)
+        {
+            string[] enumNames = Enum.GetNames(valueType);
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.PrefixLabel(label);
+
+                for (int i = 0; i < enumNames.Length; ++i)
+                {
+                    int tValue = Convert.ToInt32(Enum.Parse(valueType, enumNames[i]));
+
+                    bool isSelected = tValue == value;
+
+                    bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton,options);
+                    if (newIsSelected != isSelected && newIsSelected)
+                    {
+                        value = tValue;
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        #endregion Draw Enum As Button
+
         public static T DrawPopup<T>(string label, string[] contents, T[] values, T selectedValue)
         {
             int index = Array.IndexOf(values, selectedValue);

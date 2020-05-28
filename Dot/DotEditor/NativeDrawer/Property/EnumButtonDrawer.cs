@@ -21,107 +21,17 @@ namespace DotEditor.NativeDrawer.Property
 
         protected override void OnDrawProperty(string label)
         {
-            var flagAttrs = DrawerProperty.ValueType.GetCustomAttributes(typeof(FlagsAttribute), false);
-            bool isFlagEnum = false;
-            if (flagAttrs != null && flagAttrs.Length > 0)
-            {
-                isFlagEnum = true;
-            }
-
             label = label ?? "";
-            int value = Convert.ToInt32(DrawerProperty.Value);
+
+            object value = DrawerProperty.Value;
             EditorGUI.BeginChangeCheck();
             {
-                if(isFlagEnum)
-                {
-                    value = DrawFlagEnum(label,value);
-                }else
-                {
-                    value = DrawEnum(label,value);
-                }
+                value = EGUILayout.DrawEnumButton(label, (Enum)value, GetLayoutOptions());
             }
             if (EditorGUI.EndChangeCheck())
             {
                 DrawerProperty.Value = Enum.ToObject(DrawerProperty.ValueType, value);
             }
-        }
-
-        private int DrawEnum(string label, int value)
-        {
-            string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.PrefixLabel(label);
-
-                for (int i = 0; i < enumNames.Length; ++i)
-                {
-                    int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
-
-                    bool isSelected = tValue == value;
-
-                    bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton, GetLayoutOptions());
-                    if (newIsSelected != isSelected && newIsSelected)
-                    {
-                        value = tValue;
-                    }
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-
-            return value;
-        }
-
-        private int DrawFlagEnum(string label, int value)
-        {
-            string[] enumNames = Enum.GetNames(DrawerProperty.ValueType);
-
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.PrefixLabel(label);
-                GUILayout.FlexibleSpace();
-                if(GUILayout.Button("Everything", EditorStyles.toolbarButton ,GUILayout.Width(120)))
-                {
-                    value = 0;
-                    for (int i = 0; i < enumNames.Length; ++i)
-                    {
-                        int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
-                        value |= tValue;
-                    }
-                }
-                if(GUILayout.Button("Nothing", EditorStyles.toolbarButton, GUILayout.Width(120)))
-                {
-                    value = 0;
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-            EGUI.BeginIndent();
-            {
-                EditorGUILayout.BeginHorizontal();
-                {
-                    for (int i = 0; i < enumNames.Length; ++i)
-                    {
-                        int tValue = Convert.ToInt32(Enum.Parse(DrawerProperty.ValueType, enumNames[i]));
-
-                        bool isSelected = (value & tValue) > 0;
-                        bool newIsSelected = GUILayout.Toggle(isSelected, enumNames[i], EditorStyles.toolbarButton, GetLayoutOptions());
-                        if (newIsSelected != isSelected)
-                        {
-                            if (newIsSelected)
-                            {
-                                value |= tValue;
-                            }
-                            else
-                            {
-                                value &= ~tValue;
-                            }
-                        }
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-            }
-            EGUI.EndIndent();
-
-            return value;
         }
 
         private GUILayoutOption[] options = null;
