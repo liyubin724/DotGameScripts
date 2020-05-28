@@ -14,10 +14,10 @@ namespace DotEditor.GUIExtension
 
         public static T CreateAsset<T>(bool deleteIfExist = true) where T:ScriptableObject
         {
-            string filePath = EditorUtility.SaveFilePanel("Save Data To", Application.dataPath, "", "");
+            string filePath = EditorUtility.SaveFilePanel("Save Data To", Application.dataPath, "", "asset");
             if(string.IsNullOrEmpty(filePath))
             {
-                return default;
+                return null;
             }
 
             string fileAssetPath = PathUtility.GetAssetPath(filePath);

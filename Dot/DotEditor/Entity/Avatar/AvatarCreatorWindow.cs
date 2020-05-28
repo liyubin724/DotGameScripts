@@ -1,12 +1,15 @@
-﻿using DotEditor.GUIExtension;
+﻿using Dot.Entity.Avatar;
+using DotEditor.GUIExtension;
 using DotEditor.GUIExtension.ListView;
 using DotEditor.NativeDrawer;
 using DotEditor.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using static DotEditor.Entity.Avatar.AvatarCreatorData;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Entity.Avatar
 {
@@ -77,23 +80,29 @@ namespace DotEditor.Entity.Avatar
         {
             PartCreatorDataDrawer.IsPartSelected = null;
             PartCreatorDataDrawer.PartSelectedChanged = null;
-            PartCreatorDataDrawer.CreatePartBtnClick = null;
+            PartCreatorDataDrawer.CreatePartBtnClick = null; 
         }
 
         private void OnListViewItemSelected(string filePath)
         {
             selectedPartCreatorDatas.Clear();
+            currentCreatorData = null;
+            skeletonCreatorDataDrawer = null;
+            partOutputDataDrawer = null;
 
-            currentCreatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(filePath);
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                currentCreatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(filePath);
 
-            skeletonCreatorDataDrawer = new NativeDrawerObject(currentCreatorData.skeletonData)
-            {
-                IsShowScroll = true,
-            };
-            partOutputDataDrawer = new NativeDrawerObject(currentCreatorData.partOutputData)
-            {
-                IsShowScroll = true
-            };
+                skeletonCreatorDataDrawer = new NativeDrawerObject(currentCreatorData.skeletonData)
+                {
+                    IsShowScroll = true,
+                };
+                partOutputDataDrawer = new NativeDrawerObject(currentCreatorData.partOutputData)
+                {
+                    IsShowScroll = true
+                };
+            }
 
             Repaint();
         }
@@ -131,7 +140,7 @@ namespace DotEditor.Entity.Avatar
             EGUI.DrawAreaLine(partRect, Color.black);
             DrawParts(partRect);
 
-            if(GUI.changed)
+            if(GUI.changed && currentCreatorData!=null)
             {
                 EditorUtility.SetDirty(currentCreatorData);
             }
@@ -145,15 +154,34 @@ namespace DotEditor.Entity.Avatar
                 {
                     if(EGUILayout.ToolbarButton("New"))
                     {
-                        //var newData = EGUIUtility.CreateAsset<AvatarCreatorData>();
-                        //if(newData!=null)
-                        //{
-                        //    creatorDataFiles.Add(AssetDatabase.GetAssetPath(newData));
-                        //    dataListView.SetSelection(new int[] { creatorDataFiles.Count - 1 });
-                        //    dataListView.Reload();
-                        //}
+                        var newData = EGUIUtility.CreateAsset<AvatarCreatorData>();
+                        if (newData != null)
+                        {
+                            string assetPath = AssetDatabase.GetAssetPath(newData);
+                            int selectedIndex = creatorDataFiles.IndexOf(assetPath);
+                            if(selectedIndex<0)
+                            {
+                                selectedIndex = creatorDataFiles.Count;
+                            }
+                            creatorDataFiles.Add(assetPath);
+                            dataListView.Reload();
+
+                            dataListView.SetSelection(new int[] { selectedIndex },TreeViewSelectionOptions.FireSelectionChanged);
+                        }
                     }
-                    EGUILayout.ToolbarButton("Delete");
+                    if(EGUILayout.ToolbarButton("Delete"))
+                    {
+                        if(currentCreatorData!=null)
+                        {
+                            string assetPath = AssetDatabase.GetAssetPath(currentCreatorData);
+                            creatorDataFiles.Remove(assetPath);
+                            dataListView.Reload();
+
+                            DeleteCreatorData(currentCreatorData);
+
+                            OnListViewItemSelected(null);
+                        }
+                    }
                 }
                 GUILayout.EndHorizontal();
             }
@@ -257,6 +285,43 @@ namespace DotEditor.Entity.Avatar
                 SelectionUtility.PingObject(partData);
                 return true;
             }
+        }
+
+        private void DeleteCreatorData(AvatarCreatorData data)
+        {
+            string skeletonAssetPath = data.skeletonData.GetTargetPrefabPath();
+            if(AssetDatabase.LoadAssetAtPath<UnityObject>(skeletonAssetPath)!=null)
+            {
+                AssetDatabase.DeleteAsset(skeletonAssetPath);
+            }
+
+            PartOutputData partOutputData = data.partOutputData;
+
+            foreach(var partData in partOutputData.partDatas)
+            {
+                string partAssetPath = partData.GetTargetPath(partOutputData.outputFolder);
+                AvatarPartData avatarPartData = AssetDatabase.LoadAssetAtPath<AvatarPartData>(partAssetPath);
+                if(avatarPartData!=null)
+                {
+                    foreach(var avatarRendererPartData in avatarPartData.rendererParts)
+                    {
+                        if(avatarRendererPartData.mesh!=null)
+                        {
+                            string meshAssetPath = AssetDatabase.GetAssetPath(avatarRendererPartData.mesh);
+                           if(Path.GetExtension(meshAssetPath).ToLower() == ".asset" && Path.GetFileNameWithoutExtension(meshAssetPath).EndsWith("_mesh"))
+                            {
+                                AssetDatabase.DeleteAsset(meshAssetPath);
+                            }
+                        }
+                    }
+
+                    AssetDatabase.DeleteAsset(partAssetPath);
+                }
+            }
+
+            string assetPath = AssetDatabase.GetAssetPath(currentCreatorData);
+            AssetDatabase.DeleteAsset(assetPath);
+
         }
 
         private void ShowPreview()

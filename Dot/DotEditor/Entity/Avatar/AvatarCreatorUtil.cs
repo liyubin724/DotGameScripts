@@ -9,6 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using static Dot.Entity.Avatar.AvatarPartData;
 using static DotEditor.Entity.Avatar.AvatarCreatorData;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.Entity.Avatar
 {
@@ -165,9 +166,16 @@ namespace DotEditor.Entity.Avatar
                     rendererPartData.materials = renderer.sharedMaterials;
 
                     Mesh mesh = renderer.sharedMesh;
-                    if(rendererCreatorData.IsCopyMesh)
+                    string meshAssetPath = $"{outputFolder}/{mesh.name}_mesh.asset";
+                    if (rendererCreatorData.IsCopyMesh)
                     {
-                        mesh = Utilities.MeshUtility.CopyMeshTo(mesh, $"{outputFolder}/{mesh.name}_mesh.asset");
+                        mesh = Utilities.MeshUtility.CopyMeshTo(mesh, meshAssetPath);
+                    }else
+                    {
+                        if(AssetDatabase.LoadAssetAtPath<UnityObject>(meshAssetPath)!=null)
+                        {
+                            AssetDatabase.DeleteAsset(meshAssetPath);
+                        }
                     }
                     rendererPartData.mesh = mesh;
 
