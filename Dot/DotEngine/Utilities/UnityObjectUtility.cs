@@ -1,8 +1,8 @@
 ﻿using UnityObject = UnityEngine.Object;
 
-namespace Dot.Core.Extension
+namespace Dot.Utility
 {
-    public static class UnityObjectExtensions
+    public static class UnityObjectUtility
     {
         public static bool IsNull(this UnityObject obj)
         {

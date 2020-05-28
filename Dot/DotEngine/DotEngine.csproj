@@ -153,8 +153,8 @@
     <Compile Include="NativeDrawer\Visible\VisibleAtrribute.cs" />
     <Compile Include="Proxy\StartupProxy.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
-    <Compile Include="Extension\TransformExtensions.cs" />
-    <Compile Include="Extension\UnityObjectExtensions.cs" />
+    <Compile Include="Utilities\TransformUtility.cs" />
+    <Compile Include="Utilities\UnityObjectUtility.cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />

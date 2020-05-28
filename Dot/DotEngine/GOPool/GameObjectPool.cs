@@ -1,7 +1,7 @@
 ﻿using Dot.Asset;
-using Dot.Core.Extension;
 using Dot.Log;
 using Dot.Timer;
+using Dot.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

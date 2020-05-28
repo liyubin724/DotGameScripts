@@ -23,13 +23,16 @@ public class NullInnerData
 
 public class TestData
 {
-    [Button("InvokeMethod",Size = ButtonSize.Big)]
-    public int value;
 
-    public void InvokeMethod()
-    {
-        value = 100;
-    }
+
+
+    //[Button("InvokeMethod",Size = ButtonSize.Big)]
+    //public int value;
+
+    //public void InvokeMethod()
+    //{
+    //    value = 100;
+    //}
 
 
     //[StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
@@ -42,31 +45,33 @@ public class TestData
 
     //public Dictionary<int, string> dic = new Dictionary<int, string>();
 
-    [OpenFolderPath]
-    public string folderPath1;
-    [OpenFolderPath(IsAbsolute =true)]
-    public string folderPath2;
+    #region Test Folder or File Path
+    //[OpenFolderPath]
+    //public string folderPath1;
+    //[OpenFolderPath(IsAbsolute =true)]
+    //public string folderPath2;
 
-    [SpaceLine]
+    //[SpaceLine]
 
-    [OpenFilePath(IsAbsolute = false)]
-    public string filePath1;
-    [OpenFilePath(IsAbsolute = true)]
-    public string filePath2;
+    //[OpenFilePath(IsAbsolute = false)]
+    //public string filePath1;
+    //[OpenFilePath(IsAbsolute = true)]
+    //public string filePath2;
 
-    [SpaceLine]
+    //[SpaceLine]
 
-    [SeparatorLine]
-    [OpenFilePath(IsAbsolute = false, Extension = "txt")]
-    public string filePath3;
-    [OpenFilePath(IsAbsolute = true, Extension = "txt")]
-    public string filePath4;
+    //[SeparatorLine]
+    //[OpenFilePath(IsAbsolute = false, Extension = "txt")]
+    //public string filePath3;
+    //[OpenFilePath(IsAbsolute = true, Extension = "txt")]
+    //public string filePath4;
 
-    [SeparatorLine]
-    [OpenFilePath(IsAbsolute = false, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
-    public string filePath5;
-    [OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
-    public string filePath6;
+    //[SeparatorLine]
+    //[OpenFilePath(IsAbsolute = false, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    //public string filePath5;
+    //[OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    //public string filePath6;
+    #endregion
 
     //[EnumButton]
     ////[OnValueChanged("OnEnumTypeChanged")]
@@ -94,11 +99,13 @@ public class TestData
     //[Help("Object Data")]
     //public InnerData innerData = new InnerData();
 
-    //public List<InnerData> innerDataList = new List<InnerData>();
+    #region Test List
+    public List<InnerData> innerDataList = new List<InnerData>();
     //public InnerData[] innerDataArr = new InnerData[0];
 
     //public List<int> intList = new List<int>();
     //public int[] intArray = new int[0];
+    #endregion
 
     //public void OnEnumTypeChanged()
     //{

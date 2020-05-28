@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using UnityEngine;
 
-namespace Dot.Core.Extension
+namespace Dot.Utility
 {
-    public static class TransformExtensions
+    public static class TransformUtility
     {
         public static Transform GetChildByName(this Transform tran, string name)
         {

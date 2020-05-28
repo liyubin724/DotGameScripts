@@ -51,21 +51,7 @@ namespace DotEditor.Entity.Node
 
                 DrawNodeDataArray("Renderer Node", NodeType.SMRendererNode, nodeBehaviour.smRendererNodes, null, null, null, ()=>
                 {
-                    List<NodeData> datas = new List<NodeData>();
-
-                    GameObject gObj = nodeBehaviour.gameObject;
-                    SkinnedMeshRenderer[] renderers = gObj.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-                    foreach(var renderer in renderers)
-                    {
-                        NodeData data = new NodeData();
-                        data.nodeType = NodeType.SMRendererNode;
-                        data.name = renderer.name;
-                        data.renderer = renderer;
-
-                        datas.Add(data);
-                    }
-
-                    nodeBehaviour.smRendererNodes = datas.ToArray();
+                    NodeBehaviourUtil.FindSMRendererNodes(nodeBehaviour);
 
                     EditorGUIUtility.ExitGUI();
                     Repaint();
@@ -73,21 +59,7 @@ namespace DotEditor.Entity.Node
 
                 DrawNodeDataArray("Bone Node", NodeType.BindNode, nodeBehaviour.boneNodes, null, null, null, () =>
                 {
-                    List<NodeData> datas = new List<NodeData>();
-
-                    GameObject gObj = nodeBehaviour.gameObject;
-                    Transform[] transforms = gObj.GetComponentsInChildren<Transform>(true);
-                    foreach (var transform in transforms)
-                    {
-                        NodeData data = new NodeData();
-                        data.nodeType = NodeType.BoneNode;
-                        data.name = transform.name;
-                        data.transform = transform;
-
-                        datas.Add(data);
-                    }
-
-                    nodeBehaviour.boneNodes = datas.ToArray();
+                    NodeBehaviourUtil.FindBoneNodes(nodeBehaviour);
 
                     EditorGUIUtility.ExitGUI();
                     Repaint();
@@ -95,6 +67,10 @@ namespace DotEditor.Entity.Node
             }
             EditorGUILayout.EndScrollView();
 
+            if(GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
             
         }
 

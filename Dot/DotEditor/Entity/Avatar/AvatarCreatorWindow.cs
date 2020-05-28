@@ -154,15 +154,19 @@ namespace DotEditor.Entity.Avatar
 
                         GUILayout.FlexibleSpace();
 
-                        EGUI.BeginGUIBackgroundColor(Color.blue);
+                        string btnContentStr = targetPrefab == null ? "Create" : "Update";
+                        if (GUILayout.Button(btnContentStr))
                         {
-                            string btnContentStr = targetPrefab == null ? "Create" : "Update";
-                            if(GUILayout.Button(btnContentStr,EditorStyles.toolbarButton))
+                            GameObject skeletonPrefab = AvatarCreatorUtil.CreateSkeleton(skeletonCreatorData);
+                            if (skeletonPrefab == null)
                             {
-
+                                EditorUtility.DisplayDialog("Error", "Create Failed.\n Please view the details from the console!!!", "OK");
+                            }
+                            else
+                            {
+                                SelectionUtility.PingObject(skeletonPrefab);
                             }
                         }
-                        EGUI.EndGUIBackgroundColor();
                     }
                 }
                 EditorGUILayout.EndVertical();

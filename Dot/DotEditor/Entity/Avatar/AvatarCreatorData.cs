@@ -29,7 +29,7 @@ namespace DotEditor.Entity.Avatar
                 {
                     return null;
                 }
-                return $"{outputFolder}/{fbx.name}.prefab";
+                return $"{outputFolder}/{fbx.name}_skeleton.prefab";
             }
         }
 

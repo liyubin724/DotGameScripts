@@ -1,5 +1,4 @@
-﻿using Dot.Core.Extension;
-using Dot.Utilities;
+﻿using Dot.Utilities;
 using System;
 using System.IO;
 using static Dot.Asset.Datas.AssetAddressConfig;

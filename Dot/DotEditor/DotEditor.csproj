@@ -78,8 +78,10 @@
     <Compile Include="EditorStyleViewer\EditorStyleViewer.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorData.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorDataEditor.cs" />
+    <Compile Include="Entity\Avatar\AvatarCreatorUtil.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorWindow.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
+    <Compile Include="Entity\Node\NodeBehaviourUtil.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfigEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderMenu.cs" />
