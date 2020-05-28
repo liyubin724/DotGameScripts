@@ -63,17 +63,13 @@ namespace DotEditor.NativeDrawer.DefaultDrawer
                             elementProperties[i].OnGUILayout();
                         }
                         EditorGUILayout.EndVertical();
-                        EditorGUILayout.BeginVertical();
+                        EditorGUILayout.BeginVertical(GUILayout.Width(20));
                         {
-                            GUILayout.FlexibleSpace();
-
                             if (GUILayout.Button("-", GUILayout.Width(20)))
                             {
                                 DrawerProperty.RemoveArrayElementAtIndex(i);
                                 InitList();
                             }
-
-                            GUILayout.FlexibleSpace();
                         }
                         EditorGUILayout.EndVertical();
                     }

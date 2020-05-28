@@ -25,11 +25,19 @@ namespace DotEditor.NativeDrawer
         public FieldInfo Field { get; private set; }
         public int ArrayElementIndex { get; private set; } = -1;
 
+        public bool IsArrayElement
+        {
+            get
+            {
+                return ArrayElementIndex >= 0;
+            }
+        }
+
         public Type ValueType
         {
             get
             {
-                if (ArrayElementIndex >= 0)
+                if (IsArrayElement)
                 {
                     return TypeUtility.GetArrayOrListElementType(Field.FieldType);
                 }
@@ -43,7 +51,7 @@ namespace DotEditor.NativeDrawer
             get
             {
                 object value = Field.GetValue(Target);
-                if(ArrayElementIndex>=0)
+                if(IsArrayElement)
                 {
                     return ((IList)value)[ArrayElementIndex];
                 }
@@ -52,7 +60,7 @@ namespace DotEditor.NativeDrawer
             }
             set
             {
-                if(ArrayElementIndex>=0)
+                if(IsArrayElement)
                 {
                     IList list = (IList)Field.GetValue(Target);
                     list[ArrayElementIndex] = value;
@@ -102,7 +110,7 @@ namespace DotEditor.NativeDrawer
 
         internal void Init()
         {
-            if(ArrayElementIndex<0)
+            if(!IsArrayElement)
             {
                 InitFieldAttr();
             }
@@ -220,12 +228,27 @@ namespace DotEditor.NativeDrawer
                         typeDrawer.OnGUILayout(label);
                     }else if(drawerObject!=null)
                     {
-                        UnityEditor.EditorGUILayout.LabelField(label);
-                        UnityEditor.EditorGUI.indentLevel++;
+                        if(!IsArrayElement)
                         {
-                            drawerObject.OnGUILayout();
+                            UnityEditor.EditorGUILayout.LabelField(label);
+                            UnityEditor.EditorGUI.indentLevel++;
+                            {
+                                drawerObject.OnGUILayout();
+                            }
+                            UnityEditor.EditorGUI.indentLevel--;
+                        }else
+                        {
+                            UnityEditor.EditorGUILayout.BeginHorizontal();
+                            {
+                                UnityEditor.EditorGUILayout.LabelField(label, UnityEngine.GUILayout.Width(25));
+                                UnityEditor.EditorGUILayout.BeginVertical();
+                                {
+                                    drawerObject.OnGUILayout();
+                                }
+                                UnityEditor.EditorGUILayout.EndVertical();
+                            }
+                            UnityEditor.EditorGUILayout.EndHorizontal();
                         }
-                        UnityEditor.EditorGUI.indentLevel--;
                     }else if(drawerObject == null)
                     {
                         if(!NativeDrawerUtility.IsTypeSupported(ValueType))
@@ -274,7 +297,7 @@ namespace DotEditor.NativeDrawer
 
         private bool IsVisible()
         {
-            if (ArrayElementIndex >= 0)
+            if (IsArrayElement)
             {
                 return true;
             }
@@ -293,7 +316,7 @@ namespace DotEditor.NativeDrawer
 
         private string GetFieldLabel()
         {
-            if(ArrayElementIndex>=0)
+            if(IsArrayElement)
             {
                 return "" + ArrayElementIndex;
             }

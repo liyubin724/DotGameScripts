@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
 
-[CustomTypeDrawer(typeof(InnerData))]
+//[CustomTypeDrawer(typeof(InnerData))]
 public class InnerDataDrawer : NativeTypeDrawer
 {
     public InnerDataDrawer(NativeDrawerProperty property) : base(property)

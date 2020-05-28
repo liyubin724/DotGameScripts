@@ -148,12 +148,12 @@ public enum TFlagEnumType
 }
 
 
-public class TestWindow : EditorWindow
+public class NativeDrawerWindow : EditorWindow
 {
-    [MenuItem("Test/Test")]
+    [MenuItem("Test/NativeDrawerWindow")]
    static void ShowWin()
     {
-        var win =EditorWindow.GetWindow<TestWindow>();
+        var win =EditorWindow.GetWindow<NativeDrawerWindow>();
         win.wantsMouseMove = true;
         win.Show();
 
