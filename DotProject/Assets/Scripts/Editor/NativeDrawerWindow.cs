@@ -5,6 +5,7 @@ using Dot.NativeDrawer.Listener;
 using Dot.NativeDrawer.Property;
 using Dot.NativeDrawer.Visible;
 using DotEditor.GUIExtension;
+using DotEditor.GUIExtension.ListView;
 using DotEditor.NativeDrawer;
 using DotEditor.NativeDrawer.Property;
 using System;
@@ -167,13 +168,12 @@ public class NativeDrawerWindow : EditorWindow
     {
         drawerObject = new NativeDrawerObject(data);
         drawerObject.IsShowScroll = true;
+
     }
-    //private TEnumType enumType = TEnumType.A;
-    //private TFlagEnumType flagsEnumType = TFlagEnumType.E;
+
     private void OnGUI()
     {
-        //enumType = (TEnumType)EGUILayout.DrawEnumButton("EnumType", enumType);
-        //flagsEnumType = (TFlagEnumType)EGUILayout.DrawEnumButton("FlagEnumType", flagsEnumType);
+        
         drawerObject.OnGUILayout();
 
 

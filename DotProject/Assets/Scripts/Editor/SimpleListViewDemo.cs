@@ -15,17 +15,24 @@ public class TestListViewData
 }
 
 
-public class LearnTreeView : EditorWindow
+public class SimpleListViewDemo : EditorWindow
 {
-    [MenuItem("Test/Open TreeView")]
+    [MenuItem("Test/SimpleListViewDemo")]
     static void ShowWin()
     {
-        EditorWindow.GetWindow<LearnTreeView>().Show();
+        EditorWindow.GetWindow<SimpleListViewDemo>().Show();
     }
 
+    private List<TestListViewData> datas = new List<TestListViewData>();
     private SimpleListView<TestListViewData> sListView = null;
 
-    private List<TestListViewData> datas = new List<TestListViewData>();
+    private List<string> strDatas = new List<string>()
+    {
+        "A","B","C","D","E"
+    };
+
+    private SimpleListView<string> strDataListView = null;
+
     private void Awake()
     {
         datas.Add(new TestListViewData()
@@ -75,6 +82,11 @@ public class LearnTreeView : EditorWindow
             Debug.Log(data.name);
         };
         sListView.Reload();
+
+
+        strDataListView = new SimpleListView<string>(strDatas);
+        strDataListView.Header = "Str List";
+        strDataListView.Reload();
     }
 
     private void OnGUI()
@@ -99,6 +111,7 @@ public class LearnTreeView : EditorWindow
         }
         Rect rect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-        sListView.OnGUI(rect);
+        //sListView.OnGUI(rect);
+        strDataListView.OnGUI(rect);
     }
 }

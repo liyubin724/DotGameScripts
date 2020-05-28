@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1675065642, guid: 095106b97874c014ba020ed44a34a51e, type: 3}
-  m_Name: avatar_part_part
+  m_Name: ch_pc_hou_006_jiao_part
   m_EditorClassIdentifier: 
   partType: 0
   rendererParts:

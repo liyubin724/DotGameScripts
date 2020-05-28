@@ -81,6 +81,7 @@
     <Compile Include="Entity\Avatar\AvatarCreatorUtil.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorWindow.cs" />
     <Compile Include="Entity\Avatar\AvatarPartDataEditor.cs" />
+    <Compile Include="Entity\Avatar\PartCreatorDataDrawer.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
     <Compile Include="Entity\Node\NodeBehaviourUtil.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />

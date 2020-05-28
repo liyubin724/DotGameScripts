@@ -10,15 +10,6 @@ using static DotEditor.Entity.Avatar.AvatarCreatorData;
 
 namespace DotEditor.Entity.Avatar
 {
-    public class CreatorAssetPathData
-    {
-        public string assetPath;
-        public override string ToString()
-        {
-            return Path.GetFileName(assetPath);
-        }
-    }
-
     public class AvatarCreatorWindow : EditorWindow
     {
         [MenuItem("Game/Entity/Avatar Creator")]
@@ -33,35 +24,73 @@ namespace DotEditor.Entity.Avatar
         private static int DATA_LIST_WIDTH = 200;
         private static int LINE_THINKNESS = 1;
 
-        private List<CreatorAssetPathData> creatorDatas = new List<CreatorAssetPathData>();
-        private SimpleListView<CreatorAssetPathData> dataListView;
+        private List<string> creatorDataFiles = new List<string>();
+        private SimpleListView<string> dataListView;
 
-        private AvatarCreatorData creatorData = null;
+        private AvatarCreatorData currentCreatorData = null;
         private NativeDrawerObject partOutputDataDrawer = null;
         private NativeDrawerObject skeletonCreatorDataDrawer = null;
+
+        private List<PartCreatorData> selectedPartCreatorDatas = new List<PartCreatorData>();
         void OnEnable()
         {
             FindAllData();
 
-            dataListView = new SimpleListView<CreatorAssetPathData>(creatorDatas);
+            dataListView = new SimpleListView<string>(creatorDataFiles);
             dataListView.Header = "Data List";
             dataListView.OnItemSelected = OnListViewItemSelected;
             dataListView.OnDrawItem = (rect, data) =>
             {
-                EditorGUI.LabelField(rect, data.ToString(), EGUIStyles.BoldLabelStyle);
+                EditorGUI.LabelField(rect, Path.GetFileNameWithoutExtension(data), EGUIStyles.BoldLabelStyle);
             };
             dataListView.Reload();
+
+            PartCreatorDataDrawer.IsPartSelected = (data) =>
+            {
+                return selectedPartCreatorDatas.Contains(data);
+            };
+            PartCreatorDataDrawer.PartSelectedChanged = (data, isSelected) =>
+            {
+                if(isSelected)
+                {
+                    foreach(var d in selectedPartCreatorDatas)
+                    {
+                        if(d.partType == data.partType)
+                        {
+                            selectedPartCreatorDatas.Remove(d);
+                            break;
+                        }
+                    }
+                    selectedPartCreatorDatas.Add(data);
+                }else
+                {
+                    selectedPartCreatorDatas.Remove(data);
+                }
+            };
+            PartCreatorDataDrawer.CreatePartBtnClick = (data) =>
+            {
+                CreatePart(data);
+            };
         }
 
-        private void OnListViewItemSelected(CreatorAssetPathData data)
+        void OnDisable()
         {
-            creatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(data.assetPath);
+            PartCreatorDataDrawer.IsPartSelected = null;
+            PartCreatorDataDrawer.PartSelectedChanged = null;
+            PartCreatorDataDrawer.CreatePartBtnClick = null;
+        }
 
-            skeletonCreatorDataDrawer = new NativeDrawerObject(creatorData.skeletonData)
+        private void OnListViewItemSelected(string filePath)
+        {
+            selectedPartCreatorDatas.Clear();
+
+            currentCreatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(filePath);
+
+            skeletonCreatorDataDrawer = new NativeDrawerObject(currentCreatorData.skeletonData)
             {
                 IsShowScroll = true,
             };
-            partOutputDataDrawer = new NativeDrawerObject(creatorData.partOutputData)
+            partOutputDataDrawer = new NativeDrawerObject(currentCreatorData.partOutputData)
             {
                 IsShowScroll = true
             };
@@ -71,12 +100,12 @@ namespace DotEditor.Entity.Avatar
 
         private void FindAllData()
         {
-            creatorDatas.Clear();
+            creatorDataFiles.Clear();
 
             string[] assetPaths = AssetDatabaseUtility.FindAssets<AvatarCreatorData>();
             foreach(var assetPath in assetPaths)
             {
-                creatorDatas.Add(new CreatorAssetPathData() { assetPath = assetPath });
+                creatorDataFiles.Add(assetPath);
             }
 
             dataListView?.Reload();
@@ -104,7 +133,7 @@ namespace DotEditor.Entity.Avatar
 
             if(GUI.changed)
             {
-                EditorUtility.SetDirty(creatorData);
+                EditorUtility.SetDirty(currentCreatorData);
             }
         }
 
@@ -114,12 +143,17 @@ namespace DotEditor.Entity.Avatar
             {
                 GUILayout.BeginHorizontal();
                 {
-                    EGUILayout.ToolbarButton("New");
+                    if(EGUILayout.ToolbarButton("New"))
+                    {
+                        //var newData = EGUIUtility.CreateAsset<AvatarCreatorData>();
+                        //if(newData!=null)
+                        //{
+                        //    creatorDataFiles.Add(AssetDatabase.GetAssetPath(newData));
+                        //    dataListView.SetSelection(new int[] { creatorDataFiles.Count - 1 });
+                        //    dataListView.Reload();
+                        //}
+                    }
                     EGUILayout.ToolbarButton("Delete");
-                    EGUILayout.ToolbarButton("Export");
-                    GUILayout.FlexibleSpace();
-                    EGUILayout.ToolbarButton("Export All");
-                    EGUILayout.ToolbarButton("Refresh");
                 }
                 GUILayout.EndHorizontal();
             }
@@ -133,11 +167,11 @@ namespace DotEditor.Entity.Avatar
                 EditorGUILayout.BeginVertical();
                 {
                     EGUILayout.DrawBoxHeader("Skeleton Data", EGUIStyles.BoxedHeaderCenterStyle, GUILayout.ExpandWidth(true));
-                    if(creatorData !=null && skeletonCreatorDataDrawer!=null)
+                    if(currentCreatorData !=null && skeletonCreatorDataDrawer!=null)
                     {
                         skeletonCreatorDataDrawer.OnGUILayout();
 
-                        SkeletonCreatorData skeletonCreatorData = creatorData.skeletonData;
+                        SkeletonCreatorData skeletonCreatorData = currentCreatorData.skeletonData;
 
                         string targetPrefabPath = skeletonCreatorData.GetTargetPrefabPath();
                         GameObject targetPrefab = null;
@@ -154,8 +188,7 @@ namespace DotEditor.Entity.Avatar
 
                         GUILayout.FlexibleSpace();
 
-                        string btnContentStr = targetPrefab == null ? "Create" : "Update";
-                        if (GUILayout.Button(btnContentStr))
+                        if (GUILayout.Button("Create Skeleton"))
                         {
                             GameObject skeletonPrefab = AvatarCreatorUtil.CreateSkeleton(skeletonCreatorData);
                             if (skeletonPrefab == null)
@@ -181,16 +214,28 @@ namespace DotEditor.Entity.Avatar
                 EditorGUILayout.BeginVertical();
                 {
                     EGUILayout.DrawBoxHeader("Part Data", EGUIStyles.BoxedHeaderCenterStyle,GUILayout.ExpandWidth(true));
-                    if (creatorData != null && partOutputDataDrawer!=null)
+                    if (currentCreatorData != null && partOutputDataDrawer!=null)
                     {
                         partOutputDataDrawer.OnGUILayout();
-                    }
 
-                    if(GUILayout.Button("Export"))
-                    {
-                        foreach(var d in creatorData.partOutputData.partDatas)
+
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button("Create Parts"))
                         {
-                            AvatarCreatorUtil.CreatePart(creatorData.partOutputData.outputFolder, d);
+                            PartOutputData partOutputData = currentCreatorData.partOutputData;
+                            foreach (var data in partOutputData.partDatas)
+                            {
+                                if (!CreatePart(data))
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (GUILayout.Button("Show Preview"))
+                        {
+                            ShowPreview();
                         }
                     }
                 }
@@ -199,16 +244,24 @@ namespace DotEditor.Entity.Avatar
             GUILayout.EndArea();
         }
 
-        [MenuItem("Game/Entity/Create data")]
-        static void CreateCreatorData()
+        private bool CreatePart(PartCreatorData data)
         {
-            string dir = SelectionUtility.GetSelectionDir();
-            Debug.Log(dir);
-            if(!string.IsNullOrEmpty(dir))
+            var partData = AvatarCreatorUtil.CreatePart(currentCreatorData.partOutputData.outputFolder, data);
+            if (partData == null)
             {
-                var data = ScriptableObject.CreateInstance<AvatarCreatorData>();
-                AssetDatabase.CreateAsset(data, $"{dir}/t.asset");
+                EditorUtility.DisplayDialog("Error", "Create Failed.\n Please view the details from the console!!!", "OK");
+                return false;
             }
+            else
+            {
+                SelectionUtility.PingObject(partData);
+                return true;
+            }
+        }
+
+        private void ShowPreview()
+        {
+
         }
     }
 }
