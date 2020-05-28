@@ -1,8 +1,6 @@
 ﻿using Dot.NativeDrawer.Property;
 using DotEditor.GUIExtension;
-using DotEditor.Utilities;
 using UnityEditor;
-using UnityEngine;
 
 namespace DotEditor.NativeDrawer.Property
 {
@@ -25,35 +23,13 @@ namespace DotEditor.NativeDrawer.Property
 
             EditorGUI.BeginChangeCheck();
             {
-                EditorGUILayout.BeginHorizontal();
+                if(attr.Filters!=null && attr.Filters.Length>0)
                 {
-                    value = EditorGUILayout.TextField(label, value);
-
-                    if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon),GUIStyle.none ,GUILayout.Width(17),GUILayout.Height(17)))
-                    {
-                        string filePath;
-                        if (attr.Filters!=null && attr.Filters.Length>0)
-                        {
-                            filePath = EditorUtility.OpenFilePanelWithFilters("Select file", "", attr.Filters);
-                        }
-                        else
-                        {
-                            filePath = EditorUtility.OpenFilePanel("Select file", "", attr.Extension);
-                        }
-                        if (!string.IsNullOrEmpty(filePath))
-                        {
-                            if (attr.IsAbsolute)
-                            {
-                                value = filePath.Replace("\\", "/");
-                            }
-                            else
-                            {
-                                value = PathUtility.GetAssetPath(filePath);
-                            }
-                        }
-                    }
+                    value = EGUILayout.DrawOpenFileWithFilter(label, value, attr.Filters, attr.IsAbsolute);
+                }else
+                {
+                    value = EGUILayout.DrawOpenFile(label, value, attr.Extension, attr.IsAbsolute);
                 }
-                EditorGUILayout.EndHorizontal();
             }
             if(EditorGUI.EndChangeCheck())
             {

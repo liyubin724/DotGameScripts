@@ -31,8 +31,6 @@ public class TestData
         value = 100;
     }
 
-    [OpenFolderPath]
-    public string folderPath;
 
     //[StringPopup(IsSearchable = true,Options = new string[] { "A", "B", "C", "D", "E", })]
     //public string strValue = "A";
@@ -44,33 +42,38 @@ public class TestData
 
     //public Dictionary<int, string> dic = new Dictionary<int, string>();
 
-    //[OpenFilePath(IsAbsolute =false)]
-    //public string filePath1;
-    //[OpenFilePath(IsAbsolute = true)]
-    //public string filePath2;
+    [OpenFolderPath]
+    public string folderPath1;
+    [OpenFolderPath(IsAbsolute =true)]
+    public string folderPath2;
 
-    //[SpaceLine]
+    [SpaceLine]
 
-    //[SeparatorLine]
-    //[OpenFilePath(IsAbsolute = false,Extension ="txt")]
-    //public string filePath3;
-    //[OpenFilePath(IsAbsolute = true,Extension ="txt")]
-    //public string filePath4;
+    [OpenFilePath(IsAbsolute = false)]
+    public string filePath1;
+    [OpenFilePath(IsAbsolute = true)]
+    public string filePath2;
 
-    //[SeparatorLine]
-    //[OpenFilePath(IsAbsolute = false,Filters =new string[] { "CSharp", "cs", "All Files", "*" })]
-    //public string filePath5;
-    //[OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
-    //public string filePath6;
+    [SpaceLine]
 
+    [SeparatorLine]
+    [OpenFilePath(IsAbsolute = false, Extension = "txt")]
+    public string filePath3;
+    [OpenFilePath(IsAbsolute = true, Extension = "txt")]
+    public string filePath4;
 
+    [SeparatorLine]
+    [OpenFilePath(IsAbsolute = false, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    public string filePath5;
+    [OpenFilePath(IsAbsolute = true, Filters = new string[] { "CSharp", "cs", "All Files", "*" })]
+    public string filePath6;
 
-    [EnumButton]
-    //[OnValueChanged("OnEnumTypeChanged")]
-    public TEnumType enumType = TEnumType.A;
-    //[Readonly]
-    [EnumButton]
-    public TFlagEnumType flagEnumType = TFlagEnumType.E;
+    //[EnumButton]
+    ////[OnValueChanged("OnEnumTypeChanged")]
+    //public TEnumType enumType = TEnumType.A;
+    ////[Readonly]
+    //[EnumButton]
+    //public TFlagEnumType flagEnumType = TFlagEnumType.E;
 
     //[Help("Test for it")]
     //[Indent(2)]
@@ -158,12 +161,12 @@ public class TestWindow : EditorWindow
         drawerObject = new NativeDrawerObject(data);
         drawerObject.IsShowScroll = true;
     }
-    private TEnumType enumType = TEnumType.A;
-    private TFlagEnumType flagsEnumType = TFlagEnumType.E;
+    //private TEnumType enumType = TEnumType.A;
+    //private TFlagEnumType flagsEnumType = TFlagEnumType.E;
     private void OnGUI()
     {
-        enumType = (TEnumType)EGUILayout.DrawEnumButton("EnumType", enumType);
-        flagsEnumType = (TFlagEnumType)EGUILayout.DrawEnumButton("FlagEnumType", flagsEnumType);
+        //enumType = (TEnumType)EGUILayout.DrawEnumButton("EnumType", enumType);
+        //flagsEnumType = (TFlagEnumType)EGUILayout.DrawEnumButton("FlagEnumType", flagsEnumType);
         drawerObject.OnGUILayout();
 
 

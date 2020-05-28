@@ -1,5 +1,6 @@
 ﻿using DotEditor.Utilities;
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -187,6 +188,100 @@ namespace DotEditor.GUIExtension
         }
 
         #endregion Draw Enum As Button
+
+        #region Draw Open File Or  Folder
+
+        public static string DrawOpenFileWithFilter(string label,string value,string[] filters,bool isAbsolute = false)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                value = EditorGUILayout.TextField(label, value);
+
+                if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon), GUIStyle.none, GUILayout.Width(17), GUILayout.Height(17)))
+                {
+                    string dir = "";
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        dir = Path.GetDirectoryName(value);
+                    }
+
+                    string filePath = EditorUtility.OpenFilePanelWithFilters("Select file", dir, filters);
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        if (isAbsolute)
+                        {
+                            value = filePath.Replace("\\", "/");
+                        }
+                        else
+                        {
+                            value = PathUtility.GetAssetPath(filePath);
+                        }
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            return value;
+        }
+
+        public static string DrawOpenFile(string label,string value,string extension = "", bool isAbsolute = false)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                value = EditorGUILayout.TextField(label, value);
+
+                if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon), GUIStyle.none, GUILayout.Width(17), GUILayout.Height(17)))
+                {
+                    string dir = "";
+                    if(!string.IsNullOrEmpty(value))
+                    {
+                        dir = Path.GetDirectoryName(value);
+                    }
+
+                    string filePath = EditorUtility.OpenFilePanel("Select File", dir, extension);
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        if(isAbsolute)
+                        {
+                            value = filePath.Replace("\\", "/");
+                        }else
+                        {
+                            value = PathUtility.GetAssetPath(filePath);
+                        }
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        public static string DrawOpenFolder(string label,string value,bool isAbsolute = false)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                value = EditorGUILayout.TextField(label, value);
+
+                if (GUILayout.Button(new GUIContent(EGUIResources.DefaultFolderIcon), GUIStyle.none, GUILayout.Width(17), GUILayout.Height(17)))
+                {
+                    string folderPath = EditorUtility.OpenFolderPanel("Open Folder", value, "");
+                    if (!string.IsNullOrEmpty(folderPath))
+                    {
+                        if(isAbsolute)
+                        {
+                            value = folderPath.Replace("\\", "/");
+                        }else
+                        {
+                            value = PathUtility.GetAssetPath(folderPath);
+                        }
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        #endregion Draw Open File Or  Folder
 
         public static T DrawPopup<T>(string label, string[] contents, T[] values, T selectedValue)
         {
