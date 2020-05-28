@@ -80,6 +80,7 @@
     <Compile Include="Entity\Avatar\AvatarCreatorDataEditor.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorUtil.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorWindow.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartDataEditor.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
     <Compile Include="Entity\Node\NodeBehaviourUtil.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Utilities\ExplorerUtility.cs" />
     <Compile Include="Utilities\FileUtility.cs" />
     <Compile Include="Utilities\GraphicsSettingsUtility.cs" />
+    <Compile Include="Utilities\MeshUtility.cs" />
     <Compile Include="Utilities\PathUtility.cs" />
     <Compile Include="Utilities\PlayerSettingsUtility.cs" />
     <Compile Include="Utilities\PrefabUtility.cs" />

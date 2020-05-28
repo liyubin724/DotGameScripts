@@ -8,8 +8,9 @@ namespace Dot.Entity.Avatar
     {
         [EnumButton]
         public AvatarPartType partType = AvatarPartType.Feet;
-
+        [Readonly]
         public AvatarRendererPartData[] rendererParts = new AvatarRendererPartData[0];
+        [Readonly]
         public AvatarPrefabPartData[] prefabParts = new AvatarPrefabPartData[0];
 
         [Serializable]

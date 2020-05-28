@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using DotEditor.GUIExtension;
+using UnityEditor;
 
 namespace DotEditor.NativeDrawer
 {
@@ -21,6 +22,9 @@ namespace DotEditor.NativeDrawer
 
         public override void OnInspectorGUI()
         {
+            EGUILayout.DrawScript(target);
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
             drawerObject.OnGUILayout();
         }
     }

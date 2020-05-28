@@ -185,6 +185,14 @@ namespace DotEditor.Entity.Avatar
                     {
                         partOutputDataDrawer.OnGUILayout();
                     }
+
+                    if(GUILayout.Button("Export"))
+                    {
+                        foreach(var d in creatorData.partOutputData.partDatas)
+                        {
+                            AvatarCreatorUtil.CreatePart(creatorData.partOutputData.outputFolder, d);
+                        }
+                    }
                 }
                 EditorGUILayout.EndVertical();
             }

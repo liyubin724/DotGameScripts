@@ -44,11 +44,17 @@ namespace DotEditor.Entity.Avatar
         [Serializable]
         public class PartCreatorData
         {
+            public string name = "";
             [EnumButton]
             public AvatarPartType partType = AvatarPartType.Body;
 
             public List<SMRendererCreatorData> smRendererDatas = new List<SMRendererCreatorData>();
             public List<PrefabCreatorData> prefabDatas = new List<PrefabCreatorData>();
+
+            public string GetTargetPath(string outputDir)
+            {
+                return $"{outputDir}/{name}_part.asset";
+            }
         }
 
         [Serializable]
@@ -62,6 +68,7 @@ namespace DotEditor.Entity.Avatar
         public class SMRendererCreatorData
         {
             public GameObject partFbx;
+            public bool IsCopyMesh = true;
         }
     }
 }
