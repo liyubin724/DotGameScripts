@@ -22,6 +22,15 @@ namespace DotEditor.Entity.Avatar
             [OpenFolderPath]
             public string outputFolder = string.Empty;
             public GameObject fbx;
+
+            public string GetTargetPrefabPath()
+            {
+                if(string.IsNullOrEmpty(outputFolder) || fbx == null)
+                {
+                    return null;
+                }
+                return $"{outputFolder}/{fbx.name}.prefab";
+            }
         }
 
         [Serializable]

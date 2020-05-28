@@ -1,10 +1,12 @@
 ﻿using DotEditor.GUIExtension;
 using DotEditor.GUIExtension.ListView;
+using DotEditor.NativeDrawer;
 using DotEditor.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static DotEditor.Entity.Avatar.AvatarCreatorData;
 
 namespace DotEditor.Entity.Avatar
 {
@@ -35,6 +37,8 @@ namespace DotEditor.Entity.Avatar
         private SimpleListView<CreatorAssetPathData> dataListView;
 
         private AvatarCreatorData creatorData = null;
+        private NativeDrawerObject partOutputDataDrawer = null;
+        private NativeDrawerObject skeletonCreatorDataDrawer = null;
         void OnEnable()
         {
             FindAllData();
@@ -52,6 +56,16 @@ namespace DotEditor.Entity.Avatar
         private void OnListViewItemSelected(CreatorAssetPathData data)
         {
             creatorData = AssetDatabase.LoadAssetAtPath<AvatarCreatorData>(data.assetPath);
+
+            skeletonCreatorDataDrawer = new NativeDrawerObject(creatorData.skeletonData)
+            {
+                IsShowScroll = true,
+            };
+            partOutputDataDrawer = new NativeDrawerObject(creatorData.partOutputData)
+            {
+                IsShowScroll = true
+            };
+
             Repaint();
         }
 
@@ -80,14 +94,18 @@ namespace DotEditor.Entity.Avatar
                                                                 DATA_LIST_WIDTH-LINE_THINKNESS*2, rect.height - TOOLBAR_HEIGHT - LINE_THINKNESS *2);
             dataListView.OnGUI(dataListRect);
 
-            Rect skeletonRect = new Rect(dataListRect.x + dataListRect.width, dataListRect.y, (rect.width - dataListRect.width) * 0.5f, dataListRect.height);
+            Rect skeletonRect = new Rect(dataListRect.x + dataListRect.width, dataListRect.y, (rect.width - dataListRect.width) * 0.4f, dataListRect.height);
             EGUI.DrawAreaLine(skeletonRect,Color.black);
-            Rect partRect = skeletonRect;
-            partRect.x += skeletonRect.width;
-            EGUI.DrawAreaLine(partRect, Color.black);
-
             DrawSkeleton(skeletonRect);
+
+            Rect partRect = new Rect(skeletonRect.x + skeletonRect.width, dataListRect.y, (rect.width - dataListRect.width) * 0.6f, dataListRect.height);
+            EGUI.DrawAreaLine(partRect, Color.black);
             DrawParts(partRect);
+
+            if(GUI.changed)
+            {
+                EditorUtility.SetDirty(creatorData);
+            }
         }
 
         private void DrawToolbar(Rect rect)
@@ -112,11 +130,42 @@ namespace DotEditor.Entity.Avatar
         {
             GUILayout.BeginArea(rect);
             {
-                EGUILayout.DrawBoxHeader("Skeleton Data", EGUIStyles.BoxedHeaderCenterStyle, GUILayout.ExpandWidth(true));
-                if(creatorData !=null)
+                EditorGUILayout.BeginVertical();
                 {
+                    EGUILayout.DrawBoxHeader("Skeleton Data", EGUIStyles.BoxedHeaderCenterStyle, GUILayout.ExpandWidth(true));
+                    if(creatorData !=null && skeletonCreatorDataDrawer!=null)
+                    {
+                        skeletonCreatorDataDrawer.OnGUILayout();
 
+                        SkeletonCreatorData skeletonCreatorData = creatorData.skeletonData;
+
+                        string targetPrefabPath = skeletonCreatorData.GetTargetPrefabPath();
+                        GameObject targetPrefab = null;
+                        if(!string.IsNullOrEmpty(targetPrefabPath))
+                        {
+                            targetPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(targetPrefabPath);
+                        }
+                        EditorGUILayout.Space();
+                        EditorGUILayout.Space();
+
+                        EditorGUILayout.ObjectField("Output", targetPrefab, typeof(GameObject), false);
+
+                        EditorGUILayout.Space();
+
+                        GUILayout.FlexibleSpace();
+
+                        EGUI.BeginGUIBackgroundColor(Color.blue);
+                        {
+                            string btnContentStr = targetPrefab == null ? "Create" : "Update";
+                            if(GUILayout.Button(btnContentStr,EditorStyles.toolbarButton))
+                            {
+
+                            }
+                        }
+                        EGUI.EndGUIBackgroundColor();
+                    }
                 }
+                EditorGUILayout.EndVertical();
             }
             GUILayout.EndArea();
         }
@@ -125,23 +174,18 @@ namespace DotEditor.Entity.Avatar
         {
             GUILayout.BeginArea(rect);
             {
-                EGUILayout.DrawBoxHeader("Part Data", EGUIStyles.BoxedHeaderCenterStyle,GUILayout.ExpandWidth(true));
-                if (creatorData != null)
+                EditorGUILayout.BeginVertical();
                 {
-
+                    EGUILayout.DrawBoxHeader("Part Data", EGUIStyles.BoxedHeaderCenterStyle,GUILayout.ExpandWidth(true));
+                    if (creatorData != null && partOutputDataDrawer!=null)
+                    {
+                        partOutputDataDrawer.OnGUILayout();
+                    }
                 }
+                EditorGUILayout.EndVertical();
             }
             GUILayout.EndArea();
         }
-
-
-
-
-
-
-
-
-
 
         [MenuItem("Game/Entity/Create data")]
         static void CreateCreatorData()

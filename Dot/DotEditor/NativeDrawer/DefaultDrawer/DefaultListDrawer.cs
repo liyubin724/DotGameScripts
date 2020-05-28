@@ -43,14 +43,15 @@ namespace DotEditor.NativeDrawer.DefaultDrawer
             EditorGUILayout.BeginVertical(EGUIStyles.BoxStyle);
             {
                 EditorGUILayout.LabelField(GUIContent.none, EditorStyles.toolbar, GUILayout.ExpandWidth(true));
+
                 Rect lastRect = GUILayoutUtility.GetLastRect();
                 EditorGUI.LabelField(lastRect, label, EGUIStyles.BoldLabelStyle);
+
                 Rect clearBtnRect = new Rect(lastRect.x + lastRect.width - 40, lastRect.y, 40, lastRect.height);
                 if (GUI.Button(clearBtnRect, "C",EditorStyles.toolbarButton))
                 {
                     DrawerProperty.ClearArrayElement();
                     InitList();
-                    //EditorGUIUtility.ExitGUI();
                 }
 
                 for (int i = 0; i < list.Count; ++i)
@@ -62,14 +63,22 @@ namespace DotEditor.NativeDrawer.DefaultDrawer
                             elementProperties[i].OnGUILayout();
                         }
                         EditorGUILayout.EndVertical();
-                        if (GUILayout.Button("-", GUILayout.Width(20)))
+                        EditorGUILayout.BeginVertical();
                         {
-                            DrawerProperty.RemoveArrayElementAtIndex(i);
-                            InitList();
-                            //EditorGUIUtility.ExitGUI();
+                            GUILayout.FlexibleSpace();
+
+                            if (GUILayout.Button("-", GUILayout.Width(20)))
+                            {
+                                DrawerProperty.RemoveArrayElementAtIndex(i);
+                                InitList();
+                            }
+
+                            GUILayout.FlexibleSpace();
                         }
+                        EditorGUILayout.EndVertical();
                     }
                     EditorGUILayout.EndHorizontal();
+
                     EGUILayout.DrawHorizontalLine();
                 }
                 Rect addBtnRect = GUILayoutUtility.GetRect(lastRect.width, 20);
@@ -79,7 +88,6 @@ namespace DotEditor.NativeDrawer.DefaultDrawer
                 {
                     DrawerProperty.AddArrayElement();
                     InitList();
-                    //EditorGUIUtility.ExitGUI();
                 }
             }
             EditorGUILayout.EndVertical();
