@@ -3,6 +3,7 @@ using DotEditor.GUIExtension;
 using DotEditor.GUIExtension.ListView;
 using DotEditor.NativeDrawer;
 using DotEditor.Utilities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -37,16 +38,18 @@ namespace DotEditor.Entity.Avatar
         void OnEnable()
         {
             string[] assetPaths = AssetDatabaseUtility.FindAssets<AvatarCreatorData>();
-            
-            dataListView = new SimpleListView<string>(new List<string>(assetPaths));
-            dataListView.Header = "Data List";
-            dataListView.OnSelectedChange = OnListViewItemSelected;
-            dataListView.OnDrawItem = (rect, index) =>
+
+            dataListView = new SimpleListView<string>
             {
-                string assetPath = dataListView.GetItem(index);
-                EditorGUI.LabelField(rect, Path.GetFileNameWithoutExtension(assetPath), EGUIStyles.BoldLabelStyle);
+                Header = "Data List",
+                OnSelectedChange = OnListViewItemSelected,
+                OnDrawItem = (rect, index) =>
+                {
+                    string assetPath = dataListView.GetItem(index);
+                    EditorGUI.LabelField(rect, Path.GetFileNameWithoutExtension(assetPath), EGUIStyles.BoldLabelStyle);
+                },
             };
-            dataListView.Reload();
+            dataListView.AddItems(assetPaths);
 
             PartCreatorDataDrawer.IsPartSelected = (data) =>
             {

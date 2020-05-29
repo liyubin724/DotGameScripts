@@ -61,7 +61,7 @@ public class SimpleListViewDemo : EditorWindow
             name = "E",
         });
 
-        sListView = new SimpleListView<TestListViewData>(datas);
+        sListView = new SimpleListView<TestListViewData>();
         sListView.Header = "Test Data List";
         sListView.GetItemHeight = (index) =>
         {
@@ -84,37 +84,28 @@ public class SimpleListViewDemo : EditorWindow
             var data = sListView.GetItem(index);
             Debug.Log(data.name);
         };
-        sListView.Reload();
+        sListView.AddItems(datas.ToArray());
 
 
-        strDataListView = new SimpleListView<string>(strDatas);
+        strDataListView = new SimpleListView<string>();
         strDataListView.Header = "Str List";
         strDataListView.Reload();
+        strDataListView.AddItems(strDatas.ToArray());
     }
 
     private void OnGUI()
     {
-        if(GUILayout.Button("Reload"))
-        {
-            sListView.Reload();
-        }
         if(GUILayout.Button("Add"))
         {
-            datas.Add(new TestListViewData()
-            {
-                id = 6,
-                name = "F",
-            });
-            sListView.Reload();
+            sListView.AddItem(new TestListViewData() { id = 111, name = "SSDF" });
         }
         if (GUILayout.Button("Remove"))
         {
-            datas.RemoveAt(1);
-            sListView.Reload();
+            sListView.RemoveAt(0);
         }
         Rect rect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-        //sListView.OnGUI(rect);
-        strDataListView.OnGUI(rect);
+        sListView.OnGUI(rect);
+        //strDataListView.OnGUI(rect);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -18,14 +19,12 @@ namespace DotEditor.GUIExtension.ListView
         public string Header { get; set; } = null;
         public bool ShowSeparator { get; set; } = true;
 
-        private List<T> itemDatas;
+        private List<T> itemDatas = new List<T>();
 
         private SimpleListTreeView<T> listTreeView;
 
-        public SimpleListView(List<T> itemDatas)
+        public SimpleListView()
         {
-            this.itemDatas = itemDatas ?? new List<T>() ;
-
             listTreeView = new SimpleListTreeView<T>(this);
         }
 
@@ -38,6 +37,15 @@ namespace DotEditor.GUIExtension.ListView
         {
             itemDatas.Add(itemData);
 
+            listTreeView.Reload();
+        }
+
+        public void AddItems(T[] itemDatas)
+        {
+            foreach(var itemData in itemDatas)
+            {
+                this.itemDatas.Add(itemData);
+            }
             listTreeView.Reload();
         }
 
