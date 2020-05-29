@@ -203,6 +203,9 @@ namespace DotEditor.GUIExtension.ListView
             {
                 int selectedId = selectedIds[0];
                 listView.OnSelectedChange?.Invoke(selectedId);
+            }else
+            {
+                listView.OnSelectedChange?.Invoke(-1);
             }
         }
 

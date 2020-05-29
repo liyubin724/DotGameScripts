@@ -1,7 +1,7 @@
 ﻿using DotEditor.Utilities;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEditor.GUIExtension
 {
@@ -12,31 +12,28 @@ namespace DotEditor.GUIExtension
         public static readonly float boxFrameSize = 6.0f;
         public static readonly float padding = 5.0f;
 
-        public static T CreateAsset<T>(bool deleteIfExist = true) where T:ScriptableObject
+        public static T CreateAsset<T>() where T:ScriptableObject
         {
-            string filePath = EditorUtility.SaveFilePanel("Save Data To", Application.dataPath, "", "asset");
+            string filePath = EditorUtility.SaveFilePanel("Save Asset", Application.dataPath, "", "asset");
             if(string.IsNullOrEmpty(filePath))
             {
                 return null;
             }
 
             string fileAssetPath = PathUtility.GetAssetPath(filePath);
-            if(File.Exists(filePath))
+            if(AssetDatabase.LoadAssetAtPath<UnityObject>(fileAssetPath) !=null)
             {
-                if (deleteIfExist)
-                {
-                    AssetDatabase.DeleteAsset(fileAssetPath);
-                }
-                else
-                {
-                    return AssetDatabase.LoadAssetAtPath<T>(fileAssetPath);
-                }
+                Debug.LogError($"EGUIUtility::CreateAsset->The file is exist in \"{fileAssetPath}\"");
+                return null;
+            }else
+            {
+                T data = ScriptableObject.CreateInstance<T>();
+                AssetDatabase.CreateAsset(data, fileAssetPath);
+
+                AssetDatabase.ImportAsset(fileAssetPath);
+
+                return data;
             }
-
-            T data = ScriptableObject.CreateInstance<T>();
-            AssetDatabase.CreateAsset(data, fileAssetPath);
-
-            return data;
         }
 
     }
