@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dot.Pool
+namespace Dot.GOPool
 {
     public class GameObjectPoolItem : MonoBehaviour
     {

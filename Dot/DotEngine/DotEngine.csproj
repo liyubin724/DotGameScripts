@@ -115,6 +115,7 @@
     <Compile Include="Entity\EntityEventConst.cs" />
     <Compile Include="Entity\EntityManager.cs" />
     <Compile Include="Entity\EntityObject.cs" />
+    <Compile Include="Entity\EntityObjectBehaviour.cs" />
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\ButtonAttribute.cs" />

@@ -10,6 +10,8 @@ namespace Dot.Entity
     public class EntityObject
     {
         public long UniqueID { get; private set; }
+        public long OwerUniqueID { get; set; } = -1;
+
         public EventDispatcher EntityDispatcher { get; private set; }
 
         private Dictionary<Type, EntityController> controllerDic = new Dictionary<Type, EntityController>();

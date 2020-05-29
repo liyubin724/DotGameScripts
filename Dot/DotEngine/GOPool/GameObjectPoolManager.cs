@@ -4,7 +4,7 @@ using Dot.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dot.Pool
+namespace Dot.GOPool
 {
     public delegate void PoolPreloadComplete(string groupName, string assetPath);
 

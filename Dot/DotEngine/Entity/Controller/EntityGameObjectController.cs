@@ -6,7 +6,6 @@ namespace Dot.Entity.Controller
     public class EntityGameObjectController : EntityController
     {
         public GameObject RootGameObject { get; }
-
         public Transform RootTransform { get; }
 
         private string name = "";

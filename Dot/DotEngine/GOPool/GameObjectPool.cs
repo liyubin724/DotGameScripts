@@ -8,7 +8,7 @@ using UnityEngine;
 using SystemObject = System.Object;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Pool
+namespace Dot.GOPool
 {
     /// <summary>
     /// 用于创建缓存池的模板的类型
