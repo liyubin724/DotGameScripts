@@ -15,7 +15,7 @@ namespace DotEditor.Entity.Avatar
 {
     public static class AvatarCreatorUtil
     {
-        public static GameObject CreateSkeleton(SkeletonCreatorData data)
+        public static GameObject CreateSkeleton(AvatarSkeletonCreatorData data)
         {
             if(data == null)
             {
@@ -48,7 +48,7 @@ namespace DotEditor.Entity.Avatar
                 Directory.CreateDirectory(outputDiskFolder);
             }
 
-            string skeletonPrefabAssetPath = data.GetTargetPrefabPath();
+            string skeletonPrefabAssetPath = data.GetSkeletonPrefabPath();
             GameObject cachedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(skeletonPrefabAssetPath);
             NodeBehaviour cachedNodeBehaviour = cachedPrefab?.GetComponent<NodeBehaviour>();
 
@@ -85,7 +85,7 @@ namespace DotEditor.Entity.Avatar
             return AssetDatabase.LoadAssetAtPath<GameObject>(skeletonPrefabAssetPath);
         }
 
-        public static AvatarPartData CreatePart(string outputFolder,PartCreatorData data)
+        public static AvatarPartData CreatePart(string outputFolder,AvatarPartCreatorData data)
         {
             if(data == null)
             {
@@ -105,7 +105,7 @@ namespace DotEditor.Entity.Avatar
                 return null;
             }
 
-            string partAssetPath = data.GetTargetPath(outputFolder);
+            string partAssetPath = data.GetPartAssetPath(outputFolder);
             
             AvatarPartData partData = ScriptableObject.CreateInstance<AvatarPartData>();
             partData.name = data.name;
@@ -141,22 +141,22 @@ namespace DotEditor.Entity.Avatar
             partData.prefabParts = prefabPartDatas.ToArray();
 
             List<AvatarRendererPartData> rendererPartDatas = new List<AvatarRendererPartData>();
-            foreach(var rendererCreatorData in data.smRendererDatas)
+            foreach(var rendererCreatorData in data.rendererDatas)
             {
-                if(rendererCreatorData.partFbx == null)
+                if(rendererCreatorData.fbx == null)
                 {
                     Debug.LogError("AvatarCreatorUtil::CreatePart->The fbx is null");
                     return null;
                 }
 
-                PrefabAssetType assetType = UnityEditor.PrefabUtility.GetPrefabAssetType(rendererCreatorData.partFbx);
+                PrefabAssetType assetType = UnityEditor.PrefabUtility.GetPrefabAssetType(rendererCreatorData.fbx);
                 if (assetType != PrefabAssetType.Model)
                 {
                     Debug.LogError($"AvatarCreatorUtil::CreatePart->The fbx is not a model.type = {assetType}");
                     return null;
                 }
 
-                SkinnedMeshRenderer[] renderers = rendererCreatorData.partFbx.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+                SkinnedMeshRenderer[] renderers = rendererCreatorData.fbx.GetComponentsInChildren<SkinnedMeshRenderer>(true);
                 foreach(var renderer in renderers)
                 {
                     AvatarRendererPartData rendererPartData = new AvatarRendererPartData();

@@ -3,8 +3,6 @@ using DotEditor.GUIExtension;
 using DotEditor.GUIExtension.ListView;
 using DotEditor.NativeDrawer;
 using DotEditor.Utilities;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -33,7 +31,7 @@ namespace DotEditor.Entity.Avatar
         private NativeDrawerObject partOutputDataDrawer = null;
         private NativeDrawerObject skeletonCreatorDataDrawer = null;
 
-        private List<PartCreatorData> selectedPartCreatorDatas = new List<PartCreatorData>();
+        private AvatarPreviewer previewer = null;
 
         void OnEnable()
         {
@@ -51,46 +49,30 @@ namespace DotEditor.Entity.Avatar
             };
             dataListView.AddItems(assetPaths);
 
-            PartCreatorDataDrawer.IsPartSelected = (data) =>
-            {
-                return selectedPartCreatorDatas.Contains(data);
-            };
-            PartCreatorDataDrawer.PartSelectedChanged = (data, isSelected) =>
-            {
-                if(isSelected)
-                {
-                    foreach(var d in selectedPartCreatorDatas)
-                    {
-                        if(d.partType == data.partType)
-                        {
-                            selectedPartCreatorDatas.Remove(d);
-                            break;
-                        }
-                    }
-                    selectedPartCreatorDatas.Add(data);
-                }else
-                {
-                    selectedPartCreatorDatas.Remove(data);
-                }
-            };
-            PartCreatorDataDrawer.CreatePartBtnClick = (data) =>
+            AvatarPartCreatorDataDrawer.CreatePartBtnClick = (data) =>
             {
                 CreatePart(data);
             };
+            AvatarPartCreatorDataDrawer.PreviewPartBtnClick = (data) =>
+            {
+                PreviewPart(data);
+            };
+
+            previewer = new AvatarPreviewer();
         }
 
         void OnDisable()
         {
-            PartCreatorDataDrawer.IsPartSelected = null;
-            PartCreatorDataDrawer.PartSelectedChanged = null;
-            PartCreatorDataDrawer.CreatePartBtnClick = null;
+            previewer.Dispose();
+
+            AvatarPartCreatorDataDrawer.CreatePartBtnClick = null;
+            AvatarPartCreatorDataDrawer.PreviewPartBtnClick = null;
 
             AssetDatabase.SaveAssets();
         }
 
         private void OnListViewItemSelected(int index)
         {
-            selectedPartCreatorDatas.Clear();
             currentCreatorData = null;
             skeletonCreatorDataDrawer = null;
             partOutputDataDrawer = null;
@@ -103,7 +85,7 @@ namespace DotEditor.Entity.Avatar
                 {
                     IsShowScroll = true,
                 };
-                partOutputDataDrawer = new NativeDrawerObject(currentCreatorData.partOutputData)
+                partOutputDataDrawer = new NativeDrawerObject(currentCreatorData.skeletonPartData)
                 {
                     IsShowScroll = true
                 };
@@ -184,9 +166,9 @@ namespace DotEditor.Entity.Avatar
                     {
                         skeletonCreatorDataDrawer.OnGUILayout();
 
-                        SkeletonCreatorData skeletonCreatorData = currentCreatorData.skeletonData;
+                        AvatarSkeletonCreatorData skeletonCreatorData = currentCreatorData.skeletonData;
 
-                        string targetPrefabPath = skeletonCreatorData.GetTargetPrefabPath();
+                        string targetPrefabPath = skeletonCreatorData.GetSkeletonPrefabPath();
                         GameObject targetPrefab = null;
                         if(!string.IsNullOrEmpty(targetPrefabPath))
                         {
@@ -213,6 +195,11 @@ namespace DotEditor.Entity.Avatar
                                 SelectionUtility.PingObject(skeletonPrefab);
                             }
                         }
+
+                        if (GUILayout.Button("Preview Skeleton"))
+                        {
+                            PreviewSkeleton();
+                        }
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -236,7 +223,7 @@ namespace DotEditor.Entity.Avatar
 
                         if (GUILayout.Button("Create Parts"))
                         {
-                            PartOutputData partOutputData = currentCreatorData.partOutputData;
+                            AvatarSkeletonPartCreatorData partOutputData = currentCreatorData.skeletonPartData;
                             foreach (var data in partOutputData.partDatas)
                             {
                                 if (!CreatePart(data))
@@ -257,9 +244,9 @@ namespace DotEditor.Entity.Avatar
             GUILayout.EndArea();
         }
 
-        private bool CreatePart(PartCreatorData data)
+        private bool CreatePart(AvatarPartCreatorData data)
         {
-            var partData = AvatarCreatorUtil.CreatePart(currentCreatorData.partOutputData.outputFolder, data);
+            var partData = AvatarCreatorUtil.CreatePart(currentCreatorData.skeletonPartData.outputFolder, data);
             if (partData == null)
             {
                 EditorUtility.DisplayDialog("Error", "Create Failed.\n Please view the details from the console!!!", "OK");
@@ -272,19 +259,51 @@ namespace DotEditor.Entity.Avatar
             }
         }
 
+        private void PreviewSkeleton()
+        {
+            AvatarSkeletonCreatorData skeletonCreatorData = currentCreatorData.skeletonData;
+            string skeletonAssetPath = skeletonCreatorData.GetSkeletonPrefabPath();
+            if (AssetDatabaseUtility.IsAssetAtPath<GameObject>(skeletonAssetPath))
+            {
+                previewer.LoadSkeleton(skeletonAssetPath);
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Error", $"The prefab is not found in \"{skeletonAssetPath}\"", "OK");
+            }
+        }
+
+        private void PreviewPart(AvatarPartCreatorData data)
+        {
+            if(!previewer.HasSkeleton())
+            {
+                EditorUtility.DisplayDialog("Error", $"Please preview the skeleton at first", "OK");
+                return;
+            }
+
+            string assetPath = data.GetPartAssetPath(currentCreatorData.skeletonPartData.outputFolder);
+            if(AssetDatabaseUtility.IsAssetAtPath<AvatarPartData>(assetPath))
+            {
+                previewer.AddPart(assetPath);
+            }else
+            {
+                EditorUtility.DisplayDialog("Error", $"The asset is not found in \"{assetPath}\"", "OK");
+            }
+        }
+
         private void DeleteCreatorData(AvatarCreatorData data)
         {
-            string skeletonAssetPath = data.skeletonData.GetTargetPrefabPath();
+            string skeletonAssetPath = data.skeletonData.GetSkeletonPrefabPath();
             if(AssetDatabase.LoadAssetAtPath<UnityObject>(skeletonAssetPath)!=null)
             {
                 AssetDatabase.DeleteAsset(skeletonAssetPath);
             }
 
-            PartOutputData partOutputData = data.partOutputData;
+            AvatarSkeletonPartCreatorData partOutputData = data.skeletonPartData;
 
             foreach(var partData in partOutputData.partDatas)
             {
-                string partAssetPath = partData.GetTargetPath(partOutputData.outputFolder);
+                string partAssetPath = partData.GetPartAssetPath(partOutputData.outputFolder);
                 AvatarPartData avatarPartData = AssetDatabase.LoadAssetAtPath<AvatarPartData>(partAssetPath);
                 if(avatarPartData!=null)
                 {

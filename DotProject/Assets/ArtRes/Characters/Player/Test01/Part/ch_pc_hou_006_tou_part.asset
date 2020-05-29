@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1675065642, guid: 095106b97874c014ba020ed44a34a51e, type: 3}
+  m_Name: ch_pc_hou_006_tou_part
+  m_EditorClassIdentifier: 
+  partType: 3
+  rendererParts:
+  - rendererNodeName: ch_pc_hou_006_tou
+    rootBoneName: Bip001 Spine
+    boneNames:
+    - Bip001 Head
+    - Bip001 Spine
+    - Bip001 Spine1
+    mesh: {fileID: 4300000, guid: f3f790a52dbe1d948a2a3584d2736850, type: 2}
+    materials:
+    - {fileID: 2100000, guid: dcd63075bbacd4c7b8d352e9c56018d8, type: 2}
+  prefabParts: []

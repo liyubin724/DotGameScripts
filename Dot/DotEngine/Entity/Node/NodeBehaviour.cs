@@ -20,6 +20,7 @@ namespace Dot.Entity.Node
         public SkinnedMeshRenderer renderer = null;
     }
 
+    [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour
     {
         public NodeData[] bindNodes = new NodeData[0];

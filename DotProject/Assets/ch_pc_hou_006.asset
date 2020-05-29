@@ -15,12 +15,30 @@ MonoBehaviour:
   skeletonData:
     outputFolder: Assets/ArtRes/Characters/Player/Test01/Prefab
     fbx: {fileID: 100062, guid: 7556dece0bd2244b59ff85ac005aeab3, type: 3}
-  partOutputData:
+  skeletonPartData:
     outputFolder: Assets/ArtRes/Characters/Player/Test01/Part
     partDatas:
     - name: ch_pc_hou_006_jiao
       partType: 0
-      smRendererDatas:
-      - partFbx: {fileID: 100062, guid: 305be6428797d48bab3c7420ff9884be, type: 3}
-        IsCopyMesh: 1
+      rendererDatas:
+      - IsCopyMesh: 1
+        fbx: {fileID: 100062, guid: 305be6428797d48bab3c7420ff9884be, type: 3}
+      prefabDatas: []
+    - name: ch_pc_hou_006_shen
+      partType: 1
+      rendererDatas:
+      - IsCopyMesh: 1
+        fbx: {fileID: 100062, guid: 54df7832b81e94797adf47851013c44e, type: 3}
+      prefabDatas: []
+    - name: ch_pc_hou_006_shou
+      partType: 2
+      rendererDatas:
+      - IsCopyMesh: 1
+        fbx: {fileID: 100062, guid: a30692238af304df1adcd2567ffa9c8d, type: 3}
+      prefabDatas: []
+    - name: ch_pc_hou_006_tou
+      partType: 3
+      rendererDatas:
+      - IsCopyMesh: 1
+        fbx: {fileID: 100062, guid: c15b759551c0c415590f89d9e32e53c1, type: 3}
       prefabDatas: []

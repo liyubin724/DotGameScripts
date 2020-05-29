@@ -161,6 +161,26 @@ namespace DotEditor.Utilities
 
         #endregion
 
+        public static bool HasAssetAtPath(string assetPath)
+        {
+            if(string.IsNullOrEmpty(assetPath))
+            {
+                return false;
+            }
+
+            return AssetDatabase.LoadAssetAtPath<UnityObject>(assetPath) != null;
+        }
+
+        public static bool IsAssetAtPath<T>(string assetPath) where T:UnityObject
+        {
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                return false;
+            }
+
+            return AssetDatabase.LoadAssetAtPath<T>(assetPath) != null;
+        }
+
         public static T CreateAsset<T>() where T: ScriptableObject
         {
             string selectedDir = SelectionUtility.GetSelectionDir();

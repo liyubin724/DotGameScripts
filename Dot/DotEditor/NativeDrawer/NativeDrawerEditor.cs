@@ -23,8 +23,10 @@ namespace DotEditor.NativeDrawer
         public override void OnInspectorGUI()
         {
             EGUILayout.DrawScript(target);
+
             EditorGUILayout.Space();
             EditorGUILayout.Space();
+
             drawerObject.OnGUILayout();
         }
     }

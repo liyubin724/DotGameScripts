@@ -8,8 +8,8 @@ namespace DotEditor.Entity.Avatar
 {
     public class AvatarCreatorData : ScriptableObject
     {
-        public SkeletonCreatorData skeletonData = new SkeletonCreatorData();
-        public PartOutputData partOutputData = new PartOutputData();
+        public AvatarSkeletonCreatorData skeletonData = new AvatarSkeletonCreatorData();
+        public AvatarSkeletonPartCreatorData skeletonPartData = new AvatarSkeletonPartCreatorData();
 
         public override string ToString()
         {
@@ -17,13 +17,13 @@ namespace DotEditor.Entity.Avatar
         }
 
         [Serializable]
-        public class SkeletonCreatorData
+        public class AvatarSkeletonCreatorData
         {
             [OpenFolderPath]
             public string outputFolder = string.Empty;
             public GameObject fbx;
 
-            public string GetTargetPrefabPath()
+            public string GetSkeletonPrefabPath()
             {
                 if(string.IsNullOrEmpty(outputFolder) || fbx == null)
                 {
@@ -34,41 +34,41 @@ namespace DotEditor.Entity.Avatar
         }
 
         [Serializable]
-        public class PartOutputData
+        public class AvatarSkeletonPartCreatorData
         {
             [OpenFolderPath]
             public string outputFolder = string.Empty;
-            public List<PartCreatorData> partDatas = new List<PartCreatorData>();
+            public List<AvatarPartCreatorData> partDatas = new List<AvatarPartCreatorData>();
         }
 
         [Serializable]
-        public class PartCreatorData
+        public class AvatarPartCreatorData
         {
             public string name = "";
             [EnumButton]
             public AvatarPartType partType = AvatarPartType.Body;
 
-            public List<SMRendererCreatorData> smRendererDatas = new List<SMRendererCreatorData>();
-            public List<PrefabCreatorData> prefabDatas = new List<PrefabCreatorData>();
+            public List<AvatarPartSMRendererCreatorData> rendererDatas = new List<AvatarPartSMRendererCreatorData>();
+            public List<AvatarPartPrefabCreatorData> prefabDatas = new List<AvatarPartPrefabCreatorData>();
 
-            public string GetTargetPath(string outputDir)
+            public string GetPartAssetPath(string outputDir)
             {
                 return $"{outputDir}/{name}_part.asset";
             }
         }
 
         [Serializable]
-        public class PrefabCreatorData
+        public class AvatarPartPrefabCreatorData
         {
             public string bindNodeName = string.Empty;
             public GameObject bindPrefab = null;
         }
 
         [Serializable]
-        public class SMRendererCreatorData
+        public class AvatarPartSMRendererCreatorData
         {
-            public GameObject partFbx;
             public bool IsCopyMesh = true;
+            public GameObject fbx;
         }
     }
 }

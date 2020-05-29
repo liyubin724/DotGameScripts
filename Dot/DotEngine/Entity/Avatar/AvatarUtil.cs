@@ -16,7 +16,7 @@ namespace Dot.Entity.Avatar
                 var prefabData = partData.prefabParts[i];
 
                 GameObject bindGameObject = GameObject.Instantiate(prefabData.prefabGO);
-                NodeData bindNodeData = nodeBehaviour.GetNode(NodeType.BindNode, prefabData.bindNodeName);
+                NodeData bindNodeData = nodeBehaviour.GetBindNode(prefabData.bindNodeName);
                 bindGameObject.transform.SetParent(bindNodeData.transform, false);
 
                 partInstance.gameObjects[i] = bindGameObject;
@@ -27,11 +27,11 @@ namespace Dot.Entity.Avatar
             {
                 var rendererData = partData.rendererParts[i];
 
-                NodeData nodeData = nodeBehaviour.GetNode(NodeType.SMRendererNode, rendererData.rendererNodeName);
+                NodeData nodeData = nodeBehaviour.GetSMRendererNode(rendererData.rendererNodeName);
                 if(nodeData != null)
                 {
                     SkinnedMeshRenderer smRenderer = nodeData.renderer;
-                    smRenderer.rootBone = nodeBehaviour.GetNode(NodeType.BoneNode, rendererData.rootBoneName).transform;
+                    smRenderer.rootBone = nodeBehaviour.GetBoneNode(rendererData.rootBoneName).transform;
                     smRenderer.bones = nodeBehaviour.GetBoneTransformByNames(rendererData.boneNames);
                     smRenderer.sharedMesh = rendererData.mesh;
                     smRenderer.sharedMaterials = rendererData.materials;
