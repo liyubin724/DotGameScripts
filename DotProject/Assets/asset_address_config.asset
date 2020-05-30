@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2063035449, guid: 095106b97874c014ba020ed44a34a51e, type: 3}
+  m_Name: asset_address_config
+  m_EditorClassIdentifier: 
+  addressDatas:
+  - assetAddress: ch_pc_hou_006_skeleton
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Prefab/ch_pc_hou_006_skeleton.prefab
+    bundlePath: assets/artres/characters/player/test01/prefab/ch_pc_hou_006_skeleton_prefab
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_jiao_mesh
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_jiao_mesh.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_jiao_mesh_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_jiao_part
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_jiao_part.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_jiao_part_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_shen_mesh
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_shen_mesh.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_shen_mesh_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_shen_part
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_shen_part.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_shen_part_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_shou_mesh
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_shou_mesh.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_shou_mesh_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_shou_part
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_shou_part.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_shou_part_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_tou_mesh
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_tou_mesh.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_tou_mesh_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0
+  - assetAddress: ch_pc_hou_006_tou_part
+    assetPath: Assets/ArtRes/Characters/Player/Test01/Part/ch_pc_hou_006_tou_part.asset
+    bundlePath: assets/artres/characters/player/test01/part/ch_pc_hou_006_tou_part_asset
+    labels: []
+    isScene: 0
+    isPreload: 0
+    isNeverDestroy: 0

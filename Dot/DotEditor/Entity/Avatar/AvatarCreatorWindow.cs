@@ -232,11 +232,6 @@ namespace DotEditor.Entity.Avatar
                                 }
                             }
                         }
-
-                        if (GUILayout.Button("Show Preview"))
-                        {
-                            ShowPreview();
-                        }
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -325,11 +320,6 @@ namespace DotEditor.Entity.Avatar
 
             string assetPath = AssetDatabase.GetAssetPath(currentCreatorData);
             AssetDatabase.DeleteAsset(assetPath);
-
-        }
-
-        private void ShowPreview()
-        {
 
         }
     }

@@ -12,6 +12,11 @@ namespace DotEditor.NativeDrawer.Decorator
 
         public override void OnGUILayout()
         {
+            if(!NativeDrawerSetting.IsShowHelp)
+            {
+                return;
+            }
+
             HelpAttribute attr = GetAttr<HelpAttribute>();
             MessageType messageType = MessageType.None;
             if(attr.MessageType == HelpMessageType.Warning)

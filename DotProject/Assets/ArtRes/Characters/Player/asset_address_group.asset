@@ -12,13 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: -326584434, guid: 850609f56be3c4e478dbc3e070431c7c, type: 3}
   m_Name: asset_address_group
   m_EditorClassIdentifier: 
-  groupName: Asset Address Group
+  groupName: Character
   isEnable: 1
-  isMain: 0
+  isMain: 1
   isPreload: 0
   isNeverDestroy: 0
   operation:
-    packMode: 0
-    addressMode: 0
-    labels: 
-  filters: []
+    packMode: 1
+    addressMode: 2
+    labels: []
+  filters:
+  - assetFolder: Assets/ArtRes/Characters/Player/Test01/Prefab
+    isIncludeSubfolder: 0
+    fileRegex: ^\w*.prefab$
+  - assetFolder: Assets/ArtRes/Characters/Player/Test01/Part
+    isIncludeSubfolder: 0
+    fileRegex: ^\w*.asset$

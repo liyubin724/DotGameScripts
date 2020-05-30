@@ -1,131 +1,65 @@
 ﻿using DotEditor.GUIExtension;
+using DotEditor.GUIExtension.ListView;
+using DotEditor.NativeDrawer;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
-
-using DGUI = DotEditor.GUIExtension.EGUI;
-using DGUILayout = DotEditor.GUIExtension.EGUILayout;
 
 namespace DotEditor.Asset.AssetAddress
 {
     [CustomEditor(typeof(AssetAddressGroup))]
-    public class AssetAddressGroupEditor : Editor
+    public class AssetAddressGroupEditor :  NativeDrawerEditor
     {
-        SerializedProperty groupName = null;
-        SerializedProperty isEnable = null;
-        SerializedProperty isMain = null;
-        SerializedProperty isPreload = null;
-        SerializedProperty isNeverDestroy = null;
-        SerializedProperty operation = null;
-        SerializedProperty filters = null;
+        private SimpleListView<string> listViewer = null;
 
-        ReorderableList filterRList = null;
-        List<string> filterResList = new List<string>();
-        ReorderableList filterResRList = null;
-        private void OnEnable()
+        protected override bool IsShowScroll()
         {
-            groupName = serializedObject.FindProperty("groupName");
-            isEnable = serializedObject.FindProperty("isEnable");
-            isMain = serializedObject.FindProperty("isMain");
-            isPreload = serializedObject.FindProperty("isPreload");
-            isNeverDestroy = serializedObject.FindProperty("isNeverDestroy");
-            operation = serializedObject.FindProperty("operation");
-            
-            filters = serializedObject.FindProperty("filters");
-            filterRList = new ReorderableList(serializedObject, filters,true,true,true,true);
-            filterRList.elementHeight = 3 * EditorGUIUtility.singleLineHeight;
-            filterRList.drawHeaderCallback = (rect) =>
-            {
-                EditorGUI.LabelField(rect, new GUIContent("Filters"));
-            };
-            filterRList.drawElementCallback = (rect, index, isActive, isFocused) =>
-            {
-                SerializedProperty property = filters.GetArrayElementAtIndex(index);
-                EditorGUI.PropertyField(rect, property);
-            };
-            filterRList.onAddCallback = (list) =>
-            {
-                filters.InsertArrayElementAtIndex(filters.arraySize);
-            };
-            filterRList.drawElementBackgroundCallback = (rect, index, isActive, isFocused) =>
-              {
-                  if(isActive)
-                  {
-                      EditorGUI.DrawRect(rect, Color.blue);
-                  }else
-                  {
-                      if (index % 2 == 0)
-                      {
-                          EditorGUI.DrawRect(rect, EGUIResources.BackgroundColor);
-                      }
-                      else
-                      {
-                          EditorGUI.DrawRect(rect, EGUIResources.BorderColor);
-                      }
-                  }
-                  
-              };
-
-            filterResRList = new ReorderableList(filterResList, typeof(string), false, true, false, false);
-            filterResRList.elementHeight = EditorGUIUtility.singleLineHeight;
-            filterResRList.drawHeaderCallback = (rect) =>
-            {
-                EditorGUI.LabelField(rect, new GUIContent("Filter Res List"));
-            };
-            filterResRList.drawElementCallback = (rect, index, isActive, isFocused) =>
-            {
-                string assetPath = filterResList[index];
-                DGUI.BeginLabelWidth(40);
-                {
-                    EditorGUI.TextField(rect, "" + index, assetPath);
-                }
-                DGUI.EndLableWidth();
-            };
+            return false;
         }
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-
-            DGUILayout.DrawScript(target);
-
-            EditorGUILayout.PropertyField(groupName);
-            EditorGUILayout.PropertyField(isEnable);
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.PropertyField(isMain);
-            EditorGUILayout.PropertyField(isPreload);
-            EditorGUILayout.PropertyField(isNeverDestroy);
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.PropertyField(operation);
-
-            EditorGUILayout.Space();
-
-            filterRList.DoLayoutList();
-
-            serializedObject.ApplyModifiedProperties();
-
-            if (GUILayout.Button("Execute",GUILayout.Height(40)))
+            EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             {
-                AssetAddressUtil.UpdateConfigByGroup(target as AssetAddressGroup);
-                EditorUtility.DisplayDialog("Finished", "Finished", "OK");
-            }
+                base.OnInspectorGUI();
 
-            if (GUILayout.Button("Filter", GUILayout.Height(40)))
-            {
-                filterResList.Clear();
-                AssetAddressGroup group = target as AssetAddressGroup;
-                foreach (var filter in group.filters)
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+
+                if (GUILayout.Button("Execute", GUILayout.Height(40)))
                 {
-                    filterResList.AddRange(filter.Filter());
+                    AssetAddressUtil.UpdateConfigByGroup(target as AssetAddressGroup);
+                    EditorUtility.DisplayDialog("Finished", "Finished", "OK");
+                }
+
+                if (GUILayout.Button("Filter", GUILayout.Height(40)))
+                {
+                    List<string> files = new List<string>();
+                    AssetAddressGroup group = target as AssetAddressGroup;
+                    foreach (var filter in group.filters)
+                    {
+                        files.AddRange(filter.Filter());
+                    }
+
+                    listViewer = new SimpleListView<string>();
+                    listViewer.AddItems(files.ToArray());
+                }
+
+                EGUILayout.DrawHorizontalLine();
+
+                if (listViewer != null)
+                {
+                    Rect lastRect = EditorGUILayout.GetControlRect(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+                    EditorGUI.LabelField(lastRect, lastRect.ToString() + "\n" + lastRect.ToString());
+                    if (Event.current.type == EventType.Repaint)
+                    {
+                        //listViewer.OnGUI(lastRect);
+                    }
                 }
             }
-
-            filterResRList.DoLayoutList();
+            EditorGUILayout.EndVertical();
+            
         }
     }
 }

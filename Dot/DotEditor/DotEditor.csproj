@@ -59,10 +59,8 @@
     <Compile Include="Asset\AssetAddress\AssetAddressGroup.cs" />
     <Compile Include="Asset\AssetAddress\AssetAddressGroupEditor.cs" />
     <Compile Include="Asset\AssetAddress\AssetAddressOperation.cs" />
-    <Compile Include="Asset\AssetAddress\AssetAddressOperationPropertyDrawer.cs" />
     <Compile Include="Asset\AssetAddress\AssetAddressUtil.cs" />
-    <Compile Include="Asset\AssetAddress\AssetFilter.cs" />
-    <Compile Include="Asset\AssetAddress\AssetFilterPropertyDrawer.cs" />
+    <Compile Include="Asset\AssetAddress\AssetAddressFilter.cs" />
     <Compile Include="Asset\AssetPacker\AssetAddressRepeatPopupContent.cs" />
     <Compile Include="Asset\AssetPacker\AssetPackerConfig.cs" />
     <Compile Include="Asset\AssetPacker\AssetPackerTreeView.cs" />

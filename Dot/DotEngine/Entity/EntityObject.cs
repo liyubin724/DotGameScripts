@@ -7,10 +7,19 @@ using SystemObject = System.Object;
 
 namespace Dot.Entity
 {
+    public enum EntityObjectCategroy
+    {
+        None = 0,
+        Scene,
+        Effect,
+        Player,
+    }
+
     public class EntityObject
     {
         public long UniqueID { get; private set; }
         public long OwerUniqueID { get; set; } = -1;
+        public EntityObjectCategroy Categroy { get; set; } = EntityObjectCategroy.None;
 
         public EventDispatcher EntityDispatcher { get; private set; }
 

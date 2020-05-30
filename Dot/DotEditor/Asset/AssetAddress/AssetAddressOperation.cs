@@ -1,6 +1,9 @@
-﻿using Dot.Utilities;
+﻿using Dot.NativeDrawer.Decorator;
+using Dot.NativeDrawer.Property;
+using Dot.Utilities;
 using System;
 using System.IO;
+using System.Reflection.Emit;
 using static Dot.Asset.Datas.AssetAddressConfig;
 
 namespace DotEditor.Asset.AssetAddress
@@ -21,9 +24,16 @@ namespace DotEditor.Asset.AssetAddress
     [Serializable]
     public class AssetAddressOperation
     {
+        [Help("AB打包方式.\nTogether:将筛选出来的所有的资源打到一个包内\nSeparate:将筛选出来的资源每个都单独打包")]
+        [EnumButton]
         public AssetPackMode packMode = AssetPackMode.Together;
+        [Help("资源地址生成方式\nFullPath:使用资源的完整路径作为地址\nFileName:使用带后缀的文件名做为地址\nFileNameWithoutExtension:使用不带后缀的文件名作为地址")]
+        [EnumButton]
         public AssetAddressMode addressMode = AssetAddressMode.FullPath;
-        public string labels = string.Empty;
+        [Help("资源标签，加载时可以使用标签对所有的资源进行加载")]
+        public string[] labels = new string[0];
+        
+
 
         public string GetAddressName(string assetPath)
         {
@@ -54,13 +64,14 @@ namespace DotEditor.Asset.AssetAddress
 
         public string[] GetLabels()
         {
-            if(string.IsNullOrEmpty(labels))
-            {
-                return new string[0];
-            }else
-            {
-                return labels.SplitToNotEmptyArray('|');
-            }
+            //if(string.IsNullOrEmpty(labels))
+            //{
+            //    return new string[0];
+            //}else
+            //{
+            //    return labels.SplitToNotEmptyArray('|');
+            //}
+            return labels;
         }
 
         private bool IsScene(string assetPath)

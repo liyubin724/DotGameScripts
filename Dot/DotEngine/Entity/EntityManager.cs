@@ -14,7 +14,7 @@ namespace Dot.Entity
 
         protected override void DoInit()
         {
-            base.DoInit();
+            
         }
 
     }
