@@ -20,6 +20,7 @@ namespace Dot.Proxy
             }
             isStartup = true;
             updateProxy = UpdateProxy.GetInstance();
+            DontDestroyHandler.AddTransform(transform);
         }
         
         void Update()

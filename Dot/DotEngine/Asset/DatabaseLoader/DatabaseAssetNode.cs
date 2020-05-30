@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Dot.Asset.Datas;
-using Dot.Core.Log;
+using Dot.Log;
 using UnityObject = UnityEngine.Object;
 
 namespace Dot.Asset

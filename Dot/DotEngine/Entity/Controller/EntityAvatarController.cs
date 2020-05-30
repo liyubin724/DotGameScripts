@@ -131,7 +131,7 @@ namespace Dot.Entity.Controller
 
         protected override void OnInitialized()
         {
-            assetBridge = new AssetBridge();
+            assetBridge = new AssetBridge(AssetLoaderPriority.High);
         }
 
         public void LoadSkeleton(string skeletonAddress)

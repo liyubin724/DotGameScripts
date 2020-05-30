@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
 
 using Dot.Asset.Datas;
-using Dot.Core.Pool;
-using Dot.Core.Log;
+using Dot.Pool;
+using Dot.Log;
 using System.Linq;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
