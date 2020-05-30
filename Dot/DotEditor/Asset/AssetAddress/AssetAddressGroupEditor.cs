@@ -42,6 +42,14 @@ namespace DotEditor.Asset.AssetAddress
                     }
 
                     listViewer = new SimpleListView<string>();
+                    listViewer.Header = "Asset List";
+                    listViewer.OnDrawItem = (rect, index) =>
+                    {
+                        Rect indexRect = new Rect(rect.x, rect.y, 20, rect.height);
+                        EditorGUI.PrefixLabel(indexRect, new GUIContent("" + index));
+                        Rect itemRect = new Rect(rect.x + indexRect.width, rect.y, rect.width - indexRect.width, rect.height);
+                        EditorGUI.LabelField(itemRect, listViewer.GetItem(index));
+                    };
                     listViewer.AddItems(files.ToArray());
                 }
 
@@ -49,12 +57,10 @@ namespace DotEditor.Asset.AssetAddress
 
                 if (listViewer != null)
                 {
-                    Rect lastRect = EditorGUILayout.GetControlRect(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-
-                    EditorGUI.LabelField(lastRect, lastRect.ToString() + "\n" + lastRect.ToString());
+                    Rect lastRect = EditorGUILayout.GetControlRect(false,300,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
                     if (Event.current.type == EventType.Repaint)
                     {
-                        //listViewer.OnGUI(lastRect);
+                        listViewer.OnGUI(lastRect);
                     }
                 }
             }
