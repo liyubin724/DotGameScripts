@@ -115,10 +115,11 @@
     <Compile Include="Entity\Controller\EntityGameObjectController.cs" />
     <Compile Include="Entity\Controller\EntityMotionController.cs" />
     <Compile Include="Entity\EntityController.cs" />
-    <Compile Include="Entity\EntityEventConst.cs" />
+    <Compile Include="Entity\Event\EntityEventConst.cs" />
     <Compile Include="Entity\EntityManager.cs" />
     <Compile Include="Entity\EntityObject.cs" />
     <Compile Include="Entity\EntityObjectBehaviour.cs" />
+    <Compile Include="Entity\Event\EntityEvents.cs" />
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
     <Compile Include="NativeDrawer\Decorator\ButtonAttribute.cs" />

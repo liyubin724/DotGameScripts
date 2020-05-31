@@ -29,9 +29,8 @@ namespace Dot.Entity
         private List<EntityController> lateUpdateControllers = new List<EntityController>();
         private List<EntityController> fixedUpdateControllers = new List<EntityController>();
 
-        public EntityObject(long id)
+        public EntityObject()
         {
-            UniqueID = id;
             EntityDispatcher = new EventDispatcher();
         }
 
@@ -142,20 +141,6 @@ namespace Dot.Entity
         {
             Assert.IsTrue(typeof(EntityController).IsAssignableFrom(type), $"EntityObject::HasController->The type is not a subclass of EntityController.type = {type}");
             return controllerDic.ContainsKey(type);
-        }
-
-        public T AddController<T>() where T:EntityController
-        {
-            return (T)AddController(typeof(T));
-        }
-
-        public EntityController AddController(Type type)
-        {
-            Assert.IsTrue(typeof(EntityController).IsAssignableFrom(type), $"EntityObject::AddController->The type is not a subclass of EntityController.type = {type}");
-
-            EntityController controller = Activator.CreateInstance(type) as EntityController;
-            AddController(controller);
-            return controller;
         }
 
         public void AddController(EntityController controller)

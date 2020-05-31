@@ -1,4 +1,5 @@
 ﻿using Dot.Dispatch;
+using Dot.Entity.Event;
 using UnityEngine;
 
 namespace Dot.Entity.Controller
