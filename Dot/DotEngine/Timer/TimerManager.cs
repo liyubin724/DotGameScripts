@@ -1,4 +1,5 @@
 ﻿using Dot.Proxy;
+using System;
 
 namespace Dot.Timer
 {
@@ -52,8 +53,8 @@ namespace Dot.Timer
         /// <returns></returns>
         public TimerTaskInfo AddTimer(float intervalInSec,
                                                 float totalInSec,
-                                                TimerCallback intervalCallback,
-                                                TimerCallback endCallback,
+                                                Action<object> intervalCallback,
+                                                Action<object> endCallback,
                                                 object userData)
         {
             if (hTimerWheel == null) return null;
@@ -67,8 +68,8 @@ namespace Dot.Timer
         /// <param name="intervalCallback">触发回调</param>
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
-        public TimerTaskInfo AddIntervalTimer(float intervalInSec, 
-                                                                    TimerCallback intervalCallback, 
+        public TimerTaskInfo AddIntervalTimer(float intervalInSec,
+                                                                    Action<object> intervalCallback, 
                                                                     object userData = null)
         {
             return AddTimer(intervalInSec, 0f, intervalCallback, null, userData);
@@ -80,8 +81,8 @@ namespace Dot.Timer
         /// <param name="endCallback">达到指定时长后回调</param>
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
-        public TimerTaskInfo AddEndTimer(float totalInSec, 
-                                                                TimerCallback endCallback,
+        public TimerTaskInfo AddEndTimer(float totalInSec,
+                                                                Action<object> endCallback,
                                                                 object userData = null)
         {
             return AddTimer(totalInSec, totalInSec, null, endCallback, userData);

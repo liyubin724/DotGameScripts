@@ -1,5 +1,6 @@
 ﻿using Dot.Utilities;
 using Dot.Pool;
+using System;
 
 namespace Dot.Timer
 {
@@ -10,8 +11,8 @@ namespace Dot.Timer
         
         private int intervalInMS = 0;
         private int totalInMS = 0;
-        private TimerCallback onIntervalEvent = null;
-        private TimerCallback onEndEvent = null;
+        private Action<object> onIntervalEvent = null;
+        private Action<object> onEndEvent = null;
         private object userData = null;
 
         internal int RemainingInMS { get; set; } = 0;
@@ -23,8 +24,8 @@ namespace Dot.Timer
 
         public void SetData(long id, float intervalInSec,
                                                 float totalInSec,
-                                                TimerCallback intervalCallback,
-                                                TimerCallback endCallback,
+                                                Action<object> intervalCallback,
+                                                Action<object> endCallback,
                                                 object callbackData)
         {
             this.id = id;

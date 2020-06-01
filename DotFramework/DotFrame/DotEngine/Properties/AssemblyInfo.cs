@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("DotEngine")]
+[assembly: AssemblyTitle("DotEngine-Unity")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DotEngine")]
+[assembly: AssemblyProduct("DotEngine-Unity")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("f1ab6fd7-126a-4d65-86fd-912f04563703")]
+[assembly: Guid("2208ee38-bbcb-4f84-862c-9df926bf1a7a")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

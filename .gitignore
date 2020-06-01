@@ -3,13 +3,14 @@ DotFramework/*/packages
 *.bak
 *.temp
 *.log
+!DotEngine.Log/
 bin/
 obj/
 temp/
 Library/
 Logs/
 
-# Office »º´æÎÄ¼þ
+# Office ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 ~'$'*.docx
 ~'$'*.ppt
 ~'$'*.pptx 
