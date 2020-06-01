@@ -1,4 +1,4 @@
-﻿using DotEngine.Framework.Service;
+﻿using DotEngine.Framework.Services;
 using log4net;
 using log4net.Config;
 using System.IO;
@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DotEngine.Log
 {
-    public class LogServicer : ILogServicer
+    public class LogServicer : ILogService
     {
         public static LogServicer GetLogServicer(string xmlConfig,LogLevelType limitLevelType)
         {
@@ -69,14 +69,14 @@ namespace DotEngine.Log
             return null;
         }
 
-        public void DoDispose()
+        public void DoRemove()
         {
 #if !UNITY_EDITOR
             Application.logMessageReceived -= OnMessageReceived;   
 #endif
         }
 
-        public void DoStart()
+        public void DoRegister()
         {
 #if !UNITY_EDITOR
             if(isInited)

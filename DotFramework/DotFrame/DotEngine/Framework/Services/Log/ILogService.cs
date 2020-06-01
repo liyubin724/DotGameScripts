@@ -1,4 +1,4 @@
-﻿namespace DotEngine.Framework.Service
+﻿namespace DotEngine.Framework.Services
 {
     public enum LogLevelType
     {
@@ -9,7 +9,7 @@
         Fatal,
     }
 
-    public interface ILogServicer : IServicer
+    public interface ILogService : IService
     {
         void Log(LogLevelType levelType, string tag, string message);
 

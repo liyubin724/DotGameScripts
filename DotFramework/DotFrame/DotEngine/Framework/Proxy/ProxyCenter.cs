@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEngine.Framework.Service
+namespace DotEngine.Framework.Proxy
 {
-    public interface IClientNetServicer : IServicer
+    public class ProxyCenter
     {
     }
 }

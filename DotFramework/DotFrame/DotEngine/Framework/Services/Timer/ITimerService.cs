@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace DotEngine.Framework.Service
+namespace DotEngine.Framework.Services
 {
     public interface ITimerTaskInfo
     {
     }
 
-    public interface ITimerServicer : IServicer
+    public interface ITimerService : IService, IUpdate
     {
-        void DoUpdate(float deltaTime);
         void Pause();
         void Resume();
         ITimerTaskInfo AddTimer(float intervalInSec,

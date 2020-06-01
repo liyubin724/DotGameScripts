@@ -1,5 +1,5 @@
 ﻿using DotEngine.Framework.Facade;
-using DotEngine.Framework.Service;
+using DotEngine.Framework.Services;
 using System;
 
 namespace Dot.Timer

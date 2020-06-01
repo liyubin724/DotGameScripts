@@ -1,5 +1,5 @@
-﻿using DotEngine.Framework.Service;
-using DotEngine.Framework.Service.Update;
+﻿using DotEngine.Framework.Services;
+using DotEngine.Framework.Services.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +22,7 @@ namespace DotEngine.Framework.Facade
             return instance;
         }
 
-        private ServicerCenter servicerCenter = null;
-        private Updater updater = null;
-
-        public Updater GetUpdater()
-        {
-            return updater;
-        }
+        private ServiceCenter servicerCenter = null;
 
         public AppFacade()
         {
@@ -42,15 +36,13 @@ namespace DotEngine.Framework.Facade
 
         protected virtual void InitializeFacade()
         {
-            updater = new Updater();
-
             InitializeServicerCenter();
             InitializeProxyCenter();
         }
 
         protected virtual void InitializeServicerCenter()
         {
-            servicerCenter = new ServicerCenter();
+            servicerCenter = new ServiceCenter();
         }
 
         protected virtual void InitializeProxyCenter()
@@ -60,22 +52,22 @@ namespace DotEngine.Framework.Facade
 
         public void DoFixedUpdate(float deltaTime)
         {
-            updater?.DoFixedUpdate(deltaTime);
+            servicerCenter.DoFixedUpdate(deltaTime);
         }
 
         public void DoLateUpdate(float deltaTime)
         {
-            updater?.DoLateUpdate(deltaTime);   
+            servicerCenter.DoLateUpdate(deltaTime);   
         }
 
         public void DoUnscaleUpdate(float deltaTime)
         {
-            updater?.DoUnscaleUpdate(deltaTime);
+            servicerCenter.DoUnscaleUpdate(deltaTime);
         }
 
         public void DoUpdate(float deltaTime)
         {
-            updater?.DoUpdate(deltaTime);
+            servicerCenter.DoUpdate(deltaTime);
         }
     }
 }

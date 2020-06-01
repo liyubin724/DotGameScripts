@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DotEngine.Framework.Facade
+﻿namespace DotEngine.Framework.Facade
 {
-    public interface IFacade : IUpdate
+    public interface IFacade : IUpdate, IUnscaleUpdate, ILateUpdate, IFixedUpdate
     {
     }
 }

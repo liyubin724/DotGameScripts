@@ -3,7 +3,7 @@ using Dot.Utilities;
 using Dot.Pool;
 using System;
 using System.Collections.Generic;
-using DotEngine.Framework.Service;
+using DotEngine.Framework.Services;
 
 namespace Dot.Timer
 {
