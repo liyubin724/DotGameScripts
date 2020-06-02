@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DotEngine.Framework.Services.Update
+namespace DotEngine.Framework.Services
 {
     public class UpdateService : IUpdateService
     {

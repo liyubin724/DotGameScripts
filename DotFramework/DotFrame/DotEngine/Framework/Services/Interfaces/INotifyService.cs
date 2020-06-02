@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEngine.Framework.Notify
+namespace DotEngine.Framework.Services
 {
-    public class INotifyServicer
+    public class INotifyService
     {
     }
 }

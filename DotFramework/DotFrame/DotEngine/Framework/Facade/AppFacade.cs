@@ -22,7 +22,7 @@ namespace DotEngine.Framework.Facade
             return instance;
         }
 
-        private ServiceCenter servicerCenter = null;
+        private IServiceCenter servicerCenter = null;
 
         public AppFacade()
         {
@@ -43,6 +43,7 @@ namespace DotEngine.Framework.Facade
         protected virtual void InitializeServicerCenter()
         {
             servicerCenter = new ServiceCenter();
+            servicerCenter.Register(ServiceConst.UpdateServiceName, new UpdateService());
         }
 
         protected virtual void InitializeProxyCenter()

@@ -1,4 +1,4 @@
-﻿namespace DotEngine.Framework.Services
+﻿namespace DotEngine.Framework
 {
     public interface IService
     {

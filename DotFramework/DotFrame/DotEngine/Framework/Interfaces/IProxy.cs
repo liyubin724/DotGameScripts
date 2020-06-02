@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEngine.Framework.Proxy
+namespace DotEngine.Framework
 {
     public interface IProxy : INotifier
     {

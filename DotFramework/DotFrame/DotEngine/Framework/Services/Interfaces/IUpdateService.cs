@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotEngine.Framework.Services.Update
+namespace DotEngine.Framework.Services
 {
     public interface IUpdateService : IService, IUpdate, IUnscaleUpdate, ILateUpdate, IFixedUpdate
     {
@@ -14,7 +14,7 @@ namespace DotEngine.Framework.Services.Update
         void RemoveLateUpdateHandler(Action<float> lateUpdate);
 
         void AddFixedUpdateHandler(Action<float> fixedUpdate);
-        void RemoveFixedUpdateHandler(Action<float> fixedUpdate)
+        void RemoveFixedUpdateHandler(Action<float> fixedUpdate);
 
     }
 }

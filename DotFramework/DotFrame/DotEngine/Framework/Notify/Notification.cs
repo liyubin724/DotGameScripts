@@ -15,7 +15,7 @@
             Body = body;
         }
 
-        public T GetBody<T>()
+        public T GetBody<T>() where T: INotification
         {
             return (T)Body;
         }
