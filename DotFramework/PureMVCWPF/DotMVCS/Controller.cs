@@ -1,8 +1,8 @@
-﻿using DotMVCS.Interfaces;
-using DotMVCS.Patterns.Observer;
+﻿using DotEngine.Interfaces;
+using DotEngine.Patterns.Observer;
 using System.Collections.Generic;
 
-namespace DotMVCS.Core
+namespace DotEngine.Core
 {
     public class Controller: IController
     {

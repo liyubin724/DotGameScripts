@@ -1,6 +1,6 @@
-﻿using DotMVCS.Interfaces;
+﻿using DotEngine.Interfaces;
 
-namespace DotMVCS.Patterns.Observer
+namespace DotEngine.Framework
 {
     public class Notifier : INotifier
     {
@@ -13,7 +13,7 @@ namespace DotMVCS.Patterns.Observer
         {
             get
             {
-                return Patterns.Facade.Facade.GetInstance(() => new Facade.Facade());
+                return DotEngine.Framework.Facade.GetInstance();
             }
         }
     }

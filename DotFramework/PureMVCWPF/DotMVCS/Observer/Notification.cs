@@ -1,6 +1,6 @@
-﻿using DotMVCS.Interfaces;
+﻿using DotEngine.Interfaces;
 
-namespace DotMVCS.Patterns.Observer
+namespace DotEngine.Patterns.Observer
 {
     public class Notification: INotification
     {

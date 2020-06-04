@@ -1,7 +1,7 @@
-﻿using DotMVCS.Interfaces;
+﻿using DotEngine.Interfaces;
 using System.Collections.Generic;
 
-namespace DotMVCS.Core
+namespace DotEngine.Core
 {
     public class Model: IModel
     {

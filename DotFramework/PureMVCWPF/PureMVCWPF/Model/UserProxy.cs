@@ -1,5 +1,5 @@
-﻿using DotMVCS.Interfaces;
-using DotMVCS.Patterns.Proxy;
+﻿using DotEngine.Interfaces;
+using DotEngine.Patterns.Proxy;
 using PureMVCWPF.Model.Enum;
 using PureMVCWPF.Model.VO;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace DotMVCS.Interfaces
+﻿namespace DotEngine.Interfaces
 {
     public interface IMediator: INotifier
     {

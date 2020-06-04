@@ -1,9 +1,9 @@
 ﻿using System;
-using DotMVCS.Interfaces;
-using DotMVCS.Core;
-using DotMVCS.Patterns.Observer;
+using DotEngine.Interfaces;
+using DotEngine.Core;
+using DotEngine.Patterns.Observer;
 
-namespace DotMVCS.Patterns.Facade
+namespace DotEngine.Framework
 {
     public class Facade : IFacade
     {
@@ -11,28 +11,41 @@ namespace DotMVCS.Patterns.Facade
 
         protected static IFacade instance;
 
+        protected IServiceCenter serviceCenter;
+
         protected IController controller;
         protected IModel model;
         protected IView view;
 
-        public static IFacade GetInstance(Func<IFacade> facadeFunc)
+        public static IFacade GetInstance()
         {
-            if (instance == null)
-            {
-                instance = facadeFunc();
-            }
             return instance;
         }
 
-        public Facade()
+        public static IFacade InitInstance(Func<IFacade> func = null)
+        {
+            if(func == null)
+            {
+                instance = new Facade();
+            }else
+            {
+                instance = func();
+            }
+
+            return instance;
+        }
+
+        protected Facade()
         {
             if (instance != null) throw new Exception(SingletonMsg);
+
             instance = this;
             InitializeFacade();
         }
 
         protected virtual void InitializeFacade()
         {
+            InitializeService();
             InitializeModel();
             InitializeView();
             InitializeController();
@@ -51,6 +64,11 @@ namespace DotMVCS.Patterns.Facade
         protected virtual void InitializeView()
         {
             view = new View();
+        }
+
+        protected virtual void InitializeService()
+        {
+            serviceCenter = new ServiceCenter();
         }
 
         public virtual void RegisterCommand(string notificationName, ICommand command)
@@ -109,5 +127,44 @@ namespace DotMVCS.Patterns.Facade
             view.NotifyObservers(notification);
         }
 
+        public virtual void RegisterService(IService service)
+        {
+            serviceCenter.RegisterService(service);
+        }
+
+        public virtual IService RetrieveService(string name)
+        {
+            return serviceCenter.RetrieveService(name);
+        }
+
+        public virtual void RemoveService(string name)
+        {
+            serviceCenter.RemoveService(name);
+        }
+
+        public virtual bool HasService(string name)
+        {
+            return serviceCenter.HasService(name);
+        }
+
+        public virtual void DoUpdate(float deltaTime)
+        {
+            serviceCenter.DoUpdate(deltaTime);
+        }
+
+        public virtual void DoUnscaleUpdate(float deltaTime)
+        {
+            serviceCenter.DoUnscaleUpdate(deltaTime);
+        }
+
+        public virtual void DoLateUpdate(float deltaTime)
+        {
+            serviceCenter.DoLateUpdate(deltaTime);
+        }
+
+        public virtual void DoFixedUpdate(float deltaTime)
+        {
+            serviceCenter.DoFixedUpdate(deltaTime);
+        }
     }
 }

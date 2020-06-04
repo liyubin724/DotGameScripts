@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotMVCS.Interfaces
+namespace DotEngine.Interfaces
 {
     public interface IObserver
     {

@@ -1,7 +1,7 @@
-﻿using DotMVCS.Interfaces;
-using DotMVCS.Patterns.Observer;
+﻿using DotEngine.Interfaces;
+using DotEngine.Patterns.Observer;
 
-namespace DotMVCS.Patterns.Proxy
+namespace DotEngine.Patterns.Proxy
 {
     public class Proxy: Notifier, IProxy
     {

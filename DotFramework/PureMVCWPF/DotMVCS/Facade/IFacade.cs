@@ -1,9 +1,17 @@
-﻿using System;
+﻿using DotEngine.Framework;
+using DotEngine.Framework.Update;
+using DotEngine.Interfaces;
+using System;
 
-namespace DotMVCS.Interfaces
+namespace DotEngine.Framework
 {
-    public interface IFacade: INotifier
+    public interface IFacade: INotifier,IUpdate,IUnscaleUpdate,ILateUpdate,IFixedUpdate
     {
+        void RegisterService(IService service);
+        IService RetrieveService(string name);
+        void RemoveService(string name);
+        bool HasService(string name);
+
         void RegisterProxy(IProxy proxy);
         IProxy RetrieveProxy(string proxyName);
         IProxy RemoveProxy(string proxyName);

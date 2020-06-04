@@ -1,7 +1,7 @@
-﻿using DotMVCS.Interfaces;
+﻿using DotEngine.Interfaces;
 using System;
 
-namespace DotMVCS.Patterns.Observer
+namespace DotEngine.Patterns.Observer
 {
     public class Observer: IObserver
     {
