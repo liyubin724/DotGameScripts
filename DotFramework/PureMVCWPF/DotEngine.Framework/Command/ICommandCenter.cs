@@ -1,6 +1,6 @@
 ﻿namespace DotEngine.Framework
 {
-    public interface IController
+    public interface ICommandCenter
     {
         void RegisterCommand(string notificationName, ICommand command);
         void ExecuteCommand(INotification notification);

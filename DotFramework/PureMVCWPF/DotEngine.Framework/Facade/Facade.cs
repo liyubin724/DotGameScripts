@@ -11,8 +11,8 @@ namespace DotEngine.Framework
         protected IServiceCenter serviceCenter;
         protected IObserverCenter observerCenter;
         protected IModelCenter modelCenter;
+        protected ICommandCenter commandCenter;
 
-        protected IController controller;
         protected IView view;
 
         public static IFacade GetInstance()
@@ -53,7 +53,7 @@ namespace DotEngine.Framework
 
         protected virtual void InitializeController()
         {
-            controller = new Controller();
+            commandCenter = new CommandCenter ();
         }
 
         protected virtual void InitializeModel()
@@ -73,15 +73,15 @@ namespace DotEngine.Framework
 
         public virtual void RegisterCommand(string notificationName, ICommand command)
         {
-            controller.RegisterCommand(notificationName, command);
+            commandCenter.RegisterCommand(notificationName, command);
         }
         public virtual void RemoveCommand(string notificationName)
         {
-            controller.RemoveCommand(notificationName);
+            commandCenter.RemoveCommand(notificationName);
         }
         public virtual bool HasCommand(string notificationName)
         {
-            return controller.HasCommand(notificationName);
+            return commandCenter.HasCommand(notificationName);
         }
 
         public virtual void RegisterProxy(IProxy proxy)

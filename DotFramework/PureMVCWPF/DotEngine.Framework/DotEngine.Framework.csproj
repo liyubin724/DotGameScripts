@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Command\CommandCenter .cs" />
     <Compile Include="Model\ModelCenter .cs" />
     <Compile Include="Notify\IObserverCenter.cs" />
     <Compile Include="Notify\ObserverCenter.cs" />
@@ -51,8 +51,8 @@
     <Compile Include="Service\Service.cs" />
     <Compile Include="Update\IUpdate.cs" />
     <Compile Include="View\View.cs" />
-    <Compile Include="Controller\Command\ICommand.cs" />
-    <Compile Include="Controller\IController.cs" />
+    <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\ICommandCenter.cs" />
     <Compile Include="Facade\IFacade.cs" />
     <Compile Include="View\Mediator\IMediator.cs" />
     <Compile Include="Model\IModelCenter.cs" />
@@ -60,8 +60,8 @@
     <Compile Include="Notify\Notifier\INotifier.cs" />
     <Compile Include="Model\Proxy\IProxy.cs" />
     <Compile Include="View\IView.cs" />
-    <Compile Include="Controller\Command\MacroCommand.cs" />
-    <Compile Include="Controller\Command\SimpleCommand.cs" />
+    <Compile Include="Command\MacroCommand.cs" />
+    <Compile Include="Command\SimpleCommand.cs" />
     <Compile Include="Facade\Facade.cs" />
     <Compile Include="View\Mediator\Mediator.cs" />
     <Compile Include="Notify\Notification\Notification.cs" />

@@ -2,7 +2,7 @@
 
 namespace DotEngine.Framework
 {
-    public class Controller: IController
+    public class CommandCenter : ICommandCenter
     {
         protected readonly Dictionary<string, ICommand> commandMap;
         protected IFacade Facade
@@ -13,7 +13,7 @@ namespace DotEngine.Framework
             }
         }
 
-        public Controller()
+        public CommandCenter ()
         {
             commandMap = new Dictionary<string, ICommand>();
             InitializeController();
