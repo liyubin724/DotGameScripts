@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PureMVCWPF", "PureMVCWPF\PureMVCWPF.csproj", "{151CADD6-CE8A-419D-A979-0F3CD97E0FA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMVCS", "DotMVCS\DotMVCS.csproj", "{F225C2EB-7E07-4F29-89C8-67551ADA8C91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Framework", "DotEngine.Framework\DotEngine.Framework.csproj", "{F225C2EB-7E07-4F29-89C8-67551ADA8C91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

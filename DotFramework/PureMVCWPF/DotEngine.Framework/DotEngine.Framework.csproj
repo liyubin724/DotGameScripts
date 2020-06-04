@@ -41,32 +41,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller.cs" />
-    <Compile Include="Model.cs" />
+    <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Model\Model.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Service\IServiceCenter.cs" />
     <Compile Include="Service\ServiceCenter.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Update\IUpdate.cs" />
-    <Compile Include="View.cs" />
-    <Compile Include="Interfaces\ICommand.cs" />
-    <Compile Include="Interfaces\IController.cs" />
+    <Compile Include="View\View.cs" />
+    <Compile Include="Controller\Command\ICommand.cs" />
+    <Compile Include="Controller\IController.cs" />
     <Compile Include="Facade\IFacade.cs" />
-    <Compile Include="Interfaces\IMediator.cs" />
-    <Compile Include="Interfaces\IModel.cs" />
-    <Compile Include="Interfaces\INotification.cs" />
-    <Compile Include="Interfaces\INotifier.cs" />
-    <Compile Include="Interfaces\IObserver.cs" />
-    <Compile Include="Interfaces\IProxy.cs" />
-    <Compile Include="Interfaces\IView.cs" />
-    <Compile Include="Command\MacroCommand.cs" />
-    <Compile Include="Command\SimpleCommand.cs" />
+    <Compile Include="View\Mediator\IMediator.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Notify\INotification.cs" />
+    <Compile Include="Notify\INotifier.cs" />
+    <Compile Include="View\Observer\IObserver.cs" />
+    <Compile Include="Model\Proxy\IProxy.cs" />
+    <Compile Include="View\IView.cs" />
+    <Compile Include="Controller\Command\MacroCommand.cs" />
+    <Compile Include="Controller\Command\SimpleCommand.cs" />
     <Compile Include="Facade\Facade.cs" />
-    <Compile Include="Mediator\Mediator.cs" />
-    <Compile Include="Observer\Notification.cs" />
-    <Compile Include="Observer\Notifier.cs" />
-    <Compile Include="Observer\Observer.cs" />
-    <Compile Include="Proxy\Proxy.cs" />
+    <Compile Include="View\Mediator\Mediator.cs" />
+    <Compile Include="Notify\Notification.cs" />
+    <Compile Include="Notify\Notifier.cs" />
+    <Compile Include="View\Observer\Observer.cs" />
+    <Compile Include="Model\Proxy\Proxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

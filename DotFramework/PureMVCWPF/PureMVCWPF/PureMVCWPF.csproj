@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DotMVCS\DotMVCS.csproj" />
+    <ProjectReference Include="..\DotMVCS\DotEngine.Framework.csproj" />
   </ItemGroup>
 
 </Project>

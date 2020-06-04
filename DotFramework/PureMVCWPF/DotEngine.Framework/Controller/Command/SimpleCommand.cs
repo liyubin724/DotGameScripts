@@ -1,7 +1,5 @@
-﻿using DotEngine.Framework;
-
-namespace DotEngine.Framework
-{ 
+﻿namespace DotEngine.Framework
+{
     public class SimpleCommand : Notifier, ICommand
     {
         public SimpleCommand()

@@ -11,7 +11,7 @@
         {
             get
             {
-                return DotEngine.Framework.Facade.GetInstance();
+                return Framework.Facade.GetInstance();
             }
         }
     }

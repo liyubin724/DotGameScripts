@@ -4,8 +4,6 @@ namespace DotEngine.Framework
 {
     public class Controller: IController
     {
-        protected const string SingletonMsg = "Controller Singleton already constructed!";
-
         protected IView view;
         protected readonly Dictionary<string, ICommand> commandMap;
 

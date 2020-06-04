@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using DotEngine.Framework;
+using System.Windows;
 
 namespace PureMVCWPF
 {
@@ -11,6 +12,7 @@ namespace PureMVCWPF
         {
             base.OnStartup(e);
             MainWindow window = new MainWindow();
+
             ApplicationFacade facade = (ApplicationFacade)ApplicationFacade.Instance;
             facade.Startup(window);
             window.Show();
