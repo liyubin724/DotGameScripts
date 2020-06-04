@@ -7,22 +7,24 @@ namespace DotEngine.Framework
     {
         private Dictionary<string, IService> services = new Dictionary<string, IService>();
 
-        private List<string> updateServices = new List<string>();
-        private List<string> lateUpdateServices = new List<string>();
-        private List<string> unscaleUpdateServices = new List<string>();
-        private List<string> fixedUpdateServices = new List<string>();
+        private List<string> updateServices = null;
+        private List<string> lateUpdateServices = null;
+        private List<string> unscaleUpdateServices = null;
+        private List<string> fixedUpdateServices = null;
 
-        public virtual void InitilizeCenter()
+        public ServiceCenter()
         {
+            services = new Dictionary<string, IService>();
+            updateServices = new List<string>();
+            lateUpdateServices = new List<string>();
+            unscaleUpdateServices = new List<string>();
+            fixedUpdateServices = new List<string>();
+
+            InitilizeCenter();
         }
 
-        public virtual void DisposeCenter()
+        protected virtual void InitilizeCenter()
         {
-            services.Clear();
-            updateServices.Clear();
-            lateUpdateServices.Clear();
-            unscaleUpdateServices.Clear();
-            fixedUpdateServices.Clear();
         }
 
         public virtual void DoUpdate(float deltaTime)

@@ -6,8 +6,5 @@
         IService RetrieveService(string name);
         void RemoveService(string name);
         bool HasService(string name);
-
-        void InitilizeCenter();
-        void DisposeCenter();
     }
 }

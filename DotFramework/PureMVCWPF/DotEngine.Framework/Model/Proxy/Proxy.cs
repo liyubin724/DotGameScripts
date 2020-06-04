@@ -1,15 +1,14 @@
 ﻿namespace DotEngine.Framework
 { 
-    public class Proxy: Notifier, IProxy
+    public abstract class Proxy: Notifier, IProxy
     {
         public const string NAME = "Proxy";
-        public string ProxyName { get; protected set; }
-        public object Data { get; set; }
 
-        public Proxy(string proxyName, object data = null)
+        public string ProxyName { get; protected set; }
+
+        public Proxy(string proxyName)
         {
             ProxyName = proxyName ?? NAME;
-            if (data != null) Data = data;
         }
 
         public virtual void OnRegister()

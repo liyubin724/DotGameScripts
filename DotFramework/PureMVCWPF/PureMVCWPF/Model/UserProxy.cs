@@ -10,8 +10,12 @@ namespace PureMVCWPF.Model
     {
         public new const string NAME = "UserProxy";
 
-        public UserProxy():base(NAME,new ObservableCollection<UserVO>())
+        private ObservableCollection<UserVO> users = null;
+
+        public UserProxy():base(NAME)
         {
+            users = new ObservableCollection<UserVO>();
+
             AddItem(new UserVO("lstooge", "Larry", "Stooge", "larry@stooges.com", "ijk456", DeptEnum.ACCT));
             AddItem(new UserVO("cstooge", "Curly", "Stooge", "curly@stooges.com", "xyz987", DeptEnum.SALES));
             AddItem(new UserVO("mstooge", "Moe", "Stooge", "moe@stooges.com", "abc123", DeptEnum.PLANT));
@@ -21,7 +25,7 @@ namespace PureMVCWPF.Model
         {
             get
             {
-                return (IList<UserVO>)Data;
+                return users;
             }
         }
 

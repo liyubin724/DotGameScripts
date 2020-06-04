@@ -9,9 +9,16 @@ namespace PureMVCWPF.Model
     public class RoleProxy : Proxy, IProxy
     {
         public new const string NAME = "RoleProxy";
-
-        public RoleProxy() : base(NAME, new ObservableCollection<RoleVO>())
+        private ObservableCollection<RoleVO> roles;
+        public IList<RoleVO> Roles
         {
+            get { return roles; }
+        }
+
+        public RoleProxy() : base(NAME)
+        {
+            roles = new ObservableCollection<RoleVO>();
+
             AddItem(new RoleVO("lstooge",
                 new RoleEnum[] { RoleEnum.PAYROLL, RoleEnum.EMP_BENEFITS }));
 
@@ -20,11 +27,6 @@ namespace PureMVCWPF.Model
 
             AddItem(new RoleVO("mstooge",
                 new RoleEnum[] { RoleEnum.INVENTORY, RoleEnum.PRODUCTION, RoleEnum.SALES, RoleEnum.SHIPPING }));
-        }
-
-        public IList<RoleVO> Roles
-        {
-            get { return (IList<RoleVO>)Data; }
         }
 
         public void AddItem(RoleVO role)
