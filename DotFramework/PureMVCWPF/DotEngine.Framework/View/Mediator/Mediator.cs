@@ -2,6 +2,9 @@
 {
     public class Mediator : Notifier, IMediator
     {
+        public string MediatorName { get; protected set; }
+        public object ViewComponent { get; set; }
+
         public static string NAME = "Mediator";
 
         public Mediator(string mediatorName, object viewComponent = null)
@@ -26,9 +29,5 @@
         public virtual void OnRemove()
         {
         }
-
-        public string MediatorName { get; protected set; }
-
-        public object ViewComponent { get; set; }
     }
 }

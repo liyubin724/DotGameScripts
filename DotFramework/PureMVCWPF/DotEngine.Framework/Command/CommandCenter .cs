@@ -4,7 +4,7 @@ namespace DotEngine.Framework
 {
     public class CommandCenter : ICommandCenter
     {
-        protected readonly Dictionary<string, ICommand> commandMap;
+        protected readonly Dictionary<string, ICommand> commandDic;
         protected IFacade Facade
         {
             get
@@ -15,7 +15,7 @@ namespace DotEngine.Framework
 
         public CommandCenter ()
         {
-            commandMap = new Dictionary<string, ICommand>();
+            commandDic = new Dictionary<string, ICommand>();
             InitializeController();
         }
 
@@ -25,7 +25,7 @@ namespace DotEngine.Framework
 
         public virtual void ExecuteCommand(INotification notification)
         {
-            if (commandMap.TryGetValue(notification.Name, out var command))
+            if (commandDic.TryGetValue(notification.Name, out var command))
             {
                 command.Execute(notification);
             }
@@ -33,18 +33,18 @@ namespace DotEngine.Framework
 
         public virtual void RegisterCommand(string notificationName, ICommand command)
         {
-            if (commandMap.TryGetValue(notificationName, out _) == false)
+            if (commandDic.TryGetValue(notificationName, out _) == false)
             {
                 Facade.RegisterObserver(notificationName, ExecuteCommand);
             }
-            commandMap[notificationName] = command;
+            commandDic[notificationName] = command;
         }
 
         public virtual void RemoveCommand(string notificationName)
         {
-            if(commandMap.ContainsKey(notificationName))
+            if(commandDic.ContainsKey(notificationName))
             {
-                commandMap.Remove(notificationName);
+                commandDic.Remove(notificationName);
 
                 Facade.RemoveObserver(notificationName, ExecuteCommand);
             }
@@ -52,7 +52,7 @@ namespace DotEngine.Framework
 
         public virtual bool HasCommand(string notificationName)
         {
-            return commandMap.ContainsKey(notificationName);
+            return commandDic.ContainsKey(notificationName);
         }
     }
 }
