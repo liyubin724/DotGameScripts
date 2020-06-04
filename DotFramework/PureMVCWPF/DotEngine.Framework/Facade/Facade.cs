@@ -9,9 +9,10 @@ namespace DotEngine.Framework
         protected static IFacade instance;
 
         protected IServiceCenter serviceCenter;
+        protected IObserverCenter observerCenter;
+        protected IModelCenter modelCenter;
 
         protected IController controller;
-        protected IModel model;
         protected IView view;
 
         public static IFacade GetInstance()
@@ -42,6 +43,8 @@ namespace DotEngine.Framework
 
         protected virtual void InitializeFacade()
         {
+            observerCenter = new ObserverCenter();
+
             InitializeService();
             InitializeModel();
             InitializeView();
@@ -50,12 +53,12 @@ namespace DotEngine.Framework
 
         protected virtual void InitializeController()
         {
-            controller = new Controller(view);
+            controller = new Controller();
         }
 
         protected virtual void InitializeModel()
         {
-            model = new Model();
+            modelCenter = new ModelCenter ();
         }
 
         protected virtual void InitializeView()
@@ -83,19 +86,19 @@ namespace DotEngine.Framework
 
         public virtual void RegisterProxy(IProxy proxy)
         {
-            model.RegisterProxy(proxy);
+            modelCenter.RegisterProxy(proxy);
         }
         public virtual IProxy RetrieveProxy(string proxyName)
         {
-            return model.RetrieveProxy(proxyName);
+            return modelCenter.RetrieveProxy(proxyName);
         }
         public virtual IProxy RemoveProxy(string proxyName)
         {
-            return model.RemoveProxy(proxyName);
+            return modelCenter.RemoveProxy(proxyName);
         }
         public virtual bool HasProxy(string proxyName)
         {
-            return model.HasProxy(proxyName);
+            return modelCenter.HasProxy(proxyName);
         }
 
         public virtual void RegisterMediator(IMediator mediator)
@@ -114,14 +117,20 @@ namespace DotEngine.Framework
         {
             return view.HasMediator(mediatorName);
         }
+
         public virtual void SendNotification(string notificationName, object body = null)
         {
-            NotifyObservers(new Notification(notificationName, body));
+            observerCenter.NotifyObservers(new Notification(notificationName, body));
         }
 
-        public virtual void NotifyObservers(INotification notification)
+        public virtual void RegisterObserver(string notificationName, Action<INotification> notifyMethod)
         {
-            view.NotifyObservers(notification);
+            observerCenter.RegisterObserver(notificationName, notifyMethod);
+        }
+
+        public virtual void RemoveObserver(string notificationName, Action<INotification> notifyMethod = null)
+        {
+            observerCenter.RemoveObserver(notificationName, notifyMethod);
         }
 
         public virtual void RegisterService(IService service)

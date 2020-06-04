@@ -8,7 +8,7 @@ namespace PureMVCWPF.Model
 {
     public class UserProxy : Proxy, IProxy
     {
-        public new const string NAME = "UserProxy";
+        public const string NAME = "UserProxy";
 
         private ObservableCollection<UserVO> users = null;
 

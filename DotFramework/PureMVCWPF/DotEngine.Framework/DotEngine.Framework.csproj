@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\Controller.cs" />
-    <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\ModelCenter .cs" />
+    <Compile Include="Notify\IObserverCenter.cs" />
+    <Compile Include="Notify\ObserverCenter.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Service\IServiceCenter.cs" />
     <Compile Include="Service\ServiceCenter.cs" />
@@ -53,19 +55,17 @@
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Facade\IFacade.cs" />
     <Compile Include="View\Mediator\IMediator.cs" />
-    <Compile Include="Model\IModel.cs" />
-    <Compile Include="Notify\INotification.cs" />
-    <Compile Include="Notify\INotifier.cs" />
-    <Compile Include="View\Observer\IObserver.cs" />
+    <Compile Include="Model\IModelCenter.cs" />
+    <Compile Include="Notify\Notification\INotification.cs" />
+    <Compile Include="Notify\Notifier\INotifier.cs" />
     <Compile Include="Model\Proxy\IProxy.cs" />
     <Compile Include="View\IView.cs" />
     <Compile Include="Controller\Command\MacroCommand.cs" />
     <Compile Include="Controller\Command\SimpleCommand.cs" />
     <Compile Include="Facade\Facade.cs" />
     <Compile Include="View\Mediator\Mediator.cs" />
-    <Compile Include="Notify\Notification.cs" />
-    <Compile Include="Notify\Notifier.cs" />
-    <Compile Include="View\Observer\Observer.cs" />
+    <Compile Include="Notify\Notification\Notification.cs" />
+    <Compile Include="Notify\Notifier\Notifier.cs" />
     <Compile Include="Model\Proxy\Proxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

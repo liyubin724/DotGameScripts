@@ -5,58 +5,23 @@ namespace DotEngine.Framework
     public class View: IView
     {
         protected readonly Dictionary<string, IMediator> mediatorMap;
-        protected readonly Dictionary<string, IList<IObserver>> observerMap;
+        
+        protected IFacade Facade
+        {
+            get
+            {
+                return Framework.Facade.GetInstance();
+            }
+        }
 
         public View()
         {
             mediatorMap = new Dictionary<string, IMediator>();
-            observerMap = new Dictionary<string, IList<IObserver>>();
             InitializeView();
         }
 
         protected virtual void InitializeView()
         {
-        }
-
-        public virtual void RegisterObserver(string notificationName, IObserver observer)
-        {
-            if(!observerMap.TryGetValue(notificationName,out IList<IObserver> observers))
-            {
-                observers = new List<IObserver>();
-                observerMap.Add(notificationName,observers);
-            }
-            observers.Add(observer);
-        }
-
-        public virtual void NotifyObservers(INotification notification)
-        {
-            if (observerMap.TryGetValue(notification.Name, out var observersRef))
-            {
-                var observers = new List<IObserver>(observersRef);
-                foreach (var observer in observers)
-                {
-                    observer.NotifyObserver(notification);
-                }
-            }
-        }
-        public virtual void RemoveObserver(string notificationName, object notifyContext)
-        {
-            if (observerMap.TryGetValue(notificationName, out var observers))
-            {
-                for (var i = 0; i < observers.Count; i++)
-                {
-                    if (observers[i].CompareNotifyContext(notifyContext))
-                    {
-                        observers.RemoveAt(i);
-                        break;
-                    }
-                }
-
-                if (observers.Count == 0)
-                {
-                    observerMap.Remove(notificationName);
-                }
-            }
         }
 
         public virtual void RegisterMediator(IMediator mediator)
@@ -68,10 +33,9 @@ namespace DotEngine.Framework
                 var interests = mediator.ListNotificationInterests();
                 if (interests!=null && interests.Length > 0)
                 {
-                    IObserver observer = new Observer(mediator.HandleNotification, mediator);
                     foreach (var interest in interests)
                     {
-                        RegisterObserver(interest, observer);
+                        Facade.RegisterObserver(interest, mediator.HandleNotification);
                     }
                 }
                 mediator.OnRegister();
@@ -92,7 +56,7 @@ namespace DotEngine.Framework
                 var interests = mediator.ListNotificationInterests();
                 foreach (var interest in interests)
                 {
-                    RemoveObserver(interest, mediator);
+                    Facade.RemoveObserver(interest, mediator.HandleNotification);
                 }
 
                 mediator.OnRemove();

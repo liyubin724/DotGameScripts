@@ -8,7 +8,7 @@ namespace PureMVCWPF.Model
 {
     public class RoleProxy : Proxy, IProxy
     {
-        public new const string NAME = "RoleProxy";
+        public const string NAME = "RoleProxy";
         private ObservableCollection<RoleVO> roles;
         public IList<RoleVO> Roles
         {

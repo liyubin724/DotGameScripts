@@ -4,12 +4,17 @@ namespace DotEngine.Framework
 {
     public class Controller: IController
     {
-        protected IView view;
         protected readonly Dictionary<string, ICommand> commandMap;
-
-        public Controller(IView view)
+        protected IFacade Facade
         {
-            this.view = view;
+            get
+            {
+                return Framework.Facade.GetInstance();
+            }
+        }
+
+        public Controller()
+        {
             commandMap = new Dictionary<string, ICommand>();
             InitializeController();
         }
@@ -30,7 +35,7 @@ namespace DotEngine.Framework
         {
             if (commandMap.TryGetValue(notificationName, out _) == false)
             {
-                view.RegisterObserver(notificationName, new Observer(ExecuteCommand, this));
+                Facade.RegisterObserver(notificationName, ExecuteCommand);
             }
             commandMap[notificationName] = command;
         }
@@ -40,7 +45,8 @@ namespace DotEngine.Framework
             if(commandMap.ContainsKey(notificationName))
             {
                 commandMap.Remove(notificationName);
-                view.RemoveObserver(notificationName, this);
+
+                Facade.RemoveObserver(notificationName, ExecuteCommand);
             }
         }
 

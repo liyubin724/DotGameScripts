@@ -2,11 +2,11 @@
 
 namespace DotEngine.Framework
 {
-    public class Model: IModel
+    public class ModelCenter : IModelCenter
     {
         protected readonly Dictionary<string, IProxy> proxyMap;
 
-        public Model()
+        public ModelCenter ()
         {
             proxyMap = new Dictionary<string, IProxy>();
             InitializeModel();
@@ -18,8 +18,12 @@ namespace DotEngine.Framework
 
         public virtual void RegisterProxy(IProxy proxy)
         {
-            proxyMap[proxy.ProxyName] = proxy;
-            proxy.OnRegister();
+            if(proxy!=null && !string.IsNullOrEmpty(proxy.ProxyName) && !proxyMap.ContainsKey(proxy.ProxyName))
+            {
+                proxyMap.Add(proxy.ProxyName, proxy);
+                
+                proxy.OnRegister();
+            }
         }
 
         public virtual IProxy RetrieveProxy(string proxyName)
@@ -42,7 +46,5 @@ namespace DotEngine.Framework
         {
             return proxyMap.ContainsKey(proxyName);
         }
-
-        
     }
 }

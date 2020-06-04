@@ -1,6 +1,6 @@
 ﻿namespace DotEngine.Framework
 {
-    public interface IModel
+    public interface IModelCenter
     {
         void RegisterProxy(IProxy proxy);
 

@@ -1,4 +1,6 @@
-﻿namespace DotEngine.Framework
+﻿using System;
+
+namespace DotEngine.Framework
 {
     public interface IFacade: INotifier,IUpdate,IUnscaleUpdate,ILateUpdate,IFixedUpdate
     {
@@ -21,6 +23,7 @@
         IMediator RemoveMediator(string mediatorName);
         bool HasMediator(string mediatorName);
 
-        void NotifyObservers(INotification notification);
+        void RegisterObserver(string notificationName, Action<INotification> notifyMethod);
+        void RemoveObserver(string notificationName, Action<INotification> notifyMethod);
     }
 }
