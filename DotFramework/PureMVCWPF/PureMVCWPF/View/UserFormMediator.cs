@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class UserFormMediator : Mediator,IMediator
+    public class UserFormMediator : ViewController,IViewController
     {
         public new const string NAME = "UserFormMediator";
 

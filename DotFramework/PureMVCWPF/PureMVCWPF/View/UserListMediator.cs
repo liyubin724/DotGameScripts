@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class UserListMediator : Mediator,IMediator
+    public class UserListMediator : ViewController,IViewController
     {
         private UserProxy userProxy;
 

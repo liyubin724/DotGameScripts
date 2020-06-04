@@ -1,6 +1,6 @@
 ﻿namespace DotEngine.Framework
 {
-    public interface IMediator: INotifier
+    public interface IViewController: INotifier
     {
         string MediatorName { get; }
         object ViewComponent { get; set; }

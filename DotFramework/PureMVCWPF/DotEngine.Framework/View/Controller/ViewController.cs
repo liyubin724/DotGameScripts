@@ -1,13 +1,13 @@
 ﻿namespace DotEngine.Framework
 {
-    public class Mediator : Notifier, IMediator
+    public class ViewController : Notifier, IViewController
     {
         public string MediatorName { get; protected set; }
         public object ViewComponent { get; set; }
 
         public static string NAME = "Mediator";
 
-        public Mediator(string mediatorName, object viewComponent = null)
+        public ViewController(string mediatorName, object viewComponent = null)
         {
             MediatorName = mediatorName ?? NAME;
             ViewComponent = viewComponent;

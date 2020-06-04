@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class RolePanelMediator : Mediator,IMediator
+    public class RolePanelMediator : ViewController,IViewController
     {
         public new const string NAME = "RolePanelMediator";
 

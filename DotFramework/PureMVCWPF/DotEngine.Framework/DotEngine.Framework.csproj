@@ -54,7 +54,7 @@
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ICommandCenter.cs" />
     <Compile Include="Facade\IFacade.cs" />
-    <Compile Include="View\Mediator\IMediator.cs" />
+    <Compile Include="View\Controller\IViewController.cs" />
     <Compile Include="Model\IModelCenter.cs" />
     <Compile Include="Notify\Notification\INotification.cs" />
     <Compile Include="Notify\Notifier\INotifier.cs" />
@@ -63,7 +63,7 @@
     <Compile Include="Command\MacroCommand.cs" />
     <Compile Include="Command\SimpleCommand.cs" />
     <Compile Include="Facade\Facade.cs" />
-    <Compile Include="View\Mediator\Mediator.cs" />
+    <Compile Include="View\Controller\ViewController.cs" />
     <Compile Include="Notify\Notification\Notification.cs" />
     <Compile Include="Notify\Notifier\Notifier.cs" />
     <Compile Include="Model\Proxy\Proxy.cs" />

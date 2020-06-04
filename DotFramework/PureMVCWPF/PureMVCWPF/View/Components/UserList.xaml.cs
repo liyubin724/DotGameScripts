@@ -1,4 +1,5 @@
-﻿using PureMVCWPF.Model.VO;
+﻿using DotEngine.Framework;
+using PureMVCWPF.Model.VO;
 using System;
 using System.Collections.Generic;
 using System.Text;

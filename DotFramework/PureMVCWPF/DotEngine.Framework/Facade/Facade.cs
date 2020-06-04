@@ -101,15 +101,15 @@ namespace DotEngine.Framework
             return modelCenter.HasProxy(proxyName);
         }
 
-        public virtual void RegisterMediator(IMediator mediator)
+        public virtual void RegisterMediator(IViewController mediator)
         {
             view.RegisterMediator(mediator);
         }
-        public virtual IMediator RetrieveMediator(string mediatorName)
+        public virtual IViewController RetrieveMediator(string mediatorName)
         {
             return view.RetrieveMediator(mediatorName);
         }
-        public virtual IMediator RemoveMediator(string mediatorName)
+        public virtual IViewController RemoveMediator(string mediatorName)
         {
             return view.RemoveMediator(mediatorName);
         }

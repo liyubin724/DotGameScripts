@@ -4,7 +4,7 @@ namespace DotEngine.Framework
 {
     public class View: IView
     {
-        protected readonly Dictionary<string, IMediator> mediatorMap;
+        protected readonly Dictionary<string, IViewController> mediatorMap;
         
         protected IFacade Facade
         {
@@ -16,7 +16,7 @@ namespace DotEngine.Framework
 
         public View()
         {
-            mediatorMap = new Dictionary<string, IMediator>();
+            mediatorMap = new Dictionary<string, IViewController>();
             InitializeView();
         }
 
@@ -24,7 +24,7 @@ namespace DotEngine.Framework
         {
         }
 
-        public virtual void RegisterMediator(IMediator mediator)
+        public virtual void RegisterMediator(IViewController mediator)
         {
             if(mediator!=null && !string.IsNullOrEmpty(mediator.MediatorName) && !mediatorMap.ContainsKey(mediator.MediatorName))
             {
@@ -42,14 +42,14 @@ namespace DotEngine.Framework
             }
         }
 
-        public virtual IMediator RetrieveMediator(string mediatorName)
+        public virtual IViewController RetrieveMediator(string mediatorName)
         {
             return mediatorMap.TryGetValue(mediatorName, out var mediator) ? mediator : null;
         }
 
-        public virtual IMediator RemoveMediator(string mediatorName)
+        public virtual IViewController RemoveMediator(string mediatorName)
         {
-            if(mediatorMap.TryGetValue(mediatorName,out IMediator mediator))
+            if(mediatorMap.TryGetValue(mediatorName,out IViewController mediator))
             {
                 mediatorMap.Remove(mediatorName);
 

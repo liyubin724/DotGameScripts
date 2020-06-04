@@ -1,4 +1,5 @@
-﻿using PureMVCWPF.Model.Enum;
+﻿using DotEngine.Framework;
+using PureMVCWPF.Model.Enum;
 using PureMVCWPF.Model.VO;
 using System;
 using System.Collections.Generic;
