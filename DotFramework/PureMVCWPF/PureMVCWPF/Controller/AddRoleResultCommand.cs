@@ -1,5 +1,4 @@
-﻿using DotEngine.Command;
-using DotEngine.Interfaces;
+﻿using DotEngine.Framework;
 using System.Windows;
 
 namespace PureMVCWPF.Controller

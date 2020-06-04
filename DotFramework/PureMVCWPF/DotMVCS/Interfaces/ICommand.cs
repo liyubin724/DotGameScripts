@@ -1,4 +1,4 @@
-﻿namespace DotEngine.Interfaces
+﻿namespace DotEngine.Framework
 {
     public interface ICommand: INotifier
     {

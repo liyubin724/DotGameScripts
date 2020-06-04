@@ -1,6 +1,4 @@
-﻿using DotEngine.Framework.Update;
-
-namespace DotEngine.Framework
+﻿namespace DotEngine.Framework
 {
     public interface IServiceCenter : IUpdate,ILateUpdate,IUnscaleUpdate,IFixedUpdate
     {

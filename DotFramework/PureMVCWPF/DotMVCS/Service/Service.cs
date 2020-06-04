@@ -1,6 +1,4 @@
-﻿using DotEngine.Patterns.Observer;
-
-namespace DotEngine.Framework
+﻿namespace DotEngine.Framework
 {
     public class Service : Notifier,IService
     {

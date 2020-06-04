@@ -1,8 +1,7 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Observer;
+﻿using DotEngine.Framework;
 
-namespace DotEngine.Command
-{
+namespace DotEngine.Framework
+{ 
     public class SimpleCommand : Notifier, ICommand
     {
         public SimpleCommand()

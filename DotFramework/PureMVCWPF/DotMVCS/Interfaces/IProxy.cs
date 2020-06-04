@@ -1,5 +1,5 @@
 ﻿
-namespace DotEngine.Interfaces
+namespace DotEngine.Framework
 {
     public interface IProxy: INotifier
     {

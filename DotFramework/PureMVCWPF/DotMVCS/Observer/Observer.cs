@@ -1,7 +1,6 @@
-﻿using DotEngine.Interfaces;
-using System;
+﻿using System;
 
-namespace DotEngine.Patterns.Observer
+namespace DotEngine.Framework
 {
     public class Observer: IObserver
     {

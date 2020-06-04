@@ -1,8 +1,6 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Observer;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DotEngine.Core
+namespace DotEngine.Framework
 {
     public class View: IView
     {

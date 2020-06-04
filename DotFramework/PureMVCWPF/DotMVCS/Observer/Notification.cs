@@ -1,6 +1,4 @@
-﻿using DotEngine.Interfaces;
-
-namespace DotEngine.Patterns.Observer
+﻿namespace DotEngine.Framework
 {
     public class Notification: INotification
     {

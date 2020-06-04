@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DotEngine.Interfaces
+﻿namespace DotEngine.Framework
 {
     public interface IController
     {

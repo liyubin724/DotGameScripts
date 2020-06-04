@@ -1,9 +1,5 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Facade;
+﻿using DotEngine.Framework;
 using PureMVCWPF.Controller;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PureMVCWPF
 {

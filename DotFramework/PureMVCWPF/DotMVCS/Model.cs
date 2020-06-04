@@ -1,7 +1,6 @@
-﻿using DotEngine.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DotEngine.Core
+namespace DotEngine.Framework
 {
     public class Model: IModel
     {

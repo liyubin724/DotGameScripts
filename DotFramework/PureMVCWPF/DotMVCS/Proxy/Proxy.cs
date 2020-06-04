@@ -1,8 +1,5 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Observer;
-
-namespace DotEngine.Patterns.Proxy
-{
+﻿namespace DotEngine.Framework
+{ 
     public class Proxy: Notifier, IProxy
     {
         public const string NAME = "Proxy";

@@ -1,8 +1,7 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Observer;
+﻿using DotEngine.Framework;
 using System.Collections.Generic;
 
-namespace DotEngine.Command
+namespace DotEngine.Framework
 {
     public class MacroCommand : Notifier, ICommand
     {

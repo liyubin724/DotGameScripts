@@ -1,9 +1,4 @@
-﻿using DotEngine.Framework;
-using DotEngine.Framework.Update;
-using DotEngine.Interfaces;
-using System;
-
-namespace DotEngine.Framework
+﻿namespace DotEngine.Framework
 {
     public interface IFacade: INotifier,IUpdate,IUnscaleUpdate,ILateUpdate,IFixedUpdate
     {

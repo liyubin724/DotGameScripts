@@ -1,7 +1,4 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Observer;
-
-namespace DotEngine.Patterns.Mediator
+﻿namespace DotEngine.Framework
 {
     public class Mediator : Notifier, IMediator
     {

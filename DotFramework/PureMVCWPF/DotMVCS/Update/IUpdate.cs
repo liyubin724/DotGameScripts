@@ -1,4 +1,4 @@
-﻿namespace DotEngine.Framework.Update
+﻿namespace DotEngine.Framework
 {
     public interface IUpdate
     {

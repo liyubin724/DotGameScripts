@@ -1,5 +1,4 @@
-﻿using DotEngine.Interfaces;
-using DotEngine.Patterns.Mediator;
+﻿using DotEngine.Framework;
 using PureMVCWPF.Model;
 using PureMVCWPF.Model.VO;
 using PureMVCWPF.View.Components;

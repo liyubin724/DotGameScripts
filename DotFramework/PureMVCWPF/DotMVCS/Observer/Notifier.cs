@@ -1,6 +1,4 @@
-﻿using DotEngine.Interfaces;
-
-namespace DotEngine.Framework
+﻿namespace DotEngine.Framework
 {
     public class Notifier : INotifier
     {

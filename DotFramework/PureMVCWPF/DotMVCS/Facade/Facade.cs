@@ -1,7 +1,4 @@
 ﻿using System;
-using DotEngine.Interfaces;
-using DotEngine.Core;
-using DotEngine.Patterns.Observer;
 
 namespace DotEngine.Framework
 {
