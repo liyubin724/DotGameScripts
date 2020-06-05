@@ -6,7 +6,7 @@ namespace DotEngine.Timer
     /// <summary>
     /// 定时器的管理器
     /// </summary>
-    public class TimerService : IService,IUpdate
+    public class TimerService : Service,IUpdate
     {
         //多层时间轮
         private HierarchicalTimerWheel hTimerWheel = null;
@@ -15,13 +15,15 @@ namespace DotEngine.Timer
 
         public TimerService()
         {
-
+            hTimerWheel = new HierarchicalTimerWheel();
         }
 
-
-        protected override void DoInit()
+        public void DoUpdate(float deltaTime)
         {
-            hTimerWheel = new HierarchicalTimerWheel();
+            if (!isPause && hTimerWheel != null)
+            {
+                hTimerWheel.OnUpdate(deltaTime);
+            }
         }
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace DotEngine.Timer
         {
             isPause = true;
         }
+
         /// <summary>
         /// 恢复时间轮
         /// </summary>
@@ -38,6 +41,7 @@ namespace DotEngine.Timer
         {
             isPause = false;
         }
+
         /// <summary>
         /// 添加定时器
         /// </summary>
@@ -47,7 +51,7 @@ namespace DotEngine.Timer
         /// <param name="endCallback">结束时回调</param>
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
-        public TimerTaskInfo AddTimer(float intervalInSec,
+        public TimerTaskHandle AddTimer(float intervalInSec,
                                                 float totalInSec,
                                                 Action<object> intervalCallback,
                                                 Action<object> endCallback,
@@ -64,12 +68,13 @@ namespace DotEngine.Timer
         /// <param name="intervalCallback">触发回调</param>
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
-        public TimerTaskInfo AddIntervalTimer(float intervalInSec,
+        public TimerTaskHandle AddIntervalTimer(float intervalInSec,
                                                                     Action<object> intervalCallback, 
                                                                     object userData = null)
         {
             return AddTimer(intervalInSec, 0f, intervalCallback, null, userData);
         }
+
         /// <summary>
         /// 添加定时器，默认一次性执行，当执行结束后会自动删除定时器
         /// </summary>
@@ -77,18 +82,19 @@ namespace DotEngine.Timer
         /// <param name="endCallback">达到指定时长后回调</param>
         /// <param name="userData">自定义参数</param>
         /// <returns></returns>
-        public TimerTaskInfo AddEndTimer(float totalInSec,
+        public TimerTaskHandle AddEndTimer(float totalInSec,
                                                                 Action<object> endCallback,
                                                                 object userData = null)
         {
             return AddTimer(totalInSec, totalInSec, null, endCallback, userData);
         }
+
         /// <summary>
         /// 删除定时器
         /// </summary>
         /// <param name="taskInfo"></param>
         /// <returns></returns>
-        public bool RemoveTimer(TimerTaskInfo taskInfo)
+        public bool RemoveTimer(TimerTaskHandle taskInfo)
         {
             if (hTimerWheel != null)
             {
@@ -97,15 +103,7 @@ namespace DotEngine.Timer
             return false;
         }
 
-        public void DoUpdate(float deltaTime)
-        {
-            if (!isPause && hTimerWheel != null)
-            {
-                hTimerWheel.OnUpdate(deltaTime);
-            }
-        }
-
-        public override void DoDispose()
+        public override void DoRemove()
         {
             hTimerWheel?.Clear();
             isPause = false;

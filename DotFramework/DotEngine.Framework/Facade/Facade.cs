@@ -15,18 +15,11 @@ namespace DotEngine.Framework
 
         protected IViewControllerCenter viewControllerCenter;
 
-        public static IFacade GetInstance(Func<IFacade> func = null)
+        public static IFacade GetInstance()
         {
             if(instance == null)
             {
-                if(func == null)
-                {
-                    instance = new Facade();
-                }
-                else
-                {
-                    instance = func();
-                }
+                instance = new Facade();
             }
             return instance;
         }

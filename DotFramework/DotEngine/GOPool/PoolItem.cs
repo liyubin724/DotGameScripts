@@ -58,12 +58,12 @@ namespace DotEngine.GOPool
                 Destroy(CachedGameObject);
                 return;
             }
-            if (!PoolManager.GetInstance().HasGroup(SpawnName))
+            if (!PoolService.GetInstance().HasGroup(SpawnName))
             {
                 Destroy(CachedGameObject);
                 return;
             }
-            PoolGroup spawnPool = PoolManager.GetInstance().GetGroup(SpawnName);
+            PoolGroup spawnPool = PoolService.GetInstance().GetGroup(SpawnName);
             Pool gObjPool = spawnPool.GetPool(AssetPath);
             if (gObjPool == null)
             {

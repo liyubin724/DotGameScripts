@@ -8,37 +8,6 @@ using System.Collections.Generic;
 namespace DotEngine.Timer
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public class TimerTaskInfo
-    {
-        internal long taskID = -1;
-        internal int wheelIndex = -1;
-        internal int wheelSlotIndex = -1;
-
-        internal TimerTaskInfo()
-        {
-        }
-
-        internal bool IsValid()
-        {
-            return taskID > 0 && wheelIndex > 0 && wheelSlotIndex > 0;
-        }
-
-        internal void Clear()
-        {
-            taskID = -1;
-            wheelIndex = -1;
-            wheelSlotIndex = -1;
-        }
-
-        public override string ToString()
-        {
-            return $"TimerTaskInfo:{{taskID = {taskID},wheelIndex = {wheelIndex},wheelSlotIndex = {wheelSlotIndex}}}";
-        }
-    }
-
-    /// <summary>
     /// 多层时间轮
     /// </summary>
     internal sealed class HierarchicalTimerWheel
@@ -47,7 +16,7 @@ namespace DotEngine.Timer
         private ObjectPool<TimerTask> taskPool = new ObjectPool<TimerTask>();
 
         private TimerWheel[] wheelArr = null;
-        private Dictionary<long, TimerTaskInfo> taskInfoDic = new Dictionary<long, TimerTaskInfo>();
+        private Dictionary<long, TimerTaskHandle> taskInfoDic = new Dictionary<long, TimerTaskHandle>();
 
         private int lapseTimeInMS = 0;
 
@@ -70,7 +39,7 @@ namespace DotEngine.Timer
             }
         }
 
-        internal TimerTaskInfo AddTimerTask(float intervalInSec,
+        internal TimerTaskHandle AddTimerTask(float intervalInSec,
                                                 float totalInSec,
                                                 Action<object> intervalCallback,
                                                 Action<object> endCallback,
@@ -79,7 +48,7 @@ namespace DotEngine.Timer
             TimerTask task = taskPool.Get();
             task.SetData(idCreator.NextID, intervalInSec, totalInSec, intervalCallback, endCallback, callbackData);
 
-            TimerTaskInfo taskInfo = new TimerTaskInfo();
+            TimerTaskHandle taskInfo = new TimerTaskHandle();
             taskInfo.taskID = task.ID;
 
             if(AddTimerTask(task,taskInfo))
@@ -89,7 +58,7 @@ namespace DotEngine.Timer
             throw new Exception($"HierarchicalTimerWheel::AddTimerTask->Add Failed");
         }
 
-        private bool AddTimerTask(TimerTask task, TimerTaskInfo taskInfo)
+        private bool AddTimerTask(TimerTask task, TimerTaskHandle taskInfo)
         {
             for (int i = 0; i < wheelArr.Length; i++)
             {
@@ -105,7 +74,7 @@ namespace DotEngine.Timer
             return false;
         }
 
-        internal bool RemoveTimerTask(TimerTaskInfo taskInfo)
+        internal bool RemoveTimerTask(TimerTaskHandle taskInfo)
         {
             if(taskInfo == null|| !taskInfo.IsValid())
             {
@@ -171,7 +140,7 @@ namespace DotEngine.Timer
                 {
                     continue;
                 }
-                if (!taskInfoDic.TryGetValue(task.ID, out TimerTaskInfo taskInfo))
+                if (!taskInfoDic.TryGetValue(task.ID, out TimerTaskHandle taskInfo))
                 {
                     continue;
                 }

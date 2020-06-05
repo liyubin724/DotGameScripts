@@ -75,7 +75,7 @@ namespace DotEngine.GOPool
         public int LimitMinAmount = 0;
 
         //预加载的定时器
-        private TimerTaskInfo preloadTimerTask = null;
+        private TimerTaskHandle preloadTimerTask = null;
 
         internal Pool(PoolGroup pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
         {

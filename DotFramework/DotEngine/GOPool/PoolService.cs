@@ -1,4 +1,5 @@
-﻿using DotEngine.Log;
+﻿using DotEngine.Framework;
+using DotEngine.Log;
 using DotEngine.Timer;
 using DotEngine.Utilities;
 using System.Collections.Generic;
@@ -8,13 +9,19 @@ namespace DotEngine.GOPool
 {
     public delegate void PoolPreloadComplete(string groupName, string assetPath);
 
-    public class PoolManager : Singleton<PoolManager>
+    public class PoolService : Service
     {
         private Transform mgrTransform = null;
         private Dictionary<string, PoolGroup> groupDic = new Dictionary<string, PoolGroup>();
 
         private float cullTimeInterval = 60f;
-        private TimerTaskInfo cullTimerTask = null;
+        private TimerTaskHandle cullTimerTask = null;
+
+        public override void DoRegister()
+        {
+            
+        }
+
         protected override void DoInit()
         {
             LogUtil.LogInfo(PoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
