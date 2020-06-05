@@ -46,6 +46,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset\AssetBridge.cs" />
+    <Compile Include="Asset\AssetConst.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetLoader.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetNode.cs" />
+    <Compile Include="Asset\AssetLoader\AAsyncOperation.cs" />
+    <Compile Include="Asset\AssetLoader\AssetHandler.cs" />
+    <Compile Include="Asset\AssetLoader\AssetLoaderData.cs" />
+    <Compile Include="Asset\AssetManager.cs" />
+    <Compile Include="Asset\AssetManager_Clean.cs" />
+    <Compile Include="Asset\AssetManager_Scene.cs" />
+    <Compile Include="Asset\AssetUtil.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAssetNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAsyncOperation.cs" />
+    <Compile Include="Asset\BundleLoader\BundleLoader.cs" />
+    <Compile Include="Asset\BundleLoader\BundleNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleSceneLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAssetNode.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAsyncOperation.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseSceneLoader.cs" />
+    <Compile Include="Asset\Datas\AssetAddressConfig.cs" />
+    <Compile Include="Asset\Datas\AssetBundleConfig.cs" />
+    <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
+    <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
+    <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
     <Compile Include="Framework\Command\CommandCenter .cs" />
     <Compile Include="Framework\Command\ICommand.cs" />
     <Compile Include="Framework\Command\ICommandCenter.cs" />
@@ -76,12 +101,21 @@
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
+    <Compile Include="GOPool\Pool.cs" />
+    <Compile Include="GOPool\PoolConst.cs" />
+    <Compile Include="GOPool\PoolGroup.cs" />
+    <Compile Include="GOPool\PoolItem.cs" />
+    <Compile Include="GOPool\PoolManager.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\LogUtil.cs" />
     <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
+    <Compile Include="Timer\HierarchicalTimerWheel.cs" />
+    <Compile Include="Timer\TimerManager.cs" />
+    <Compile Include="Timer\TimerTask.cs" />
+    <Compile Include="Timer\TimerWheel.cs" />
     <Compile Include="Utilities\ArrayUtility.cs" />
     <Compile Include="Utilities\AssemblyUtility.cs" />
     <Compile Include="Utilities\BitUtil.cs" />
@@ -94,8 +128,6 @@
     <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Asset\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -50,6 +50,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset\AssetAddress\AssetAddressFilter.cs" />
+    <Compile Include="Asset\AssetAddress\AssetAddressGroup.cs" />
+    <Compile Include="Asset\AssetAddress\AssetAddressGroupEditor.cs" />
+    <Compile Include="Asset\AssetAddress\AssetAddressOperation.cs" />
+    <Compile Include="Asset\AssetAddress\AssetAddressUtil.cs" />
+    <Compile Include="Asset\AssetPacker\AssetAddressRepeatPopupContent.cs" />
+    <Compile Include="Asset\AssetPacker\AssetPackerConfig.cs" />
+    <Compile Include="Asset\AssetPacker\AssetPackerTreeView.cs" />
+    <Compile Include="Asset\AssetPacker\AssetPackerUtil.cs" />
+    <Compile Include="Asset\AssetPacker\AssetPackerWindow.cs" />
+    <Compile Include="Asset\AssetPacker\BundleBuildConfig.cs" />
+    <Compile Include="Asset\AssetPacker\BundleBuildPipeline.cs" />
+    <Compile Include="Asset\AssetPacker\IAssetBundlePacker.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfigEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderMenu.cs" />

@@ -52,10 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEngine.Timer\DotEngine.Timer.csproj">
-      <Project>{efa7e737-1185-4147-8488-77812f580678}</Project>
-      <Name>DotEngine.Timer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DotEngine\DotEngine.csproj">
       <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
       <Name>DotEngine</Name>
