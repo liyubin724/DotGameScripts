@@ -46,6 +46,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Command\CommandCenter .cs" />
+    <Compile Include="Framework\Command\ICommand.cs" />
+    <Compile Include="Framework\Command\ICommandCenter.cs" />
+    <Compile Include="Framework\Command\MacroCommand.cs" />
+    <Compile Include="Framework\Command\SimpleCommand.cs" />
+    <Compile Include="Framework\Facade\Facade.cs" />
+    <Compile Include="Framework\Facade\IFacade.cs" />
+    <Compile Include="Framework\Model\IModelCenter.cs" />
+    <Compile Include="Framework\Model\ModelCenter .cs" />
+    <Compile Include="Framework\Model\Proxy\IProxy.cs" />
+    <Compile Include="Framework\Model\Proxy\Proxy.cs" />
+    <Compile Include="Framework\Notify\IObserverCenter.cs" />
+    <Compile Include="Framework\Notify\Notification\INotification.cs" />
+    <Compile Include="Framework\Notify\Notification\Notification.cs" />
+    <Compile Include="Framework\Notify\Notifier\INotifier.cs" />
+    <Compile Include="Framework\Notify\Notifier\Notifier.cs" />
+    <Compile Include="Framework\Notify\ObserverCenter.cs" />
+    <Compile Include="Framework\Service\IService.cs" />
+    <Compile Include="Framework\Service\IServiceCenter.cs" />
+    <Compile Include="Framework\Service\Service.cs" />
+    <Compile Include="Framework\Service\ServiceCenter.cs" />
+    <Compile Include="Framework\Update\IUpdate.cs" />
+    <Compile Include="Framework\View\Controller\ComplexViewController.cs" />
+    <Compile Include="Framework\View\Controller\IViewController.cs" />
+    <Compile Include="Framework\View\Controller\SingleViewController.cs" />
+    <Compile Include="Framework\View\IViewControllerCenter.cs" />
+    <Compile Include="Framework\View\ViewControllerCenter .cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
