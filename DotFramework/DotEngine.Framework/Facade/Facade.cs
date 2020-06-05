@@ -69,71 +69,71 @@ namespace DotEngine.Framework
             serviceCenter = new ServiceCenter();
         }
 
-        public virtual void RegisterCommand(string notificationName, ICommand command)
+        public virtual void RegisterCommand(string name, ICommand command)
         {
-            commandCenter.RegisterCommand(notificationName, command);
+            commandCenter.RegisterCommand(name, command);
         }
-        public virtual void RemoveCommand(string notificationName)
+        public virtual void RemoveCommand(string name)
         {
-            commandCenter.RemoveCommand(notificationName);
+            commandCenter.RemoveCommand(name);
         }
-        public virtual bool HasCommand(string notificationName)
+        public virtual bool HasCommand(string name)
         {
-            return commandCenter.HasCommand(notificationName);
-        }
-
-        public virtual void RegisterProxy(IProxy proxy)
-        {
-            modelCenter.RegisterProxy(proxy);
-        }
-        public virtual IProxy RetrieveProxy(string proxyName)
-        {
-            return modelCenter.RetrieveProxy(proxyName);
-        }
-        public virtual IProxy RemoveProxy(string proxyName)
-        {
-            return modelCenter.RemoveProxy(proxyName);
-        }
-        public virtual bool HasProxy(string proxyName)
-        {
-            return modelCenter.HasProxy(proxyName);
+            return commandCenter.HasCommand(name);
         }
 
-        public virtual void RegisterViewController(IViewController mediator)
+        public virtual void RegisterProxy(string name,IProxy proxy)
         {
-            viewControllerCenter.RegisterViewController(mediator);
+            modelCenter.RegisterProxy(name,proxy);
         }
-        public virtual IViewController RetrieveViewController(string mediatorName)
+        public virtual IProxy RetrieveProxy(string name)
         {
-            return viewControllerCenter.RetrieveViewController(mediatorName);
+            return modelCenter.RetrieveProxy(name);
         }
-        public virtual IViewController RemoveViewController(string mediatorName)
+        public virtual IProxy RemoveProxy(string name)
         {
-            return viewControllerCenter.RemoveViewController(mediatorName);
+            return modelCenter.RemoveProxy(name);
         }
-        public virtual bool HasViewController(string mediatorName)
+        public virtual bool HasProxy(string name)
         {
-            return viewControllerCenter.HasViewController(mediatorName);
-        }
-
-        public virtual void SendNotification(string notificationName, object body = null)
-        {
-            observerCenter.NotifyObservers(new Notification(notificationName, body));
+            return modelCenter.HasProxy(name);
         }
 
-        public virtual void RegisterObserver(string notificationName, Action<INotification> notifyMethod)
+        public virtual void RegisterViewController(string name,IViewController viewController)
         {
-            observerCenter.RegisterObserver(notificationName, notifyMethod);
+            viewControllerCenter.RegisterViewController(name, viewController);
+        }
+        public virtual IViewController RetrieveViewController(string name)
+        {
+            return viewControllerCenter.RetrieveViewController(name);
+        }
+        public virtual IViewController RemoveViewController(string name)
+        {
+            return viewControllerCenter.RemoveViewController(name);
+        }
+        public virtual bool HasViewController(string name)
+        {
+            return viewControllerCenter.HasViewController(name);
         }
 
-        public virtual void RemoveObserver(string notificationName, Action<INotification> notifyMethod = null)
+        public virtual void SendNotification(string name, object body = null)
         {
-            observerCenter.RemoveObserver(notificationName, notifyMethod);
+            observerCenter.NotifyObservers(new Notification(name, body));
         }
 
-        public virtual void RegisterService(IService service)
+        public virtual void RegisterObserver(string name, Action<INotification> notifyMethod)
         {
-            serviceCenter.RegisterService(service);
+            observerCenter.RegisterObserver(name, notifyMethod);
+        }
+
+        public virtual void RemoveObserver(string name, Action<INotification> notifyMethod = null)
+        {
+            observerCenter.RemoveObserver(name, notifyMethod);
+        }
+
+        public virtual void RegisterService(string name, IService service)
+        {
+            serviceCenter.RegisterService(name, service);
         }
 
         public virtual IService RetrieveService(string name)

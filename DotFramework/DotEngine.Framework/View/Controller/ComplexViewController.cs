@@ -5,36 +5,51 @@ namespace DotEngine.Framework
 {
     public abstract class ComplexViewController : Notifier, IViewController
     {
-        public string ControllerName { get; private set; }
+        protected Dictionary<string, IViewController> subControllerDic = null;
 
-        protected IList<IViewController> subControllers = null;
-
-        public ComplexViewController(string name = null)
+        public ComplexViewController()
         {
-            subControllers = new List<IViewController>();
+        }
 
-            if (string.IsNullOrEmpty(name))
+        public void AddSubViewController(IViewController viewController)
+        {
+            AddSubViewController(Guid.NewGuid().ToString(), viewController);
+        }
+
+        public void AddSubViewController(string name,IViewController viewController)
+        {
+            if(string.IsNullOrEmpty(name) || viewController == null)
             {
-                ControllerName = Guid.NewGuid().ToString();
+                throw new ArgumentNullException("The viewController or the name of viewController is empty");
             }
-            else
+            if(subControllerDic.ContainsKey(name))
             {
-                ControllerName = name;
+                throw new Exception($"The name of viewController has been added.name = {name}.");
+            }
+
+            subControllerDic.Add(name, viewController);
+            Facade.RegisterViewController(name, viewController);
+        }
+
+        public void RemoveSubViewController(IViewController viewController)
+        {
+            foreach(var kvp in subControllerDic)
+            {
+                if(kvp.Value == viewController)
+                {
+                    Facade.RemoveViewController(kvp.Key);
+                    subControllerDic.Remove(kvp.Key);
+                    break;
+                }
             }
         }
 
-        public void AddSubController(IViewController subViewController)
+        public void RemoveSubViewController(string name)
         {
-            subControllers.Add(subViewController);
-
-            Facade.RegisterViewController(subViewController);
-        }
-
-        public void RemoveSubController(IViewController subViewController)
-        {
-            if(subControllers.Remove(subViewController))
+            if(subControllerDic.ContainsKey(name))
             {
-                Facade.RemoveViewController(subViewController.ControllerName);
+                Facade.RemoveViewController(name);
+                subControllerDic.Remove(name);
             }
         }
 

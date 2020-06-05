@@ -25,18 +25,18 @@ namespace DotEngine.Framework
         {
         }
 
-        public virtual void RegisterViewController(IViewController viewController)
+        public virtual void RegisterViewController(string name,IViewController viewController)
         {
-            if(viewController == null || string.IsNullOrEmpty(viewController.ControllerName))
+            if(viewController == null || string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("ViewControllerCenter::RegisterViewController->The controller or the name of controller is null");
             }
-            if(viewControllerDic.ContainsKey(viewController.ControllerName))
+            if(viewControllerDic.ContainsKey(name))
             {
-                throw new Exception($"ViewControllerCenter::RegisterViewController->The name of controller has been added.Name = {viewController.ControllerName}");
+                throw new Exception($"ViewControllerCenter::RegisterViewController->The name of controller has been added.Name = {name}");
             }
 
-            viewControllerDic.Add(viewController.ControllerName, viewController);
+            viewControllerDic.Add(name, viewController);
 
             var interests = viewController.ListNotificationInterests();
             if (interests != null && interests.Length > 0)
@@ -49,16 +49,16 @@ namespace DotEngine.Framework
             viewController.OnRegister();
         }
 
-        public virtual IViewController RetrieveViewController(string viewControllerName)
+        public virtual IViewController RetrieveViewController(string name)
         {
-            return viewControllerDic.TryGetValue(viewControllerName, out var viewController) ? viewController : null;
+            return viewControllerDic.TryGetValue(name, out var viewController) ? viewController : null;
         }
 
-        public virtual IViewController RemoveViewController(string viewControllerName)
+        public virtual IViewController RemoveViewController(string name)
         {
-            if(viewControllerDic.TryGetValue(viewControllerName,out IViewController viewController))
+            if(viewControllerDic.TryGetValue(name,out IViewController viewController))
             {
-                viewControllerDic.Remove(viewControllerName);
+                viewControllerDic.Remove(name);
 
                 var interests = viewController.ListNotificationInterests();
                 foreach (var interest in interests)
@@ -70,13 +70,13 @@ namespace DotEngine.Framework
                 return viewController;
             }else
             {
-                throw new KeyNotFoundException($"ViewControllerCenter::RemoveViewController->The name of controller was not found.name = {viewControllerName}");
+                throw new KeyNotFoundException($"ViewControllerCenter::RemoveViewController->The name of controller was not found.name = {name}");
             }
         }
 
-        public virtual bool HasViewController(string viewControllerName)
+        public virtual bool HasViewController(string name)
         {
-            return viewControllerDic.ContainsKey(viewControllerName);
+            return viewControllerDic.ContainsKey(name);
         }
     }
 }

@@ -4,17 +4,8 @@ namespace DotEngine.Framework
 {
     public abstract class SingleViewController : Notifier, IViewController
     {
-        public string ControllerName { get; protected set; }
-
-        public SingleViewController(string name = null)
+        public SingleViewController()
         {
-            if(string.IsNullOrEmpty(name))
-            {
-                ControllerName = Guid.NewGuid().ToString();
-            }else
-            {
-                ControllerName = name;
-            }
         }
 
         public virtual string[] ListNotificationInterests()

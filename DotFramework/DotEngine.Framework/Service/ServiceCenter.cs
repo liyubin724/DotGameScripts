@@ -97,37 +97,39 @@ namespace DotEngine.Framework
             return serviceDic.ContainsKey(name);
         }
 
-        public virtual void RegisterService(IService service)
+        public virtual void RegisterService(string serviceName,IService service)
         {
-            if(service!=null)
+            if (service == null || string.IsNullOrEmpty(serviceName))
             {
-                string name = service.Name;
-
-                if (!HasService(name))
-                {
-                    serviceDic.Add(name, service);
-
-                    Type serviceType = service.GetType();
-                    if (typeof(IUpdate).IsAssignableFrom(serviceType))
-                    {
-                        updateServices.Add(name);
-                    }
-                    else if (typeof(IUnscaleUpdate).IsAssignableFrom(serviceType))
-                    {
-                        unscaleUpdateServices.Add(name);
-                    }
-                    else if (typeof(ILateUpdate).IsAssignableFrom(serviceType))
-                    {
-                        lateUpdateServices.Add(name);
-                    }
-                    else if (typeof(IFixedUpdate).IsAssignableFrom(serviceType))
-                    {
-                        fixedUpdateServices.Add(name);
-                    }
-
-                    service.DoRegister();
-                }
+                throw new ArgumentNullException("The service or the name of service is empty");
             }
+
+            if (serviceDic.ContainsKey(serviceName))
+            {
+                throw new Exception($"The name of service has been added.name = {serviceName}.");
+            }
+
+            serviceDic.Add(serviceName, service);
+
+            Type serviceType = service.GetType();
+            if (typeof(IUpdate).IsAssignableFrom(serviceType))
+            {
+                updateServices.Add(serviceName);
+            }
+            else if (typeof(IUnscaleUpdate).IsAssignableFrom(serviceType))
+            {
+                unscaleUpdateServices.Add(serviceName);
+            }
+            else if (typeof(ILateUpdate).IsAssignableFrom(serviceType))
+            {
+                lateUpdateServices.Add(serviceName);
+            }
+            else if (typeof(IFixedUpdate).IsAssignableFrom(serviceType))
+            {
+                fixedUpdateServices.Add(serviceName);
+            }
+
+            service.DoRegister();
         }
 
         public virtual void RemoveService(string name)

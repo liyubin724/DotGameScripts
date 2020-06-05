@@ -2,11 +2,8 @@
 {
     public class Service : Notifier,IService
     {
-        public string Name { get; }
-
-        public Service(string name)
+        public Service()
         {
-            Name = name;
         }
 
         public virtual void DoRegister()

@@ -2,9 +2,9 @@
 {
     public interface IViewControllerCenter
     {
-        bool HasViewController(string mediatorName);
-        void RegisterViewController(IViewController mediator);
-        IViewController RetrieveViewController(string viewControllerName);
-        IViewController RemoveViewController(string viewControllerName);
+        bool HasViewController(string name);
+        void RegisterViewController(string name,IViewController viewController);
+        IViewController RetrieveViewController(string name);
+        IViewController RemoveViewController(string name);
     }
 }
