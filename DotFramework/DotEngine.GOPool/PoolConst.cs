@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotEngine.GOPool
 {
-    public static class GameObjectPoolConst
+    public static class PoolConst
     {
         internal static readonly string LOGGER_NAME = "GameObjectPool";
 

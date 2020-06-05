@@ -2,7 +2,7 @@
 
 namespace DotEngine.GOPool
 {
-    public class GameObjectPoolItem : MonoBehaviour
+    public class PoolItem : MonoBehaviour
     {
         public string AssetPath { get; set; } = string.Empty;
         public string SpawnName { get; set; } = string.Empty;
@@ -58,13 +58,13 @@ namespace DotEngine.GOPool
                 Destroy(CachedGameObject);
                 return;
             }
-            if (!GameObjectPoolManager.GetInstance().HasGroup(SpawnName))
+            if (!PoolManager.GetInstance().HasGroup(SpawnName))
             {
                 Destroy(CachedGameObject);
                 return;
             }
-            GameObjectPoolGroup spawnPool = GameObjectPoolManager.GetInstance().GetGroup(SpawnName);
-            GameObjectPool gObjPool = spawnPool.GetPool(AssetPath);
+            PoolGroup spawnPool = PoolManager.GetInstance().GetGroup(SpawnName);
+            Pool gObjPool = spawnPool.GetPool(AssetPath);
             if (gObjPool == null)
             {
                 Destroy(CachedGameObject);

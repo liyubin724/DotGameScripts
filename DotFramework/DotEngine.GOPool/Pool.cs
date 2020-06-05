@@ -1,5 +1,4 @@
-﻿using DotEngine.Asset;
-using DotEngine.Log;
+﻿using DotEngine.Log;
 using DotEngine.Timer;
 using DotEngine.Utility;
 using System;
@@ -23,12 +22,12 @@ namespace DotEngine.GOPool
     /// <summary>
     /// 以GameObject为对象的缓存池
     /// </summary>
-    public class GameObjectPool
+    public class Pool
     {
         /// <summary>
         /// 缓存池所属的分组
         /// </summary>
-        private GameObjectPoolGroup spawnPool = null;
+        private PoolGroup spawnPool = null;
 
         /// <summary>
         ///唯一名称，一般情况下为资源的路径
@@ -78,7 +77,7 @@ namespace DotEngine.GOPool
         //预加载的定时器
         private TimerTaskInfo preloadTimerTask = null;
 
-        internal GameObjectPool(GameObjectPoolGroup pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
+        internal Pool(PoolGroup pool, string aPath, GameObject templateGObj, PoolTemplateType templateType)
         {
             spawnPool = pool;
             uniqueName = aPath;
@@ -152,7 +151,7 @@ namespace DotEngine.GOPool
         {
             if (LimitMaxAmount != 0 && GetUsedItemCount() > LimitMaxAmount)
             {
-                LogUtil.LogWarning(GameObjectPoolConst.LOGGER_NAME, "GameObjectPool::GetItem->Large than Max Amount");
+                LogUtil.LogWarning(PoolConst.LOGGER_NAME, "GameObjectPool::GetItem->Large than Max Amount");
                 return null;
             }
 
@@ -168,7 +167,7 @@ namespace DotEngine.GOPool
 
             if (item != null)
             {
-                GameObjectPoolItem poolItem = item.GetComponent<GameObjectPoolItem>();
+                PoolItem poolItem = item.GetComponent<PoolItem>();
                 if (poolItem != null)
                 {
                     poolItem.DoSpawned();
@@ -206,7 +205,7 @@ namespace DotEngine.GOPool
                 {
                     component = gObj.AddComponent<T>();
 
-                    if(component is GameObjectPoolItem poolItem)
+                    if(component is PoolItem poolItem)
                     {
                         poolItem.SpawnName = spawnPool.GroupName;
                         poolItem.AssetPath = uniqueName;
@@ -232,7 +231,7 @@ namespace DotEngine.GOPool
 
             if (item != null)
             {
-                GameObjectPoolItem poolItem = item.GetComponent<GameObjectPoolItem>();
+                PoolItem poolItem = item.GetComponent<PoolItem>();
                 if (poolItem != null)
                 {
                     poolItem.AssetPath = uniqueName;
@@ -252,11 +251,11 @@ namespace DotEngine.GOPool
         {
             if(item == null)
             {
-                LogUtil.LogError(GameObjectPoolConst.LOGGER_NAME, "GameObjectPool::ReleaseItem->Item is Null");
+                LogUtil.LogError(PoolConst.LOGGER_NAME, "GameObjectPool::ReleaseItem->Item is Null");
                 return;
             }
 
-            GameObjectPoolItem pItem = item.GetComponent<GameObjectPoolItem>();
+            PoolItem pItem = item.GetComponent<PoolItem>();
             if(pItem!=null)
             {
                 pItem.DoDespawned();

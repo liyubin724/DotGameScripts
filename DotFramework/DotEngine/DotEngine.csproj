@@ -67,5 +67,8 @@
     <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Asset\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

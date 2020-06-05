@@ -8,17 +8,17 @@ namespace DotEngine.GOPool
 {
     public delegate void PoolPreloadComplete(string groupName, string assetPath);
 
-    public class GameObjectPoolManager : Singleton<GameObjectPoolManager>
+    public class PoolManager : Singleton<PoolManager>
     {
         private Transform mgrTransform = null;
-        private Dictionary<string, GameObjectPoolGroup> groupDic = new Dictionary<string, GameObjectPoolGroup>();
+        private Dictionary<string, PoolGroup> groupDic = new Dictionary<string, PoolGroup>();
 
         private float cullTimeInterval = 60f;
         private TimerTaskInfo cullTimerTask = null;
         protected override void DoInit()
         {
-            LogUtil.LogInfo(GameObjectPoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
-            mgrTransform = DontDestroyHandler.CreateTransform(GameObjectPoolConst.MANAGER_NAME);
+            LogUtil.LogInfo(PoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
+            mgrTransform = DontDestroyHandler.CreateTransform(PoolConst.MANAGER_NAME);
 
             cullTimerTask = TimerManager.GetInstance().AddIntervalTimer(cullTimeInterval, OnCullTimerUpdate);
         }
@@ -36,9 +36,9 @@ namespace DotEngine.GOPool
         /// <param name="name"></param>
         /// <param name="autoCreateIfNot"></param>
         /// <returns></returns>
-        public GameObjectPoolGroup GetGroup(string name,bool autoCreateIfNot = false)
+        public PoolGroup GetGroup(string name,bool autoCreateIfNot = false)
         {
-            if (groupDic.TryGetValue(name, out GameObjectPoolGroup pool))
+            if (groupDic.TryGetValue(name, out PoolGroup pool))
             {
                 return pool;
             }
@@ -55,11 +55,11 @@ namespace DotEngine.GOPool
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public GameObjectPoolGroup CreateGroup(string name)
+        public PoolGroup CreateGroup(string name)
         {
-            if (!groupDic.TryGetValue(name, out GameObjectPoolGroup pool))
+            if (!groupDic.TryGetValue(name, out PoolGroup pool))
             {
-                pool = new GameObjectPoolGroup(name, mgrTransform);
+                pool = new PoolGroup(name, mgrTransform);
                 groupDic.Add(name, pool);
             }
             return pool;
@@ -71,7 +71,7 @@ namespace DotEngine.GOPool
         /// <param name="name"></param>
         public void DeleteGroup(string name)
         {
-            if (groupDic.TryGetValue(name, out GameObjectPoolGroup spawn))
+            if (groupDic.TryGetValue(name, out PoolGroup spawn))
             {
                 groupDic.Remove(name);
                 spawn.DestroyGroup();
