@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConst.cs" />
     <Compile Include="Asset\AssetBridge.cs" />
     <Compile Include="Asset\AssetConst.cs" />
     <Compile Include="Asset\AssetLoader\AAssetLoader.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
     <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
     <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
+    <Compile Include="AppFacade.cs" />
+    <Compile Include="AppFacadeBehaviour.cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
@@ -78,7 +81,7 @@
     <Compile Include="GOPool\PoolConst.cs" />
     <Compile Include="GOPool\PoolGroup.cs" />
     <Compile Include="GOPool\PoolItem.cs" />
-    <Compile Include="GOPool\PoolManager.cs" />
+    <Compile Include="GOPool\PoolService.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\LogUtil.cs" />
     <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
@@ -123,7 +126,9 @@
     <Compile Include="Timer\HierarchicalTimerWheel.cs" />
     <Compile Include="Timer\TimerService.cs" />
     <Compile Include="Timer\TimerTask.cs" />
+    <Compile Include="Timer\TimerTaskHandle.cs" />
     <Compile Include="Timer\TimerWheel.cs" />
+    <Compile Include="Update\UpdateService.cs" />
     <Compile Include="Utilities\ArrayUtility.cs" />
     <Compile Include="Utilities\AssemblyUtility.cs" />
     <Compile Include="Utilities\BitUtil.cs" />
@@ -142,8 +147,6 @@
       <Name>DotEngine.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
