@@ -1,10 +1,7 @@
-﻿using DotEngine.Proxy;
-using System;
+﻿using System;
 
 namespace DotEngine.Timer
 {
-    public delegate void TimerCallback(object obj);
-
     /// <summary>
     /// 定时器的管理器
     /// </summary>
@@ -18,16 +15,16 @@ namespace DotEngine.Timer
         protected override void DoInit()
         {
             hTimerWheel = new HierarchicalTimerWheel();
-            UpdateProxy.GetInstance().DoUpdateHandle += DoUpdate;
         }
 
-        private void DoUpdate(float deltaTime)
+        public void DoUpdate(float deltaTime)
         {
             if (!isPause && hTimerWheel != null)
             {
                 hTimerWheel.OnUpdate(deltaTime);
             }
         }
+
         /// <summary>
         /// 暂停时间轮
         /// </summary>
@@ -103,8 +100,6 @@ namespace DotEngine.Timer
 
         public override void DoDispose()
         {
-            UpdateProxy.GetInstance().DoUpdateHandle -= DoUpdate;
-
             hTimerWheel?.Clear();
             isPause = false;
             hTimerWheel = null;

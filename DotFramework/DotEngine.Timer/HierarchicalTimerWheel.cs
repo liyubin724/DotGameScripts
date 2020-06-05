@@ -72,8 +72,8 @@ namespace DotEngine.Timer
 
         internal TimerTaskInfo AddTimerTask(float intervalInSec,
                                                 float totalInSec,
-                                                TimerCallback intervalCallback,
-                                                TimerCallback endCallback,
+                                                Action<object> intervalCallback,
+                                                Action<object> endCallback,
                                                 object callbackData)
         {
             TimerTask task = taskPool.Get();

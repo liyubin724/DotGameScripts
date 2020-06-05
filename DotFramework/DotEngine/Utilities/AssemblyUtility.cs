@@ -29,14 +29,14 @@ namespace DotEngine.Utilities
         {
             if(string.IsNullOrEmpty(genericTypeFullName) || paramTypeFullNames == null || paramTypeFullNames.Length ==0)
             {
-                LogUtil.LogError(typeof(AssemblyUtility), "AssemblyUtil::GetGenericType->Arg is Null");
+                LogUtil.LogError(typeof(AssemblyUtility).Name, "AssemblyUtil::GetGenericType->Arg is Null");
                 return null;
             }
 
             Type genericType = GetTypeByFullName(genericTypeFullName);
             if(genericType == null)
             {
-                LogUtil.LogError(typeof(AssemblyUtility), $"AssemblyUtil::GetGenericType->Type Not Found.Type = {genericTypeFullName}");
+                LogUtil.LogError(typeof(AssemblyUtility).Name, $"AssemblyUtil::GetGenericType->Type Not Found.Type = {genericTypeFullName}");
                 return null;
             }
 
@@ -46,13 +46,13 @@ namespace DotEngine.Utilities
                 string typeStr = paramTypeFullNames[i];
                 if (string.IsNullOrEmpty(typeStr))
                 {
-                    LogUtil.LogError(typeof(AssemblyUtility), "AssemblyUtil::GetGenericType->Param Type Is NUll");
+                    LogUtil.LogError(typeof(AssemblyUtility).Name, "AssemblyUtil::GetGenericType->Param Type Is NUll");
                     return null;
                 }
                 Type t = GetTypeByFullName(paramTypeFullNames[i]);
                 if(t == null)
                 {
-                    LogUtil.LogError(typeof(AssemblyUtility), $"AssemblyUtil::GetGenericType->Param Type Not Found.Type = {paramTypeFullNames[i]}");
+                    LogUtil.LogError(typeof(AssemblyUtility).Name, $"AssemblyUtil::GetGenericType->Param Type Not Found.Type = {paramTypeFullNames[i]}");
                 }
                 types[i] = t;
             }

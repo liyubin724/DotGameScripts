@@ -49,6 +49,8 @@
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
+    <Compile Include="Log\ILogger.cs" />
+    <Compile Include="Log\LogUtil.cs" />
     <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Singleton.cs" />

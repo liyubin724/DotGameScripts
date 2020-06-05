@@ -47,5 +47,11 @@
     <Compile Include="TimerTask.cs" />
     <Compile Include="TimerWheel.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
+      <Name>DotEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
