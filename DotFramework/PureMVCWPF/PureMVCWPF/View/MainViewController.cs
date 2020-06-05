@@ -6,7 +6,7 @@ namespace PureMVCWPF.View
     {
         private MainWindow mainWin = null;
 
-        public MainViewController(MainWindow window) : base("MainViewController",window)
+        public MainViewController(MainWindow window) : base("MainViewController")
         {
             mainWin = window;
         }

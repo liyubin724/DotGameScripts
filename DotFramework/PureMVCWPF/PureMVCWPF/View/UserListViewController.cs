@@ -9,13 +9,16 @@ namespace PureMVCWPF.View
 {
     public class UserListViewController : SingleViewController,IViewController
     {
-        private UserProxy userProxy;
 
         public const string NAME = "UserListMediator";
 
-        public UserListViewController(UserList userList)
-            : base(NAME, userList)
+        private UserProxy userProxy;
+        private UserList userList;
+
+        public UserListViewController(UserList userList): base(NAME)
         {
+            this.userList = userList;
+
             userList.NewUser += new EventHandler(userList_NewUser);
             userList.DeleteUser += new EventHandler(userList_DeleteUser);
             userList.SelectUser += new EventHandler(userList_SelectUser);
@@ -24,13 +27,10 @@ namespace PureMVCWPF.View
         public override void OnRegister()
         {
             userProxy = (UserProxy)Facade.RetrieveProxy(UserProxy.NAME);
-            UserList.LoadUsers(userProxy.Users);
+            userList.LoadUsers(userProxy.Users);
         }
 
-        private UserList UserList
-        {
-            get { return (UserList)ViewComponent; }
-        }
+        
 
         void userList_NewUser(object sender, EventArgs e)
         {
@@ -40,12 +40,12 @@ namespace PureMVCWPF.View
 
         void userList_DeleteUser(object sender, EventArgs e)
         {
-            SendNotification(ApplicationFacade.DELETE_USER, UserList.SelectedUser);
+            SendNotification(ApplicationFacade.DELETE_USER, userList.SelectedUser);
         }
 
         void userList_SelectUser(object sender, EventArgs e)
         {
-            SendNotification(ApplicationFacade.USER_SELECTED, UserList.SelectedUser);
+            SendNotification(ApplicationFacade.USER_SELECTED, userList.SelectedUser);
         }
 
         public override string[] ListNotificationInterests()
@@ -61,11 +61,11 @@ namespace PureMVCWPF.View
             switch (note.Name)
             {
                 case ApplicationFacade.CANCEL_SELECTED:
-                    UserList.Deselect();
+                    userList.Deselect();
                     break;
 
                 case ApplicationFacade.USER_UPDATED:
-                    UserList.Deselect();
+                    userList.Deselect();
                     break;
             }
         }

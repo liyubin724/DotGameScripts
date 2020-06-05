@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotEngine.Framework
 {
@@ -10,11 +7,9 @@ namespace DotEngine.Framework
     {
         public string ControllerName { get; private set; }
 
-        public object ViewComponent { get; set; }
-
         protected IList<IViewController> subControllers = null;
 
-        public ComplexViewController(string name = null, object viewComponent = null)
+        public ComplexViewController(string name = null)
         {
             subControllers = new List<IViewController>();
 
@@ -26,8 +21,6 @@ namespace DotEngine.Framework
             {
                 ControllerName = name;
             }
-
-            ViewComponent = viewComponent;
         }
 
         public void AddSubController(IViewController subViewController)

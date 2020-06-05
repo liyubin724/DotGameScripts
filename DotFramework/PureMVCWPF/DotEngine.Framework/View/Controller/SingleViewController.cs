@@ -5,9 +5,8 @@ namespace DotEngine.Framework
     public abstract class SingleViewController : Notifier, IViewController
     {
         public string ControllerName { get; protected set; }
-        public object ViewComponent { get; set; }
 
-        public SingleViewController(string name = null,object viewComponent = null)
+        public SingleViewController(string name = null)
         {
             if(string.IsNullOrEmpty(name))
             {
@@ -16,7 +15,6 @@ namespace DotEngine.Framework
             {
                 ControllerName = name;
             }
-            ViewComponent = viewComponent;
         }
 
         public virtual string[] ListNotificationInterests()

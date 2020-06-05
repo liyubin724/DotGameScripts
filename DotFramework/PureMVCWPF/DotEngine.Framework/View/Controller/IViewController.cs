@@ -3,7 +3,6 @@
     public interface IViewController: INotifier
     {
         string ControllerName { get; }
-        object ViewComponent { get; set; }
 
         string[] ListNotificationInterests();
 

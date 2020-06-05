@@ -12,16 +12,15 @@ namespace PureMVCWPF.View
         public const string NAME = "UserFormMediator";
 
         private UserProxy userProxy;
-        private UserForm UserForm
-        {
-            get { return (UserForm)ViewComponent; }
-        }
+        private UserForm userForm;
 
-        public UserFormViewController(UserForm view):base(NAME,view)
+        public UserFormViewController(UserForm view):base(NAME)
         {
-            UserForm.AddUser += new EventHandler(UserForm_AddUser);
-            UserForm.UpdateUser += new EventHandler(UserForm_UpdateUser);
-            UserForm.CancelUser += new EventHandler(UserForm_CancelUser);
+            userForm = view;
+
+            userForm.AddUser += new EventHandler(UserForm_AddUser);
+            userForm.UpdateUser += new EventHandler(UserForm_UpdateUser);
+            userForm.CancelUser += new EventHandler(UserForm_CancelUser);
         }
 
         public override void OnRegister()
@@ -32,24 +31,24 @@ namespace PureMVCWPF.View
 
         void UserForm_AddUser(object sender, EventArgs e)
         {
-            UserVO user = UserForm.User;
+            UserVO user = userForm.User;
             userProxy.AddItem(user);
             SendNotification(ApplicationFacade.USER_ADDED, user);
-            UserForm.ClearForm();
+            userForm.ClearForm();
         }
 
         void UserForm_UpdateUser(object sender, EventArgs e)
         {
-            UserVO user = UserForm.User;
+            UserVO user = userForm.User;
             userProxy.UpdateItem(user);
             SendNotification(ApplicationFacade.USER_UPDATED, user);
-            UserForm.ClearForm();
+            userForm.ClearForm();
         }
 
         void UserForm_CancelUser(object sender, EventArgs e)
         {
             SendNotification(ApplicationFacade.CANCEL_SELECTED);
-            UserForm.ClearForm();
+            userForm.ClearForm();
         }
 
         public override string[] ListNotificationInterests()
@@ -69,16 +68,16 @@ namespace PureMVCWPF.View
             {
                 case ApplicationFacade.NEW_USER:
                     user = (UserVO)note.Body;
-                    UserForm.ShowUser(user, UserFormMode.ADD);
+                    userForm.ShowUser(user, UserFormMode.ADD);
                     break;
 
                 case ApplicationFacade.USER_DELETED:
-                    UserForm.ClearForm();
+                    userForm.ClearForm();
                     break;
 
                 case ApplicationFacade.USER_SELECTED:
                     user = (UserVO)note.Body;
-                    UserForm.ShowUser(user, UserFormMode.EDIT);
+                    userForm.ShowUser(user, UserFormMode.EDIT);
                     break;
 
             }

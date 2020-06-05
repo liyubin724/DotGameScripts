@@ -12,16 +12,15 @@ namespace PureMVCWPF.View
         public const string NAME = "RolePanelMediator";
 
         private RoleProxy roleProxy;
-        private RolePanel RolePanel
-        {
-            get { return (RolePanel)ViewComponent; }
-        }
+        private RolePanel rolePanel;
 
 
-        public RolePanelViewController(RolePanel viewComponent):base(NAME,viewComponent)
+        public RolePanelViewController(RolePanel viewComponent):base(NAME)
         {
-            RolePanel.AddRole += new EventHandler(RolePanel_AddRole);
-            RolePanel.RemoveRole += new EventHandler(RolePanel_RemoveRole);
+            rolePanel = viewComponent;
+
+            rolePanel.AddRole += new EventHandler(RolePanel_AddRole);
+            rolePanel.RemoveRole += new EventHandler(RolePanel_RemoveRole);
         }
 
         public override void OnRegister()
@@ -37,12 +36,12 @@ namespace PureMVCWPF.View
 
         void RolePanel_RemoveRole(object sender, EventArgs e)
         {
-            roleProxy.RemoveRoleFromUser(RolePanel.User, RolePanel.SelectedRole);
+            roleProxy.RemoveRoleFromUser(rolePanel.User, rolePanel.SelectedRole);
         }
 
         void RolePanel_AddRole(object sender, EventArgs e)
         {
-            roleProxy.AddRoleToUser(RolePanel.User, RolePanel.SelectedRole);
+            roleProxy.AddRoleToUser(rolePanel.User, rolePanel.SelectedRole);
         }
 
         public override string[] ListNotificationInterests()
@@ -67,32 +66,32 @@ namespace PureMVCWPF.View
             switch(note.Name)
             {
                 case ApplicationFacade.NEW_USER:
-                    RolePanel.ClearForm();
+                    rolePanel.ClearForm();
                     break;
                 case ApplicationFacade.USER_ADDED:
                     user = (UserVO)note.Body;
                     userName = user == null ? "" : user.UserName;
                     role = new RoleVO(userName);
                     roleProxy.AddItem(role);
-                    RolePanel.ClearForm();
+                    rolePanel.ClearForm();
                     break;
                 case ApplicationFacade.USER_UPDATED:
-                    RolePanel.ClearForm();
+                    rolePanel.ClearForm();
                     break;
                 case ApplicationFacade.USER_DELETED:
-                    RolePanel.ClearForm();
+                    rolePanel.ClearForm();
                     break;
                 case ApplicationFacade.CANCEL_SELECTED:
-                    RolePanel.ClearForm();
+                    rolePanel.ClearForm();
                     break;
                 case ApplicationFacade.USER_SELECTED:
                     user = (UserVO)note.Body;
                     userName = user == null ? "" : user.UserName;
-                    RolePanel.ShowUser(user, roleProxy.GetUserRoles(userName));
+                    rolePanel.ShowUser(user, roleProxy.GetUserRoles(userName));
                     break;
                 case ApplicationFacade.ADD_ROLE_RESULT:
-                    userName = RolePanel.User == null ? "" : RolePanel.User.UserName;
-                    RolePanel.ShowUserRoles(roleProxy.GetUserRoles(userName));
+                    userName = rolePanel.User == null ? "" : rolePanel.User.UserName;
+                    rolePanel.ShowUserRoles(roleProxy.GetUserRoles(userName));
                     break;
             }
 
