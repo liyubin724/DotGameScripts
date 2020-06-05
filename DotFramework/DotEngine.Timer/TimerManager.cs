@@ -17,14 +17,6 @@ namespace DotEngine.Timer
             hTimerWheel = new HierarchicalTimerWheel();
         }
 
-        public void DoUpdate(float deltaTime)
-        {
-            if (!isPause && hTimerWheel != null)
-            {
-                hTimerWheel.OnUpdate(deltaTime);
-            }
-        }
-
         /// <summary>
         /// 暂停时间轮
         /// </summary>
@@ -96,6 +88,14 @@ namespace DotEngine.Timer
                 return hTimerWheel.RemoveTimerTask(taskInfo);
             }
             return false;
+        }
+
+        public void DoUpdate(float deltaTime)
+        {
+            if (!isPause && hTimerWheel != null)
+            {
+                hTimerWheel.OnUpdate(deltaTime);
+            }
         }
 
         public override void DoDispose()

@@ -1,10 +1,10 @@
-﻿using Dot.NativeDrawer.Decorator;
-using Dot.NativeDrawer.Layout;
-using Dot.NativeDrawer.Listener;
-using Dot.NativeDrawer.Property;
-using Dot.NativeDrawer.Verification;
-using Dot.NativeDrawer.Visible;
-using Dot.Utilities;
+﻿using DotEngine.NativeDrawer.Decorator;
+using DotEngine.NativeDrawer.Layout;
+using DotEngine.NativeDrawer.Listener;
+using DotEngine.NativeDrawer.Property;
+using DotEngine.NativeDrawer.Verification;
+using DotEngine.NativeDrawer.Visible;
+using DotEngine.Utilities;
 using DotEditor.NativeDrawer.Decorator;
 using DotEditor.NativeDrawer.Layout;
 using DotEditor.NativeDrawer.Listener;

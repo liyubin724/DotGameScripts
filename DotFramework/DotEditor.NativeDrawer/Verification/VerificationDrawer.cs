@@ -1,4 +1,4 @@
-﻿using Dot.NativeDrawer.Verification;
+﻿using DotEngine.NativeDrawer.Verification;
 
 namespace DotEditor.NativeDrawer.Verification
 {

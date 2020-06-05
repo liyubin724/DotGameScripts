@@ -1,5 +1,5 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Layout;
+﻿using DotEngine.NativeDrawer;
+using DotEngine.NativeDrawer.Layout;
 
 namespace DotEditor.NativeDrawer.Layout
 {

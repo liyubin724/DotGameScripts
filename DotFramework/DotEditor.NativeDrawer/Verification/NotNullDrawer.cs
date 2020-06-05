@@ -1,5 +1,5 @@
-﻿using Dot.NativeDrawer;
-using Dot.NativeDrawer.Verification;
+﻿using DotEngine.NativeDrawer;
+using DotEngine.NativeDrawer.Verification;
 using UnityEditor;
 
 namespace DotEditor.NativeDrawer.Verification

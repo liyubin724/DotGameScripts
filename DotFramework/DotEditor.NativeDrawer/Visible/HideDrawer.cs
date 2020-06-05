@@ -1,4 +1,4 @@
-﻿using Dot.NativeDrawer.Visible;
+﻿using DotEngine.NativeDrawer.Visible;
 
 namespace DotEditor.NativeDrawer.Visible
 {

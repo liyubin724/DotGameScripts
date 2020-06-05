@@ -111,6 +111,10 @@
       <Project>{b055a638-daf4-439c-a323-92ebcb4d6301}</Project>
       <Name>DotEngine.NativeDrawer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
+      <Name>DotEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
