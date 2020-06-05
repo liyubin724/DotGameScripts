@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class UserListMediator : ViewController,IViewController
+    public class UserListViewController : SingleViewController,IViewController
     {
         private UserProxy userProxy;
 
-        public new const string NAME = "UserListMediator";
+        public const string NAME = "UserListMediator";
 
-        public UserListMediator(UserList userList)
+        public UserListViewController(UserList userList)
             : base(NAME, userList)
         {
             userList.NewUser += new EventHandler(userList_NewUser);

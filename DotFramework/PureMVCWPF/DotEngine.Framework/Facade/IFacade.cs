@@ -18,10 +18,10 @@ namespace DotEngine.Framework
         void RemoveCommand(string notificationName);
         bool HasCommand(string notificationName);
 
-        void RegisterMediator(IViewController mediator);
-        IViewController RetrieveMediator(string mediatorName);
-        IViewController RemoveMediator(string mediatorName);
-        bool HasMediator(string mediatorName);
+        bool HasViewController(string viewControllerName);
+        void RegisterViewController(IViewController viewController);
+        IViewController RetrieveViewController(string viewControllerName);
+        IViewController RemoveViewController(string viewControllerName);
 
         void RegisterObserver(string notificationName, Action<INotification> notifyMethod);
         void RemoveObserver(string notificationName, Action<INotification> notifyMethod);

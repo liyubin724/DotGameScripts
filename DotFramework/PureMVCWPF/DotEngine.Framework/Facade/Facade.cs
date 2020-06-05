@@ -13,23 +13,21 @@ namespace DotEngine.Framework
         protected IModelCenter modelCenter;
         protected ICommandCenter commandCenter;
 
-        protected IView view;
+        protected IViewControllerCenter viewControllerCenter;
 
-        public static IFacade GetInstance()
+        public static IFacade GetInstance(Func<IFacade> func = null)
         {
-            return instance;
-        }
-
-        public static IFacade InitInstance(Func<IFacade> func = null)
-        {
-            if(func == null)
+            if(instance == null)
             {
-                instance = new Facade();
-            }else
-            {
-                instance = func();
+                if(func == null)
+                {
+                    instance = new Facade();
+                }
+                else
+                {
+                    instance = func();
+                }
             }
-
             return instance;
         }
 
@@ -63,7 +61,7 @@ namespace DotEngine.Framework
 
         protected virtual void InitializeView()
         {
-            view = new View();
+            viewControllerCenter = new ViewControllerCenter ();
         }
 
         protected virtual void InitializeService()
@@ -101,21 +99,21 @@ namespace DotEngine.Framework
             return modelCenter.HasProxy(proxyName);
         }
 
-        public virtual void RegisterMediator(IViewController mediator)
+        public virtual void RegisterViewController(IViewController mediator)
         {
-            view.RegisterMediator(mediator);
+            viewControllerCenter.RegisterViewController(mediator);
         }
-        public virtual IViewController RetrieveMediator(string mediatorName)
+        public virtual IViewController RetrieveViewController(string mediatorName)
         {
-            return view.RetrieveMediator(mediatorName);
+            return viewControllerCenter.RetrieveViewController(mediatorName);
         }
-        public virtual IViewController RemoveMediator(string mediatorName)
+        public virtual IViewController RemoveViewController(string mediatorName)
         {
-            return view.RemoveMediator(mediatorName);
+            return viewControllerCenter.RemoveViewController(mediatorName);
         }
-        public virtual bool HasMediator(string mediatorName)
+        public virtual bool HasViewController(string mediatorName)
         {
-            return view.HasMediator(mediatorName);
+            return viewControllerCenter.HasViewController(mediatorName);
         }
 
         public virtual void SendNotification(string notificationName, object body = null)

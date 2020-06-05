@@ -50,7 +50,8 @@
     <Compile Include="Service\ServiceCenter.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Update\IUpdate.cs" />
-    <Compile Include="View\View.cs" />
+    <Compile Include="View\Controller\ComplexViewController.cs" />
+    <Compile Include="View\ViewControllerCenter .cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ICommandCenter.cs" />
     <Compile Include="Facade\IFacade.cs" />
@@ -59,11 +60,11 @@
     <Compile Include="Notify\Notification\INotification.cs" />
     <Compile Include="Notify\Notifier\INotifier.cs" />
     <Compile Include="Model\Proxy\IProxy.cs" />
-    <Compile Include="View\IView.cs" />
+    <Compile Include="View\IViewControllerCenter.cs" />
     <Compile Include="Command\MacroCommand.cs" />
     <Compile Include="Command\SimpleCommand.cs" />
     <Compile Include="Facade\Facade.cs" />
-    <Compile Include="View\Controller\ViewController.cs" />
+    <Compile Include="View\Controller\SingleViewController.cs" />
     <Compile Include="Notify\Notification\Notification.cs" />
     <Compile Include="Notify\Notifier\Notifier.cs" />
     <Compile Include="Model\Proxy\Proxy.cs" />

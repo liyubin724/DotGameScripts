@@ -19,16 +19,9 @@ namespace PureMVCWPF
         public const string ADD_ROLE = "addRole";
         public const string ADD_ROLE_RESULT = "addRoleResult";
 
-        public new static IFacade Instance
+        public static IFacade GetInstance()
         {
-            get
-            {
-                if(instance == null)
-                {
-                    instance = new ApplicationFacade();
-                }
-                return instance;
-            }
+            return Facade.GetInstance(()=> { return new ApplicationFacade(); });
         }
 
         public void Startup(object app)

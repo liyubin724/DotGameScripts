@@ -2,7 +2,7 @@
 {
     public interface IViewController: INotifier
     {
-        string MediatorName { get; }
+        string ControllerName { get; }
         object ViewComponent { get; set; }
 
         string[] ListNotificationInterests();

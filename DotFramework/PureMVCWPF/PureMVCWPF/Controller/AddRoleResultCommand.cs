@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace PureMVCWPF.Controller
 {
-    public class AddRoleResultCommand : SimpleCommand,ICommand
+    public class AddRoleResultCommand : SimpleCommand
     {
         public override void Execute(INotification notification)
         {

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class UserFormMediator : ViewController,IViewController
+    public class UserFormViewController : SingleViewController,IViewController
     {
-        public new const string NAME = "UserFormMediator";
+        public const string NAME = "UserFormMediator";
 
         private UserProxy userProxy;
         private UserForm UserForm
@@ -17,7 +17,7 @@ namespace PureMVCWPF.View
             get { return (UserForm)ViewComponent; }
         }
 
-        public UserFormMediator(UserForm view):base(NAME,view)
+        public UserFormViewController(UserForm view):base(NAME,view)
         {
             UserForm.AddUser += new EventHandler(UserForm_AddUser);
             UserForm.UpdateUser += new EventHandler(UserForm_UpdateUser);

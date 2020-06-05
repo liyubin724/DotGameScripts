@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace PureMVCWPF.View
 {
-    public class RolePanelMediator : ViewController,IViewController
+    public class RolePanelViewController : SingleViewController,IViewController
     {
-        public new const string NAME = "RolePanelMediator";
+        public const string NAME = "RolePanelMediator";
 
         private RoleProxy roleProxy;
         private RolePanel RolePanel
@@ -18,7 +18,7 @@ namespace PureMVCWPF.View
         }
 
 
-        public RolePanelMediator(RolePanel viewComponent):base(NAME,viewComponent)
+        public RolePanelViewController(RolePanel viewComponent):base(NAME,viewComponent)
         {
             RolePanel.AddRole += new EventHandler(RolePanel_AddRole);
             RolePanel.RemoveRole += new EventHandler(RolePanel_RemoveRole);

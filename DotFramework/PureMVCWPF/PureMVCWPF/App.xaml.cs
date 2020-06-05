@@ -13,7 +13,7 @@ namespace PureMVCWPF
             base.OnStartup(e);
             MainWindow window = new MainWindow();
 
-            ApplicationFacade facade = (ApplicationFacade)ApplicationFacade.Instance;
+            ApplicationFacade facade = (ApplicationFacade)ApplicationFacade.GetInstance();
             facade.Startup(window);
             window.Show();
         }

@@ -4,7 +4,7 @@ using PureMVCWPF.View;
 
 namespace PureMVCWPF.Controller
 {
-    public class StartupCommand : SimpleCommand,ICommand
+    public class StartupCommand : SimpleCommand
     {
         public override void Execute(INotification notification)
         {
@@ -12,10 +12,7 @@ namespace PureMVCWPF.Controller
             Facade.RegisterProxy(new RoleProxy());
 
             MainWindow window = (MainWindow)notification.Body;
-
-            Facade.RegisterMediator(new UserFormMediator(window.userForm));
-            Facade.RegisterMediator(new UserListMediator(window.userList));
-            Facade.RegisterMediator(new RolePanelMediator(window.rolePanel));
+            Facade.RegisterViewController(new MainViewController(window));
         }
     }
 }
