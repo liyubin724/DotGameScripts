@@ -91,7 +91,7 @@ namespace DotEngine.GOPool
                 instanceOrPrefabTemplate.transform.SetParent(pool.GroupTransform, false);
             }
 
-            preloadTimerTask = TimerManager.GetInstance().AddIntervalTimer(0.05f, OnPreloadTimerUpdate);
+            preloadTimerTask = TimerService.GetInstance().AddIntervalTimer(0.05f, OnPreloadTimerUpdate);
         }
 
         #region Preload
@@ -131,7 +131,7 @@ namespace DotEngine.GOPool
         {
             if (preloadTimerTask != null)
             {
-                TimerManager.GetInstance().RemoveTimer(preloadTimerTask);
+                TimerService.GetInstance().RemoveTimer(preloadTimerTask);
                 preloadTimerTask = null;
             }
 
@@ -339,7 +339,7 @@ namespace DotEngine.GOPool
             PreloadCompleteCallback = null;
             if (preloadTimerTask != null)
             {
-                TimerManager.GetInstance().RemoveTimer(preloadTimerTask);
+                TimerService.GetInstance().RemoveTimer(preloadTimerTask);
                 preloadTimerTask = null;
             }
 

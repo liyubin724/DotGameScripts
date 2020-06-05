@@ -9,7 +9,7 @@ namespace DotEngine.Framework
         void RemoveService(string name);
         bool HasService(string name);
 
-        void RegisterProxy(IProxy proxy);
+        void RegisterProxy(string proxyName,IProxy proxy);
         IProxy RetrieveProxy(string proxyName);
         IProxy RemoveProxy(string proxyName);
         bool HasProxy(string proxyName);

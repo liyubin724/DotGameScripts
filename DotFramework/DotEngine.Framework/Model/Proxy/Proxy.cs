@@ -2,11 +2,8 @@
 { 
     public abstract class Proxy: Notifier, IProxy
     {
-        public string ProxyName { get; protected set; }
-
-        public Proxy(string proxyName)
+        public Proxy()
         {
-            ProxyName = proxyName;
         }
 
         public virtual void OnRegister()

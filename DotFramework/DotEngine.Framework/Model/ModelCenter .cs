@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace DotEngine.Framework
 {
@@ -16,14 +17,20 @@ namespace DotEngine.Framework
         {
         }
 
-        public virtual void RegisterProxy(IProxy proxy)
+        public virtual void RegisterProxy(string proxyName,IProxy proxy)
         {
-            if(proxy!=null && !string.IsNullOrEmpty(proxy.ProxyName) && !proxyDic.ContainsKey(proxy.ProxyName))
+            if(proxy == null || string.IsNullOrEmpty(proxyName))
             {
-                proxyDic.Add(proxy.ProxyName, proxy);
-                
-                proxy.OnRegister();
+                throw new ArgumentNullException("The proxy or the name of proxy is empty");
             }
+
+            if(proxyDic.ContainsKey(proxyName))
+            {
+                throw new Exception($"The name of proxy has been added.name = {proxyName}.");
+            }
+
+            proxyDic.Add(proxyName, proxy);
+            proxy.OnRegister();
         }
 
         public virtual IProxy RetrieveProxy(string proxyName)

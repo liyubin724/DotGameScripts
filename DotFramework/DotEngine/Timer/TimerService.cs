@@ -1,16 +1,23 @@
-﻿using System;
+﻿using DotEngine.Framework;
+using System;
 
 namespace DotEngine.Timer
 {
     /// <summary>
     /// 定时器的管理器
     /// </summary>
-    public class TimerManager : Singleton<TimerManager>
+    public class TimerService : IService,IUpdate
     {
         //多层时间轮
         private HierarchicalTimerWheel hTimerWheel = null;
         //是否暂停
         private bool isPause = false;
+
+        public TimerService()
+        {
+
+        }
+
 
         protected override void DoInit()
         {

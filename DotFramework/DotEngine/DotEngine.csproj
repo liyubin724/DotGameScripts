@@ -71,33 +71,6 @@
     <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
     <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
     <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
-    <Compile Include="Framework\Command\CommandCenter .cs" />
-    <Compile Include="Framework\Command\ICommand.cs" />
-    <Compile Include="Framework\Command\ICommandCenter.cs" />
-    <Compile Include="Framework\Command\MacroCommand.cs" />
-    <Compile Include="Framework\Command\SimpleCommand.cs" />
-    <Compile Include="Framework\Facade\Facade.cs" />
-    <Compile Include="Framework\Facade\IFacade.cs" />
-    <Compile Include="Framework\Model\IModelCenter.cs" />
-    <Compile Include="Framework\Model\ModelCenter .cs" />
-    <Compile Include="Framework\Model\Proxy\IProxy.cs" />
-    <Compile Include="Framework\Model\Proxy\Proxy.cs" />
-    <Compile Include="Framework\Notify\IObserverCenter.cs" />
-    <Compile Include="Framework\Notify\Notification\INotification.cs" />
-    <Compile Include="Framework\Notify\Notification\Notification.cs" />
-    <Compile Include="Framework\Notify\Notifier\INotifier.cs" />
-    <Compile Include="Framework\Notify\Notifier\Notifier.cs" />
-    <Compile Include="Framework\Notify\ObserverCenter.cs" />
-    <Compile Include="Framework\Service\IService.cs" />
-    <Compile Include="Framework\Service\IServiceCenter.cs" />
-    <Compile Include="Framework\Service\Service.cs" />
-    <Compile Include="Framework\Service\ServiceCenter.cs" />
-    <Compile Include="Framework\Update\IUpdate.cs" />
-    <Compile Include="Framework\View\Controller\ComplexViewController.cs" />
-    <Compile Include="Framework\View\Controller\IViewController.cs" />
-    <Compile Include="Framework\View\Controller\SingleViewController.cs" />
-    <Compile Include="Framework\View\IViewControllerCenter.cs" />
-    <Compile Include="Framework\View\ViewControllerCenter .cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />
@@ -108,12 +81,47 @@
     <Compile Include="GOPool\PoolManager.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\LogUtil.cs" />
+    <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\ButtonAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\HelpAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SeparatorLineAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SpaceLineAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginGroupAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginHorizontalAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginIndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndGroupAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndHorizontalAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndIndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\LayoutAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\ListenerAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\OnValueChangedAttribute.cs" />
+    <Compile Include="NativeDrawer\NativeConditionDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\NativeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Control\IndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Control\ReadonlyAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\EnumButtonAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\FloatSliderAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Label\HideLabelAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Label\NewLabelAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFilePathAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFolderPathAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\PropertyAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\StringPopupAttribute.cs" />
+    <Compile Include="NativeDrawer\Verification\NotNullAttribute.cs" />
+    <Compile Include="NativeDrawer\Verification\VerificationAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\HideAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\HideIfAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\ShowAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\ShowIfAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\VisibleAtrribute.cs" />
     <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Timer\HierarchicalTimerWheel.cs" />
-    <Compile Include="Timer\TimerManager.cs" />
+    <Compile Include="Timer\TimerService.cs" />
     <Compile Include="Timer\TimerTask.cs" />
     <Compile Include="Timer\TimerWheel.cs" />
     <Compile Include="Utilities\ArrayUtility.cs" />
@@ -128,6 +136,14 @@
     <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DotEngine.Framework\DotEngine.Framework.csproj">
+      <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
+      <Name>DotEngine.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

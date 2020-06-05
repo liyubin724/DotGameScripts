@@ -20,7 +20,7 @@ namespace DotEngine.GOPool
             LogUtil.LogInfo(PoolConst.LOGGER_NAME, "PoolManager::DoInit->PoolManager Start");
             mgrTransform = DontDestroyHandler.CreateTransform(PoolConst.MANAGER_NAME);
 
-            cullTimerTask = TimerManager.GetInstance().AddIntervalTimer(cullTimeInterval, OnCullTimerUpdate);
+            cullTimerTask = TimerService.GetInstance().AddIntervalTimer(cullTimeInterval, OnCullTimerUpdate);
         }
         
         /// <summary>
@@ -96,7 +96,7 @@ namespace DotEngine.GOPool
 
             if (cullTimerTask != null)
             {
-                TimerManager.GetInstance().RemoveTimer(cullTimerTask);
+                TimerService.GetInstance().RemoveTimer(cullTimerTask);
             }
             cullTimerTask = null;
             groupDic = null;

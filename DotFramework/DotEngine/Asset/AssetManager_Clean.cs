@@ -35,14 +35,14 @@ namespace DotEngine.Asset
             }
             else if (autoCleanInterval > 0)
             {
-                autoCleanTimer = TimerManager.GetInstance().AddIntervalTimer(autoCleanInterval, (userData) => assetLoader?.UnloadUnusedAsset());
+                autoCleanTimer = TimerService.GetInstance().AddIntervalTimer(autoCleanInterval, (userData) => assetLoader?.UnloadUnusedAsset());
             }
         }
         private void StopAutoClean()
         {
             if (autoCleanTimer != null)
             {
-                TimerManager.GetInstance().RemoveTimer(autoCleanTimer);
+                TimerService.GetInstance().RemoveTimer(autoCleanTimer);
                 autoCleanTimer = null;
             }
         }
