@@ -26,7 +26,7 @@ namespace PureMVCWPF.View
         public override void OnRegister()
         {
             base.OnRegister();
-            userProxy = (UserProxy)Facade.RetrieveProxy(UserProxy.NAME);
+            userProxy = Facade.RetrieveProxy<UserProxy>(UserProxy.NAME);
         }
 
         void UserForm_AddUser(object sender, EventArgs e)

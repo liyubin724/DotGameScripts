@@ -32,6 +32,7 @@ namespace DotEngine.Framework
             InitializeFacade();
         }
 
+        #region Initialize
         protected virtual void InitializeFacade()
         {
             observerCenter = new ObserverCenter();
@@ -61,7 +62,9 @@ namespace DotEngine.Framework
         {
             serviceCenter = new ServiceCenter();
         }
+        #endregion
 
+        #region Command
         public virtual void RegisterCommand(string name, ICommand command)
         {
             commandCenter.RegisterCommand(name, command);
@@ -74,15 +77,18 @@ namespace DotEngine.Framework
         {
             return commandCenter.HasCommand(name);
         }
+        #endregion
 
+        #region Proxy
         public virtual void RegisterProxy(string name,IProxy proxy)
         {
             modelCenter.RegisterProxy(name,proxy);
         }
-        public virtual IProxy RetrieveProxy(string name)
+        public virtual T RetrieveProxy<T>(string name) where T:IProxy
         {
-            return modelCenter.RetrieveProxy(name);
+            return (T)modelCenter.RetrieveProxy(name);
         }
+
         public virtual IProxy RemoveProxy(string name)
         {
             return modelCenter.RemoveProxy(name);
@@ -91,14 +97,16 @@ namespace DotEngine.Framework
         {
             return modelCenter.HasProxy(name);
         }
+        #endregion
 
+        #region ViewController
         public virtual void RegisterViewController(string name,IViewController viewController)
         {
             viewControllerCenter.RegisterViewController(name, viewController);
         }
-        public virtual IViewController RetrieveViewController(string name)
+        public virtual T RetrieveViewController<T>(string name) where T:IViewController
         {
-            return viewControllerCenter.RetrieveViewController(name);
+            return (T)viewControllerCenter.RetrieveViewController(name);
         }
         public virtual IViewController RemoveViewController(string name)
         {
@@ -108,7 +116,9 @@ namespace DotEngine.Framework
         {
             return viewControllerCenter.HasViewController(name);
         }
+        #endregion
 
+        #region Notification && Observer
         public virtual void SendNotification(string name, object body = null)
         {
             observerCenter.NotifyObservers(new Notification(name, body));
@@ -123,15 +133,17 @@ namespace DotEngine.Framework
         {
             observerCenter.RemoveObserver(name, notifyMethod);
         }
+        #endregion
 
+        #region Service
         public virtual void RegisterService(string name, IService service)
         {
             serviceCenter.RegisterService(name, service);
         }
 
-        public virtual IService RetrieveService(string name)
+        public virtual T RetrieveService<T>(string name)where T:IService
         {
-            return serviceCenter.RetrieveService(name);
+            return (T)serviceCenter.RetrieveService(name);
         }
 
         public virtual void RemoveService(string name)
@@ -144,6 +156,9 @@ namespace DotEngine.Framework
             return serviceCenter.HasService(name);
         }
 
+        #endregion
+
+        #region Update
         public virtual void DoUpdate(float deltaTime)
         {
             serviceCenter.DoUpdate(deltaTime);
@@ -163,5 +178,6 @@ namespace DotEngine.Framework
         {
             serviceCenter.DoFixedUpdate(deltaTime);
         }
+        #endregion
     }
 }

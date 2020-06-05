@@ -26,7 +26,7 @@ namespace PureMVCWPF.View
         public override void OnRegister()
         {
             base.OnRegister();
-            roleProxy = (RoleProxy)Facade.RetrieveProxy(RoleProxy.NAME);
+            roleProxy = Facade.RetrieveProxy<RoleProxy>(RoleProxy.NAME);
         }
 
         public override void OnRemove()

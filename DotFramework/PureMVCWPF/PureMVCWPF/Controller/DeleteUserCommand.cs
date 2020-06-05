@@ -9,8 +9,8 @@ namespace PureMVCWPF.Controller
         public override void Execute(INotification notification)
         {
             UserVO user = (UserVO)notification.Body;
-            UserProxy userProxy = (UserProxy)Facade.RetrieveProxy(UserProxy.NAME);
-            RoleProxy roleProxy = (RoleProxy)Facade.RetrieveProxy(RoleProxy.NAME);
+            UserProxy userProxy = Facade.RetrieveProxy<UserProxy>(UserProxy.NAME);
+            RoleProxy roleProxy = Facade.RetrieveProxy<RoleProxy>(RoleProxy.NAME);
             userProxy.DeleteItem(user);
             roleProxy.DeleteItem(user);
 
