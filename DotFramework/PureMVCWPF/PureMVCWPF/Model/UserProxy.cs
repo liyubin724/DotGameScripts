@@ -11,8 +11,7 @@ namespace PureMVCWPF.Model
         public const string NAME = "UserProxy";
 
         private ObservableCollection<UserVO> users = null;
-
-        public UserProxy():base(NAME)
+        public UserProxy()
         {
             users = new ObservableCollection<UserVO>();
 

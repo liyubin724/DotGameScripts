@@ -15,7 +15,7 @@ namespace PureMVCWPF.View
         private RolePanel rolePanel;
 
 
-        public RolePanelViewController(RolePanel viewComponent):base(NAME)
+        public RolePanelViewController(RolePanel viewComponent)
         {
             rolePanel = viewComponent;
 

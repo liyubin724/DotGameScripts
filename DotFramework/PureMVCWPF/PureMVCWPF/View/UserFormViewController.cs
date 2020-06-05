@@ -14,7 +14,7 @@ namespace PureMVCWPF.View
         private UserProxy userProxy;
         private UserForm userForm;
 
-        public UserFormViewController(UserForm view):base(NAME)
+        public UserFormViewController(UserForm view)
         {
             userForm = view;
 

@@ -15,7 +15,7 @@ namespace PureMVCWPF.Model
             get { return roles; }
         }
 
-        public RoleProxy() : base(NAME)
+        public RoleProxy()
         {
             roles = new ObservableCollection<RoleVO>();
 

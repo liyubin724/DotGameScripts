@@ -9,6 +9,7 @@ namespace DotEngine.Framework
 
         public ComplexViewController()
         {
+            subControllerDic = new Dictionary<string, IViewController>();
         }
 
         public void AddSubViewController(IViewController viewController)

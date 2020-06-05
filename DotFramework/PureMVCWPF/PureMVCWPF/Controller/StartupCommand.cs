@@ -8,11 +8,11 @@ namespace PureMVCWPF.Controller
     {
         public override void Execute(INotification notification)
         {
-            Facade.RegisterProxy(new UserProxy());
-            Facade.RegisterProxy(new RoleProxy());
+            Facade.RegisterProxy(UserProxy.NAME, new UserProxy());
+            Facade.RegisterProxy(RoleProxy.NAME, new RoleProxy());
 
             MainWindow window = (MainWindow)notification.Body;
-            Facade.RegisterViewController(new MainViewController(window));
+            Facade.RegisterViewController(MainViewController.NAME,new MainViewController(window));
         }
     }
 }

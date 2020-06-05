@@ -4,9 +4,11 @@ namespace PureMVCWPF.View
 {
     public class MainViewController : ComplexViewController
     {
+        public const string NAME = "MainViewController";
+
         private MainWindow mainWin = null;
 
-        public MainViewController(MainWindow window) : base("MainViewController")
+        public MainViewController(MainWindow window)
         {
             mainWin = window;
         }
@@ -14,9 +16,9 @@ namespace PureMVCWPF.View
         public override void OnRegister()
         {
             base.OnRegister();
-            AddSubController(new UserListViewController(mainWin.userList));
-            AddSubController(new UserFormViewController(mainWin.userForm));
-            AddSubController(new RolePanelViewController(mainWin.rolePanel));
+            AddSubViewController(new UserListViewController(mainWin.userList));
+            AddSubViewController(new UserFormViewController(mainWin.userForm));
+            AddSubViewController(new RolePanelViewController(mainWin.rolePanel));
         }
     }
 }

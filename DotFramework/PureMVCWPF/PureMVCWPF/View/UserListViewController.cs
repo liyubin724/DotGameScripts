@@ -15,7 +15,7 @@ namespace PureMVCWPF.View
         private UserProxy userProxy;
         private UserList userList;
 
-        public UserListViewController(UserList userList): base(NAME)
+        public UserListViewController(UserList userList)
         {
             this.userList = userList;
 
