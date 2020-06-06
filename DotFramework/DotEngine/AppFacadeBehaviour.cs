@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿//using UnityEngine;
 
-namespace DotEngine.Core
-{
-    public class AppFacadeBehaviour : MonoBehaviour
-    {
-        AppFacade appFacade = null;
+//namespace DotEngine.Core
+//{
+//    public class AppFacadeBehaviour : MonoBehaviour
+//    {
+//        void Update()
+//        {
 
-        void Awake()
-        {
+//        }
 
-        }
+//        void LateUpdate()
+//        {
 
-        void Update()
-        {
+//        }
 
-        }
-    }
-}
+//        void FixedUpdate()
+//        {
+
+//        }
+//    }
+//}

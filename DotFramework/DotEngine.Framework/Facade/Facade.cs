@@ -4,15 +4,12 @@ namespace DotEngine.Framework
 {
     public class Facade : IFacade
     {
-        protected const string SingletonMsg = "Facade Singleton already constructed!";
-
         protected static IFacade instance;
 
         protected IServiceCenter serviceCenter;
         protected IObserverCenter observerCenter;
         protected IModelCenter modelCenter;
         protected ICommandCenter commandCenter;
-
         protected IViewControllerCenter viewControllerCenter;
 
         public static IFacade GetInstance()
@@ -26,8 +23,6 @@ namespace DotEngine.Framework
 
         protected Facade()
         {
-            if (instance != null) throw new Exception(SingletonMsg);
-
             instance = this;
             InitializeFacade();
         }

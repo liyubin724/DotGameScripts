@@ -4,7 +4,7 @@ namespace DotEngine.Utilities
 {
     public static class DontDestroyHandler
     {
-        private static readonly string RootName = "Singleton-Root";
+        private const string RootName = "Singleton-Root";
         private static Transform rootTran = null;
 
         private static Transform RootTransform
@@ -26,17 +26,19 @@ namespace DotEngine.Utilities
             }
         }
 
-        public static Transform CreateTransform(string name)
-        {
-            GameObject behGO = new GameObject(name);
-            Transform tran = behGO.transform;
-            AddTransform(tran);
-            return tran;
-        }
-
-        public static void AddTransform(Transform tran,bool worldPositionStays = false)
+        public static void AddTransform(Transform tran, bool worldPositionStays = false)
         {
             tran.SetParent(RootTransform, worldPositionStays);
+        }
+
+        public static Transform CreateTransform(string name)
+        {
+            GameObject gObject = new GameObject(name);
+            Transform tran = gObject.transform;
+           
+            AddTransform(tran);
+
+            return tran;
         }
 
         public static T CreateComponent<T>(string name = null) where T : MonoBehaviour
@@ -44,7 +46,7 @@ namespace DotEngine.Utilities
             T component = RootTransform.GetComponentInChildren<T>();
             if(component == null)
             {
-                Transform tran = CreateTransform(string.IsNullOrEmpty(name)?typeof(T).Name:name);
+                Transform tran = CreateTransform(string.IsNullOrEmpty(name) ? typeof(T).Name : name);
                 component = tran.gameObject.AddComponent<T>();
             }
 
