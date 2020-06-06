@@ -10,11 +10,11 @@ namespace DotEngine.Log
     public class Log4NetLogger : ILogger
     {
         private bool isInited = false;
-        public static void Initalize(string xmlConfig, LogLevelType level = LogLevelType.Info)
+        public static ILogger Initalize(string xmlConfig)
         {
             if (string.IsNullOrEmpty(xmlConfig))
             {
-                return;
+                return null;
             }
 
             Log4NetLogger logger = new Log4NetLogger();
@@ -26,6 +26,8 @@ namespace DotEngine.Log
             }
 
             Application.logMessageReceived += OnMessageReceived;
+
+            return logger;
         }
 
         private static void OnMessageReceived(string condition, string stackTrace, LogType type)

@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace DotEngine.GOPool
 {
@@ -10,6 +10,6 @@ namespace DotEngine.GOPool
         internal static readonly string MANAGER_NAME = "GOService";
         internal static readonly string GROUP_NAME_FORMAT = "Group{0}";
 
-        public static Func<string, GameObject, GameObject> InstantiateAsset;
+        public static Func<string, UnityObject, UnityObject> InstantiateAsset;
     }
 }

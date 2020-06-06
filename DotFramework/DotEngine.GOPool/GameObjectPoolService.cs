@@ -19,7 +19,7 @@ namespace DotEngine.GOPool
         private float cullTimeInterval = 60f;
         private TimerTaskHandle cullTimerTask = null;
 
-        public GameObjectPoolService(Func<string,GameObject,GameObject> instantiateAsset)
+        public GameObjectPoolService(Func<string, UnityObject, UnityObject> instantiateAsset)
         {
             GameObjectPoolConst.InstantiateAsset = instantiateAsset;
         }

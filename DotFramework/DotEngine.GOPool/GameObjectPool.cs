@@ -230,7 +230,7 @@ namespace DotEngine.GOPool
             }
             else
             {
-                item = GameObjectPoolConst.InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
+                item = (GameObject)GameObjectPoolConst.InstantiateAsset(uniqueName, instanceOrPrefabTemplate);
             }
 
             if (item != null)
