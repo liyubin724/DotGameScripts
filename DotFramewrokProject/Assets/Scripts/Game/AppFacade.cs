@@ -65,6 +65,13 @@ namespace Game
 
 
         }
+
+        protected override void InitializeView()
+        {
+            base.InitializeView();
+
+            RegisterViewController(StartupViewController.NAME, new StartupViewController());
+        }
     }
 }
 
