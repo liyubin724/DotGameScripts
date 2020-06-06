@@ -2,7 +2,7 @@
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Dot.Asset
+namespace DotEngine.Asset
 {
     public class DatabaseSceneLoader : ASceneLoader
     {

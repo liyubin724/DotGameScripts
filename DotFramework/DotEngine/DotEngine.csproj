@@ -46,9 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppConst.cs" />
-    <Compile Include="AppFacade.cs" />
-    <Compile Include="AppFacadeBehaviour.cs" />
     <Compile Include="Generic\ListDictionary.cs" />
     <Compile Include="Generic\UniqueID.cs" />
     <Compile Include="Generic\UniqueIntID.cs" />

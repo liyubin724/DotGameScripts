@@ -1,9 +1,9 @@
 ﻿#if UNITY_EDITOR
-using Dot.Asset.Datas;
-using Dot.Log;
+using DotEngine.Asset.Datas;
+using DotEngine.Log;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Asset
+namespace DotEngine.Asset
 {
     internal class DatabaseAssetNode : AAssetNode
     {

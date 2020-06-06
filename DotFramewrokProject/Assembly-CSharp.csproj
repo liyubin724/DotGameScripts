@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Game\AppFacade.cs" />
     <Compile Include="Assets\Scripts\Game\AppFacadeBehaviour.cs" />
     <Compile Include="Assets\Scripts\Game\Command\StartupCommand.cs" />
+    <Compile Include="Assets\Scripts\Game\StartupViewController.cs" />
     <Compile Include="Assets\Scripts\Game\Update\UpdateService.cs" />
     <Compile Include="Assets\Scripts\Startup.cs" />
     <None Include="Assets\log4net.xml" />

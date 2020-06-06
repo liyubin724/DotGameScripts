@@ -1,13 +1,13 @@
 ﻿#if UNITY_EDITOR
 
-using Dot.Asset.Datas;
-using Dot.Pool;
-using Dot.Log;
+using DotEngine.Asset.Datas;
+using DotEngine.Pool;
+using DotEngine.Log;
 using System.Linq;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
-namespace Dot.Asset
+namespace DotEngine.Asset
 {
     /// <summary>
     /// 使用Database进行资源的加载，只能用于编辑器模式中

@@ -18,7 +18,11 @@ namespace Game
             IFacade facade = AppFacade.GetInstance();
             DontDestroyHandler.CreateComponent<AppFacadeBehaviour>();
 
-            facade.SendNotification(AppConst.STARTUP);
+            AssetService assetService = facade.RetrieveService<AssetService>(AssetService.NAME);
+            assetService.InitDatabaseLoader((result) =>
+            {
+                facade.SendNotification(AppConst.STARTUP);
+            });
         }
 
         public new static IFacade GetInstance()
