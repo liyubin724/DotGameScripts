@@ -1,4 +1,4 @@
-﻿namespace Dot.AI.FSM
+﻿namespace DotEngine.AI.FSM
 {
     public abstract class StateEventArgs
     {

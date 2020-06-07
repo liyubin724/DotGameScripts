@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dot.AI.FSM
+namespace DotEngine.AI.FSM
 {
     public class StateToken : Token
     {

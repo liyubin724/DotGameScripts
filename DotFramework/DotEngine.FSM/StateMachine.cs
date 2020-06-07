@@ -1,8 +1,8 @@
-﻿using Dot.Context;
+﻿using DotEngine.Context;
 using System;
 using System.Collections.Generic;
 
-namespace Dot.AI.FSM
+namespace DotEngine.AI.FSM
 {
     public delegate void StateChangedHandler(StateMachine machine, StateChangedEventArgs e);
     public delegate void CompletedHandler(StateMachine machine);

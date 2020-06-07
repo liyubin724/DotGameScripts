@@ -1,8 +1,8 @@
-﻿using Dot.Context;
+﻿using DotEngine.Context;
 using System;
 using System.Collections.Generic;
 
-namespace Dot.AI.FSM
+namespace DotEngine.AI.FSM
 {
     public delegate void StateInitializedHandler(StateBase state);
     public delegate void StateEnterHandler(StateBase state,StateEnterEventArgs e);
