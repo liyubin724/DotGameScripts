@@ -44,6 +44,11 @@
     <Compile Include="Ini\IniConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DotEngine.Framework\DotEngine.Framework.csproj">
+      <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
+      <Name>DotEngine.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

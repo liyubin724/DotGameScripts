@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Game\StartupViewController.cs" />
     <Compile Include="Assets\Scripts\Game\Update\UpdateService.cs" />
     <Compile Include="Assets\Scripts\Startup.cs" />
+    <None Include="Assets\ini_config.txt" />
     <None Include="Assets\log4net.xml" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -310,6 +311,9 @@
     </Reference>
     <Reference Include="PriorityQueue">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/PriorityQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="DotEngine.Config">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Config.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
