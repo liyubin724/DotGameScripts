@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("DotConfig")]
+[assembly: AssemblyTitle("DotEditor.Config")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DotConfig")]
+[assembly: AssemblyProduct("DotEditor.Config")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("d7353c36-aca8-454d-8a61-e3707efe5ce5")]
+[assembly: Guid("1cb6de4c-0ad9-49d3-9fee-3b1f22994bc5")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

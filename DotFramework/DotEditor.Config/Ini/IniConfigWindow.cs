@@ -1,9 +1,8 @@
-﻿using Dot.Ini;
-using DotEditor.Core.EGUI;
-using DotEditor.EGUI;
-using DotEditor.Util;
+﻿using DotEditor.GUIExtension;
+using DotEngine.Config.Ini;
 using ReflectionMagic;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,78 +20,26 @@ namespace DotEditor.Config.Ini
         }
 
         private IniConfig iniConfig = null;
-        private string configAssetPath = null;
-        public string ConfigAssetPath
-        {
-            get 
-            {
-                return configAssetPath;
-            }
-            set
-            {
-                if(configAssetPath!=value)
-                {
-                    configAssetPath = value;
-                    LoadIniConfig();
-                }
-            }
-        }
-
-        private void LoadIniConfig()
+        private string configFilePath = null;
+        private void LoadConfig(string filePath)
         {
             iniConfig = null;
+            configFilePath = null;
 
-            if(string.IsNullOrEmpty(configAssetPath))
+            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
-                return;
-            }
-            TextAsset ta = AssetDatabase.LoadAssetAtPath<TextAsset>(configAssetPath);
-            if(ta!=null && !string.IsNullOrEmpty(ta.text))
-            {
-                iniConfig = new IniConfig(ta.text, false);
-                Repaint();
-            }
-        }
-
-        private void OpenIniConfig()
-        {
-            string filePath = EditorUtility.OpenFilePanel(Contents.OpenStr, Application.dataPath, "txt");
-            if(!string.IsNullOrEmpty(filePath))
-            {
-                ConfigAssetPath = PathUtil.GetAssetPath(filePath);
-            }
-        }
-
-        private void SaveIniConfig()
-        {
-            if(iniConfig == null)
-            {
-                return;
+                configFilePath = filePath;
+                iniConfig = IniConfigUtil.ReadConfigFrom(filePath);
             }
 
-            if(string.IsNullOrEmpty(ConfigAssetPath))
-            {
-                string filePath = EditorUtility.SaveFilePanel(Contents.SaveStr, Application.dataPath, "ini_config", "txt");
-                if(!string.IsNullOrEmpty(filePath))
-                {
-                    configAssetPath = PathUtil.GetAssetPath(filePath);
-                }
-            }
-
-            iniConfig.Save(PathUtil.GetDiskPath(ConfigAssetPath));
-            AssetDatabase.ImportAsset(ConfigAssetPath);
-        }
-
-        private void NewIniConfig()
-        {
-            configAssetPath = null;
-            iniConfig = new IniConfig();
+            Repaint();
         }
 
         private DeleteData deleteData = null;
         private void OnGUI()
         {
             DrawToolbar();
+
             if(iniConfig!=null)
             {
                 dynamic config = iniConfig.AsDynamic();
@@ -124,44 +71,61 @@ namespace DotEditor.Config.Ini
             }
         }
 
-        private EGUIToolbarSearchField searchField = null;
+        private ToolbarSearchField searchField = null;
         private string searchText = string.Empty;
         private void DrawToolbar()
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar,GUILayout.ExpandWidth(true));
             {
-                if(GUILayout.Button(Contents.OpenStr,EditorStyles.toolbarButton,GUILayout.Width(40)))
+                if (EGUILayout.ToolbarButton(Contents.OpenStr))
                 {
-                    OpenIniConfig();
+                    string filePath = EditorUtility.OpenFilePanel(Contents.OpenStr, Application.dataPath, "txt");
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        LoadConfig(filePath);
+                    }
                 }
                 
-                if (GUILayout.Button(Contents.NewStr, EditorStyles.toolbarButton, GUILayout.Width(40)))
+                if (EGUILayout.ToolbarButton(Contents.NewStr))
                 {
-                    NewIniConfig();
+                    configFilePath = null;
+                    iniConfig = new IniConfig();
                 }
                 if(iniConfig!=null)
                 {
-                    if (GUILayout.Button(Contents.SaveStr, EditorStyles.toolbarButton, GUILayout.Width(40)))
+                    if (EGUILayout.ToolbarButton(Contents.SaveStr))
                     {
-                        SaveIniConfig();
+                        string filePath = configFilePath;
+
+                        if (string.IsNullOrEmpty(filePath))
+                        {
+                            filePath = EditorUtility.SaveFilePanel(Contents.SaveStr, Application.dataPath, "ini_config", "txt");
+                        }
+
+                        if(!string.IsNullOrEmpty(filePath))
+                        {
+                            configFilePath = filePath;
+                            IniConfigUtil.WriteConfigTo(filePath, iniConfig);
+                        }
                     }
                 }
 
                 GUILayout.FlexibleSpace();
+
                 if(iniConfig!=null)
                 {
-                    if (GUILayout.Button(Contents.AddGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
+                    if (EGUILayout.ToolbarButton(Contents.AddGroupContent,70))
                     {
-                        Vector2 size = new Vector2(300, 150);
-                        Rect rect = new Rect(position.position + 0.5f * position.size - size * 0.5f, size);
-                        CreateIniGroupPopupWindow.ShowWin(iniConfig, (name)=>
+                        PopupWindow.Show(new Rect(Event.current.mousePosition,Vector2.zero), new CreateIniGroupContent(iniConfig, (groupName)=>
                         {
-                        },rect);
+                            Repaint();
+                        }));
                     }
                 }
+
                 if(searchField == null)
                 {
-                    searchField = new EGUIToolbarSearchField((text) =>
+                    searchField = new ToolbarSearchField((text) =>
                     {
                         searchText = text==null?"":text.ToLower();
                     },null);
@@ -179,6 +143,8 @@ namespace DotEditor.Config.Ini
                 {
                     EditorGUILayout.LabelField(new GUIContent(group.Name, group.Comment));
 
+                    GUILayout.FlexibleSpace();
+
                     if (GUILayout.Button(Contents.DeleteGroupContent, EditorStyles.toolbarButton, GUILayout.Width(80)))
                     {
                         deleteData = new DeleteData() { groupName = group.Name };
@@ -186,22 +152,17 @@ namespace DotEditor.Config.Ini
 
                     if (GUILayout.Button(Contents.AddDataContent,EditorStyles.toolbarButton,GUILayout.Width(80)))
                     {
-                        Vector2 pos = GUIUtility.GUIToScreenPoint(Input.mousePosition);
-                        Vector2 size = new Vector2(300, 200);
-                        Rect rect = new Rect(position.position + 0.5f*position.size - size * 0.5f, size);
-                        CreateIniDataPopupWindow.ShowWin(group, (groupName,dataKey)=>
+                        PopupWindow.Show(new Rect(Event.current.mousePosition, Vector2.zero), new CreateIniDataContent(group, (groupName,dataKey) =>
                         {
-                        },rect);
+                            Repaint();
+                        }));
                     }
                 }
                 EditorGUILayout.EndHorizontal();
 
-                foreach(var dKVP in group.dataDic)
+                foreach(var dKVP in group.AsDynamic().dataDic)
                 {
-                    if(string.IsNullOrEmpty(searchText))
-                    {
-                        DrawData(group, dKVP.Value);
-                    }else if(dKVP.Key.ToLower().IndexOf(searchText) >= 0)
+                    if(string.IsNullOrEmpty(searchText) || dKVP.Key.ToLower().IndexOf(searchText) >= 0)
                     {
                         DrawData(group, dKVP.Value);
                     }
@@ -213,11 +174,12 @@ namespace DotEditor.Config.Ini
         private void DrawData(IniGroup group,IniData data)
         {
             string value = data.Value;
+            
             EditorGUILayout.BeginHorizontal();
             {
                 if(data.OptionValues!=null && data.OptionValues.Length>0)
                 {
-                    value = DotEditorGUILayout.StringPopup(new GUIContent(data.Key,data.Comment), data.Value, data.OptionValues);
+                    value = EGUILayout.StringPopup(new GUIContent(data.Key,data.Comment), data.Value, data.OptionValues);
                 }else
                 {
                     value = EditorGUILayout.TextField(new GUIContent(data.Key, data.Comment), data.Value);
@@ -229,6 +191,7 @@ namespace DotEditor.Config.Ini
                 }
             }
             EditorGUILayout.EndHorizontal();
+
             if(data.Value!=value)
             {
                 data.Value = value;
@@ -246,14 +209,9 @@ namespace DotEditor.Config.Ini
             internal static GUIContent WinTitleContent = new GUIContent("Ini Config");
             internal static GUIContent ChangedWinTitleContent = new GUIContent("Ini Config *");
 
-            internal static string SaveStr = "Save";
-            internal static string SaveForChangedMessageStr = "The config is changed,do you want to save it?";
-            internal static string OKStr = "OK";
-            internal static string CancelStr = "Cancel";
-
             internal static string OpenStr = "Open";
-
             internal static string NewStr = "New";
+            internal static string SaveStr = "Save";
 
             internal static GUIContent AddGroupContent = new GUIContent("Add Group", "Add a new group");
             internal static GUIContent DeleteGroupContent = new GUIContent("Delete Group", "Delete the group");

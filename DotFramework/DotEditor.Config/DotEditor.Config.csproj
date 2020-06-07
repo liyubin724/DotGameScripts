@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F79667A9-0309-4B90-84D9-0BA0CF85F76E}</ProjectGuid>
+    <ProjectGuid>{1CB6DE4C-0AD9-49D3-9FEE-3B1F22994BC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotEditor.Configs</RootNamespace>
-    <AssemblyName>DotConfigEditor</AssemblyName>
+    <RootNamespace>DotEditor.Config</RootNamespace>
+    <AssemblyName>DotEditor.Config</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ReflectionMagic">
+      <HintPath>..\libs\Editor\ReflectionMagic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,18 +43,32 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEditor">
-      <HintPath>..\..\DotDependLibs\Editor\UnityEditor.dll</HintPath>
+      <HintPath>..\libs\Editor\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\DotDependLibs\UnityEngine.dll</HintPath>
+      <HintPath>..\libs\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Ini\CreateIniDataPopupWindow.cs" />
-    <Compile Include="Ini\CreateIniGroupPopupWindow.cs" />
+    <Compile Include="Ini\CreateIniDataContent.cs" />
+    <Compile Include="Ini\CreateIniGroupContent.cs" />
+    <Compile Include="Ini\IniConfigUtil.cs" />
     <Compile Include="Ini\IniConfigWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotEditor\DotEditor.csproj">
+      <Project>{620120c0-a2bb-4ee9-83ea-374195187574}</Project>
+      <Name>DotEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotEngine.Config\DotEngine.Config.csproj">
+      <Project>{be7f795a-d5b8-4558-942e-85f3a59ddc0f}</Project>
+      <Name>DotEngine.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
+      <Name>DotEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
