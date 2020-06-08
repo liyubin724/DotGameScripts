@@ -7,22 +7,55 @@ namespace DotEngine.Net.Message
 {
     public class MessageWriter
     {
-        public IMessageCrypto Crypto { get; set; } = null;
-        public IMessageCompressor Compressor { get; set; } = null;
-
         private byte serialNumber = 0;
         private MemoryStreamEx bufferStream = new MemoryStreamEx();
+        private IMessageParser messageParser = null;
 
-        public MessageWriter()
+        public MessageWriter(IMessageParser parser)
         {
+            messageParser = parser;
         }
 
-        public MessageWriter(IMessageCompressor compressor,IMessageCrypto crypto)
+        public byte[] EncodeEmptyMessage(int messageID)
         {
-            Compressor = compressor;
-            Crypto = crypto;
+            return EncodeNetData(messageID,null);
         }
 
+        public byte[] EncodeMessage(int messageID,object message)
+        {
+            return EncodeNetData(messageID,messageParser.EncodeMessage(messageID,message));
+        }
+
+        private byte[] EncodeNetData(int messageID,byte[] datas)
+        {
+            bufferStream.Clear();
+
+
+            byte flag = 0;
+            byte[] dataBytes = msgBytes;
+
+            int byteTotalSize = MessageConst.MESSAGE_MIN_LENGTH + (dataBytes != null ? dataBytes.Length : 0);
+            int netByteTotalSize = IPAddress.HostToNetworkOrder(byteTotalSize);
+            byte[] netSizeBytes = BitConverter.GetBytes(netByteTotalSize);
+
+            ++serialNumber;
+
+            bufferStream.Write(netSizeBytes, 0, netSizeBytes.Length);
+            bufferStream.WriteByte((byte)serialNumber);
+            bufferStream.WriteByte(flag);
+
+            int netMessageID = IPAddress.HostToNetworkOrder(messageID);
+            byte[] netMessageIDBytes = BitConverter.GetBytes(netMessageID);
+
+            bufferStream.Write(netMessageIDBytes, 0, netMessageIDBytes.Length);
+            if (dataBytes != null)
+            {
+                bufferStream.Write(dataBytes, 0, dataBytes.Length);
+            }
+            return bufferStream.ToArray();
+
+        }
+        
         public byte[] EncodeData(int messageID)
         {
             return EncodeData(messageID, null, false, false);
@@ -33,7 +66,7 @@ namespace DotEngine.Net.Message
             return EncodeData(messageID, msgBytes, true, true);
         }
 
-        public byte[] EncodeData(int messageID, byte[] msgBytes, bool isCrypto, bool isCompress)
+        public byte[] EncodeData(int messageID, byte[] msgBytes)
         {
             bufferStream.Clear();
 

@@ -9,22 +9,16 @@ namespace DotEngine.Net.Message
 
     public class MessageReader
     {
-        public IMessageCrypto Crypto { get; set; } = null;
-        public IMessageCompressor Compressor { get; set; } = null;
         public OnMessageReceived MessageReceived { get; set; } = null;
         public OnMessageError MessageError { get; set; } = null;
 
         private byte serialNumber = 0;
         private BufferStream bufferStream = new BufferStream();
+        private IMessageParser messageParser = null;
 
-        public MessageReader()
+        public MessageReader(IMessageParser parser)
         {
-        }
-
-        public MessageReader(IMessageCrypto crypto,IMessageCompressor compressor)
-        {
-            Crypto = crypto;
-            Compressor = compressor;
+            messageParser = parser;
         }
 
         public void OnDataReceived(byte[] bytes, int size)

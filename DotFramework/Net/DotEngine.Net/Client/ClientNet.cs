@@ -32,6 +32,11 @@ namespace DotEngine.Net.Client
         public event ClientNetStateChanged NetConnectedFailed;
         public event ClientNetStateChanged NetDisconnected;
 
+        public ClientNet(int id,IMessageParser messageParser)
+        {
+
+        }
+
         public ClientNet(int id,IMessageCrypto crypto,IMessageCompressor compressor)
         {
             uniqueID = id;

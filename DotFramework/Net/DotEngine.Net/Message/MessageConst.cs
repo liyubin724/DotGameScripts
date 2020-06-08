@@ -22,7 +22,6 @@
         {
             MESSAGE_MIN_LENGTH = sizeof(int) //Total Length
                 + sizeof(byte) //Serial Number
-                + sizeof(byte) //compression and crypt
                 + sizeof(int); //Message ID
         }
     }

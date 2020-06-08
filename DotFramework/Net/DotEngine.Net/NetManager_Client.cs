@@ -9,15 +9,9 @@ namespace DotEngine.Net
     {
         private Dictionary<int, ClientNet> clientNetDic = null;
 
-        public ClientNet CreateClientNet(IMessageCrypto crypto=null, IMessageCompressor compressor=null)
+        public ClientNet CreateClientNet(int netID,IMessageParser messageParser)
         {
-            int netID = idCreator.NextID;
-            return CreateClientNet(netID, crypto, compressor);
-        }
-
-        public ClientNet CreateClientNet(int netID,IMessageCrypto crypto=null,IMessageCompressor compressor=null)
-        {
-            if (clientNetDic == null)
+            if(clientNetDic == null)
             {
                 clientNetDic = new Dictionary<int, ClientNet>();
             }
@@ -26,11 +20,33 @@ namespace DotEngine.Net
                 LogUtil.LogError(NetConst.CLIENT_LOGGER_TAG, $"NetMananger::CreateClientNet->the net has been created.netID={netID}");
                 return null;
             }
-            ClientNet net = new ClientNet(netID, crypto,compressor);
-            clientNetDic.Add(netID, net);
 
+            ClientNet net = new ClientNet(netID, messageParser);
             return net;
         }
+
+        //public ClientNet CreateClientNet(IMessageCrypto crypto=null, IMessageCompressor compressor=null)
+        //{
+        //    int netID = idCreator.NextID;
+        //    return CreateClientNet(netID, crypto, compressor);
+        //}
+
+        //public ClientNet CreateClientNet(int netID,IMessageCrypto crypto=null,IMessageCompressor compressor=null)
+        //{
+        //    if (clientNetDic == null)
+        //    {
+        //        clientNetDic = new Dictionary<int, ClientNet>();
+        //    }
+        //    if (clientNetDic.ContainsKey(netID))
+        //    {
+        //        LogUtil.LogError(NetConst.CLIENT_LOGGER_TAG, $"NetMananger::CreateClientNet->the net has been created.netID={netID}");
+        //        return null;
+        //    }
+        //    ClientNet net = new ClientNet(netID, crypto,compressor);
+        //    clientNetDic.Add(netID, net);
+
+        //    return net;
+        //}
 
         public ClientNet GetClientNet(int netID)
         {
