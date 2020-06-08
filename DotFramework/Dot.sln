@@ -3,69 +3,69 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine", "DotEngine\DotEngine.csproj", "{FB66A876-D598-498C-8DBD-BEC7CC13C40D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine", "Core\DotEngine\DotEngine.csproj", "{FB66A876-D598-498C-8DBD-BEC7CC13C40D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor", "DotEditor\DotEditor.csproj", "{620120C0-A2BB-4EE9-83EA-374195187574}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor", "Core\DotEditor\DotEditor.csproj", "{620120C0-A2BB-4EE9-83EA-374195187574}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{E98DC73C-F348-4902-8ADA-4779FE4A1EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriorityQueue", "PriorityQueue\PriorityQueue\PriorityQueue.csproj", "{ECBDFA0F-FED1-40AB-883D-F4A28245E418}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriorityQueue", "Others\PriorityQueue\PriorityQueue.csproj", "{ECBDFA0F-FED1-40AB-883D-F4A28245E418}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Log", "Log", "{428CF0A2-BCAF-41C0-B7BE-B2D2D30BD992}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Log", "DotEngine.Log\DotEngine.Log.csproj", "{66AA6B81-B885-44B8-B471-4F104FF97A03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Log", "Log\DotEngine.Log\DotEngine.Log.csproj", "{66AA6B81-B885-44B8-B471-4F104FF97A03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{EF338EFA-65C6-491B-8E11-CA5791514F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Framework", "DotEngine.Framework\DotEngine.Framework.csproj", "{A5D87CC3-4AC3-4D9F-AE97-92F81DE8AFE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Framework", "Framework\DotEngine.Framework\DotEngine.Framework.csproj", "{A5D87CC3-4AC3-4D9F-AE97-92F81DE8AFE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Context", "Context", "{BBAA7C0D-BE6B-4430-8E4B-3F1625EBF41A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Context", "DotEngine.Context\DotEngine.Context.csproj", "{973BA58F-3FD4-4A7D-AEEE-C9E0F135B12A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Context", "Context\DotEngine.Context\DotEngine.Context.csproj", "{973BA58F-3FD4-4A7D-AEEE-C9E0F135B12A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crypto", "Crypto", "{866E0E00-2689-44A9-9D47-7413277201CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Crypto", "DotEngine.Crypto\DotEngine.Crypto.csproj", "{6920F3ED-3AB9-41F4-B0F5-CB21B27BC53C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Crypto", "Crypto\DotEngine.Crypto\DotEngine.Crypto.csproj", "{6920F3ED-3AB9-41F4-B0F5-CB21B27BC53C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Asset", "Asset", "{C6CCC8B5-2447-42DB-B70D-D2312A14523A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NativeDrawer", "NativeDrawer", "{1FF7147E-2B7A-4E55-ABD3-714032D4DB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.NativeDrawer", "DotEngine.NativeDrawer\DotEngine.NativeDrawer.csproj", "{53E3B1DA-4BCE-41FD-90F5-384D36C8F829}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.NativeDrawer", "NativeDrawer\DotEngine.NativeDrawer\DotEngine.NativeDrawer.csproj", "{53E3B1DA-4BCE-41FD-90F5-384D36C8F829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.NativeDrawer", "DotEditor.NativeDrawer\DotEditor.NativeDrawer.csproj", "{532A1FD9-F45A-4DE9-8542-7800315F65B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.NativeDrawer", "NativeDrawer\DotEditor.NativeDrawer\DotEditor.NativeDrawer.csproj", "{532A1FD9-F45A-4DE9-8542-7800315F65B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Asset", "DotEngine.Asset\DotEngine.Asset.csproj", "{4741F247-59ED-44F8-A3AA-B617C7447A9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Asset", "Asset\DotEngine.Asset\DotEngine.Asset.csproj", "{4741F247-59ED-44F8-A3AA-B617C7447A9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.Asset", "DotEditor.Asset\DotEditor.Asset.csproj", "{3B480AB1-1514-462A-9083-33B407E46769}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.Asset", "Asset\DotEditor.Asset\DotEditor.Asset.csproj", "{3B480AB1-1514-462A-9083-33B407E46769}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timer", "Timer", "{ECC76ED9-D5D3-424D-BF7D-673D9A4D5F90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Timer", "DotEngine.Timer\DotEngine.Timer.csproj", "{79435F1A-E02C-4372-85C9-348C556DFC46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Timer", "Timer\DotEngine.Timer\DotEngine.Timer.csproj", "{79435F1A-E02C-4372-85C9-348C556DFC46}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GOPool", "GOPool", "{75B0A114-1D56-47E8-8B9C-BF22B42203E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.GOPool", "DotEngine.GOPool\DotEngine.GOPool.csproj", "{2DB926D6-A06D-4CB3-8194-2E264905537B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.GOPool", "GOPool\DotEngine.GOPool\DotEngine.GOPool.csproj", "{2DB926D6-A06D-4CB3-8194-2E264905537B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snappy.Net", "Snappy.Net\Snappy.Net.csproj", "{DD329D5D-D18D-4390-99E4-17439E8AD4D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snappy.Net", "Others\Snappy.Net\Snappy.Net.csproj", "{DD329D5D-D18D-4390-99E4-17439E8AD4D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net", "Net", "{F505AFC0-07B7-4C6E-A060-EC51C99C29E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Net", "DotEngine.Net\DotEngine.Net.csproj", "{30D3AA21-A04F-4138-A1E6-C0696227DFA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Net", "Net\DotEngine.Net\DotEngine.Net.csproj", "{30D3AA21-A04F-4138-A1E6-C0696227DFA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AI", "AI", "{3AABE726-2DE2-45DF-9A18-C3FA79DABD25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.FSM", "DotEngine.FSM\DotEngine.FSM.csproj", "{FB2CBAC1-8CBE-40ED-87D7-165978EECDED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.FSM", "AI\DotEngine.FSM\DotEngine.FSM.csproj", "{FB2CBAC1-8CBE-40ED-87D7-165978EECDED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{8F899DC0-4513-4394-90F9-05DBE6C441CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Config", "DotEngine.Config\DotEngine.Config.csproj", "{BE7F795A-D5B8-4558-942E-85F3A59DDC0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Config", "Config\DotEngine.Config\DotEngine.Config.csproj", "{BE7F795A-D5B8-4558-942E-85F3A59DDC0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.Config", "DotEditor.Config\DotEditor.Config.csproj", "{1CB6DE4C-0AD9-49D3-9FEE-3B1F22994BC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEditor.Config", "Config\DotEditor.Config\DotEditor.Config.csproj", "{1CB6DE4C-0AD9-49D3-9FEE-3B1F22994BC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B61C0A76-51A5-4152-BB7B-DE98E8DBCF46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTool.ScriptGenerate", "DotTool.ScriptGenerate\DotTool.ScriptGenerate.csproj", "{F710F578-3D80-475E-BB1B-1CBB966C7C13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTool.ScriptGenerate", "Tools\DotTool.ScriptGenerate\DotTool.ScriptGenerate.csproj", "{F710F578-3D80-475E-BB1B-1CBB966C7C13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

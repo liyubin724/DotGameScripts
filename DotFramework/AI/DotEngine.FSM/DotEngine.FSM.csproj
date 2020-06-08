@@ -48,7 +48,7 @@
     <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEngine.Context\DotEngine.Context.csproj">
+    <ProjectReference Include="..\..\Context\DotEngine.Context\DotEngine.Context.csproj">
       <Project>{973ba58f-3fd4-4a7d-aeee-c9e0f135b12a}</Project>
       <Name>DotEngine.Context</Name>
     </ProjectReference>

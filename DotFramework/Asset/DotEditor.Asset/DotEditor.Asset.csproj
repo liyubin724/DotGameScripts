@@ -67,11 +67,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEditor.NativeDrawer\DotEditor.NativeDrawer.csproj">
+    <ProjectReference Include="..\..\NativeDrawer\DotEditor.NativeDrawer\DotEditor.NativeDrawer.csproj">
       <Project>{532a1fd9-f45a-4de9-8542-7800315f65b4}</Project>
       <Name>DotEditor.NativeDrawer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEditor\DotEditor.csproj">
+    <ProjectReference Include="..\..\Core\DotEditor\DotEditor.csproj">
       <Project>{620120c0-a2bb-4ee9-83ea-374195187574}</Project>
       <Name>DotEditor</Name>
     </ProjectReference>
@@ -79,19 +79,19 @@
       <Project>{4741f247-59ed-44f8-a3aa-b617c7447a9c}</Project>
       <Name>DotEngine.Asset</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine.Crypto\DotEngine.Crypto.csproj">
+    <ProjectReference Include="..\..\Crypto\DotEngine.Crypto\DotEngine.Crypto.csproj">
       <Project>{6920f3ed-3ab9-41f4-b0f5-cb21b27bc53c}</Project>
       <Name>DotEngine.Crypto</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine.Framework\DotEngine.Framework.csproj">
+    <ProjectReference Include="..\..\Framework\DotEngine.Framework\DotEngine.Framework.csproj">
       <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
       <Name>DotEngine.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine.NativeDrawer\DotEngine.NativeDrawer.csproj">
+    <ProjectReference Include="..\..\NativeDrawer\DotEngine.NativeDrawer\DotEngine.NativeDrawer.csproj">
       <Project>{53e3b1da-4bce-41fd-90f5-384d36c8f829}</Project>
       <Name>DotEngine.NativeDrawer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
       <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
       <Name>DotEngine</Name>
     </ProjectReference>

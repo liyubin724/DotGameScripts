@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEditor\DotEditor.csproj">
+    <ProjectReference Include="..\..\Core\DotEditor\DotEditor.csproj">
       <Project>{620120c0-a2bb-4ee9-83ea-374195187574}</Project>
       <Name>DotEditor</Name>
     </ProjectReference>
@@ -65,7 +65,7 @@
       <Project>{be7f795a-d5b8-4558-942e-85f3a59ddc0f}</Project>
       <Name>DotEngine.Config</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
       <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
       <Name>DotEngine</Name>
     </ProjectReference>

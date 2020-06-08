@@ -53,7 +53,7 @@
     <Compile Include="UnityLogger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
       <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
       <Name>DotEngine</Name>
     </ProjectReference>

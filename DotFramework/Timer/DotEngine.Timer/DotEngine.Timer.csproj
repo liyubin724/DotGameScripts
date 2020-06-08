@@ -49,11 +49,11 @@
     <Compile Include="TimerWheel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DotEngine.Framework\DotEngine.Framework.csproj">
+    <ProjectReference Include="..\..\Framework\DotEngine.Framework\DotEngine.Framework.csproj">
       <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
       <Name>DotEngine.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotEngine\DotEngine.csproj">
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
       <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
       <Name>DotEngine</Name>
     </ProjectReference>
