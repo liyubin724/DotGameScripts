@@ -56,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Context\DotEngine.Context\DotEngine.Context.csproj">
+      <Project>{973ba58f-3fd4-4a7d-aeee-c9e0f135b12a}</Project>
+      <Name>DotEngine.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotTool.PBConfig\DotTool.PBConfig.csproj">
       <Project>{84938cc6-540b-46b2-ada0-4271f6e68982}</Project>
       <Name>DotTool.PBConfig</Name>

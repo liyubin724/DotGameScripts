@@ -24,16 +24,6 @@ namespace DotTool.PBConfig
         [XmlAttribute("name")]
         public string Name { get; set; }
 
-        [XmlElement("message_group")]
-        public List<ProtoMessageGroup> MessageGroups { get; set; }
-    }
-
-    [Serializable]
-    public class ProtoMessageGroup
-    {
-        [XmlAttribute("name")]
-        public string Name { get; set; }
-
         [XmlElement("message")]
         public List<ProtoMessage> Messages { get; set; }
     }
@@ -57,10 +47,10 @@ namespace DotTool.PBConfig
         public string ClassName { get; set; }
 
         [XmlAttribute("compress_type")]
-        public CompressType Compress { get; set; }
+        public CompressType Compress { get; set; } = CompressType.None;
 
         [XmlAttribute("crypto_type")]
-        public CryptoType Crypto { get; set; }
+        public CryptoType Crypto { get; set; } = CryptoType.None;
     }
 
     public enum CompressType

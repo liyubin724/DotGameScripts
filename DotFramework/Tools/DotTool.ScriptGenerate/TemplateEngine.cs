@@ -20,7 +20,7 @@ namespace DotTool.ScriptGenerate
         };
 
         private static string ScriptStart =
-@"using Dot.Context;
+@"using DotEngine.Context;
 using System.Text;
 
 public static class TemplateRunner {
