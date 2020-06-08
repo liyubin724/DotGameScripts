@@ -55,7 +55,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoUpdateClient(float deltaTime)
+        private void DoUpdate_Client(float deltaTime)
         {
             if(clientNetDic!=null)
             {
@@ -66,7 +66,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoLateUpdateClient()
+        private void DoLateUpdate_Client()
         {
             if (clientNetDic != null)
             {
@@ -74,6 +74,19 @@ namespace DotEngine.Net
                 {
                     kvp.Value.DoLateUpdate();
                 }
+            }
+        }
+
+        private void DoDispose_Client()
+        {
+            if (clientNetDic != null)
+            {
+                foreach (var kvp in clientNetDic)
+                {
+                    kvp.Value.Dispose();
+                }
+                clientNetDic.Clear();
+                clientNetDic = null;
             }
         }
     }

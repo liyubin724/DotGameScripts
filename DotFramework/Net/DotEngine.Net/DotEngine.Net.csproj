@@ -49,6 +49,7 @@
     <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
     <Compile Include="Message\IMessageCompressor.cs" />
     <Compile Include="Message\IMessageCrypto.cs" />
+    <Compile Include="Message\IMessageParser.cs" />
     <Compile Include="Message\MessageConst.cs" />
     <Compile Include="Message\MessageReader.cs" />
     <Compile Include="Message\MessageWriter.cs" />

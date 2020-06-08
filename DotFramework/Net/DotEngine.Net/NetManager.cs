@@ -8,14 +8,22 @@ namespace DotEngine.Net
 
         public void DoUpdate(float deltaTime)
         {
-            DoUpdateClient(deltaTime);
-            DoUpdateServer(deltaTime);
+            DoUpdate_Client(deltaTime);
+            DoUpdate_Server(deltaTime);
         }
 
         public void DoLateUpdate()
         {
-            DoLateUpdateClient();
-            DoLateUpdateServer();
+            DoLateUpdate_Client();
+            DoLateUpdate_Server();
+        }
+
+        public override void DoDispose()
+        {
+            DoDispose_Client();
+            DoDispose_Server();
+
+            base.DoDispose();
         }
     }
 }

@@ -60,7 +60,7 @@ namespace DotEngine.Net
             }
         }
 
-        public void DoUpdateServer(float deltaTime)
+        private void DoUpdate_Server(float deltaTime)
         {
             if(serverNetListenerDic!=null && serverNetListenerDic.Count>0)
             {
@@ -71,7 +71,7 @@ namespace DotEngine.Net
             }
         }
 
-        public void DoLateUpdateServer()
+        private void DoLateUpdate_Server()
         {
             if (serverNetListenerDic != null && serverNetListenerDic.Count > 0)
             {
@@ -79,6 +79,20 @@ namespace DotEngine.Net
                 {
                     kvp.Value.DoLateUpdate();
                 }
+            }
+        }
+
+        private void DoDispose_Server()
+        {
+            if(serverNetListenerDic!=null)
+            {
+                foreach (var kvp in serverNetListenerDic)
+                {
+                    kvp.Value.Dispose();
+                }
+
+                serverNetListenerDic.Clear();
+                serverNetListenerDic = null;
             }
         }
     }
