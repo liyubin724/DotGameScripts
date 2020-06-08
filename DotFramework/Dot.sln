@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GOPool", "GOPool", "{75B0A1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.GOPool", "DotEngine.GOPool\DotEngine.GOPool.csproj", "{2DB926D6-A06D-4CB3-8194-2E264905537B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snappy.Net", "DotSnappy\DotSnappy\Snappy.Net.csproj", "{DD329D5D-D18D-4390-99E4-17439E8AD4D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snappy.Net", "Snappy.Net\Snappy.Net.csproj", "{DD329D5D-D18D-4390-99E4-17439E8AD4D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net", "Net", "{F505AFC0-07B7-4C6E-A060-EC51C99C29E4}"
 EndProject
