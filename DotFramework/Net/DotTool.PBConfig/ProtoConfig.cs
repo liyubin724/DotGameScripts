@@ -46,10 +46,11 @@ namespace DotTool.PBConfig
         [XmlAttribute("class_name")]
         public string ClassName { get; set; }
 
-        [XmlAttribute("compress_type")]
-        public CompressType Compress { get; set; } = CompressType.None;
+        [XmlAttribute("is_compress")]
+        public bool IsCompress { get; set; } = false;
 
-        [XmlAttribute("crypto_type")]
+        [XmlAttribute("is_crypto")]
+        public bool IsCrypto { get; set; } = false;
         public CryptoType Crypto { get; set; } = CryptoType.None;
     }
 

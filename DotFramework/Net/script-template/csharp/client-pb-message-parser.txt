@@ -1,0 +1,57 @@
+/*The file was created by tool.
+-----------------------------------------------
+Please don't change it manually!!!
+Please don't change it manually!!!
+Please don't change it manually!!!
+-----------------------------------------------
+*/
+using DotEngine.Net.Message;
+using System;
+using System.Collections.Generic;
+<%+using DotTool.PBConfig;%>
+<%string spaceName = context.Get<string>("spaceName");%>
+<%string platform = context.Get<string>("platform");%>
+<%ProtoGroup encodeProtoGroup = context.Get<ProtoGroup>("encodeProtoGroup");%>
+<%ProtoGroup decodeProtoGroup = context.Get<ProtoGroup>("decodeProtoGroup");%>
+namespace <%=spaceName%>
+{
+    public static class <%=platform%>MessageParser : IMessageParser
+    {
+        public string string SecretKey { get; set; }
+
+        private Dictionary<int,Func<object,byte[]>> encodeParserDic = new Dictionary<int,Func<object,byte[]>>();
+        private Dictionary<int,Func<byte[],object>> decodeParserDic = new Dictionary<int,Func<byte[],object>>();
+
+        public <%=platform%>MessageParser()
+        {
+
+        }
+
+        public byte[] EncodeMessage(int messageID, object message)
+        {
+            if(encodeParserDic.TryGetValue(messageID,out Func<object,byte[]> parser))
+            {
+                return parser(message);
+            }
+            return null;
+        }
+
+        public object DecodeMessage(int messageID, byte[] bytes)
+        {
+            if(decodeParserDic.TryGetValue(messageID,out Func<byte[],object> parser))
+            {
+                return parser(bytes);
+            }
+            return null;
+        }
+
+<%foreach(var message in encodeProtoGroup.Messages){%>
+        public byte[] <%=message.ClassName%>EncodeParser(object message)
+        {
+            IMessage m = (IMessage)message;
+            byte[] messageBytes = m.ToByteArray();
+
+        }
+<%}%>
+    }
+}
