@@ -6,7 +6,6 @@ namespace DotEngine.Net.Client
 {
     public delegate void ClientNetStateChanged(ClientNet clientNet);
 
-    public delegate object ClientMessageParser(int messageID, byte[] msgDatas);
     public delegate void ClientMessageHandler(int messageID, object message);
 
     public delegate void ClientFinalMessageHandler(int messageID, byte[] msgDatas);
@@ -18,11 +17,11 @@ namespace DotEngine.Net.Client
 
         private MessageWriter messageWriter = null;
         private MessageReader messageReader = null;
+        private IMessageParser messageParser = null;
 
         private ClientNetSession netSession = null;
         private ClientNetSessionState sessionState = ClientNetSessionState.Unavailable;
 
-        private Dictionary<int, ClientMessageParser> messageParserDic = new Dictionary<int, ClientMessageParser>();
         private Dictionary<int, ClientMessageHandler> messageHandlerDic = new Dictionary<int, ClientMessageHandler>();
 
         public ClientFinalMessageHandler FinalMessageHandler { get; set; } = null;
@@ -34,14 +33,10 @@ namespace DotEngine.Net.Client
 
         public ClientNet(int id,IMessageParser messageParser)
         {
-
-        }
-
-        public ClientNet(int id,IMessageCrypto crypto,IMessageCompressor compressor)
-        {
             uniqueID = id;
-            messageWriter = new MessageWriter(compressor,crypto);
-            messageReader = new MessageReader(crypto, compressor);
+            this.messageParser = messageParser;
+            messageWriter = new MessageWriter();
+            messageReader = new MessageReader();
 
             netSession = new ClientNetSession(messageReader);
             messageReader.MessageError = OnMessageError;
@@ -112,7 +107,6 @@ namespace DotEngine.Net.Client
             messageReader.MessageError = null;
             messageReader.MessageReceived = null;
 
-            messageParserDic.Clear();
             messageHandlerDic.Clear();
 
             netSession.Dispose();
@@ -127,35 +121,30 @@ namespace DotEngine.Net.Client
 
         private void OnMessageReceived(int messageID, byte[] datas)
         {
-            if (messageHandlerDic.TryGetValue(messageID, out ClientMessageHandler handler) && handler != null)
+            if(!messageHandlerDic.TryGetValue(messageID, out ClientMessageHandler messageHandler))
             {
-                if (messageParserDic.TryGetValue(messageID, out ClientMessageParser parser) && parser != null)
-                {
-                    handler.Invoke(messageID, parser.Invoke(messageID, datas));
-                }else
-                {
-                    handler.Invoke(messageID, datas);
-                }
-            }
-            else
-            {
-                if(FinalMessageHandler!=null)
+                if (FinalMessageHandler != null)
                 {
                     LogUtil.LogWarning(NetConst.CLIENT_LOGGER_TAG, $"ClientNet::OnMessageReceived->the handler not found.messageID = {messageID}");
                     FinalMessageHandler.Invoke(messageID, datas);
-                }else
+                }
+                else
                 {
                     LogUtil.LogError(NetConst.CLIENT_LOGGER_TAG, $"ClientNet::OnMessageReceived->the handler not found.messageID = {messageID}");
                 }
+            }else
+            {
+                object message = messageParser.DecodeMessage(messageID, datas);
+                messageHandler.Invoke(messageID, message);
             }
         }
 
         #region Send Data
-        public void SendData(int messageID)
+        public void SendMessage(int messageID)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeData(messageID);
+                byte[] netBytes = messageWriter.EncodeMessage(messageID);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
@@ -163,54 +152,20 @@ namespace DotEngine.Net.Client
             }
         }
 
-        public void SendData(int messageID, byte[] msg)
+        public void SendMessage(int messageID,object message)
         {
-            if (IsConnected())
+            if(IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeData(messageID, msg);
-                if (netBytes != null && netBytes.Length > 0)
+                byte[] messageBytes = messageParser.EncodeMessage(messageID, message);
+                byte[] netBytes = messageWriter.EncodeMessage(messageID, messageBytes);
+                if(netBytes!=null && netBytes.Length>0)
                 {
                     netSession.Send(netBytes);
                 }
             }
+
         }
 
-        public void SendData(int messageID, byte[] msg, bool isCrypto, bool isCompress)
-        {
-            if (IsConnected())
-            {
-                byte[] netBytes = messageWriter.EncodeData(messageID, msg, isCrypto, isCompress);
-                if (netBytes != null && netBytes.Length > 0)
-                {
-                    netSession.Send(netBytes);
-                }
-            }
-        }
-        #endregion
-
-        #region Register Message Parser
-        public void RegisterMessageParser(int messageID,ClientMessageParser parser)
-        {
-            if(!messageParserDic.ContainsKey(messageID))
-            {
-                messageParserDic.Add(messageID, parser);
-            }else
-            {
-                LogUtil.LogError(NetConst.CLIENT_LOGGER_TAG, $"ClientNet::RegisterMessageParser->The parser has been added.messageID={messageID}");
-            }
-        }
-
-        public void UnregisterMessageParser(int messageID)
-        {
-            if (messageParserDic.ContainsKey(messageID))
-            {
-                messageParserDic.Remove(messageID);
-            }
-            else
-            {
-                LogUtil.LogError(NetConst.CLIENT_LOGGER_TAG, $"ClientNet::UnregisterMessageParser->The parser not found.messageID={messageID}");
-            }
-        }
         #endregion
 
         #region Register Message Handler

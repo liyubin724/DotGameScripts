@@ -26,6 +26,8 @@ namespace DotEngine.Net.Stream
             value = 0;
             if(Length>=startIndex+sizeof(byte))
             {
+                Seek(startIndex, SeekOrigin.Begin);
+
                 value = (byte)ReadByte();
                 return true;
             }

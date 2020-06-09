@@ -1,11 +1,7 @@
-﻿using DotEngine.Generic;
-
-namespace DotEngine.Net
+﻿namespace DotEngine.Net
 {
     public partial class NetManager : Singleton<NetManager>
     {
-        private UniqueIntID idCreator = new UniqueIntID();
-
         public void DoUpdate(float deltaTime)
         {
             DoUpdate_Client(deltaTime);

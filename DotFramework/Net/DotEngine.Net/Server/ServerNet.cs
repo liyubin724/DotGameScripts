@@ -14,6 +14,7 @@ namespace DotEngine.Net.Server
 
         private MessageWriter messageWriter = null;
         private MessageReader messageReader = null;
+        private IMessageParser messageParser = null;
 
         private ServerNetSession netSession = null;
 
@@ -22,11 +23,12 @@ namespace DotEngine.Net.Server
 
         private ServerNetSessionState sessionState = ServerNetSessionState.Unavailable;
 
-        public ServerNet(int id, Socket socket, IMessageCrypto crypto,IMessageCompressor compressor)
+        public ServerNet(int id, Socket socket, IMessageParser messageParser)
         {
             uniqueID = id;
-            messageWriter = new MessageWriter(compressor,crypto);
-            messageReader = new MessageReader(crypto,compressor);
+            this.messageParser = messageParser;
+            messageWriter = new MessageWriter();
+            messageReader = new MessageReader();
 
             netSession = new ServerNetSession(socket,messageReader);
             messageReader.MessageError = OnMessageError;
@@ -41,6 +43,7 @@ namespace DotEngine.Net.Server
         private void OnMessageError(MessageErrorCode code)
         {
             LogUtil.LogError(NetConst.SERVER_LOGGER_TAG, $"ServerNet::OnMessageError->message error.code = {code}");
+
             Dispose();
         }
 
@@ -67,11 +70,11 @@ namespace DotEngine.Net.Server
             netSession.DoLateUpdate();
         }
 
-        public void SendData(int messageID)
+        public void SendMessage(int messageID)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeData(messageID);
+                byte[] netBytes = messageWriter.EncodeMessage(messageID);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);
@@ -79,23 +82,13 @@ namespace DotEngine.Net.Server
             }
         }
 
-        public void SendData(int messageID, byte[] msgDatas)
+        public void SendMessage(int messageID, object message)
         {
             if (IsConnected())
             {
-                byte[] netBytes = messageWriter.EncodeData(messageID, msgDatas);
-                if (netBytes != null && netBytes.Length > 0)
-                {
-                    netSession.Send(netBytes);
-                }
-            }
-        }
+                byte[] messageBytes = messageParser.EncodeMessage(messageID, message);
 
-        public void SendData(int messageID,byte[] msgDatas,bool isCrypto,bool isCompress)
-        {
-            if (IsConnected())
-            {
-                byte[] netBytes = messageWriter.EncodeData(messageID, msgDatas,isCrypto,isCompress);
+                byte[] netBytes = messageWriter.EncodeMessage(messageID, messageBytes);
                 if (netBytes != null && netBytes.Length > 0)
                 {
                     netSession.Send(netBytes);

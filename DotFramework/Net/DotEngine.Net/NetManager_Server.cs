@@ -10,13 +10,7 @@ namespace DotEngine.Net
         private const int DEFAULT_MAX_CLIENT_COUNT = 100;
         private Dictionary<int, ServerNetListener> serverNetListenerDic = null;
 
-        public ServerNetListener CreateServerNet(int listenPort, int maxClientNetCount = DEFAULT_MAX_CLIENT_COUNT, IMessageCrypto crypto = null, IMessageCompressor compressor = null)
-        {
-            int netID = idCreator.NextID;
-            return CreateServerNet(netID, listenPort, maxClientNetCount, crypto, compressor);
-        }
-
-        public ServerNetListener CreateServerNet(int netID,int listenPort,int maxClientNetCount = DEFAULT_MAX_CLIENT_COUNT,IMessageCrypto crypto = null ,IMessageCompressor compressor = null)
+        public ServerNetListener CreateServerNet(int netID,int listenPort, IMessageParser messageParser, int maxClientNetCount = DEFAULT_MAX_CLIENT_COUNT)
         {
             if (clientNetDic == null)
             {
@@ -28,14 +22,13 @@ namespace DotEngine.Net
                 return null;
             }
 
-            ServerNetListener serverNet = new ServerNetListener(netID, crypto, compressor);
+            ServerNetListener serverNet = new ServerNetListener(netID,messageParser);
             serverNet.Startup("127.0.0.1", listenPort, maxClientNetCount);
 
             serverNetListenerDic.Add(netID, serverNet);
 
             return serverNet;
         }
-
 
         public ServerNetListener GetServerNet(int netID)
         {

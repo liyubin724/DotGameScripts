@@ -1,5 +1,4 @@
-﻿using DotEngine.Utilities;
-using DotEngine.Net.Stream;
+﻿using DotEngine.Net.Stream;
 using System.Net;
 
 namespace DotEngine.Net.Message
@@ -14,11 +13,9 @@ namespace DotEngine.Net.Message
 
         private byte serialNumber = 0;
         private BufferStream bufferStream = new BufferStream();
-        private IMessageParser messageParser = null;
 
-        public MessageReader(IMessageParser parser)
+        public MessageReader()
         {
-            messageParser = parser;
         }
 
         public void OnDataReceived(byte[] bytes, int size)
@@ -41,13 +38,14 @@ namespace DotEngine.Net.Message
                         break;
                     }
                     totalLength = IPAddress.NetworkToHostOrder(totalLength);
-                    if (streamLength < totalLength)
+                    if (streamLength - startIndex < totalLength)
                     {
                         break;
                     }
 
                     int offsetIndex = startIndex;
                     offsetIndex += sizeof(int);
+
                     if (!stream.ReadByte(offsetIndex, out byte serialNum))
                     {
                         MessageError?.Invoke(MessageErrorCode.Reader_ReadSerialNumberError);
@@ -58,16 +56,6 @@ namespace DotEngine.Net.Message
                         MessageError?.Invoke(MessageErrorCode.Reader_CompareSerialNumberError);
                         break;
                     }
-
-                    offsetIndex += sizeof(byte);
-                    if (!stream.ReadByte(offsetIndex, out byte flag))
-                    {
-                        MessageError?.Invoke(MessageErrorCode.Reader_ReadFlagTypeError);
-                        break;
-                    }
-
-                    bool isCrypto = BitUtility.IsEnable(flag, MessageConst.MESSAGE_CRYPTO_FLAG_INDEX);
-                    bool isCompressor = BitUtility.IsEnable(flag, MessageConst.MESSAGE_COMPRESSOR_FLAG_INDEX);
 
                     offsetIndex += sizeof(byte);
                     if (!stream.ReadInt(offsetIndex, out int messageID))
@@ -88,12 +76,11 @@ namespace DotEngine.Net.Message
                             MessageError?.Invoke(MessageErrorCode.Reader_CompareMessageDataLengthError);
                             break;
                         }
-
-                        OnMessage(messageID, messageDatas, isCrypto, isCompressor);
+                        MessageReceived?.Invoke(messageID, messageDatas);
                     }
                     else
                     {
-                        OnMessage(messageID, null, isCrypto, isCompressor);
+                        MessageReceived?.Invoke(messageID, null);
                     }
 
                     startIndex += totalLength;
@@ -102,23 +89,6 @@ namespace DotEngine.Net.Message
 
                 bufferStream.MoveStream(startIndex);
             }
-        }
-
-        private void OnMessage(int messageID,byte[] msgBytes,bool isCrypt,bool isCompress)
-        {
-            byte[] bytes = msgBytes;
-            if (bytes != null)
-            {
-                if (isCompress)
-                {
-                    bytes = Compressor.Uncompress(bytes);
-                }
-                if(isCrypt)
-                {
-                    bytes = Crypto.Decrypt(bytes);
-                }
-            }
-            MessageReceived?.Invoke(messageID, bytes);
         }
 
         public void Reset()
