@@ -22,6 +22,8 @@ namespace DotEngine.Net
             }
 
             ClientNet net = new ClientNet(netID, messageParser);
+            clientNetDic.Add(netID, net);
+
             return net;
         }
 
@@ -48,7 +50,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoUpdate_Client(float deltaTime)
+        public void DoUpdate_Client(float deltaTime)
         {
             if(clientNetDic!=null)
             {
@@ -59,7 +61,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoLateUpdate_Client()
+        public void DoLateUpdate_Client(float deltaTime)
         {
             if (clientNetDic != null)
             {

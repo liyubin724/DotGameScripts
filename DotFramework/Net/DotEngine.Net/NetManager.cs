@@ -8,10 +8,10 @@
             DoUpdate_Server(deltaTime);
         }
 
-        public void DoLateUpdate()
+        public void DoLateUpdate(float deltaTime)
         {
-            DoLateUpdate_Client();
-            DoLateUpdate_Server();
+            DoLateUpdate_Client(deltaTime);
+            DoLateUpdate_Server(deltaTime);
         }
 
         public override void DoDispose()

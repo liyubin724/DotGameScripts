@@ -19,7 +19,7 @@ using Game.Net.Protos;
 <%ProtoGroup decodeProtoGroup = context.Get<ProtoGroup>("decodeProtoGroup");%>
 namespace <%=spaceName%>
 {
-    public static class <%=platform%>MessageParser : IMessageParser
+    public class <%=platform%>MessageParser : IMessageParser
     {
         public string SecretKey { get; set; }
         public string SecretVector{get;set;}
@@ -64,7 +64,7 @@ namespace <%=spaceName%>
             messageBytes = AESCrypto.Encrypt(messageBytes, SecretKey, SecretVector);
 <%}%>
 <%if(message.IsCompress){%>
-            messageBytes = SnappySharp.Compress(bytes);
+            messageBytes = SnappySharp.Compress(messageBytes);
 <%}%>
             return messageBytes;
         }

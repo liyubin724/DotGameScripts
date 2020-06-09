@@ -31,6 +31,7 @@ namespace Game
             assetService.InstanceAssetAsync("Cube.prefab", (address,gObj,userData) =>
             {
                 gObj = (GameObject)gObj;
+                SendNotification(AppConst.LAUNCH_NET);
             });
         }
     }

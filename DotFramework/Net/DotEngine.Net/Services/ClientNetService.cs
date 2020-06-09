@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DotEngine.Net.Services
 {
-    public class ClientNetService : Service
+    public class ClientNetService : Service, IUpdate, ILateUpdate
     {
         public const string NAME = "ClientNetService";
 
@@ -85,6 +85,16 @@ namespace DotEngine.Net.Services
         private void HandleNetDisconnected(ClientNet net)
         {
             SendNotification(NetNotification.CLIENT_NET_DISCONNECTED, net.UniqueID);
+        }
+
+        public void DoLateUpdate(float deltaTime)
+        {
+            NetManager.GetInstance().DoLateUpdate_Client(deltaTime);
+        }
+
+        public void DoUpdate(float deltaTime)
+        {
+            NetManager.GetInstance().DoUpdate_Client(deltaTime);
         }
     }
 }

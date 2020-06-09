@@ -10,7 +10,6 @@ using System.Threading;
 
 namespace DotEngine.Net.Server
 {
-    public delegate object ServerMessageParser(int messageID, byte[] msgDatas);
     public delegate void ServerMessageHandler(int netID, int messageID, object message);
 
     public class ServerNetMessageData : IObjectPoolItem

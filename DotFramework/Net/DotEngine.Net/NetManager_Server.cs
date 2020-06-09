@@ -53,7 +53,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoUpdate_Server(float deltaTime)
+        public void DoUpdate_Server(float deltaTime)
         {
             if(serverNetListenerDic!=null && serverNetListenerDic.Count>0)
             {
@@ -64,7 +64,7 @@ namespace DotEngine.Net
             }
         }
 
-        private void DoLateUpdate_Server()
+        public void DoLateUpdate_Server(float deltaTime)
         {
             if (serverNetListenerDic != null && serverNetListenerDic.Count > 0)
             {
