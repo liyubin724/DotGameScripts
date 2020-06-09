@@ -35,7 +35,7 @@ public static class TemplateRunner {
         {
             string code = ComposeCode(template);
 
-            System.IO.File.WriteAllText("D:/code.cs", code);
+            //System.IO.File.WriteAllText("D:/code.cs", code);
 
             if (string.IsNullOrEmpty(code))
             {

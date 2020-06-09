@@ -4,11 +4,10 @@ using System.IO;
 
 namespace PBConfigTool
 {
-    public enum PlatformType
+    public enum OutputFileType
     {
-        Client = 0,
-        Server,
-        All,
+        Id = 0,
+        Parser = 1,
     }
 
     class Options
@@ -22,8 +21,11 @@ namespace PBConfigTool
         [Option('t',"template-path",Required =true,HelpText ="")]
         public string TemplateFilePath { get; set; }
 
+        [Option('f',"file-type",Required =true,HelpText ="")]
+        public OutputFileType FileType { get; set; } 
+
         [Option('p',"platform",Required =false,HelpText ="")]
-        public PlatformType Platform { get; set; } = PlatformType.All;
+        public OutputPlatformType Platform { get; set; } = OutputPlatformType.All;
     }
 
     class Program
@@ -55,15 +57,31 @@ namespace PBConfigTool
             {
                 return;
             }
+            if(options.FileType == OutputFileType.Id)
+            {
+                if (options.Platform == OutputPlatformType.Client || options.Platform == OutputPlatformType.All)
+                {
+                    ProtoConfigUtil.CreateProtoID(options.OutputDir, protoConfig.SpaceName, protoConfig.C2SGroup, templateContent);
+                }
+                if (options.Platform == OutputPlatformType.Server || options.Platform == OutputPlatformType.All)
+                {
+                    ProtoConfigUtil.CreateProtoID(options.OutputDir, protoConfig.SpaceName, protoConfig.S2CGroup, templateContent);
+                }
+            }else if(options.FileType == OutputFileType.Parser)
+            {
+                ProtoConfigUtil.CreateParser(options.OutputDir, options.Platform, protoConfig, templateContent);
 
-            if(options.Platform == PlatformType.Client || options.Platform == PlatformType.All)
-            {
-                ProtoIDWriter.CreateProtoID(options.OutputDir, protoConfig.SpaceName, protoConfig.C2SGroup, templateContent);
+                if (options.Platform == OutputPlatformType.Client || options.Platform == OutputPlatformType.All)
+                {
+                    ProtoConfigUtil.CreateParser(options.OutputDir, OutputPlatformType.Client, protoConfig, templateContent);
+                }
+                if (options.Platform == OutputPlatformType.Server || options.Platform == OutputPlatformType.All)
+                {
+                    ProtoConfigUtil.CreateParser(options.OutputDir, OutputPlatformType.Server, protoConfig, templateContent);
+                }
             }
-            if(options.Platform == PlatformType.Server || options.Platform == PlatformType.All)
-            {
-                ProtoIDWriter.CreateProtoID(options.OutputDir, protoConfig.SpaceName, protoConfig.S2CGroup, templateContent);
-            }
+
+            
         }
     }
 }

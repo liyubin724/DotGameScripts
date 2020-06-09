@@ -13,9 +13,6 @@
         //最小的消息的长度，总长度+序号+消息ID
         public static readonly int MESSAGE_MIN_LENGTH = 0;
 
-        public static readonly int MESSAGE_CRYPTO_FLAG_INDEX = 0;
-        public static readonly int MESSAGE_COMPRESSOR_FLAG_INDEX = 1;
-
         static MessageConst()
         {
             MESSAGE_MIN_LENGTH = sizeof(int) //Total Length

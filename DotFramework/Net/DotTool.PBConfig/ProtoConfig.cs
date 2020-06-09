@@ -51,19 +51,5 @@ namespace DotTool.PBConfig
 
         [XmlAttribute("is_crypto")]
         public bool IsCrypto { get; set; } = false;
-        public CryptoType Crypto { get; set; } = CryptoType.None;
-    }
-
-    public enum CompressType
-    {
-        None = 0,
-        Snappy = 1,
-    }
-
-    public enum CryptoType
-    {
-        None = 0,
-        AES = 1,
-        DES = 2,
     }
 }
