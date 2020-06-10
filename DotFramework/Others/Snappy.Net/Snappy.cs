@@ -38,7 +38,8 @@ namespace Snappy.Sharp
 
         public static byte[] Uncompress(byte[] compressed)
         {
-            throw new NotImplementedException();
+            var target = new SnappyDecompressor();
+            return target.Decompress(compressed, 0, compressed.Length);
         }
 
         public static void Uncompress(SnappyStream compressed, StreamWriter uncompressed)

@@ -310,8 +310,14 @@
     <Reference Include="DotEngine.NativeDrawer">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.NativeDrawer.dll</HintPath>
     </Reference>
+    <Reference Include="DotEngine.Net">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Net.dll</HintPath>
+    </Reference>
     <Reference Include="DotEngine.Timer">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Timer.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/log4net.dll</HintPath>
@@ -322,14 +328,8 @@
     <Reference Include="PriorityQueue">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/PriorityQueue.dll</HintPath>
     </Reference>
-    <Reference Include="DotEngine.Net">
-      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Snappy.Net">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/Snappy.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

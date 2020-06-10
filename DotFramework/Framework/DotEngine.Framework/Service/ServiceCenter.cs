@@ -116,15 +116,15 @@ namespace DotEngine.Framework
             {
                 updateServices.Add(serviceName);
             }
-            else if (typeof(IUnscaleUpdate).IsAssignableFrom(serviceType))
+            if (typeof(IUnscaleUpdate).IsAssignableFrom(serviceType))
             {
                 unscaleUpdateServices.Add(serviceName);
             }
-            else if (typeof(ILateUpdate).IsAssignableFrom(serviceType))
+            if (typeof(ILateUpdate).IsAssignableFrom(serviceType))
             {
                 lateUpdateServices.Add(serviceName);
             }
-            else if (typeof(IFixedUpdate).IsAssignableFrom(serviceType))
+            if (typeof(IFixedUpdate).IsAssignableFrom(serviceType))
             {
                 fixedUpdateServices.Add(serviceName);
             }
