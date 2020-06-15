@@ -43,8 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="FileChunk.cs" />
+    <Compile Include="FileContent.cs" />
+    <Compile Include="FileFragment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
+      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
+      <Name>DotEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

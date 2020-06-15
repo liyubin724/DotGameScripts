@@ -1,8 +1,17 @@
-﻿namespace DotEngine.FileSystem
+﻿using System;
+using System.IO;
+using System.Text;
+
+namespace DotEngine.FileSystem
 {
-    internal class FileFragment
+    public class FileFragment
     {
-        public int Start { get; set; }
-        public int Size { get; set; }
+        public static readonly int PATH_MAX_LENGTH = 128;
+        public static readonly int LENGTH = sizeof(int) + PATH_MAX_LENGTH + sizeof(long) * 3;
+
+        public string Path { get; set; } = null;
+        public long Start { get; set; }
+        public long Length { get; set; }
+        public long Size { get; set; }
     }
 }
