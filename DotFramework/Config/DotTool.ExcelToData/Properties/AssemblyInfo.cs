@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("NdbConfigTool")]
+[assembly: AssemblyTitle("DotTool.ExcelToData")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NdbConfigTool")]
+[assembly: AssemblyProduct("DotTool.ExcelToData")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("2dd3d540-4597-4d9b-b2b2-bf2b278b25b7")]
+[assembly: Guid("92a3c239-7338-4f74-977a-7e428d710396")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

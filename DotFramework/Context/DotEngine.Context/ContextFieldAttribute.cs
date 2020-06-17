@@ -16,11 +16,11 @@ namespace DotEngine.Context
         public ContextUsage Usage { get; set; }
         public bool Optional { get; set; }
 
-        public ContextFieldAttribute(object key) : this(key,ContextUsage.InOut,false)
+        public ContextFieldAttribute(object key) : this(key,ContextUsage.In,true)
         {
         }
 
-        public ContextFieldAttribute(object key,ContextUsage usage) : this(key, usage, false)
+        public ContextFieldAttribute(object key,ContextUsage usage) : this(key, usage, true)
         {
 
         }
