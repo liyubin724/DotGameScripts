@@ -41,7 +41,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Cell.cs" />
+    <Compile Include="Data\Field.cs" />
+    <Compile Include="Data\Line.cs" />
+    <Compile Include="Data\Sheet.cs" />
+    <Compile Include="Data\Workbook.cs" />
+    <Compile Include="Fields\AddressField.cs" />
+    <Compile Include="Fields\BoolField.cs" />
+    <Compile Include="Fields\ErrorField.cs" />
+    <Compile Include="Fields\FieldFactory.cs" />
+    <Compile Include="Fields\FieldTypeUtil.cs" />
+    <Compile Include="Fields\FloatField.cs" />
+    <Compile Include="Fields\IdField.cs" />
+    <Compile Include="Fields\IntField.cs" />
+    <Compile Include="Fields\ListField.cs" />
+    <Compile Include="Fields\LongField.cs" />
+    <Compile Include="Fields\LuaField.cs" />
+    <Compile Include="Fields\RefField.cs" />
+    <Compile Include="Fields\StringField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\AssemblyUtil.cs" />
+    <Compile Include="Validation\BoolValidation.cs" />
+    <Compile Include="Validation\ErrorValidation.cs" />
+    <Compile Include="Validation\FloatValidation.cs" />
+    <Compile Include="Validation\IntValidation.cs" />
+    <Compile Include="Validation\IFieldValidation.cs" />
+    <Compile Include="Validation\ListValidation.cs" />
+    <Compile Include="Validation\LongValidation.cs" />
+    <Compile Include="Validation\StringValidation.cs" />
+    <Compile Include="Validation\UniqueValidation.cs" />
+    <Compile Include="Validation\ValidationFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Verify\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
