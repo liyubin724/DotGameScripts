@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnvContext.cs" />
-    <Compile Include="IContext.cs" />
+    <Compile Include="IEnvContext.cs" />
     <Compile Include="Inject\InjectAttribute.cs" />
     <Compile Include="Inject\InjectUtil.cs" />
     <Compile Include="IntContext.cs" />

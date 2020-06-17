@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SystemObject = System.Object;
 
 namespace DotEngine.Context
 {
-    public class EnvContext<K> : IContext<K>
+    public class EnvContext<K> : IEnvContext<K>
     {
-        private Dictionary<K, SystemObject> itemDic = new Dictionary<K, SystemObject>();
+        private Dictionary<K, object> itemDic = new Dictionary<K, object>();
         private List<K> neverClearKeyList = new List<K>();
 
-        public SystemObject this[K key]
+        public object this[K key]
         {
             get
             {
@@ -22,26 +21,27 @@ namespace DotEngine.Context
             }
         }
 
-        public void Add(K key, SystemObject value)
+        public void Add(K key, object value)
         {
             Add(key, value, false);
         }
 
-        public void Add(K key, SystemObject value, bool isNeverClear)
+        public void Add(K key, object value, bool isNeverClear)
         {
             if (ContainsKey(key))
             {
-                throw new Exception($"AContext::Add->The key has been saved into dictionry.you can use 'AddOrUpdate' to changed it.key = {key.ToString()}");
+                throw new Exception($"AContext::Add->The key has been saved into dictionry.you can use 'AddOrUpdate' to changed it.key = {key}");
             }
 
             itemDic.Add(key, value);
+
             if(isNeverClear)
             {
                 neverClearKeyList.Add(key);
             }
         }
 
-        public void AddOrUpdate(K key,SystemObject value)
+        public void AddOrUpdate(K key, object value)
         {
             if (ContainsKey(key))
             {
@@ -53,7 +53,7 @@ namespace DotEngine.Context
             }
         }
 
-        public void AddOrUpdate(K key, SystemObject value, bool isNeverClear)
+        public void AddOrUpdate(K key, object value, bool isNeverClear)
         {
             bool cachedIsNeverClear = false;
             if(ContainsKey(key))
@@ -77,9 +77,9 @@ namespace DotEngine.Context
             }
         }
 
-        public void Update(K key, SystemObject value)
+        public void Update(K key, object value)
         {
-            if (itemDic.TryGetValue(key, out SystemObject item))
+            if (itemDic.TryGetValue(key, out object item))
             {
                 itemDic[key] = item;
             }
@@ -94,7 +94,7 @@ namespace DotEngine.Context
             return itemDic.ContainsKey(key);
         }
 
-        public SystemObject Get(K key)
+        public object Get(K key)
         {
             if(TryGet(key,out object v))
             {
@@ -105,7 +105,7 @@ namespace DotEngine.Context
 
         public V Get<V>(K key)
         {
-            SystemObject obj = Get(key);
+            object obj = Get(key);
             if(obj!=null)
             {
                 return (V)obj;
@@ -129,7 +129,7 @@ namespace DotEngine.Context
             }
         }
 
-        public bool TryGet(K key, out SystemObject value)
+        public bool TryGet(K key, out object value)
         {
             if (itemDic.TryGetValue(key, out value))
             {
@@ -142,7 +142,7 @@ namespace DotEngine.Context
 
         public bool TryGet<V>(K key, out V value)
         {
-            if(itemDic.TryGetValue(key,out SystemObject item))
+            if(itemDic.TryGetValue(key,out object item))
             {
                 value = (V)item;
                 return true;

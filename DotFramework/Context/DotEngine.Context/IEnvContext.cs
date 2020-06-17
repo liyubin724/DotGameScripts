@@ -1,6 +1,6 @@
 ﻿namespace DotEngine.Context
 {
-    public interface IContext<K>
+    public interface IEnvContext<K>
     {
         object this[K key] { get;set; }
 
@@ -10,9 +10,10 @@
         V Get<V>(K key);
 
         void Add(K key, object value);
-        void Add(K key, object value,bool isNeverClear);
+        void Add(K key, object value, bool isNeverClear);
 
         void Update(K key, object value);
+
         void AddOrUpdate(K key, object value);
         void AddOrUpdate(K key, object value, bool isNeverClear);
 

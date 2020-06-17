@@ -34,7 +34,7 @@ namespace DotEngine.AI.FSM
             }
         }
 
-        public IContext<Type> TypeContext
+        public IEnvContext<Type> TypeContext
         {
             get
             {
@@ -46,7 +46,7 @@ namespace DotEngine.AI.FSM
             }
         }
 
-        public IContext<string> StrContext
+        public IEnvContext<string> StrContext
         {
             get
             {

@@ -41,7 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IniConfigService.cs" />
     <Compile Include="Ini\IniConfig.cs" />
+    <Compile Include="Ndb\NDBConst.cs" />
+    <Compile Include="Ndb\NDBDataSheet.cs" />
+    <Compile Include="Ndb\NDBHeader.cs" />
+    <Compile Include="Ndb\NDBSheetLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,5 +55,6 @@
       <Name>DotEngine.Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
