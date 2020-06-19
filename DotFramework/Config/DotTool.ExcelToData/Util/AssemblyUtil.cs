@@ -5,7 +5,7 @@ namespace DotTool.ETD.Util
 {
     public class AssemblyUtil
     {
-        public static Type GetTypeByName(string name, bool ingnoreCase = true)
+        public static Type GetTypeByName(string name, bool ingnoreCase = false)
         {
             if (string.IsNullOrEmpty(name))
             {

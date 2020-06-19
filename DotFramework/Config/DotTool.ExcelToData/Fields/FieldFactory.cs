@@ -20,7 +20,7 @@ namespace DotTool.ETD.Fields
             if (fieldType != FieldType.None)
             {
                 string fieldName = fieldType.ToString() + "Field";
-                resultType = AssemblyUtil.GetTypeByName(fieldName);
+                resultType = AssemblyUtil.GetTypeByName(fieldName,true);
             }
             else
             {

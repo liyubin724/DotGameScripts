@@ -1,10 +1,6 @@
 ﻿using DotTool.ETD.Data;
 using DotTool.ETD.Validation;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotTool.ETD.Fields
 {
@@ -16,11 +12,7 @@ namespace DotTool.ETD.Fields
 
         public override string GetDefaultValue()
         {
-            if (string.IsNullOrEmpty(defaultValue))
-            {
-                return "0.0f";
-            }
-            return defaultValue;
+            return string.IsNullOrEmpty(defaultValue) ? "0.0f" : defaultValue;
         }
 
         protected override void AppendDefaultValidation(List<IFieldValidation> validations)

@@ -13,12 +13,11 @@ namespace DotTool.ETD.Fields
 
         public override string GetDefaultValue()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         protected override void AppendDefaultValidation(List<IFieldValidation> validations)
         {
-            throw new NotImplementedException();
         }
     }
 }

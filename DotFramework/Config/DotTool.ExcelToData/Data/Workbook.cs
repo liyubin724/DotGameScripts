@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using DotEngine.Context;
+using DotTool.ETD.Verify;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace DotTool.ETD.Data
 {
-    public class Workbook
+    public class Workbook : IVerify
     {
         private string bookFilePath;
         public string Name { get => Path.GetFileNameWithoutExtension(bookFilePath); }
@@ -46,6 +48,11 @@ namespace DotTool.ETD.Data
             return null;
         }
 
+        public void AddSheet(Sheet sheet)
+        {
+            sheets.Add(sheet);
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -58,6 +65,11 @@ namespace DotTool.ETD.Data
             sb.AppendLine();
             sb.AppendLine();
             return sb.ToString();
+        }
+
+        public bool Verify(TypeContext context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

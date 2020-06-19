@@ -68,6 +68,8 @@ namespace DotTool.ETD.Data
         protected string defaultValue;
         protected string validationRule;
 
+        public int Col { get => col; }
+
         public FieldType Type { get; private set; } = FieldType.None;
         public FieldPlatform Platform { get; private set; } = FieldPlatform.None;
         private IFieldValidation[] validations = null;

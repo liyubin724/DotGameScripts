@@ -12,11 +12,7 @@ namespace DotTool.ETD.Fields
 
         public override string GetDefaultValue()
         {
-            if(string.IsNullOrEmpty(defaultValue))
-            {
-                return "false";
-            }
-            return defaultValue;
+            return string.IsNullOrEmpty(defaultValue) ? "false" : defaultValue;
         }
 
         protected override void AppendDefaultValidation(List<IFieldValidation> validations)

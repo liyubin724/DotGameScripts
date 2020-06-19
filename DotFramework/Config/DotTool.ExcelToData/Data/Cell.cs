@@ -16,6 +16,16 @@
             this.value = v;
         }
 
+        public string GetValue(Field field)
+        {
+            string content = value;
+            if(string.IsNullOrEmpty(content))
+            {
+                content = field.GetDefaultValue();
+            }
+            return content;
+        }
+
         public override string ToString()
         {
             return $"<row:{row},col:{col},value:{(string.IsNullOrEmpty(value) ? "" : value)}>";

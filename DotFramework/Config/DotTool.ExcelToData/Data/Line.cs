@@ -8,12 +8,13 @@ namespace DotTool.ETD.Data
         private int row;
         private List<Cell> cells = new List<Cell>();
 
+        public int Row { get => row; }
+        public int Count { get => cells.Count; }
+
         public Line(int r)
         {
             row = r;
         }
-
-        public int Count { get => cells.Count; }
 
         public void AddCell(int c,string value)
         {

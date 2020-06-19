@@ -61,7 +61,7 @@ namespace DotTool.ETD.Validation
                     return null;
                 }
                 validationName += "Validation";
-                Type type = AssemblyUtil.GetTypeByName(validationName);
+                Type type = AssemblyUtil.GetTypeByName(validationName,true);
                 if (type == null || !typeof(IFieldValidation).IsAssignableFrom(type))
                 {
                     return null;
