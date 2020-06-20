@@ -1,6 +1,7 @@
 ﻿using DotTool.ETD.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DotTool.ETD.Validation
@@ -23,6 +24,7 @@ namespace DotTool.ETD.Validation
             }
 
             string[] rules = multiRule.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            rules = new List<string>(rules).Distinct().ToArray();
             if (rules == null || rules.Length == 0)
             {
                 return;

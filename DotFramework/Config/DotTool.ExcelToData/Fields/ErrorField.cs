@@ -1,7 +1,4 @@
 ﻿using DotTool.ETD.Data;
-using DotTool.ETD.Validation;
-using System;
-using System.Collections.Generic;
 
 namespace DotTool.ETD.Fields
 {
@@ -14,10 +11,6 @@ namespace DotTool.ETD.Fields
         public override string GetDefaultValue()
         {
             return null;
-        }
-
-        protected override void AppendDefaultValidation(List<IFieldValidation> validations)
-        {
         }
     }
 }

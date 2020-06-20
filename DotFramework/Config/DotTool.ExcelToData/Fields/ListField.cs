@@ -1,6 +1,4 @@
 ﻿using DotTool.ETD.Data;
-using DotTool.ETD.Validation;
-using System.Collections.Generic;
 
 namespace DotTool.ETD.Fields
 {
@@ -20,9 +18,9 @@ namespace DotTool.ETD.Fields
             return defaultValue;
         }
 
-        protected override void AppendDefaultValidation(List<IFieldValidation> validations)
+        protected override string GetDefaultValidation()
         {
-            validations.Add(new ListValidation() { Rule = "List" });
+            return "list";
         }
     }
 }

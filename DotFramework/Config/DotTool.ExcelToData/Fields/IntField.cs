@@ -1,6 +1,4 @@
 ﻿using DotTool.ETD.Data;
-using DotTool.ETD.Validation;
-using System.Collections.Generic;
 
 namespace DotTool.ETD.Fields
 {
@@ -15,9 +13,9 @@ namespace DotTool.ETD.Fields
             return string.IsNullOrEmpty(defaultValue) ? "0" : defaultValue;
         }
 
-        protected override void AppendDefaultValidation(List<IFieldValidation> validations)
+        protected override string GetDefaultValidation()
         {
-            validations.Add(new IntValidation() { Rule = "int" });
+            return "int";
         }
     }
 }

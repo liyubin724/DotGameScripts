@@ -1,7 +1,5 @@
 ﻿using DotTool.ETD.Data;
-using DotTool.ETD.Validation;
 using System;
-using System.Collections.Generic;
 
 namespace DotTool.ETD.Fields
 {
@@ -16,10 +14,9 @@ namespace DotTool.ETD.Fields
             throw new Exception();
         }
 
-        protected override void AppendDefaultValidation(List<IFieldValidation> validations)
+        protected override string GetDefaultValidation()
         {
-            validations.Add(new IntValidation() { Rule = "Int" });
-            validations.Add(new UniqueValidation() { Rule = "Unique" });
+            return "int;unique";
         }
     }
 }

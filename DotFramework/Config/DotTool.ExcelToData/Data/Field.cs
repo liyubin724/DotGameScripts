@@ -1,5 +1,6 @@
 ﻿using DotTool.ETD.Fields;
 using DotTool.ETD.Validation;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,9 +81,10 @@ namespace DotTool.ETD.Data
                 return validations;
             }
 
+            string validationStr = validationRule + ";" +GetDefaultValidation();
+
             List<IFieldValidation> validationList = new List<IFieldValidation>();
-            AppendDefaultValidation(validationList);
-            ValidationFactory.ParseValidations(validationRule, validationList);
+            ValidationFactory.ParseValidations(validationStr, validationList);
             validations = validationList.ToArray();
 
             return validations;
@@ -96,14 +98,14 @@ namespace DotTool.ETD.Data
             type = t ?? t.Trim().ToLower();
             platform = p ?? p.Trim().ToLower();
             defaultValue = v;
-            validationRule = r;
+            validationRule = string.IsNullOrEmpty(r)?"":r.Trim();
 
             Type = FieldTypeUtil.GetFieldType(type);
             Platform = GetPlatform(platform);
         }
 
         public abstract string GetDefaultValue();
-        protected abstract void AppendDefaultValidation(List<IFieldValidation> validations);
+        protected virtual string GetDefaultValidation() { return null; }
 
         private FieldPlatform GetPlatform(string platform)
         {
