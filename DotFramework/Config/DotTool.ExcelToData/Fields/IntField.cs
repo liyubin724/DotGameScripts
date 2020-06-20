@@ -8,11 +8,6 @@ namespace DotTool.ETD.Fields
         {
         }
 
-        public override string GetDefaultValue()
-        {
-            return string.IsNullOrEmpty(defaultValue) ? "0" : defaultValue;
-        }
-
         protected override string GetDefaultValidation()
         {
             return "int";

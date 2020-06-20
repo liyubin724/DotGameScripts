@@ -32,7 +32,7 @@ namespace DotTool.ETD.Data
         {
             foreach(var field in fields)
             {
-                if(field.Col == col)
+                if(field.col == col)
                 {
                     return field;
                 }
@@ -81,7 +81,7 @@ namespace DotTool.ETD.Data
             for(int i =0;i<FieldCount;++i)
             {
                 Field field = GetFieldByIndex(i);
-                if(field.Type == FieldType.Id)
+                if(field.FieldType == FieldType.Id)
                 {
                     return line.GetCellByIndex(i).GetValue(field);
                 }
@@ -95,7 +95,7 @@ namespace DotTool.ETD.Data
             for (int i = 0; i < FieldCount; ++i)
             {
                 Field field = GetFieldByIndex(i);
-                if (field.Type == FieldType.Id)
+                if (field.FieldType == FieldType.Id)
                 {
                     return line.GetCellByIndex(i).GetValue(field);
                 }

@@ -61,18 +61,16 @@ namespace DotTool.ETD.Data
 
     public abstract class Field
     {
-        protected int col;
-        protected string name;
-        protected string desc;
-        protected string type;
-        protected string platform;
-        protected string defaultValue;
-        protected string validationRule;
+        public int col;
+        public string name;
+        public string desc;
+        public string type;
+        public string platform;
+        public string defaultValue;
+        public string validationRule;
 
-        public int Col { get => col; }
-
-        public FieldType Type { get; private set; } = FieldType.None;
-        public FieldPlatform Platform { get; private set; } = FieldPlatform.None;
+        public FieldType FieldType { get; private set; } = FieldType.None;
+        public FieldPlatform FieldPlatform { get; private set; } = FieldPlatform.None;
         private IFieldValidation[] validations = null;
         public IFieldValidation[] GetValidations()
         {
@@ -100,12 +98,11 @@ namespace DotTool.ETD.Data
             defaultValue = v;
             validationRule = string.IsNullOrEmpty(r)?"":r.Trim();
 
-            Type = FieldTypeUtil.GetFieldType(type);
-            Platform = GetPlatform(platform);
+            FieldType = FieldTypeUtil.GetFieldType(type);
+            FieldPlatform = GetPlatform(platform);
         }
 
-        public abstract string GetDefaultValue();
-        protected virtual string GetDefaultValidation() { return null; }
+        protected virtual string GetDefaultValidation() { return ""; }
 
         private FieldPlatform GetPlatform(string platform)
         {

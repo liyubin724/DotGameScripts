@@ -308,8 +308,8 @@ namespace DotTool.ETD.IO
                 for(int c = firstColNum+1;c<lastColNum;c++)
                 {
                     ETDField field = sheetData.GetFieldByCol(c);
-                    ICell valueCell = row.GetCell(field.Col);
-                    line.AddCell(field.Col, GetCellStringValue(valueCell));
+                    ICell valueCell = row.GetCell(field.col);
+                    line.AddCell(field.col, GetCellStringValue(valueCell));
                 }
                 sheetData.AddLine(line);
 

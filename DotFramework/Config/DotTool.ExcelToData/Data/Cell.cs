@@ -18,12 +18,7 @@
 
         public string GetValue(Field field)
         {
-            string content = value;
-            if(string.IsNullOrEmpty(content))
-            {
-                content = field.GetDefaultValue();
-            }
-            return content;
+            return string.IsNullOrEmpty(value) ? field.defaultValue : value;
         }
 
         public override string ToString()

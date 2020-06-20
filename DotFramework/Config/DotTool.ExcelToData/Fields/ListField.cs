@@ -13,11 +13,6 @@ namespace DotTool.ETD.Fields
             ValueRefName = refName;
         }
 
-        public override string GetDefaultValue()
-        {
-            return defaultValue;
-        }
-
         protected override string GetDefaultValidation()
         {
             return "list";
