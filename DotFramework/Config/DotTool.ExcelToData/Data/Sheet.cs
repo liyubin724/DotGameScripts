@@ -32,7 +32,7 @@ namespace DotTool.ETD.Data
         {
             foreach(var field in fields)
             {
-                if(field.col == col)
+                if(field.Col == col)
                 {
                     return field;
                 }

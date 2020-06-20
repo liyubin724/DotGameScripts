@@ -1,6 +1,5 @@
 ﻿using DotTool.ETD.Fields;
 using DotTool.ETD.Validation;
-using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,17 +60,40 @@ namespace DotTool.ETD.Data
 
     public abstract class Field
     {
-        public int col;
-        public string name;
-        public string desc;
-        public string type;
-        public string platform;
-        public string defaultValue;
-        public string validationRule;
+        protected int col;
+        protected string name;
+        protected string desc;
+        protected string type;
+        protected string platform;
+        protected string defaultValue;
+        protected string validationRule;
+
+        public int Col { get => col; }
+        public string Name { get => name; }
+        public string Desc { get => desc; }
+        public string Type { get => type; }
+        public string Platform { get => platform; }
+        public string DefaultValue { get => defaultValue; }
+        public string ValidationRule { get => validationRule; }
 
         public FieldType FieldType { get; private set; } = FieldType.None;
         public FieldPlatform FieldPlatform { get; private set; } = FieldPlatform.None;
         private IFieldValidation[] validations = null;
+
+        protected Field(int c, string n, string d, string t, string p, string v, string r)
+        {
+            col = c;
+            name = n;
+            desc = d;
+            type = t ?? t.Trim().ToLower();
+            platform = p ?? p.Trim().ToLower();
+            defaultValue = v;
+            validationRule = string.IsNullOrEmpty(r)?"":r.Trim();
+
+            FieldType = FieldTypeUtil.GetFieldType(type);
+            FieldPlatform = GetPlatform(platform);
+        }
+
         public IFieldValidation[] GetValidations()
         {
             if(validations != null)
@@ -86,20 +108,6 @@ namespace DotTool.ETD.Data
             validations = validationList.ToArray();
 
             return validations;
-        }
-
-        protected Field(int c, string n, string d, string t, string p, string v, string r)
-        {
-            col = c;
-            name = n;
-            desc = d;
-            type = t ?? t.Trim().ToLower();
-            platform = p ?? p.Trim().ToLower();
-            defaultValue = v;
-            validationRule = string.IsNullOrEmpty(r)?"":r.Trim();
-
-            FieldType = FieldTypeUtil.GetFieldType(type);
-            FieldPlatform = GetPlatform(platform);
         }
 
         protected virtual string GetDefaultValidation() { return ""; }

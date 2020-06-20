@@ -88,7 +88,8 @@
     <Compile Include="Validation\IFieldValidation.cs" />
     <Compile Include="Validation\ListValidation.cs" />
     <Compile Include="Validation\LongValidation.cs" />
-    <Compile Include="Validation\StringValidation.cs" />
+    <Compile Include="Validation\MaxLenValidation.cs" />
+    <Compile Include="Validation\NotNullValidation.cs" />
     <Compile Include="Validation\UniqueValidation.cs" />
     <Compile Include="Validation\ValidationFactory.cs" />
     <Compile Include="Verify\IVerify.cs" />

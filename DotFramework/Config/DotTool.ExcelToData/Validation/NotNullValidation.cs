@@ -1,11 +1,10 @@
 ﻿using DotEngine.Context;
 using DotTool.ETD.Data;
 using DotTool.ETD.Log;
-using System;
 
 namespace DotTool.ETD.Validation
 {
-    public class FloatValidation : IFieldValidation
+    public class NotNullValidation : IFieldValidation
     {
 #pragma warning disable CS0649
         [ContextField(typeof(LogHandler))]
@@ -28,10 +27,10 @@ namespace DotTool.ETD.Validation
             }
 
             string content = cell.GetValue(field);
-            if (!float.TryParse(content, out float value))
+            if (string.IsNullOrEmpty(content))
             {
-                logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONVERT_ERROR, "float", cell.ToString());
-                return FieldValidationResult.ParseContentFailed;
+                logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_NULL, cell.Row, cell.Col);
+                return FieldValidationResult.ContentIsNull;
             }
 
             return FieldValidationResult.Success;

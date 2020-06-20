@@ -5,15 +5,16 @@ using System;
 
 namespace DotTool.ETD.Validation
 {
-    [FieldValidationTargetType(new Type[] { typeof(bool) })]
     public class BoolValidation : IFieldValidation
     {
+#pragma warning disable CS0649
         [ContextField(typeof(LogHandler))]
         private LogHandler logHandler;
         [ContextField(typeof(Field))]
         private Field field;
         [ContextField(typeof(Cell))]
         private Cell cell;
+#pragma warning restore CS0649
 
         public string Rule { get; set; }
 

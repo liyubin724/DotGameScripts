@@ -58,7 +58,7 @@ namespace DotTool.ETD.Log
         public static readonly int LOG_LINE_VERIFY_END = 3402;
         public static readonly int LOG_LINE_COUNT_NOT_EQUAL = -3403;
 
-        public static readonly int LOG_VALIDATION_SET_DEFAULT = 4101;
+        //public static readonly int LOG_VALIDATION_SET_DEFAULT = 4101;
         public static readonly int LOG_VALIDATION_CONVERT_ERROR = -4102;
         public static readonly int LOG_VALIDATION_DIC_FORMAT_ERROR = -4103;
         public static readonly int LOG_VALIDATION_DIC_KV_COUNT_ERROR = -4104;
@@ -135,7 +135,7 @@ namespace DotTool.ETD.Log
             logFormatDic.Add(LOG_LINE_VERIFY_END, "Verify line finish. Result = {0}.");
             logFormatDic.Add(LOG_LINE_COUNT_NOT_EQUAL, "The count of the cell in line is not equal to the count of the field");
 
-            logFormatDic.Add(LOG_VALIDATION_SET_DEFAULT, "The content of the cell is null,it will be set defalut({0}).row = {1},col={2}");
+            //logFormatDic.Add(LOG_VALIDATION_SET_DEFAULT, "The content of the cell is null,it will be set defalut({0}).row = {1},col={2}");
             logFormatDic.Add(LOG_VALIDATION_CONVERT_ERROR, "The content of the cell can't convert to {0}. cell={1}");
             logFormatDic.Add(LOG_VALIDATION_DIC_FORMAT_ERROR, "The format of the content should be start with {{ and end with }}. cell={0}");
             logFormatDic.Add(LOG_VALIDATION_DIC_KV_COUNT_ERROR, "The content of the cell . cell={0}");

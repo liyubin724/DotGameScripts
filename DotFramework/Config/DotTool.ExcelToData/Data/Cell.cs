@@ -18,7 +18,7 @@
 
         public string GetValue(Field field)
         {
-            return string.IsNullOrEmpty(value) ? field.defaultValue : value;
+            return string.IsNullOrEmpty(value) ? field.DefaultValue : value;
         }
 
         public override string ToString()

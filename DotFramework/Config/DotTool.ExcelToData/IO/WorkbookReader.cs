@@ -35,54 +35,6 @@ namespace DotTool.ETD.IO
             return !string.IsNullOrEmpty(ext) && (ext == ".xls" || ext == ".xlsx");
         }
 
-        public void DebugExcel(string excelPath)
-        {
-            using (FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                IWorkbook workbook = new XSSFWorkbook(fs);
-                for (int i = 0; i < workbook.NumberOfSheets; i++)
-                {
-                    ISheet sheet = workbook.GetSheetAt(i);
-                    System.Console.WriteLine(sheet.SheetName);
-
-                    int firstRowNum = sheet.FirstRowNum;
-                    int lastRowNum = sheet.LastRowNum;
-                    int firstColNum = sheet.GetRow(0).FirstCellNum;
-                    int lastColNum = sheet.GetRow(0).LastCellNum;
-
-                    for (int r = firstRowNum;r<lastRowNum;++r)
-                    {
-                        System.Console.WriteLine($"Row = {r}");
-
-                        IRow row = sheet.GetRow(r);
-                        if(row == null)
-                        {
-                            System.Console.WriteLine("EmptyLine");
-                        }else
-                        {
-                            for(int c = firstColNum;c<lastColNum;c++)
-                            {
-                                ICell cell = row.GetCell(c);
-                                if (cell == null)
-                                {
-                                    System.Console.Write("Null,");
-                                }
-                                else
-                                {
-                                    System.Console.Write(GetCellStringValue(cell) + ",");
-                                }
-                            }
-                            System.Console.WriteLine();
-                        }
-
-                    }
-
-                    System.Console.WriteLine($"firstRow = {firstRowNum},lastRow = {lastRowNum},firstCol = {firstColNum},lastCol = {lastColNum}");
-                    break;
-                }
-            }
-        }
-
         public ETDWorkbook[] ReadExcelFromDir(string excelDir)
         {
             if (string.IsNullOrEmpty(excelDir) || !Directory.Exists(excelDir))
@@ -308,8 +260,8 @@ namespace DotTool.ETD.IO
                 for(int c = firstColNum+1;c<lastColNum;c++)
                 {
                     ETDField field = sheetData.GetFieldByCol(c);
-                    ICell valueCell = row.GetCell(field.col);
-                    line.AddCell(field.col, GetCellStringValue(valueCell));
+                    ICell valueCell = row.GetCell(field.Col);
+                    line.AddCell(field.Col, GetCellStringValue(valueCell));
                 }
                 sheetData.AddLine(line);
 
