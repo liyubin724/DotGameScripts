@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\libs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\libs\NPOI.dll</HintPath>
     </Reference>
@@ -71,6 +74,7 @@
     <Compile Include="Fields\LuaField.cs" />
     <Compile Include="Fields\RefField.cs" />
     <Compile Include="Fields\StringField.cs" />
+    <Compile Include="IO\WorkbookConst.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
     <Compile Include="IO\WorkbookWriter.cs" />
     <Compile Include="Log\LogHandler.cs" />

@@ -4,7 +4,9 @@ using DotTool.ETD.Log;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using ETDField = DotTool.ETD.Data.Field;
@@ -16,27 +18,106 @@ namespace DotTool.ETD.IO
 {
     public class WorkbookReader
     {
-        private static int MIN_ROW_COUNT = 6;
-        private static int MIN_COLUMN_COUNT = 2;
-        private static string SHEET_NAME_REGEX = @"^[A-Z]\w{3,10}";
-        private static string FIELD_NAME_REGEX = @"^[A-Za-z]{2,15}$";
-        private static string ID_FIELD_NAME = "ID";
-        private static string TEXT_BOOK_NAME = "Text";
-        private static string ROW_START_FLAG = "start";
-        private static string ROW_END_FLAG = "end";
-        private static string CELL_NULL_FLAG = "nil";
-
         private LogHandler logHandler = null;
         public WorkbookReader(LogHandler handler)
         {
             logHandler = handler;
         }
 
-        public void ReadExcel(ETDWorkbook etdWorkbook)
+        private bool IsExcel(string filePath)
         {
-            string excelPath = etdWorkbook.FilePath;
-            string ext = Path.GetExtension(excelPath).ToLower();
+            if(string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
+            {
+                return false;
+            }
 
+            string ext = Path.GetExtension(filePath);
+            return !string.IsNullOrEmpty(ext) && (ext == ".xls" || ext == ".xlsx");
+        }
+
+        public void DebugExcel(string excelPath)
+        {
+            using (FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                IWorkbook workbook = new XSSFWorkbook(fs);
+                for (int i = 0; i < workbook.NumberOfSheets; i++)
+                {
+                    ISheet sheet = workbook.GetSheetAt(i);
+                    System.Console.WriteLine(sheet.SheetName);
+
+                    int firstRowNum = sheet.FirstRowNum;
+                    int lastRowNum = sheet.LastRowNum;
+                    int firstColNum = sheet.GetRow(0).FirstCellNum;
+                    int lastColNum = sheet.GetRow(0).LastCellNum;
+
+                    for (int r = firstRowNum;r<lastRowNum;++r)
+                    {
+                        System.Console.WriteLine($"Row = {r}");
+
+                        IRow row = sheet.GetRow(r);
+                        if(row == null)
+                        {
+                            System.Console.WriteLine("EmptyLine");
+                        }else
+                        {
+                            for(int c = firstColNum;c<lastColNum;c++)
+                            {
+                                ICell cell = row.GetCell(c);
+                                if (cell == null)
+                                {
+                                    System.Console.Write("Null,");
+                                }
+                                else
+                                {
+                                    System.Console.Write(GetCellStringValue(cell) + ",");
+                                }
+                            }
+                            System.Console.WriteLine();
+                        }
+
+                    }
+
+                    System.Console.WriteLine($"firstRow = {firstRowNum},lastRow = {lastRowNum},firstCol = {firstColNum},lastCol = {lastColNum}");
+                    break;
+                }
+            }
+        }
+
+        public ETDWorkbook[] ReadExcelFromDir(string excelDir)
+        {
+            if (string.IsNullOrEmpty(excelDir) || !Directory.Exists(excelDir))
+            {
+                return null;
+            }
+
+            string[] excelFields = (from file in Directory.GetFiles(excelDir, "*.*", SearchOption.AllDirectories)
+                                    where IsExcel(file)
+                                    select file).ToArray();
+
+            List<ETDWorkbook> books = new List<ETDWorkbook>();
+            if (excelFields != null && excelFields.Length > 0)
+            {
+                foreach(var f in excelFields)
+                {
+                    ETDWorkbook book = ReadExcelFromFile(f);
+                    if(book!=null)
+                    {
+                        books.Add(book);
+                    }
+                }
+            }
+
+            return books.ToArray();
+        }
+
+        public ETDWorkbook ReadExcelFromFile(string excelPath)
+        {
+            if(!IsExcel(excelPath))
+            {
+                return null;
+            }
+            string ext = Path.GetExtension(excelPath).ToLower();
+            ETDWorkbook etdWorkbook = new ETDWorkbook(excelPath);
             using (FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 IWorkbook workbook = null;
@@ -52,22 +133,19 @@ namespace DotTool.ETD.IO
                 if (workbook == null || workbook.NumberOfSheets == 0)
                 {
                     logHandler.Log(LogType.Warning, LogMessage.LOG_WORKBOOK_EMPTY, excelPath);
-                    return;
+                    return null;
                 }
 
                 logHandler.Log(LogType.Info, LogMessage.LOG_WORKBOOK_START, excelPath);
 
                 for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
-                    logHandler.Log(LogType.Info, LogMessage.LOG_WARP_LINE);
-
                     ISheet sheet = workbook.GetSheetAt(i);
 
                     string sheetName = sheet.SheetName;
                     if (string.IsNullOrEmpty(sheetName))
                     {
                         logHandler.Log(LogType.Warning, LogMessage.LOG_SHEET_NAME_NULL, i);
-
                         continue;
                     }
                     if (sheetName.StartsWith("#"))
@@ -75,42 +153,58 @@ namespace DotTool.ETD.IO
                         logHandler.Log(LogType.Info, LogMessage.LOG_IGNORE_SHEET, sheetName);
                         continue;
                     }
-                    if (!Regex.IsMatch(sheetName, SHEET_NAME_REGEX))
+                    if (!Regex.IsMatch(sheetName, WorkbookConst.SHEET_NAME_REGEX))
                     {
-                        logHandler.Log(LogType.Error, LogMessage.LOG_SHEET_NAME_NOT_MATCH, sheetName, SHEET_NAME_REGEX);
+                        logHandler.Log(LogType.Error, LogMessage.LOG_SHEET_NAME_NOT_MATCH, sheetName, WorkbookConst.SHEET_NAME_REGEX);
                         continue;
                     }
 
                     Sheet dataSheet = ReadFromSheet(sheet);
                     etdWorkbook.AddSheet(dataSheet);
-
-                    logHandler.Log(LogType.Info, LogMessage.LOG_WARP_LINE);
                 }
 
                 logHandler.Log(LogType.Info, LogMessage.LOG_WORKBOOK_END, excelPath);
             }
+            return etdWorkbook;
         }
 
         private ETDSheet ReadFromSheet(ISheet sheet)
         {
             logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_START, sheet.SheetName);
 
-            int firstRow = sheet.FirstRowNum;
-            int lastRow = sheet.LastRowNum;
-
-            int firstCol = sheet.GetRow(firstRow).FirstCellNum;
-            int lastCol = sheet.GetRow(firstRow).LastCellNum;
-
-            int rowCount = lastRow - firstRow + 1;
-            int colCount = lastCol - firstCol + 1;
-            if (rowCount < MIN_ROW_COUNT)
+            IRow firstRow = sheet.GetRow(WorkbookConst.SHEET_ROW_START_INDEX);
+            if(firstRow==null)
             {
-                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_ROW_LESS, rowCount, MIN_ROW_COUNT);
                 return null;
             }
-            if (colCount < MIN_COLUMN_COUNT)
+            ICell firstCell = firstRow.GetCell(WorkbookConst.SHEET_COLUMN_START_INDEX);
+            if(firstCell == null)
             {
-                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_COL_LESS, colCount, MIN_COLUMN_COUNT);
+                return null;
+            }
+            string flagContent = GetCellStringValue(firstCell);
+            if(string.IsNullOrEmpty(flagContent) || flagContent != WorkbookConst.SHEET_MARK_FLAG)
+            {
+                return null;
+            }
+
+            int firstRowNum = WorkbookConst.SHEET_ROW_START_INDEX;
+            int lastRowNum = sheet.LastRowNum;
+
+            int firstColNum = sheet.GetRow(firstRowNum).FirstCellNum;
+            int lastColNum = sheet.GetRow(firstRowNum).LastCellNum;
+
+            int rowCount = lastRowNum - firstRowNum + 1;
+            int colCount = lastColNum - firstColNum + 1;
+
+            if (rowCount < WorkbookConst.SHEET_FIELD_ROW_COUNT)
+            {
+                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_ROW_LESS, rowCount, WorkbookConst.SHEET_FIELD_ROW_COUNT);
+                return null;
+            }
+            if (colCount < WorkbookConst.MIN_COLUMN_COUNT)
+            {
+                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_COL_LESS, colCount, WorkbookConst.MIN_COLUMN_COUNT);
                 return null;
             }
 
@@ -129,14 +223,27 @@ namespace DotTool.ETD.IO
 
             logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_FIELD_START);
 
-            int firstRow = sheet.FirstRowNum;
-            int firstCol = sheet.GetRow(firstRow).FirstCellNum;
-            int lastCol = sheet.GetRow(firstRow).LastCellNum;
+            int firstRowNum = sheet.FirstRowNum;
+            int lastRowNum = firstRowNum + WorkbookConst.SHEET_FIELD_ROW_COUNT - 1;
+            int firstColNum = sheet.GetRow(firstRowNum).FirstCellNum;
+            int lastColNum = sheet.GetRow(firstRowNum).LastCellNum;
 
-            for (int i = firstCol; i <= lastCol; ++i)
+            for(int c = firstColNum+1;c<lastColNum;++c)
             {
-                IRow nameRow = sheet.GetRow(firstRow);
-                string nameContent = GetCellStringValue(nameRow.GetCell(i));
+                object[] datas = new object[WorkbookConst.SHEET_FIELD_ROW_COUNT + 1];
+                datas[0] = c;
+                for (int r = firstRowNum;r<lastRowNum;++r)
+                {
+                    IRow row = sheet.GetRow(r);
+                    string cellValue = null;
+                    if(row!=null)
+                    {
+                        cellValue = GetCellStringValue(row.GetCell(c));
+                    }
+                    datas[r - firstRowNum + 1] = cellValue;
+                }
+
+                string nameContent = (string)datas[1];
                 if (string.IsNullOrEmpty(nameContent))
                 {
                     logHandler.Log(LogType.Warning, LogMessage.LOG_SHEET_FIELD_NAME_NULL);
@@ -148,15 +255,7 @@ namespace DotTool.ETD.IO
                     continue;
                 }
 
-                object[] datas = new object[MIN_ROW_COUNT + 1];
-                datas[0] = i;
-                for (int j = 0; j < MIN_ROW_COUNT; j++)
-                {
-                    IRow row = sheet.GetRow(firstRow + j);
-                    datas[j+1]  = GetCellStringValue(row.GetCell(i));
-                }
-
-                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_FIELD_CREATE, i);
+                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_FIELD_CREATE, c);
 
                 Field field = (Field)getFieldMI.Invoke(null, datas);
                 sheetData.AddField(field);
@@ -170,56 +269,47 @@ namespace DotTool.ETD.IO
         {
             logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_LINE_START);
 
-            int firstRow = sheet.FirstRowNum;
-            int lastRow = sheet.LastRowNum;
+            int firstRowNum = WorkbookConst.SHEET_FIELD_ROW_COUNT;
+            int lastRowNum = sheet.LastRowNum;
 
-            int firstCol = sheet.GetRow(firstRow).FirstCellNum;
+            int firstColNum = sheet.GetRow(WorkbookConst.SHEET_ROW_START_INDEX).FirstCellNum;
+            int lastColNum = sheet.GetRow(WorkbookConst.SHEET_ROW_START_INDEX).LastCellNum;
 
             bool isStart = false;
-            for (int i = MIN_ROW_COUNT; i < lastRow; i++)
+            for(int r = firstRowNum;r< lastRowNum;++r)
             {
-                IRow row = sheet.GetRow(i);
-                ICell cell = row.GetCell(firstCol);
-                if (!isStart)
+                IRow row = sheet.GetRow(r);
+                if (row == null)
                 {
-                    if (cell == null)
+                    continue;
+                }
+                string cellValue = GetCellStringValue(row.GetCell(firstColNum));
+                if(string.IsNullOrEmpty(cellValue))
+                {
+                    if(!isStart)
                     {
                         continue;
                     }
-                    else
-                    {
-                        string cellContent = GetCellStringValue(cell);
-                        if (cellContent == ROW_START_FLAG)
-                        {
-                            isStart = true;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                }
-                else
+                }else
                 {
-                    if (cell != null)
+                    if(!isStart && cellValue == WorkbookConst.SHEET_LINE_START_FLAG)
                     {
-                        string cellContent = GetCellStringValue(cell);
-                        if (cellContent == ROW_END_FLAG)
-                        {
-                            break;
-                        }
+                        isStart = true;
+                    }else if(isStart && cellValue == WorkbookConst.SHEET_LINE_END_FLAG)
+                    {
+                        isStart = false;
+                        break;
                     }
                 }
 
-                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_LINE_CREATE, i);
+                logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_LINE_CREATE, r);
 
-                ETDLine line = new ETDLine(i);
-                int fieldCount = sheetData.FieldCount;
-                for (int j = 0; j < fieldCount; ++j)
+                ETDLine line = new ETDLine(r);
+                for(int c = firstColNum+1;c<lastColNum;c++)
                 {
-                    ETDField fieldData = sheetData.GetFieldByIndex(j);
-                    ICell valueCell = row.GetCell(fieldData.Col);
-                    line.AddCell(fieldData.Col, GetCellStringValue(valueCell));
+                    ETDField field = sheetData.GetFieldByCol(c);
+                    ICell valueCell = row.GetCell(field.Col);
+                    line.AddCell(field.Col, GetCellStringValue(valueCell));
                 }
                 sheetData.AddLine(line);
 
