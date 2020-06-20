@@ -9,8 +9,9 @@ namespace DotTool.ETD.Data
 {
     public class Workbook : IVerify
     {
-        private string bookFilePath;
-        public string Name { get => Path.GetFileNameWithoutExtension(bookFilePath); }
+        private string filePath;
+        public string Name { get => Path.GetFileNameWithoutExtension(filePath); }
+        public string FilePath { get => filePath; }
 
         private List<Sheet> sheets = new List<Sheet>();
         public int SheetCount { get => sheets.Count; }
@@ -24,7 +25,7 @@ namespace DotTool.ETD.Data
 
         public Workbook(string path)
         {
-            bookFilePath = path;
+            filePath = path;
         }
         
         public Sheet GetSheetByName(string name)
@@ -56,7 +57,7 @@ namespace DotTool.ETD.Data
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(bookFilePath);
+            sb.AppendLine(filePath);
             sb.AppendLine("===========================");
             foreach(var sheet in sheets)
             {

@@ -31,6 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NPOI">
+      <HintPath>..\libs\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\libs\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\libs\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\libs\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +71,8 @@
     <Compile Include="Fields\LuaField.cs" />
     <Compile Include="Fields\RefField.cs" />
     <Compile Include="Fields\StringField.cs" />
+    <Compile Include="IO\WorkbookReader.cs" />
+    <Compile Include="IO\WorkbookWriter.cs" />
     <Compile Include="Log\LogHandler.cs" />
     <Compile Include="Log\LogMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +88,7 @@
     <Compile Include="Validation\UniqueValidation.cs" />
     <Compile Include="Validation\ValidationFactory.cs" />
     <Compile Include="Verify\IVerify.cs" />
+    <Compile Include="WorkbookAssembly.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

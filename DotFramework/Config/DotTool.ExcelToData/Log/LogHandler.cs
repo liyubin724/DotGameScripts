@@ -18,7 +18,7 @@
             this.handler = handler;
         }
 
-        public void Log(LogType type,int id,params string[] datas)
+        public void Log(LogType type,int id,params object[] datas)
         {
             handler?.Invoke(type, id, LogMessage.GetLogMsg(id, datas));
         }
