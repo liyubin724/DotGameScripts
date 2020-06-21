@@ -33,8 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Colorful.Console">
+      <HintPath>..\libs\Colorful.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine">
+      <HintPath>..\libs\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +57,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Context\DotEngine.Context\DotEngine.Context.csproj">
+      <Project>{973BA58F-3FD4-4A7D-AEEE-C9E0F135B12A}</Project>
+      <Name>DotEngine.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotTool.ExcelToData\DotTool.ExcelToData.csproj">
       <Project>{92a3c239-7338-4f74-977a-7e428d710396}</Project>
       <Name>DotTool.ExcelToData</Name>

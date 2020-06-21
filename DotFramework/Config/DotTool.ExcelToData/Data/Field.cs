@@ -1,5 +1,8 @@
-﻿using DotTool.ETD.Fields;
+﻿using DotEngine.Context;
+using DotTool.ETD.Fields;
+using DotTool.ETD.Log;
 using DotTool.ETD.Validation;
+using DotTool.ETD.Verify;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -58,7 +61,7 @@ namespace DotTool.ETD.Data
         All,
     }
 
-    public abstract class Field
+    public abstract class Field : IVerify
     {
         protected int col;
         protected string name;
@@ -133,6 +136,11 @@ namespace DotTool.ETD.Data
         public override string ToString()
         {
             return $"<col = {col},name = {name},desc={desc},type={type},platform={platform},defaultValue={defaultValue},validationRule={validationRule}>";
+        }
+
+        public virtual bool Verify(TypeContext context)
+        {
+            return true;
         }
     }
 }

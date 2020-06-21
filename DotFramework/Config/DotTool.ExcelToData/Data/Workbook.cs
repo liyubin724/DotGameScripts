@@ -1,4 +1,5 @@
 ﻿using DotEngine.Context;
+using DotTool.ETD.Log;
 using DotTool.ETD.Verify;
 using System.Collections.Generic;
 using System.IO;
@@ -70,7 +71,21 @@ namespace DotTool.ETD.Data
 
         public bool Verify(TypeContext context)
         {
-            throw new System.NotImplementedException();
+            LogHandler logHandler = context.Get<LogHandler>(typeof(LogHandler));
+
+            context.Add(typeof(Workbook), this);
+
+            bool result = true;
+            foreach(var sheet in sheets)
+            {
+                if(!sheet.Verify(context))
+                {
+                    result = false;
+                }
+            }
+
+            context.Remove(typeof(Workbook));
+            return result;
         }
     }
 }

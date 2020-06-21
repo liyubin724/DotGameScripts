@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DotEngine.Context;
+using DotTool.ETD.Log;
+using DotTool.ETD.Validation;
+using DotTool.ETD.Verify;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DotTool.ETD.Data
 {
-    public class Sheet
+    public class Sheet : IVerify
     {
         private string name;
 
@@ -121,6 +125,87 @@ namespace DotTool.ETD.Data
             sb.AppendLine();
             sb.AppendLine();
             return sb.ToString();
+        }
+
+        public bool Verify(TypeContext context)
+        {
+            LogHandler logHandler = context.Get<LogHandler>(typeof(LogHandler));
+
+            logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_VERIFY_START, name);
+
+            if (FieldCount == 0)
+            {
+                logHandler.Log(LogType.Error, LogMessage.LOG_SHEET_FIELD_EMPTY);
+                return false;
+            }
+
+            context.Add(typeof(Sheet), this);
+
+            bool result = true;
+            foreach(var field in fields)
+            {
+                if(!field.Verify(context))
+                {
+                    result = false;
+                }
+            }
+
+            if (result)
+            {
+                foreach (var line in lines)
+                {
+                    logHandler.Log(LogType.Info, LogMessage.LOG_LINE_VERIFY_START, line.Row);
+
+                    if(line.Count != fields.Count)
+                    {
+                        logHandler.Log(LogType.Error, LogMessage.LOG_LINE_COUNT_NOT_EQUAL);
+                        result = false;
+                    }else
+                    {
+                        for (int i = 0; i < fields.Count; ++i)
+                        {
+                            Field field = fields[i];
+                            Cell cell = line.GetCellByIndex(i);
+
+                            context.Add(typeof(Field), field);
+                            context.Add(typeof(Cell), cell);
+
+                            IFieldValidation[] validations = field.GetValidations();
+                            if(validations!=null && validations.Length>0)
+                            {
+                                foreach(var validation in validations)
+                                {
+                                    if(validation.GetType() != typeof(ErrorValidation))
+                                    {
+                                        TypeContext.Inject(context, validation);
+
+                                        FieldValidationResult resultCode = validation.Verify();
+                                        if (resultCode != FieldValidationResult.Success)
+                                        {
+                                            result = false;
+                                        }
+                                    }else
+                                    {
+                                        result = false;
+                                    }
+                                }
+                            }
+
+                            context.Remove(typeof(Field));
+                            context.Remove(typeof(Cell));
+
+                        }
+                    }
+
+                    logHandler.Log(LogType.Info, LogMessage.LOG_LINE_VERIFY_END, result);
+                }
+
+                context.Remove(typeof(Sheet));
+            }
+
+            logHandler.Log(LogType.Info, LogMessage.LOG_SHEET_VERIFY_END, name, result);
+
+            return result;
         }
     }
 }
