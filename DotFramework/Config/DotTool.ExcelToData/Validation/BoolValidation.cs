@@ -1,11 +1,10 @@
 ﻿using DotEngine.Context;
 using DotTool.ETD.Data;
 using DotTool.ETD.Log;
-using System;
 
 namespace DotTool.ETD.Validation
 {
-    public class BoolValidation : IFieldValidation
+    public class BoolValidation : IValidation
     {
 #pragma warning disable CS0649
         [ContextField(typeof(LogHandler))]
@@ -18,22 +17,22 @@ namespace DotTool.ETD.Validation
 
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
             if (field == null || cell == null)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_ARG_IS_NULL);
-
-                return FieldValidationResult.ArgIsNull;
+                return ValidationResult.ArgIsNull;
             }
 
             string content = cell.GetContent(field);
             if (!bool.TryParse(content, out bool value))
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONVERT_ERROR, "bool", cell.ToString());
-                return FieldValidationResult.ParseContentFailed;
+                return ValidationResult.ParseContentFailed;
             }
-            return FieldValidationResult.Success;
+
+            return ValidationResult.Success;
         }
     }
 }

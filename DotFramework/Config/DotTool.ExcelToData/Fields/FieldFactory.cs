@@ -16,6 +16,7 @@ namespace DotTool.ETD.Fields
             string validation)
         {
             FieldType fieldType = FieldTypeUtil.GetFieldType(type);
+
             Type resultType;
             if (fieldType != FieldType.None)
             {

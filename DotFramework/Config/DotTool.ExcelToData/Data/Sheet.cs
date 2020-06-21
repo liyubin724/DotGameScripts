@@ -2,11 +2,8 @@
 using DotTool.ETD.Log;
 using DotTool.ETD.Validation;
 using DotTool.ETD.Verify;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotTool.ETD.Data
 {
@@ -170,7 +167,7 @@ namespace DotTool.ETD.Data
                             context.Add(typeof(Field), field);
                             context.Add(typeof(Cell), cell);
 
-                            IFieldValidation[] validations = field.GetValidations();
+                            IValidation[] validations = field.GetValidations();
                             if(validations!=null && validations.Length>0)
                             {
                                 foreach(var validation in validations)
@@ -179,8 +176,8 @@ namespace DotTool.ETD.Data
                                     {
                                         TypeContext.Inject(context, validation);
 
-                                        FieldValidationResult resultCode = validation.Verify();
-                                        if (resultCode != FieldValidationResult.Success)
+                                        ValidationResult resultCode = validation.Verify();
+                                        if (resultCode != ValidationResult.Success)
                                         {
                                             result = false;
                                         }

@@ -1,9 +1,7 @@
 ﻿using DotEngine.Context;
 using DotTool.ETD.Fields;
-using DotTool.ETD.Log;
 using DotTool.ETD.Validation;
 using DotTool.ETD.Verify;
-using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,7 +80,8 @@ namespace DotTool.ETD.Data
 
         public FieldType FieldType { get; private set; } = FieldType.None;
         public FieldPlatform FieldPlatform { get; private set; } = FieldPlatform.None;
-        private IFieldValidation[] validations = null;
+
+        private IValidation[] validations = null;
 
         protected Field(int c, string n, string d, string t, string p, string v, string r)
         {
@@ -98,16 +97,21 @@ namespace DotTool.ETD.Data
             FieldPlatform = GetPlatform(platform);
         }
 
-        public IFieldValidation[] GetValidations()
+        public IValidation[] GetValidations()
         {
             if(validations != null)
             {
                 return validations;
             }
 
-            string validationStr = validationRule + ";" +GetDefaultValidation();
+            string validationStr = validationRule;
+            string defaultValidationStr = GetDefaultValidation();
+            if(!string.IsNullOrEmpty(defaultValidationStr))
+            {
+                validationStr += ";" + defaultValidationStr;
+            }
 
-            List<IFieldValidation> validationList = new List<IFieldValidation>();
+            List<IValidation> validationList = new List<IValidation>();
             ValidationFactory.ParseValidations(validationStr, validationList);
             validations = validationList.ToArray();
 
@@ -115,8 +119,6 @@ namespace DotTool.ETD.Data
         }
 
         protected virtual string GetDefaultValidation() { return ""; }
-
-        //public abstract object GetValue(Cell cell);
 
         private FieldPlatform GetPlatform(string platform)
         {

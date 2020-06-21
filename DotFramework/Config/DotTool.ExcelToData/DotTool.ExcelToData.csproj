@@ -90,7 +90,6 @@
     <Compile Include="IO\Ndb\NdbWriter.cs" />
     <Compile Include="IO\WorkbookConst.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
-    <Compile Include="IO\WorkbookWriter.cs" />
     <Compile Include="Log\LogHandler.cs" />
     <Compile Include="Log\LogMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,7 +98,7 @@
     <Compile Include="Validation\ErrorValidation.cs" />
     <Compile Include="Validation\FloatValidation.cs" />
     <Compile Include="Validation\IntValidation.cs" />
-    <Compile Include="Validation\IFieldValidation.cs" />
+    <Compile Include="Validation\IValidation.cs" />
     <Compile Include="Validation\ListValidation.cs" />
     <Compile Include="Validation\LongValidation.cs" />
     <Compile Include="Validation\MaxLenValidation.cs" />

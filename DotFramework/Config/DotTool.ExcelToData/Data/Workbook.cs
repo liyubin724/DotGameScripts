@@ -11,10 +11,11 @@ namespace DotTool.ETD.Data
     public class Workbook : IVerify
     {
         private string filePath;
-        public string Name { get => Path.GetFileNameWithoutExtension(filePath); }
         public string FilePath { get => filePath; }
+        public string Name { get => Path.GetFileNameWithoutExtension(filePath); }
 
         private List<Sheet> sheets = new List<Sheet>();
+
         public int SheetCount { get => sheets.Count; }
         public string[] SheetNames
         {

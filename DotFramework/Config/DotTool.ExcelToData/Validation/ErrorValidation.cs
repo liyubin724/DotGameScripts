@@ -1,10 +1,10 @@
 ﻿namespace DotTool.ETD.Validation
 {
-    public class ErrorValidation : IFieldValidation
+    public class ErrorValidation : IValidation
     {
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
             throw new System.NotImplementedException();
         }

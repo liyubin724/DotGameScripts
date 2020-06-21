@@ -10,7 +10,7 @@ namespace DotTool.ETD.Validation
     {
         private static readonly string VALIDATION_NAME_REGEX = @"(?<name>[A-Za-z]+)";
 
-        public static void ParseValidations(string multiRule,List<IFieldValidation> validations)
+        public static void ParseValidations(string multiRule,List<IValidation> validations)
         {
             if(string.IsNullOrEmpty(multiRule))
             {
@@ -32,7 +32,7 @@ namespace DotTool.ETD.Validation
 
             foreach (var rule in rules)
             {
-                IFieldValidation validation = GetValidation(rule);
+                IValidation validation = GetValidation(rule);
                 if (validation == null)
                 {
                     validation = new ErrorValidation();
@@ -42,7 +42,7 @@ namespace DotTool.ETD.Validation
             }
         }
 
-        private static IFieldValidation GetValidation(string rule)
+        private static IValidation GetValidation(string rule)
         {
             if (string.IsNullOrEmpty(rule))
             {
@@ -64,12 +64,12 @@ namespace DotTool.ETD.Validation
                 }
                 validationName += "Validation";
                 Type type = AssemblyUtil.GetTypeByName(validationName,true);
-                if (type == null || !typeof(IFieldValidation).IsAssignableFrom(type))
+                if (type == null || !typeof(IValidation).IsAssignableFrom(type))
                 {
                     return null;
                 }
 
-                IFieldValidation validation = (IFieldValidation)Activator.CreateInstance(type);
+                IValidation validation = (IValidation)Activator.CreateInstance(type);
                 validation.Rule = rule;
 
                 return validation;

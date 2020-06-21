@@ -4,7 +4,7 @@ using DotTool.ETD.Log;
 
 namespace DotTool.ETD.Validation
 {
-    public class UniqueValidation : IFieldValidation
+    public class UniqueValidation : IValidation
     {
 #pragma warning disable CS0649
         [ContextField(typeof(LogHandler))]
@@ -19,12 +19,12 @@ namespace DotTool.ETD.Validation
 
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
             if (field == null || cell == null)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_ARG_IS_NULL);
-                return FieldValidationResult.ArgIsNull;
+                return ValidationResult.ArgIsNull;
             }
 
             string content = cell.GetContent(field);
@@ -38,12 +38,12 @@ namespace DotTool.ETD.Validation
                     if (tempContent == content)
                     {
                         logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONTENT_REPEAT_ERROR, cell.ToString(), tempCell.ToString());
-                        return FieldValidationResult.ContentRepeatError;
+                        return ValidationResult.ContentRepeatError;
                     }
                 }
             }
 
-            return FieldValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
 }

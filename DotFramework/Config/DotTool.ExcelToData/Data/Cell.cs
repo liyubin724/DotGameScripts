@@ -21,11 +21,6 @@
             return string.IsNullOrEmpty(content) ? field.DefaultValue : content;
         }
 
-        //public object GetValue(Field field)
-        //{
-
-        //}
-
         public override string ToString()
         {
             return $"<row:{row},col:{col},value:{(string.IsNullOrEmpty(content) ? "" : content)}>";

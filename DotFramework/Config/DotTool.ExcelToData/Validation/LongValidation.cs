@@ -4,7 +4,7 @@ using DotTool.ETD.Log;
 
 namespace DotTool.ETD.Validation
 {
-    public class LongValidation : IFieldValidation
+    public class LongValidation : IValidation
     {
 #pragma warning disable CS0649
         [ContextField(typeof(LogHandler))]
@@ -17,23 +17,22 @@ namespace DotTool.ETD.Validation
 
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
             if (field == null || cell == null)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_ARG_IS_NULL);
-
-                return FieldValidationResult.ArgIsNull;
+                return ValidationResult.ArgIsNull;
             }
 
             string content = cell.GetContent(field);
             if (!long.TryParse(content, out long value))
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONVERT_ERROR, "long", cell.ToString());
-                return FieldValidationResult.ParseContentFailed;
+                return ValidationResult.ParseContentFailed;
             }
 
-            return FieldValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
 }

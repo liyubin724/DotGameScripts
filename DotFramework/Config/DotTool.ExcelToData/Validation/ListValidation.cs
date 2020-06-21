@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DotTool.ETD.Validation
 {
-    public class ListValidation : IFieldValidation
+    public class ListValidation : IValidation
     {
 #pragma warning disable CS0649,CS0169
         [ContextField(typeof(LogHandler))]
@@ -23,9 +23,9 @@ namespace DotTool.ETD.Validation
 
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
-            return FieldValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
 }

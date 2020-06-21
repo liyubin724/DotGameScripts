@@ -22,5 +22,10 @@
         {
             handler?.Invoke(type, id, LogMessage.GetLogMsg(id, datas));
         }
+
+        public void Log(LogType type,string message)
+        {
+            handler?.Invoke(type, 0, message);
+        }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace DotTool.ETD.Validation
+﻿namespace DotTool.ETD.Validation
 {
-    public enum FieldValidationResult
+    public enum ValidationResult
     {
         Success = 0,
         Pass = 1,
@@ -17,9 +15,9 @@ namespace DotTool.ETD.Validation
         LuaFunctionError = -8,
     }
 
-    public interface IFieldValidation
+    public interface IValidation
     {
         string Rule { get; set; }
-        FieldValidationResult Verify();
+        ValidationResult Verify();
     }
 }

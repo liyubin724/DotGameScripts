@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace DotTool.ETD.Validation
 {
-    public class MaxLenValidation : IFieldValidation
+    public class MaxLenValidation : IValidation
     {
         private const string MAX_LEN_REGEX = @"MaxLen\((?<len>[0-9]+)\)";
 
@@ -20,7 +20,7 @@ namespace DotTool.ETD.Validation
 
         public string Rule { get; set; }
 
-        public FieldValidationResult Verify()
+        public ValidationResult Verify()
         {
             int maxLen = 0;
             Match match = new Regex(MAX_LEN_REGEX).Match(Rule);
@@ -35,21 +35,21 @@ namespace DotTool.ETD.Validation
             if (maxLen <= 0)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_FORMAT_ERROR, cell.Col, Rule);
-                return FieldValidationResult.ValidationFormatError;
+                return ValidationResult.ValidationFormatError;
             }
 
             string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
-                return FieldValidationResult.Success;
+                return ValidationResult.Success;
             }
 
             if (content.Length > maxLen)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_LEN_ERROR, maxLen, cell.Row, cell.Col, content);
-                return FieldValidationResult.MaxLenError;
+                return ValidationResult.MaxLenError;
             }
-            return FieldValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
 }

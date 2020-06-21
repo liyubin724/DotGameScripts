@@ -50,19 +50,13 @@ namespace DotTool.ETD.Log
         public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3306;
         public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3307;
         public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3308;
-        public static readonly int LOG_FIELD_VERIFY_DIC_KEY_ERROR = -3309;
-        public static readonly int LOG_FIELD_VERIFY_DIC_VALUE_ERROR = -3310;
         public static readonly int LOG_FIELD_VERIFY_ARRAY_VALUE_ERROR = -3311;
 
         public static readonly int LOG_LINE_VERIFY_START = 3401;
         public static readonly int LOG_LINE_VERIFY_END = 3402;
         public static readonly int LOG_LINE_COUNT_NOT_EQUAL = -3403;
 
-        //public static readonly int LOG_VALIDATION_SET_DEFAULT = 4101;
         public static readonly int LOG_VALIDATION_CONVERT_ERROR = -4102;
-        public static readonly int LOG_VALIDATION_DIC_FORMAT_ERROR = -4103;
-        public static readonly int LOG_VALIDATION_DIC_KV_COUNT_ERROR = -4104;
-        public static readonly int LOG_VALIDATION_DIC_KEY_REPEAT_ERROR = -4105;
         public static readonly int LOG_VALIDATION_NULL = -4106;
         public static readonly int LOG_VALIDATION_FORMAT_ERROR = -4107;
         public static readonly int LOG_VALIDATION_LEN_ERROR = -4108;
@@ -127,19 +121,13 @@ namespace DotTool.ETD.Log
             logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_PLATFORM_ERROR, "The platform of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_VALIDATION_ERROR, "The validation of the field is error.rule = {0}");
-            logFormatDic.Add(LOG_FIELD_VERIFY_DIC_KEY_ERROR, "The type of key in dic is not correct.type = {0}");
-            logFormatDic.Add(LOG_FIELD_VERIFY_DIC_VALUE_ERROR, "The type of value in dic is not correct.type = {0}");
             logFormatDic.Add(LOG_FIELD_VERIFY_ARRAY_VALUE_ERROR, "The type of value in array is not correct.type = {0}");
 
             logFormatDic.Add(LOG_LINE_VERIFY_START, "Start to verify line.row = {0}");
             logFormatDic.Add(LOG_LINE_VERIFY_END, "Verify line finish. Result = {0}.");
             logFormatDic.Add(LOG_LINE_COUNT_NOT_EQUAL, "The count of the cell in line is not equal to the count of the field");
 
-            //logFormatDic.Add(LOG_VALIDATION_SET_DEFAULT, "The content of the cell is null,it will be set defalut({0}).row = {1},col={2}");
             logFormatDic.Add(LOG_VALIDATION_CONVERT_ERROR, "The content of the cell can't convert to {0}. cell={1}");
-            logFormatDic.Add(LOG_VALIDATION_DIC_FORMAT_ERROR, "The format of the content should be start with {{ and end with }}. cell={0}");
-            logFormatDic.Add(LOG_VALIDATION_DIC_KV_COUNT_ERROR, "The content of the cell . cell={0}");
-            logFormatDic.Add(LOG_VALIDATION_DIC_KEY_REPEAT_ERROR, "The key of dic is repeat. cell={0}");
             logFormatDic.Add(LOG_VALIDATION_NULL, "The content of the cell is null.row = {1},col={2}");
             logFormatDic.Add(LOG_VALIDATION_FORMAT_ERROR, "The format of the rule is error.col = {0},rule = {1}");
             logFormatDic.Add(LOG_VALIDATION_LEN_ERROR, "The lenght of the content is large then {0},row = {1},col = {2}.content = {3}");
@@ -151,7 +139,6 @@ namespace DotTool.ETD.Log
             logFormatDic.Add(LOG_VALIDATION_TEXT_NOT_FOUND_ERROR, "The sheet which named 'Text' not found.");
             logFormatDic.Add(LOG_VALIDATION_TEXT_ID_NOT_FOUND_ERROR, "The ID is not found in 'Text'.ID = {0}");
             logFormatDic.Add(LOG_VALIDATION_LUA_FORMAT_ERROR, "The content is not a function of lua.cell = {0}");
-
         }
 
         public static string GetLogMsg(int logID, params object[] datas)
