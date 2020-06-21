@@ -26,7 +26,7 @@ namespace DotTool.ETD.Validation
                 return FieldValidationResult.ArgIsNull;
             }
 
-            string content = cell.GetValue(field);
+            string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_NULL, cell.Row, cell.Col);

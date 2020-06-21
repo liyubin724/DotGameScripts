@@ -87,7 +87,7 @@ namespace DotTool.ETD.Data
                 Field field = GetFieldByIndex(i);
                 if(field.FieldType == FieldType.Id)
                 {
-                    return line.GetCellByIndex(i).GetValue(field);
+                    return line.GetCellByIndex(i).GetContent(field);
                 }
             }
             return null;
@@ -101,7 +101,7 @@ namespace DotTool.ETD.Data
                 Field field = GetFieldByIndex(i);
                 if (field.FieldType == FieldType.Id)
                 {
-                    return line.GetCellByIndex(i).GetValue(field);
+                    return line.GetCellByIndex(i).GetContent(field);
                 }
             }
             return null;

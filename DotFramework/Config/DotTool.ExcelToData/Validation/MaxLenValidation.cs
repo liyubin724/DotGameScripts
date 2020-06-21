@@ -38,7 +38,7 @@ namespace DotTool.ETD.Validation
                 return FieldValidationResult.ValidationFormatError;
             }
 
-            string content = cell.GetValue(field);
+            string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
                 return FieldValidationResult.Success;

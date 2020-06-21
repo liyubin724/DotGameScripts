@@ -26,7 +26,7 @@ namespace DotTool.ETD.Validation
                 return FieldValidationResult.ArgIsNull;
             }
 
-            string content = cell.GetValue(field);
+            string content = cell.GetContent(field);
             if (!int.TryParse(content, out int value))
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONVERT_ERROR, "int", cell.ToString());

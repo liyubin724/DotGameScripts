@@ -4,7 +4,7 @@
     {
         private int row;
         private int col;
-        private string value;
+        private string content;
 
         public int Row { get => row; }
         public int Col { get => col; }
@@ -13,17 +13,22 @@
         {
             this.row = r;
             this.col = c;
-            this.value = v;
+            this.content = v;
         }
 
-        public string GetValue(Field field)
+        public string GetContent(Field field)
         {
-            return string.IsNullOrEmpty(value) ? field.DefaultValue : value;
+            return string.IsNullOrEmpty(content) ? field.DefaultValue : content;
         }
+
+        //public object GetValue(Field field)
+        //{
+
+        //}
 
         public override string ToString()
         {
-            return $"<row:{row},col:{col},value:{(string.IsNullOrEmpty(value) ? "" : value)}>";
+            return $"<row:{row},col:{col},value:{(string.IsNullOrEmpty(content) ? "" : content)}>";
         }
     }
 }

@@ -9,10 +9,10 @@ namespace DotTool.ETD.Fields
         public static Field GetField(
             int col,
             string name,
+            string desc,
             string type,
             string platform,
-            string desc,
-            string value,
+            string defaultValue,
             string validation)
         {
             FieldType fieldType = FieldTypeUtil.GetFieldType(type);
@@ -27,7 +27,7 @@ namespace DotTool.ETD.Fields
                 resultType = typeof(ErrorField);
             }
 
-            return (Field)Activator.CreateInstance(resultType, col, name, desc, type, platform, value, validation);
+            return (Field)Activator.CreateInstance(resultType, col, name, desc, type, platform, defaultValue, validation);
         }
     }
 }

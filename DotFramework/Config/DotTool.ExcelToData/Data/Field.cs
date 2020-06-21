@@ -3,6 +3,7 @@ using DotTool.ETD.Fields;
 using DotTool.ETD.Log;
 using DotTool.ETD.Validation;
 using DotTool.ETD.Verify;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -115,6 +116,8 @@ namespace DotTool.ETD.Data
 
         protected virtual string GetDefaultValidation() { return ""; }
 
+        //public abstract object GetValue(Cell cell);
+
         private FieldPlatform GetPlatform(string platform)
         {
             if (platform == "c")
@@ -135,7 +138,7 @@ namespace DotTool.ETD.Data
 
         public override string ToString()
         {
-            return $"<col = {col},name = {name},desc={desc},type={type},platform={platform},defaultValue={defaultValue},validationRule={validationRule}>";
+            return $"<{this.GetType().Name}  col = {col},name = {name},desc={desc},type={type},platform={platform},defaultValue={defaultValue},validationRule={validationRule}>";
         }
 
         public virtual bool Verify(TypeContext context)

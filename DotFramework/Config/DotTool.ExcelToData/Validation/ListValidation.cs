@@ -25,7 +25,7 @@ namespace DotTool.ETD.Validation
 
         public FieldValidationResult Verify()
         {
-            throw new NotImplementedException();
+            return FieldValidationResult.Success;
         }
     }
 }

@@ -56,6 +56,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBConst.cs">
+      <Link>IO\Ndb\NDBConst.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBDataSheet.cs">
+      <Link>IO\Ndb\NDBDataSheet.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBHeader.cs">
+      <Link>IO\Ndb\NDBHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBSheetLine.cs">
+      <Link>IO\Ndb\NDBSheetLine.cs</Link>
+    </Compile>
     <Compile Include="Data\Cell.cs" />
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\Line.cs" />
@@ -74,6 +86,8 @@
     <Compile Include="Fields\LuaField.cs" />
     <Compile Include="Fields\RefField.cs" />
     <Compile Include="Fields\StringField.cs" />
+    <Compile Include="IO\Lua\LuaWriter.cs" />
+    <Compile Include="IO\Ndb\NdbWriter.cs" />
     <Compile Include="IO\WorkbookConst.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
     <Compile Include="IO\WorkbookWriter.cs" />

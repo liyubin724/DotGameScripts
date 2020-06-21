@@ -27,14 +27,14 @@ namespace DotTool.ETD.Validation
                 return FieldValidationResult.ArgIsNull;
             }
 
-            string content = cell.GetValue(field);
+            string content = cell.GetContent(field);
             for (int i = 0; i < sheet.LineCount; ++i)
             {
                 Line line = sheet.GetLineByIndex(i);
                 if (line.Row != cell.Row)
                 {
                     Cell tempCell = line.GetCellByCol(field.Col);
-                    string tempContent = tempCell.GetValue(field);
+                    string tempContent = tempCell.GetContent(field);
                     if (tempContent == content)
                     {
                         logHandler.Log(LogType.Error, LogMessage.LOG_VALIDATION_CONTENT_REPEAT_ERROR, cell.ToString(), tempCell.ToString());
