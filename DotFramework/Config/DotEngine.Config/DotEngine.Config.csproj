@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,12 +46,16 @@
     <Compile Include="IniConfigService.cs" />
     <Compile Include="Ini\IniConfig.cs" />
     <Compile Include="Ndb\NDBConst.cs" />
-    <Compile Include="Ndb\NDBDataSheet.cs" />
+    <Compile Include="Ndb\NDBField.cs" />
+    <Compile Include="Ndb\NDBSheet.cs" />
     <Compile Include="Ndb\NDBHeader.cs" />
-    <Compile Include="Ndb\NDBSheetLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
+      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
+      <Name>DotEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\DotEngine.Framework\DotEngine.Framework.csproj">
       <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
       <Name>DotEngine.Framework</Name>

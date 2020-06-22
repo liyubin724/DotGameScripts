@@ -64,6 +64,7 @@
     <Compile Include="Utilities\MathUtil.cs" />
     <Compile Include="Utilities\ReflectionUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
+    <Compile Include="Utilities\StructUtility.cs" />
     <Compile Include="Utilities\TransformUtility.cs" />
     <Compile Include="Utilities\TypeUtility.cs" />
     <Compile Include="Utilities\UnityObjectUtility.cs" />

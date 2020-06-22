@@ -56,18 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\DotEngine.Config\Ndb\NDBConst.cs">
-      <Link>IO\Ndb\NDBConst.cs</Link>
-    </Compile>
-    <Compile Include="..\DotEngine.Config\Ndb\NDBDataSheet.cs">
-      <Link>IO\Ndb\NDBDataSheet.cs</Link>
-    </Compile>
-    <Compile Include="..\DotEngine.Config\Ndb\NDBHeader.cs">
-      <Link>IO\Ndb\NDBHeader.cs</Link>
-    </Compile>
-    <Compile Include="..\DotEngine.Config\Ndb\NDBSheetLine.cs">
-      <Link>IO\Ndb\NDBSheetLine.cs</Link>
-    </Compile>
     <Compile Include="Data\Cell.cs" />
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\Line.cs" />
