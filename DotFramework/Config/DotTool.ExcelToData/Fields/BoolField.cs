@@ -16,5 +16,11 @@ namespace DotTool.ETD.Fields
         {
             return "bool";
         }
+
+        public override object GetValue(Cell cell)
+        {
+            string cellContent = cell.GetContent(this);
+            return bool.Parse(cellContent);
+        }
     }
 }

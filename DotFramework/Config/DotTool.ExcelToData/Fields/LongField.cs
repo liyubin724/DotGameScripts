@@ -8,13 +8,19 @@ namespace DotTool.ETD.Fields
         {
             if(string.IsNullOrEmpty(defaultValue))
             {
-                defaultValue = "0L";
+                defaultValue = "0";
             }
         }
 
         protected override string GetDefaultValidation()
         {
             return "long";
+        }
+
+        public override object GetValue(Cell cell)
+        {
+            string cellContent = cell.GetContent(this);
+            return long.Parse(cellContent);
         }
     }
 }

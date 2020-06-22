@@ -2,6 +2,7 @@
 using DotTool.ETD.Fields;
 using DotTool.ETD.Validation;
 using DotTool.ETD.Verify;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -119,6 +120,8 @@ namespace DotTool.ETD.Data
         }
 
         protected virtual string GetDefaultValidation() { return ""; }
+
+        public abstract object GetValue(Cell cell);
 
         private FieldPlatform GetPlatform(string platform)
         {

@@ -1,12 +1,6 @@
 ﻿using DotEngine.Context;
 using DotTool.ETD.Data;
 using DotTool.ETD.Log;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotTool.ETD.Validation
 {
@@ -25,6 +19,19 @@ namespace DotTool.ETD.Validation
 
         public ValidationResult Verify()
         {
+            if (field == null || cell == null)
+            {
+                logHandler.Log(LogType.Error, LogMessage.LOG_ARG_IS_NULL);
+                return ValidationResult.ArgIsNull;
+            }
+            string content = cell.GetContent(field);
+            if(!string.IsNullOrEmpty(content))
+            {
+                if(!content.StartsWith("[") || !content.EndsWith("]"))
+                {
+                    return ValidationResult.ParseContentFailed;
+                }
+            }
             return ValidationResult.Success;
         }
     }

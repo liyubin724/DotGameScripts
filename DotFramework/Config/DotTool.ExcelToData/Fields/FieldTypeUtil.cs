@@ -7,6 +7,12 @@ namespace DotTool.ETD.Fields
 {
     public static class FieldTypeUtil
     {
+        public static Type GetRealyType(FieldType fieldType)
+        {
+            FieldRealyType realyType = fieldType.GetType().GetCustomAttribute<FieldRealyType>();
+            return realyType?.RealyType;
+        }
+
         public static bool IsNumberType(FieldType fieldType)
         {
             FieldRealyType realyTypeAttr = typeof(FieldType).GetField(fieldType.ToString()).GetCustomAttribute<FieldRealyType>();
