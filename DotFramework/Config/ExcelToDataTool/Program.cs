@@ -2,6 +2,7 @@
 using DotEngine.Context;
 using DotTool.ETD.Data;
 using DotTool.ETD.IO;
+using DotTool.ETD.IO.Json;
 using DotTool.ETD.IO.Ndb;
 using DotTool.ETD.Log;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace ExcelToDataTool
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main2(string[] args)
         {
             NDBSheet ndbSheet = new NDBSheet("Test");
             ndbSheet.SetData(File.ReadAllBytes("D:/Test.ndb"));
@@ -32,7 +33,7 @@ namespace ExcelToDataTool
             System.Console.ReadKey();
         }
 
-        static void Main1(string[] args)
+        static void Main(string[] args)
         {
             LogHandler logHandler = new LogHandler((type, id, msg) =>
             {
@@ -70,6 +71,7 @@ namespace ExcelToDataTool
                 {
                     Sheet sheet = workbook.GetSheeetByIndex(i);
                     NdbWriter.WriteTo(sheet, "D:/");
+                    JsonWriter.WriteTo(sheet, "D:/");
                 }
 
                 
