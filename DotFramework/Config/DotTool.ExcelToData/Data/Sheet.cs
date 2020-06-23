@@ -14,6 +14,8 @@ namespace DotTool.ETD.Data
         private List<Field> fields = new List<Field>();
         private List<Line> lines = new List<Line>();
 
+        public List<Field> Fields { get => fields; }
+
         public string Name { get => name; }
 
         public Sheet(string n)
@@ -133,6 +135,12 @@ namespace DotTool.ETD.Data
             if (FieldCount == 0)
             {
                 logHandler.Log(LogType.Error, LogMessage.LOG_SHEET_FIELD_EMPTY);
+                return false;
+            }
+
+            Field idField = fields[0];
+            if(idField.FieldType != FieldType.Id)
+            {
                 return false;
             }
 

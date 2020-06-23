@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
@@ -56,6 +58,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Core\DotEngine\Utilities\StructUtility.cs">
+      <Link>IO\Ndb\StructUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBConst.cs">
+      <Link>IO\Ndb\NDBConst.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBField.cs">
+      <Link>IO\Ndb\NDBField.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBHeader.cs">
+      <Link>IO\Ndb\NDBHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\DotEngine.Config\Ndb\NDBSheet.cs">
+      <Link>IO\Ndb\NDBSheet.cs</Link>
+    </Compile>
     <Compile Include="Data\Cell.cs" />
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\Line.cs" />

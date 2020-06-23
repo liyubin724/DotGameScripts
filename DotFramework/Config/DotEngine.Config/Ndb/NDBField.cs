@@ -4,20 +4,20 @@
     {
         Null = 0,
 
-        Int = 'i',
-        IntArray = 'I',
+        Int = 1,
+        IntArray = 101,
         
-        Float = 'f',
-        FloatArray = 'F',
+        Float = 2,
+        FloatArray = 102,
         
-        Long = 'l',
-        LongArray = 'L',
+        Long = 3,
+        LongArray = 103,
         
-        Bool = 'b',
-        BoolArray = 'B',
+        Bool = 4,
+        BoolArray = 104,
         
-        String = 's',
-        StringArray = 'S',
+        String = 5,
+        StringArray = 105,
     }
 
     public class NDBField

@@ -9,7 +9,8 @@ namespace DotTool.ETD.Fields
     {
         public static Type GetRealyType(FieldType fieldType)
         {
-            FieldRealyType realyType = fieldType.GetType().GetCustomAttribute<FieldRealyType>();
+            FieldInfo fieldInfo = fieldType.GetType().GetField(fieldType.ToString());
+            FieldRealyType realyType = fieldInfo.GetCustomAttribute<FieldRealyType>();
             return realyType?.RealyType;
         }
 

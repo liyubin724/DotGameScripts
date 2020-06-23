@@ -44,9 +44,10 @@ namespace DotEngine.Config.Ndb
                     string fName = Encoding.UTF8.GetString((start + sizeof(int) * 2), len);
 
                     offset += sizeof(int) * 2 + len;
-                    byteOffset += NDBConst.GetFieldSize(fieldType);
 
                     fields.Add(new NDBField() { name = fName, type = fieldType, offset = byteOffset });
+                    byteOffset += NDBConst.GetFieldSize(fieldType);
+
                     fieldIndexDic.Add(fName, i);
                 }
             }
@@ -64,9 +65,14 @@ namespace DotEngine.Config.Ndb
             }
         }
 
-        public int Count()
+        public int DataCount()
         {
             return header.dataCount;
+        }
+
+        public int FieldCount()
+        {
+            return header.fieldCount;
         }
 
         public unsafe int GetDataIdByIndex(int index)
@@ -116,12 +122,12 @@ namespace DotEngine.Config.Ndb
             return null;
         }
 
-        public T GetDataId<T>(int id,string fieldName)
+        public T GetDataById<T>(int id,string fieldName)
         {
             return (T)GetDataById(id,fieldName);
         }
 
-        public T GetDataId<T>(int id,int fieldIndex)
+        public T GetDataById<T>(int id,int fieldIndex)
         {
             return (T)GetDataById(id, fieldIndex);
         }
@@ -134,31 +140,45 @@ namespace DotEngine.Config.Ndb
                 {
                     NDBField field = fields[fieldIndex];
                     int offset = header.dataOffset + header.dataSize * index + field.offset;
-                    
-                    fixed(byte* b = &dataBytes[offset])
+                    if (field.type == NDBFieldType.String)
                     {
-                        if(field.type == NDBFieldType.Int)
+                        int strOffset = -1;
+                        fixed (byte* b = &dataBytes[offset])
                         {
-                            return *((int*)b);
-                        }else if(field.type == NDBFieldType.Float)
+                            strOffset = *((int*)b);
+                        }
+                        return GetStringValue(strOffset);
+                    }
+                    else if (field.type == NDBFieldType.BoolArray || field.type == NDBFieldType.FloatArray
+                       || field.type == NDBFieldType.IntArray || field.type == NDBFieldType.LongArray
+                       || field.type == NDBFieldType.StringArray)
+                    {
+                        int arrayOffset = -1;
+                        fixed (byte* b = &dataBytes[offset])
                         {
-                            return *((float*)b);
-                        }else if(field.type == NDBFieldType.Long)
+                            arrayOffset = *((int*)b);
+                        }
+                        return GetArrayValue(field, arrayOffset);
+                    }else
+                    {
+                        fixed (byte* b = &dataBytes[offset])
                         {
-                            return *((long*)b);
-                        }else if(field.type == NDBFieldType.Bool)
-                        {
-                            return *((bool*)b);
-                        }else if(field.type == NDBFieldType.String)
-                        {
-                            int strOffset = *((int*)b);
-                            return GetStringValue(strOffset);
-                        }else if(field.type == NDBFieldType.BoolArray || field.type == NDBFieldType.FloatArray
-                            || field.type == NDBFieldType.IntArray || field.type == NDBFieldType.LongArray
-                            || field.type == NDBFieldType.StringArray)
-                        {
-                            int arrayOffset = *((int*)b);
-                            return GetArrayValue(field, arrayOffset);
+                            if (field.type == NDBFieldType.Int)
+                            {
+                                return *((int*)b);
+                            }
+                            else if (field.type == NDBFieldType.Float)
+                            {
+                                return *((float*)b);
+                            }
+                            else if (field.type == NDBFieldType.Long)
+                            {
+                                return *((long*)b);
+                            }
+                            else if (field.type == NDBFieldType.Bool)
+                            {
+                                return *((bool*)b);
+                            }
                         }
                     }
                 }
@@ -169,6 +189,11 @@ namespace DotEngine.Config.Ndb
 
         private unsafe string GetStringValue(int offset)
         {
+            if(offset<0)
+            {
+                return null;
+            }
+
             fixed(byte *b = &dataBytes[header.stringOffset+offset])
             {
                 int len = *((int*)b);
@@ -178,57 +203,74 @@ namespace DotEngine.Config.Ndb
 
         private unsafe object GetArrayValue(NDBField field,int offset)
         {
-            fixed(byte *b = &dataBytes[header.arrayOffset+offset])
+            if(offset<0)
             {
-                int len = *((int*)b);
-                byte* startByte = b + sizeof(int);
-                if(field.type == NDBFieldType.BoolArray)
+                return null;
+            }
+
+            if (field.type == NDBFieldType.StringArray)
+            {
+                int len = 0;
+                fixed (byte* b = &dataBytes[header.arrayOffset + offset])
                 {
-                    bool[] result = new bool[len];
-                    for(int i =0;i<len;++i)
-                    {
-                        result[i] = *((bool*)(startByte + sizeof(bool) * i));
-                    }
-                    return result;
-                }else if(field.type == NDBFieldType.FloatArray)
-                {
-                    float[] result = new float[len];
-                    for (int i = 0; i < len; ++i)
-                    {
-                        result[i] = *((float*)(startByte + sizeof(float) * i));
-                    }
-                    return result;
+                    len = *((int*)b);
                 }
-                else if(field.type == NDBFieldType.IntArray)
+                string[] result = new string[len];
+
+                for (int i = 0; i < len; ++i)
                 {
-                    int[] result = new int[len];
-                    for (int i = 0; i < len; ++i)
+                    int strIndex = -1;
+                    fixed (byte* b = &dataBytes[header.arrayOffset + offset])
                     {
-                        result[i] = *((int*)(startByte + sizeof(int) * i));
+                        byte* startByte = b + sizeof(int);
+                        strIndex = *((int*)(startByte + sizeof(int) * i));
                     }
-                    return result;
+
+                    result[i] = GetStringValue(strIndex);
                 }
-                else if(field.type == NDBFieldType.LongArray)
+                return result;
+            }else
+            {
+                fixed (byte* b = &dataBytes[header.arrayOffset + offset])
                 {
-                    long[] result = new long[len];
-                    for (int i = 0; i < len; ++i)
+                    int len = *((int*)b);
+                    byte* startByte = b + sizeof(int);
+                    if (field.type == NDBFieldType.BoolArray)
                     {
-                        result[i] = *((long*)(startByte + sizeof(long) * i));
+                        bool[] result = new bool[len];
+                        for (int i = 0; i < len; ++i)
+                        {
+                            result[i] = *((bool*)(startByte + sizeof(bool) * i));
+                        }
+                        return result;
                     }
-                    return result;
-                }
-                else if(field.type == NDBFieldType.StringArray)
-                {
-                    string[] result = new string[len];
-                    int strOffset = 0;
-                    for (int i = 0; i < len; ++i)
+                    else if (field.type == NDBFieldType.FloatArray)
                     {
-                        int strLen = *((int*)(startByte + strOffset));
-                        strOffset += sizeof(int);
-                        result[i] = Encoding.UTF8.GetString(startByte + strOffset, len);
-                        strOffset += strLen;
+                        float[] result = new float[len];
+                        for (int i = 0; i < len; ++i)
+                        {
+                            result[i] = *((float*)(startByte + sizeof(float) * i));
+                        }
+                        return result;
                     }
-                    return result;
+                    else if (field.type == NDBFieldType.IntArray)
+                    {
+                        int[] result = new int[len];
+                        for (int i = 0; i < len; ++i)
+                        {
+                            result[i] = *((int*)(startByte + sizeof(int) * i));
+                        }
+                        return result;
+                    }
+                    else if (field.type == NDBFieldType.LongArray)
+                    {
+                        long[] result = new long[len];
+                        for (int i = 0; i < len; ++i)
+                        {
+                            result[i] = *((long*)(startByte + sizeof(long) * i));
+                        }
+                        return result;
+                    }
                 }
             }
 
