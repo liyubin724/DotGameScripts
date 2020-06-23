@@ -1,4 +1,4 @@
-﻿using DotEngine.Config.Ndb;
+﻿using CommandLine;
 using DotEngine.Context;
 using DotTool.ETD.Data;
 using DotTool.ETD.IO;
@@ -10,31 +10,36 @@ using System.IO;
 
 namespace ExcelToDataTool
 {
+    public enum OutputFormat
+    {
+        Ndb,
+        Json,
+    }
+
+    class Options
+    {
+        [Option('i',"input",Required =true,HelpText ="Input Excel Dir")]
+        public string InputDir { get; set; }
+        [Option('o',"output",Required =true,HelpText ="Output Dir")]
+        public string OutputDir { get; set; }
+        [Option('f',"format",Required =true,HelpText ="Format")]
+        public OutputFormat Format { get; set; }
+    }
+
     class Program
     {
-        static void Main2(string[] args)
-        {
-            NDBSheet ndbSheet = new NDBSheet("Test");
-            ndbSheet.SetData(File.ReadAllBytes("D:/Test.ndb"));
-
-            for (int i = 0; i < ndbSheet.DataCount(); ++i)
-            {
-                for(int j =0;j<ndbSheet.FieldCount();++j)
-                {
-                    object data = ndbSheet.GetDataByIndex(i, j);
-                    Colorful.Console.Write(data +",   ", Color.Green);
-                }
-                Colorful.Console.WriteLine();
-            }
-
-            string v1 = ndbSheet.GetDataById<string>(1, "StringField");
-            Colorful.Console.WriteLine(v1, Color.Red);
-
-            System.Console.ReadKey();
-        }
-
         static void Main(string[] args)
         {
+            CommandLine.Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(RunOptions);
+        }
+        static void RunOptions(Options options)
+        {
+            if(!Directory.Exists(options.InputDir))
+            {
+                return;
+            }
+
             LogHandler logHandler = new LogHandler((type, id, msg) =>
             {
                 string msgType = "Info";
@@ -44,7 +49,8 @@ namespace ExcelToDataTool
                 {
                     msgType = "Error";
                     color = Color.Red;
-                }else if(type == LogType.Warning)
+                }
+                else if (type == LogType.Warning)
                 {
                     msgType = "Warning";
                     color = Color.Yellow;
@@ -58,33 +64,35 @@ namespace ExcelToDataTool
             TypeContext context = new TypeContext();
             context.Add(typeof(LogHandler), logHandler);
 
-            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameScripts\DotFramework\Config\test.xlsx";
-            Workbook workbook = reader.ReadExcelFromFile(excelPath);
-
-            bool result = workbook.Verify(context);
-
-            if(result)
+            Workbook[] workbooks = reader.ReadExcelFromDir(options.InputDir);
+            if(workbooks !=null && workbooks.Length>0)
             {
-                Colorful.Console.WriteLine("Verify success");
-
-                for(int i =0;i<workbook.SheetCount;++i)
+                foreach(var workbook in workbooks)
                 {
-                    Sheet sheet = workbook.GetSheeetByIndex(i);
-                    NdbWriter.WriteTo(sheet, "D:/");
-                    JsonWriter.WriteTo(sheet, "D:/");
+                    string dir = $"{options.OutputDir}/{workbook.Name}";
+                    if(!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+
+                    bool result = workbook.Verify(context);
+                    if(result)
+                    {
+                        for (int i = 0; i < workbook.SheetCount; ++i)
+                        {
+                            Sheet sheet = workbook.GetSheeetByIndex(i);
+                            if(options.Format == OutputFormat.Json)
+                            {
+                                JsonWriter.WriteTo(sheet, dir);
+                            }else if(options.Format == OutputFormat.Ndb)
+                            {
+                                NdbWriter.WriteTo(sheet, dir);
+                            }
+                        }
+                    }
                 }
-
-                
             }
-            else
-            {
-                Colorful.Console.WriteLine("Failed");
-
-                string c = workbook.ToString();
-                File.WriteAllText("D:/test.txt", c);
-            }
-
-            System.Console.ReadKey();
+            context.Clear();
         }
     }
 }
