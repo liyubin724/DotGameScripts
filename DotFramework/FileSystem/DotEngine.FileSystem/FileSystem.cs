@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace DotEngine.FS
 {
@@ -20,6 +15,7 @@ namespace DotEngine.FS
 
         UnknownError = -1,
         ModeNotExistError = -2,
+        CantModifyError = -3,
 
         ContentFileNotExistError = -100,
         ContentHasBeenOpenedError = -101,
@@ -108,15 +104,19 @@ namespace DotEngine.FS
                         indexStream.Close();
                     }
                 }
-
             }
 
             return resultCode;
         }
 
+        public int FileCount()
+        {
+            return chunk.Count();
+        }
+
         public bool HasFile(string filePath)
         {
-            return chunk.Exist(filePath);
+            return chunk.Constains(filePath);
         }
 
         public byte[] GetFile(string filePath)
@@ -130,14 +130,60 @@ namespace DotEngine.FS
             return content.Read(chunkData.StartPosition, chunkData.ContentLength);
         }
 
+        public bool GetFile(string filePath,out long start,out int length)
+        {
+            start = -1;
+            length = 0;
+            ChunkData chunkData = chunk.Get(filePath);
+            if (chunkData != null)
+            {
+                start = chunkData.StartPosition;
+                length = chunkData.ContentLength;
+                return true;
+            }
+            return false;
+        }
+
         public void AddFile(string filePath, byte[] fileBytes)
         {
-            
+            if(Mode == FileSystemMode.Read)
+            {
+                return;
+            }
+
+            int usageSize = GetFileUsageSize(fileBytes.Length);
+            FragmentData fragmentData = fragment.Get(usageSize);
+            if(fragmentData == null)
+            {
+                long start = content.Write(fileBytes);
+                if(usageSize - fileBytes.Length>0)
+                {
+                    content.Write(new byte[usageSize - fileBytes.Length]);
+                }
+
+                chunk.Add(filePath, start, fileBytes.Length, usageSize);
+
+            }else
+            {
+                content.Write(fragmentData.StartPosition, fileBytes);
+
+                chunk.Add(filePath, fragmentData.StartPosition, fileBytes.Length, usageSize);
+
+                fragmentData.StartPosition += usageSize;
+                fragmentData.UsageSize -= usageSize;
+
+                fragment.Update(fragmentData);
+            }
         }
 
         public void DeleteFile(string filePath)
         {
-            ChunkData chunkData = chunk.Get(filePath);
+            if (Mode == FileSystemMode.Read)
+            {
+                return;
+            }
+
+            ChunkData chunkData = chunk.Remove(filePath);
             if (chunkData != null)
             {
                 fragment.Add(chunkData.StartPosition, chunkData.UsageSize);
@@ -146,8 +192,59 @@ namespace DotEngine.FS
 
         public FileSystemResultCode Save()
         {
+            if (Mode == FileSystemMode.Read)
+            {
+                return FileSystemResultCode.CantModifyError;
+            }
+            content.Flush();
 
+            FileSystemResultCode resultCode = FileSystemResultCode.Success;
+            FileStream indexStream = null;
+            try
+            {
+                indexStream = new FileStream(IndexFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                chunk.WriteToStream(indexStream);
+                fragment.WriteToStream(indexStream);
+
+                indexStream.Flush();
+            }
+            catch
+            {
+                resultCode = FileSystemResultCode.IndexFileNotExistError;
+            }
+            finally
+            {
+                if (indexStream != null)
+                {
+                    indexStream.Close();
+                }
+            }
+            return resultCode;
         }
 
+        public void Close()
+        {
+            if(Mode != FileSystemMode.Read)
+            {
+                Save();
+            }
+
+            content.Close();
+            content = null;
+            fragment = null;
+            chunk = null;
+        }
+
+        private int GetFileUsageSize(int len)
+        {
+            int mod = len % 4;
+            if(mod == 0)
+            {
+                return len;
+            }else
+            {
+                return len + (4 - mod);
+            }
+        }
     }
 }

@@ -71,9 +71,12 @@ namespace DotEngine.FS
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public void Write(byte[] bytes)
+        public long Write(byte[] bytes)
         {
-
+            stream.Seek(0, SeekOrigin.End);
+            long start = stream.Length;
+            stream.Write(bytes, 0, bytes.Length);
+            return start;
         }
 
         public void Flush()

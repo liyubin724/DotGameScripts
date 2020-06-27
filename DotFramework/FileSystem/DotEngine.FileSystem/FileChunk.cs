@@ -112,7 +112,12 @@ namespace DotEngine.FS
             }
         }
 
-        public bool Exist(string path)
+        public int Count()
+        {
+            return chunkDic.Count;
+        }
+
+        public bool Constains(string path)
         {
             return chunkDic.ContainsKey(path);
         }
@@ -134,6 +139,18 @@ namespace DotEngine.FS
                 return data;
             }
             return null;
+        }
+
+        public void Add(string filePath,long start,int length,int size)
+        {
+            ChunkData chunkData = new ChunkData()
+            {
+                Path = filePath,
+                StartPosition = start,
+                ContentLength = length,
+                UsageSize = size,
+            };
+            chunkDic.Add(filePath, chunkData);
         }
 
     }

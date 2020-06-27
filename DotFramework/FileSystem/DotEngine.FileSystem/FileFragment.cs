@@ -15,9 +15,11 @@ namespace DotEngine.FS
     public class FileFragment
     {
         private List<FragmentData> sortedStartFragments;
+        private List<FragmentData> sortedSizeFragments;
         public FileFragment()
         {
             sortedStartFragments = new List<FragmentData>();
+            sortedSizeFragments = new List<FragmentData>();
         }
 
         public unsafe FileSystemResultCode ReadFromStream(Stream stream)
@@ -78,11 +80,15 @@ namespace DotEngine.FS
 
         }
 
-        public void Get(int length)
+        public FragmentData Get(int size)
+        {
+            return null;
+        }
+
+        public void Update(FragmentData fragmentData)
         {
 
         }
-
 
     }
 }
