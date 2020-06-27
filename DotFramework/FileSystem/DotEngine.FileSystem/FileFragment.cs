@@ -38,7 +38,7 @@ namespace DotEngine.FS
 
             for (int i = 0; i < len; ++i)
             {
-                if(stream.Read(bytes,0,bytes.Length)!=bytes.Length)
+                if (stream.Read(bytes, 0, bytes.Length) != bytes.Length)
                 {
                     return FileSystemResultCode.FragmentDataByteLengthError;
                 }
@@ -46,14 +46,14 @@ namespace DotEngine.FS
                 fixed(byte *c = &bytes[0])
                 {
                     long start = *((long*)c);
-                    long size = *((long*)(c + sizeof(long)));
+                    int size = *((int*)(c + sizeof(long)));
 
                     FragmentData data = new FragmentData() { StartPosition = start, UsageSize = size };
                     sortedStartFragments.Add(data);
                 }
             }
 
-            if(sortedStartFragments.Count!=len)
+            if (sortedStartFragments.Count != len)
             {
                 return FileSystemResultCode.FragmentDataCountError;
             }
@@ -77,18 +77,181 @@ namespace DotEngine.FS
 
         public void Add(long start,int size)
         {
+            if(sortedStartFragments.Count == 0)
+            {
+                FragmentData fragmentData = new FragmentData()
+                {
+                    StartPosition = start,
+                    UsageSize = size,
+                };
 
+                sortedStartFragments.Add(fragmentData);
+                sortedSizeFragments.Add(fragmentData);
+            }else
+            {
+                int startInsertIndex = FindStartInsertIndex(0, sortedStartFragments.Count - 1, start);
+
+                FragmentData preFragment = startInsertIndex == 0 ? null : sortedStartFragments[startInsertIndex - 1];
+                FragmentData nextFragment = startInsertIndex == sortedStartFragments.Count ? null : sortedStartFragments[startInsertIndex];
+
+                bool isConcatPre = false;
+                if(preFragment!=null && preFragment.StartPosition+preFragment.UsageSize == start)
+                {
+                    isConcatPre = true;
+                }
+                bool isConcatNext = false;
+                if(nextFragment!=null && start+size == nextFragment.StartPosition)
+                {
+                    isConcatNext = true;
+                }
+
+                FragmentData fragment = null;
+                if (!isConcatPre && !isConcatNext)
+                {
+                    fragment = new FragmentData()
+                    {
+                        StartPosition = startInsertIndex,
+                        UsageSize = size,
+                    };
+                    sortedStartFragments.Insert(startInsertIndex, fragment);
+                }else if(isConcatNext && isConcatPre)
+                {
+                    preFragment.UsageSize += size + nextFragment.UsageSize;
+                    sortedStartFragments.Remove(nextFragment);
+
+                    sortedSizeFragments.Remove(preFragment);
+                    sortedSizeFragments.Remove(nextFragment);
+
+                    fragment = preFragment;
+                }else if(isConcatNext)
+                {
+                    nextFragment.StartPosition -= size;
+                    sortedSizeFragments.Remove(nextFragment);
+
+                    fragment = nextFragment;
+                }
+                else if(isConcatPre)
+                {
+                    preFragment.UsageSize += size;
+                    sortedSizeFragments.Remove(preFragment);
+
+                    fragment = preFragment;
+                }
+
+                int sizeInsertIndex = FindSizeInsertIndex(0, sortedSizeFragments.Count - 1, fragment.UsageSize);
+                sortedSizeFragments.Insert(sizeInsertIndex, fragment);
+            }
         }
 
         public FragmentData Get(int size)
         {
-            return null;
+            if(sortedSizeFragments.Count == 0)
+            {
+                return null;
+            }
+            int sizeInsertIndex = FindSizeInsertIndex(0, sortedSizeFragments.Count - 1, size);
+            return sortedSizeFragments[sizeInsertIndex];
         }
 
         public void Update(FragmentData fragmentData)
         {
+            if(fragmentData.UsageSize > 0)
+            {
+                sortedSizeFragments.Remove(fragmentData);
 
+                int sizeInsertIndex = FindSizeInsertIndex(0, sortedSizeFragments.Count - 1, fragmentData.UsageSize);
+                sortedSizeFragments.Insert(sizeInsertIndex, fragmentData);
+            }
+            else
+            {
+                sortedStartFragments.Remove(fragmentData);
+                sortedSizeFragments.Remove(fragmentData);
+            }
         }
 
+        private int FindSizeInsertIndex(int left,int right,int size)
+        {
+            int leftSize = sortedStartFragments[left].UsageSize;
+            if (leftSize > size)
+            {
+                return left;
+            }
+            int rightSize = sortedStartFragments[right].UsageSize;
+            if (rightSize < size)
+            {
+                return right + 1;
+            }
+
+            int mid = (left + right) / 2;
+            int midSize = sortedStartFragments[mid].UsageSize;
+            if (mid == left)
+            {
+                if (midSize > size)
+                {
+                    return left;
+                }
+                else if (midSize < size)
+                {
+                    return right;
+                }
+                else
+                {
+                    return mid;
+                }
+            }
+            if (midSize > size)
+            {
+                return FindStartInsertIndex(left, mid, size);
+            }
+            else if (midSize < size)
+            {
+                return FindStartInsertIndex(mid, right, size);
+            }
+            else
+            {
+                return mid;
+            }
+        }
+
+        private int FindStartInsertIndex(int left,int right,long start)
+        {
+            long leftStart = sortedStartFragments[left].StartPosition;
+            if(leftStart>start)
+            {
+                return left;
+            }
+            long rightStart = sortedStartFragments[right].StartPosition;
+            if(rightStart<start)
+            {
+                return right + 1;
+            }
+
+            int mid = (left + right) / 2;
+            long midStart = sortedStartFragments[mid].StartPosition;
+            if(mid == left)
+            {
+                if(midStart>start)
+                {
+                    return left;
+                }else if(midStart<start)
+                {
+                    return right;
+                }else
+                {
+                    return mid;
+                }
+            }
+            if(midStart>start)
+            {
+                return FindStartInsertIndex(left, mid, start);
+            }else if(midStart <start)
+            {
+                return FindStartInsertIndex(mid, right, start);
+            }
+            else
+            {
+                return mid;
+            }
+        }
     }
 }
