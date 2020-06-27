@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IniConfigService.cs" />
     <Compile Include="Ini\IniConfig.cs" />
+    <Compile Include="NDBService.cs" />
     <Compile Include="Ndb\NDBConst.cs" />
     <Compile Include="Ndb\NDBField.cs" />
     <Compile Include="Ndb\NDBSheet.cs" />

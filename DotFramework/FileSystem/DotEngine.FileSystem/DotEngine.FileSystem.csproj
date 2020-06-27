@@ -7,7 +7,7 @@
     <ProjectGuid>{C6A53D3D-CAE3-4567-8B6D-ACFEF88268CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotEngine.FileSystem</RootNamespace>
+    <RootNamespace>DotEngine.FS</RootNamespace>
     <AssemblyName>DotEngine.FileSystem</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,6 +46,7 @@
     <Compile Include="FileChunk.cs" />
     <Compile Include="FileContent.cs" />
     <Compile Include="FileFragment.cs" />
+    <Compile Include="FileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
