@@ -7,6 +7,8 @@ namespace DotEngine.FS
 {
     public class ChunkData
     {
+        public const int MAX_SIZE = 512;
+
         public string Path { get; set; }
         public long StartPosition { get; set; }
         public int ContentLength { get; set; }
@@ -15,8 +17,6 @@ namespace DotEngine.FS
 
     public class FileChunk
     {
-        private const int CHUNK_MAX_BYTE_LENGTH = 512;
-
         private Dictionary<string, ChunkData> chunkDic = new Dictionary<string, ChunkData>();
         public FileChunk()
         {
@@ -24,8 +24,8 @@ namespace DotEngine.FS
 
         public unsafe FileSystemResultCode ReadFromStream(Stream stream)
         {
-            byte[] bytes = new byte[512];
-            if(stream.Read(bytes,0,sizeof(int))!=sizeof(int))
+            byte[] bytes = new byte[ChunkData.MAX_SIZE];
+            if (stream.Read(bytes, 0, sizeof(int)) != sizeof(int))
             {
                 return FileSystemResultCode.ChunkByteLengthError;
             }
@@ -50,12 +50,12 @@ namespace DotEngine.FS
                 }
 
                 int chunkLen = pathLen + sizeof(int) * 2+sizeof(long);
-                if(chunkLen> CHUNK_MAX_BYTE_LENGTH)
+                if(chunkLen> ChunkData.MAX_SIZE)
                 {
                     return FileSystemResultCode.ChunkByteTooLongError;
                 }
 
-                if(stream.Read(bytes,0,chunkLen)!=chunkLen)
+                if (stream.Read(bytes, 0, chunkLen) != chunkLen)
                 {
                     return FileSystemResultCode.ChunkDataByteLengthError;
                 }
@@ -82,7 +82,7 @@ namespace DotEngine.FS
                 }
             }
 
-            if(chunkDic.Count!= len)
+            if (chunkDic.Count != len)
             {
                 return FileSystemResultCode.ChunkDataCountError;
             }

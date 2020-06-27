@@ -18,9 +18,9 @@ namespace DotEngine.FS
                 return FileSystemResultCode.ContentHasBeenOpenedError;
             }
 
-            FileMode fileMode = FileMode.Open;
-            FileAccess fileAccess = FileAccess.Read;
-            FileShare fileShare = FileShare.None;
+            FileMode fileMode;
+            FileAccess fileAccess;
+            FileShare fileShare;
             if (mode == FileSystemMode.Read)
             {
                 fileMode = FileMode.Open;
@@ -38,7 +38,8 @@ namespace DotEngine.FS
                 fileMode = FileMode.OpenOrCreate;
                 fileAccess = FileAccess.ReadWrite;
                 fileShare = FileShare.None;
-            }else
+            }
+            else
             {
                 return FileSystemResultCode.ModeNotExistError;
             }
@@ -48,7 +49,7 @@ namespace DotEngine.FS
                 stream = new FileStream(filePath, fileMode, fileAccess, fileShare);
                 return FileSystemResultCode.Success;
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 return FileSystemResultCode.ContentOpenError;
             }
@@ -58,9 +59,9 @@ namespace DotEngine.FS
         {
             stream.Seek(start, SeekOrigin.Begin);
             byte[] result = new byte[length];
-            if(stream.Read(result,0,length) != length)
+            if (stream.Read(result, 0, length) != length)
             {
-                return new byte[0];
+                return null;
             }
             return result;
         }

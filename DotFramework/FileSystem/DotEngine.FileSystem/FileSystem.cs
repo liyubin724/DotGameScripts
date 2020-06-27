@@ -69,41 +69,47 @@ namespace DotEngine.FS
 
             content = new FileContent();
             chunk = new FileChunk();
-
-            FileSystemResultCode resultCode = FileSystemResultCode.Success;
-            resultCode = content.OpenContent(ContentFilePath, Mode);
-            if (resultCode != FileSystemResultCode.Success)
-            {
-                return resultCode;
-            }
-
             if (Mode != FileSystemMode.Read)
             {
                 fragment = new FileFragment();
             }
 
-            if (Mode != FileSystemMode.Create)
+            FileSystemResultCode resultCode = FileSystemResultCode.Success;
+            resultCode = content.OpenContent(ContentFilePath, Mode);
+            if(resultCode == FileSystemResultCode.Success)
             {
-                FileStream indexStream = null;
-                try
+                if (Mode != FileSystemMode.Create)
                 {
-                    indexStream = new FileStream(IndexFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
-                    resultCode = chunk.ReadFromStream(indexStream);
-                    if (resultCode == FileSystemResultCode.Success && fragment != null)
+                    FileStream indexStream = null;
+                    try
                     {
-                        resultCode = fragment.ReadFromStream(indexStream);
+                        indexStream = new FileStream(IndexFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
+                        resultCode = chunk.ReadFromStream(indexStream);
+                        if (resultCode == FileSystemResultCode.Success && fragment != null)
+                        {
+                            resultCode = fragment.ReadFromStream(indexStream);
+                        }
                     }
-                } catch
-                {
-                    resultCode = FileSystemResultCode.IndexFileNotExistError;
-                }
-                finally
-                {
-                    if (indexStream != null)
+                    catch
                     {
-                        indexStream.Close();
+                        resultCode = FileSystemResultCode.IndexFileNotExistError;
+                    }
+                    finally
+                    {
+                        if (indexStream != null)
+                        {
+                            indexStream.Close();
+                        }
                     }
                 }
+            }
+
+            if (resultCode != FileSystemResultCode.Success)
+            {
+                content.Close();
+                content = null;
+                fragment = null;
+                chunk = null;
             }
 
             return resultCode;
@@ -124,7 +130,7 @@ namespace DotEngine.FS
             ChunkData chunkData = chunk.Get(filePath);
             if(chunkData == null)
             {
-                return new byte[0];
+                return null;
             }
 
             return content.Read(chunkData.StartPosition, chunkData.ContentLength);

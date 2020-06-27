@@ -6,7 +6,7 @@ namespace DotEngine.FS
 {
     public class FragmentData
     {
-        public const int Size = sizeof(long) + sizeof(int);
+        public const int SIZE = sizeof(long) + sizeof(int);
 
         public long StartPosition { get; set; }
         public int UsageSize { get; set; }
@@ -24,7 +24,7 @@ namespace DotEngine.FS
 
         public unsafe FileSystemResultCode ReadFromStream(Stream stream)
         {
-            byte[] bytes = new byte[FragmentData.Size];
+            byte[] bytes = new byte[FragmentData.SIZE];
             if (stream.Read(bytes, 0, sizeof(int)) != sizeof(int))
             {
                 return FileSystemResultCode.FragmentByteLengthError;
