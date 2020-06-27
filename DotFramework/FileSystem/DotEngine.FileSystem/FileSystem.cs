@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace DotEngine.FS
 {
@@ -115,7 +116,12 @@ namespace DotEngine.FS
             return resultCode;
         }
 
-        public int FileCount()
+        public string[] GetAllFile()
+        {
+            return chunk.GetFiles();
+        }
+
+        public int GetFileCount()
         {
             return chunk.Count();
         }
@@ -251,6 +257,23 @@ namespace DotEngine.FS
             {
                 return len + (4 - mod);
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder text = new StringBuilder();
+            if(chunk!=null)
+            {
+                text.Append(chunk.ToString());
+            }
+            if(fragment!=null)
+            {
+                text.AppendLine();
+                text.AppendLine();
+
+                text.Append(fragment.ToString());
+            }
+            return text.ToString();
         }
     }
 }

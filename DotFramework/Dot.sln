@@ -103,6 +103,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTool.ExcelToData", "Conf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToDataTool", "Config\ExcelToDataTool\ExcelToDataTool.csproj", "{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemDemo", "FileSystem\FileSystemDemo\FileSystemDemo.csproj", "{2539F585-1E74-4EEC-BA93-6E7391E79A9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,10 @@ Global
 		{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2539F585-1E74-4EEC-BA93-6E7391E79A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2539F585-1E74-4EEC-BA93-6E7391E79A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2539F585-1E74-4EEC-BA93-6E7391E79A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2539F585-1E74-4EEC-BA93-6E7391E79A9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,6 +278,7 @@ Global
 		{202655A4-92DC-4A6D-B6A0-D60FAA6C1654} = {A93A29E2-A090-42B4-8637-A8217B583363}
 		{92A3C239-7338-4F74-977A-7E428D710396} = {8F899DC0-4513-4394-90F9-05DBE6C441CE}
 		{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547} = {8F899DC0-4513-4394-90F9-05DBE6C441CE}
+		{2539F585-1E74-4EEC-BA93-6E7391E79A9C} = {3DC3A9CF-3E47-438D-9A88-6987DE247BF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47FC44EA-F87D-4456-A8D2-E6113377EC98}

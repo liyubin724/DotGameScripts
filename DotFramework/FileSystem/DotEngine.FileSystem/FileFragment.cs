@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace DotEngine.FS
 {
@@ -138,8 +139,14 @@ namespace DotEngine.FS
                     fragment = preFragment;
                 }
 
-                int sizeInsertIndex = FindSizeInsertIndex(0, sortedSizeFragments.Count - 1, fragment.UsageSize);
-                sortedSizeFragments.Insert(sizeInsertIndex, fragment);
+                if(sortedSizeFragments.Count == 0)
+                {
+                    sortedSizeFragments.Add(fragment);
+                }else
+                {
+                    int sizeInsertIndex = FindSizeInsertIndex(0, sortedSizeFragments.Count - 1, fragment.UsageSize);
+                    sortedSizeFragments.Insert(sizeInsertIndex, fragment);
+                }
             }
         }
 
@@ -252,6 +259,16 @@ namespace DotEngine.FS
             {
                 return mid;
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder text = new StringBuilder();
+            foreach(var fragment in sortedStartFragments)
+            {
+                text.AppendLine($"{fragment.StartPosition}    {fragment.UsageSize}");
+            }
+            return text.ToString();
         }
     }
 }

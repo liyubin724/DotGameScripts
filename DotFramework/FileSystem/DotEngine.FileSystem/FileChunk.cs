@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace DotEngine.FS
@@ -112,6 +113,11 @@ namespace DotEngine.FS
             }
         }
 
+        public string[] GetFiles()
+        {
+            return chunkDic.Keys.ToArray();
+        }
+
         public int Count()
         {
             return chunkDic.Count;
@@ -153,6 +159,16 @@ namespace DotEngine.FS
             chunkDic.Add(filePath, chunkData);
         }
 
+        public override string ToString()
+        {
+            StringBuilder text = new StringBuilder();
+            foreach(var kvp in chunkDic)
+            {
+                text.AppendLine($"{kvp.Value.Path}    {kvp.Value.StartPosition}    {kvp.Value.ContentLength}    {kvp.Value.UsageSize}");
+            }
+
+            return text.ToString();
+        }
     }
 
 }
