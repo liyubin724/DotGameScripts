@@ -8,9 +8,9 @@ namespace DotEngine.Timeline.Item
 
         public float EndTime { get => FireTime + DurationTime; }
 
-        public override void SetEnv(TimelineContext context, ActionData actionData, float timeScale)
+        public override void SetData(TimelineContext context, ActionData actionData, float timeScale)
         {
-            base.SetEnv(context, actionData, timeScale);
+            base.SetData(context, actionData, timeScale);
 
             DurationActionData durationActionData = (DurationActionData)actionData;
             DurationTime = durationActionData.DurationTime * timeScale;
