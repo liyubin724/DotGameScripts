@@ -182,7 +182,7 @@ namespace DotTool.ETD.Data
                                 {
                                     if(validation.GetType() != typeof(ErrorValidation))
                                     {
-                                        TypeContext.Inject(context, validation);
+                                        context.Inject(validation);
 
                                         ValidationResult resultCode = validation.Verify();
                                         if (resultCode != ValidationResult.Success)

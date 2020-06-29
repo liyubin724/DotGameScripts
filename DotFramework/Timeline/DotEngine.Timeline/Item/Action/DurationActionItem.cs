@@ -1,0 +1,25 @@
+﻿using DotEngine.Timeline.Data;
+
+namespace DotEngine.Timeline.Item
+{
+    public abstract class DurationActionItem : ActionItem
+    {
+        public float DurationTime { get; private set; }
+
+        public float EndTime { get => FireTime + DurationTime; }
+
+        public override void SetEnv(TimelineContext context, ActionData actionData, float timeScale)
+        {
+            base.SetEnv(context, actionData, timeScale);
+
+            DurationActionData durationActionData = (DurationActionData)actionData;
+            DurationTime = durationActionData.DurationTime * timeScale;
+        }
+
+        public abstract void DoEnter();
+        public abstract void DoExit();
+        public abstract void DoUpdate(float deltaTime);
+        public virtual void DoPause() { }
+        public virtual void DoResume() { }
+    }
+}

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,16 +45,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\Core\ActionItem.cs" />
-    <Compile Include="Actions\Core\ActionPlatform.cs" />
-    <Compile Include="ActionTrack.cs" />
-    <Compile Include="Actions\Core\DurationActionItem.cs" />
-    <Compile Include="Actions\Core\EventActionItem.cs" />
+    <Compile Include="Data\Attr\ActionDataAttributes.cs" />
+    <Compile Include="Data\IO\GroupHelper.cs" />
+    <Compile Include="Item\Factory\ActionItemFactory.cs" />
+    <Compile Include="Item\Factory\IActionItemFactory.cs" />
+    <Compile Include="Item\Factory\IActionItemPool.cs" />
+    <Compile Include="Item\Group.cs" />
+    <Compile Include="Item\Track.cs" />
+    <Compile Include="TimelineContext.cs" />
+    <Compile Include="Data\Action\ActionData.cs" />
+    <Compile Include="Data\Action\ActionPlatform.cs" />
+    <Compile Include="Data\Action\DurationActionData.cs" />
+    <Compile Include="Data\Action\EventActionData.cs" />
+    <Compile Include="Data\GroupData.cs" />
+    <Compile Include="Data\TrackData.cs" />
+    <Compile Include="Item\Action\ActionItem.cs" />
+    <Compile Include="Item\Action\DurationActionItem.cs" />
+    <Compile Include="Item\Action\EventActionItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrackGroup.cs" />
+    <Compile Include="TimelineConst.cs" />
+    <Compile Include="TimelineException.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Conditions\" />
+    <ProjectReference Include="..\..\Context\DotEngine.Context\DotEngine.Context.csproj">
+      <Project>{973ba58f-3fd4-4a7d-aeee-c9e0f135b12a}</Project>
+      <Name>DotEngine.Context</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

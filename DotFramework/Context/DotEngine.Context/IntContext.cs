@@ -2,14 +2,14 @@
 {
     public class IntContext : EnvContext<int>
     {
-        public static void Inject(IntContext context, object injectObj)
+        public void Inject(object injectObj)
         {
-            ContextUtil.Inject<int>(context, injectObj);
+            ContextUtil.Inject<int>(this, injectObj);
         }
 
-        public static void Extract(IntContext context, object extractObj)
+        public void Extract(object extractObj)
         {
-            ContextUtil.Extract<int>(context, extractObj);
+            ContextUtil.Extract<int>(this, extractObj);
         }
     }
 }

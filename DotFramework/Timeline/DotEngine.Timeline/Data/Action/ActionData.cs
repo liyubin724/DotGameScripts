@@ -1,9 +1,9 @@
-﻿namespace DotEngine.Timeline
+﻿namespace DotEngine.Timeline.Data
 {
-    public abstract class ActionItem
+    public class ActionData
     {
         public int Index = 0;
-        public int ActionID = -1;
+        public int Id = 0;
         public ActionPlatform Platform = ActionPlatform.All;
         public float FireTime = 0.0f;
     }

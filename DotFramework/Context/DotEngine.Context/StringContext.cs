@@ -2,14 +2,14 @@
 {
     public class StringContext : EnvContext<string>
     {
-        public static void Inject(StringContext context, object injectObj)
+        public void Inject(object injectObj)
         {
-            ContextUtil.Inject<string>(context, injectObj);
+            ContextUtil.Inject<string>(this, injectObj);
         }
 
-        public static void Extract(StringContext context, object extractObj)
+        public void Extract(object extractObj)
         {
-            ContextUtil.Extract<string>(context, extractObj);
+            ContextUtil.Extract<string>(this, extractObj);
         }
     }
 }
