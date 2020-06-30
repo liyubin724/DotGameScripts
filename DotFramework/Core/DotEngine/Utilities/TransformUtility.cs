@@ -24,11 +24,11 @@ namespace DotEngine.Utility
             return null;
         }
 
-        public static string GetPath(this Transform tran)
+        public static string GetPath(this Transform tran,Transform root = null)
         {
             StringBuilder nameSB = new StringBuilder();
             Transform parent = tran;
-            while(parent != null)
+            while (parent != root && parent != null)
             {
                 if(nameSB.Length>0)
                 {

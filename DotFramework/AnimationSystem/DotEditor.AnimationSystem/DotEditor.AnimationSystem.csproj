@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9DBA9002-9E48-4501-AEEF-D50981A46AC7}</ProjectGuid>
+    <ProjectGuid>{C2D2E3F6-3035-473D-B890-4C4896B40985}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotEngine.Timeline</RootNamespace>
-    <AssemblyName>DotEngine.Timeline</AssemblyName>
+    <RootNamespace>DotEditor.AnimationSystem</RootNamespace>
+    <AssemblyName>DotEditor.AnimationSystem</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,33 +39,27 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\libs\Editor\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\libs\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Attr\ActionDataAttributes.cs" />
-    <Compile Include="Data\IO\GroupHelper.cs" />
-    <Compile Include="Item\Factory\ActionItemFactory.cs" />
-    <Compile Include="Item\Factory\IActionItemFactory.cs" />
-    <Compile Include="Item\Factory\IActionItemPool.cs" />
-    <Compile Include="Item\Group.cs" />
-    <Compile Include="Item\Track.cs" />
-    <Compile Include="TimelineContext.cs" />
-    <Compile Include="Data\Action\ActionData.cs" />
-    <Compile Include="Data\Action\DurationActionData.cs" />
-    <Compile Include="Data\Action\EventActionData.cs" />
-    <Compile Include="Data\GroupData.cs" />
-    <Compile Include="Data\TrackData.cs" />
-    <Compile Include="Item\Action\ActionItem.cs" />
-    <Compile Include="Item\Action\DurationActionItem.cs" />
-    <Compile Include="Item\Action\EventActionItem.cs" />
+    <Compile Include="AnimationClipCompress.cs" />
+    <Compile Include="AnimationClipExtract.cs" />
+    <Compile Include="ModelOptimize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimelineConst.cs" />
-    <Compile Include="TimelineException.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Context\DotEngine.Context\DotEngine.Context.csproj">
-      <Project>{973ba58f-3fd4-4a7d-aeee-c9e0f135b12a}</Project>
-      <Name>DotEngine.Context</Name>
+    <ProjectReference Include="..\..\Core\DotEditor\DotEditor.csproj">
+      <Project>{620120c0-a2bb-4ee9-83ea-374195187574}</Project>
+      <Name>DotEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
+      <Project>{FB66A876-D598-498C-8DBD-BEC7CC13C40D}</Project>
+      <Name>DotEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
