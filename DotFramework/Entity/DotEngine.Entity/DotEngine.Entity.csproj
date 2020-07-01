@@ -48,7 +48,6 @@
     <Compile Include="Avatar\AvatarPartInstance.cs" />
     <Compile Include="Avatar\AvatarPartType.cs" />
     <Compile Include="Avatar\AvatarUtil.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Node\NodeBehaviour.cs" />
     <Compile Include="Node\NodeData.cs" />
     <Compile Include="Node\NodeType.cs" />
@@ -76,6 +75,8 @@
       <Name>DotEngine.Timeline</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entity\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

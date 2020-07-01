@@ -1,5 +1,4 @@
-﻿using Game.Core.BMFont;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Core.BMFont
 {

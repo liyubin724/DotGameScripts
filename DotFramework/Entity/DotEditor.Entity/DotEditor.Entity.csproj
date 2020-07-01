@@ -54,7 +54,6 @@
     <Compile Include="Avatar\AvatarPartCreatorDataDrawer.cs" />
     <Compile Include="Avatar\AvatarPartDataEditor.cs" />
     <Compile Include="Avatar\AvatarPreviewer.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Node\NodeBehaviourEditor.cs" />
     <Compile Include="Node\NodeBehaviourUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

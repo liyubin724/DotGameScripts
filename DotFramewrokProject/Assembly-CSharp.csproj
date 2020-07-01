@@ -331,6 +331,15 @@
     <Reference Include="Snappy.Net">
       <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/Snappy.Net.dll</HintPath>
     </Reference>
+    <Reference Include="DotEngine.Entity">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="DotEngine.Timeline">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="DotEngine.FileSystem">
+      <HintPath>D:/WorkSpace/DotGameProject/DotGameScripts/DotFramewrokProject/Assets/Dot/DotEngine.FileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>

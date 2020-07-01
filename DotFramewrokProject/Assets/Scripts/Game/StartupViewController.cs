@@ -1,16 +1,20 @@
 ﻿using DotEngine.Asset;
 using DotEngine.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
     public class StartupViewController : SingleViewController
     {
+        Text uiText = null;
+
         public const string NAME = "StartupViewController";
 
         private GameObject gObj = null;
         public override string[] ListNotificationInterests()
         {
+            uiText.font
             return new string[]
             {
                 AppConst.STARTUP,
