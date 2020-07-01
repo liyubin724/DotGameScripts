@@ -1,8 +1,8 @@
-﻿using Dot.Core.Pool;
-using Dot.Timer;
+﻿using DotEngine.Pool;
+using DotEngine.Timer;
 using System.Collections.Generic;
 
-namespace Dot.Dispatch
+namespace DotEngine.EventDispatch
 {
     public delegate void EventHandler(EventData e);
 
@@ -10,7 +10,7 @@ namespace Dot.Dispatch
     {
         private static ObjectPool<EventData> eventDataPool = null;
         private Dictionary<int, List<EventHandler>> eventHandlerDic = null;
-        private Dictionary<EventData, TimerTaskInfo> delayEventTaskInfo = null;
+        private Dictionary<EventData, TimerTaskHandler> delayEventTaskInfo = null;
 
         public EventDispatcher()
         {
@@ -20,7 +20,7 @@ namespace Dot.Dispatch
             }
 
             eventHandlerDic = new Dictionary<int, List<EventHandler>>();
-            delayEventTaskInfo = new Dictionary<EventData, TimerTaskInfo>();
+            delayEventTaskInfo = new Dictionary<EventData, TimerTaskHandler>();
         }
 
         public void DoReset()
@@ -91,8 +91,8 @@ namespace Dot.Dispatch
             }
             else
             {
-                TimerTaskInfo tti = TimerManager.GetInstance().AddEndTimer(delayTime, OnDelayEventTrigger, e);
-                delayEventTaskInfo.Add(e, tti);
+                TimerTaskHandler handler = TimerManager.GetInstance().AddEndTimer(delayTime, OnDelayEventTrigger, e);
+                delayEventTaskInfo.Add(e, handler);
             }
         }
 

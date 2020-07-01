@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Log", "Log", "{153B57DD-3C2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEngine.Log", "Log\DotEngine.Log\DotEngine.Log.csproj", "{66AA6B81-B885-44B8-B471-4F104FF97A03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDumper", "Others\ObjectDumper\ObjectDumper.csproj", "{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{66AA6B81-B885-44B8-B471-4F104FF97A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66AA6B81-B885-44B8-B471-4F104FF97A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66AA6B81-B885-44B8-B471-4F104FF97A03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{F1BD7EEE-6233-4FC4-89B7-F5E8EAE3C547} = {8A8B6384-67C3-407D-B0F2-1A66DD57AE80}
 		{973BA58F-3FD4-4A7D-AEEE-C9E0F135B12A} = {7F26AF0F-9B28-4A78-AA0C-48ED33A76735}
 		{66AA6B81-B885-44B8-B471-4F104FF97A03} = {153B57DD-3C23-45A1-A733-5D799199718E}
+		{EFE3AD4B-A5B5-42D0-8DE6-C4E083F47BBF} = {2B603DA9-4E2D-45CA-8502-240A79E0334E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92C30856-52D1-481A-8B1A-98B6FB6C3BBB}

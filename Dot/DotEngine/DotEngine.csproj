@@ -104,6 +104,9 @@
     <Compile Include="Entity\Node\NodeBehaviour.cs" />
     <Compile Include="Entity\Node\NodeData.cs" />
     <Compile Include="Entity\Node\NodeType.cs" />
+    <Compile Include="Event\EventData.cs" />
+    <Compile Include="Event\EventDispatcher.cs" />
+    <Compile Include="Event\EventManager.cs" />
     <Compile Include="FileSystem\FileChunk.cs" />
     <Compile Include="FileSystem\FileContent.cs" />
     <Compile Include="FileSystem\FileFragment.cs" />
@@ -175,6 +178,8 @@
     <Compile Include="Net\Stream\MemoryStreamEx.cs" />
     <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialize\BinarySerializeConvert.cs" />
+    <Compile Include="Serialize\LuaSerializeWriter.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Timeline\Data\Action\ActionData.cs" />
@@ -196,9 +201,10 @@
     <Compile Include="Timeline\TimelineContext.cs" />
     <Compile Include="Timeline\TimelineException.cs" />
     <Compile Include="Timer\HierarchicalTimerWheel.cs" />
+    <Compile Include="Timer\TimerManager.cs" />
     <Compile Include="Timer\TimerService.cs" />
     <Compile Include="Timer\TimerTask.cs" />
-    <Compile Include="Timer\TimerTaskHandle.cs" />
+    <Compile Include="Timer\TimerTaskHandler.cs" />
     <Compile Include="Timer\TimerWheel.cs" />
     <Compile Include="Utilities\ArrayUtility.cs" />
     <Compile Include="Utilities\AssemblyUtility.cs" />

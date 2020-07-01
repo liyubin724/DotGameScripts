@@ -1,12 +1,12 @@
 ﻿namespace DotEngine.Timer
 {
-    public class TimerTaskHandle
+    public class TimerTaskHandler
     {
         internal long taskID = -1;
         internal int wheelIndex = -1;
         internal int wheelSlotIndex = -1;
 
-        internal TimerTaskHandle()
+        internal TimerTaskHandler()
         {
         }
 

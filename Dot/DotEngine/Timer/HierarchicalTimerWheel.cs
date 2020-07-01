@@ -16,7 +16,7 @@ namespace DotEngine.Timer
         private ObjectPool<TimerTask> taskPool = new ObjectPool<TimerTask>();
 
         private TimerWheel[] wheelArr = null;
-        private Dictionary<long, TimerTaskHandle> taskInfoDic = new Dictionary<long, TimerTaskHandle>();
+        private Dictionary<long, TimerTaskHandler> taskInfoDic = new Dictionary<long, TimerTaskHandler>();
 
         private int lapseTimeInMS = 0;
 
@@ -39,7 +39,7 @@ namespace DotEngine.Timer
             }
         }
 
-        internal TimerTaskHandle AddTimerTask(float intervalInSec,
+        internal TimerTaskHandler AddTimerTask(float intervalInSec,
                                                 float totalInSec,
                                                 Action<object> intervalCallback,
                                                 Action<object> endCallback,
@@ -48,7 +48,7 @@ namespace DotEngine.Timer
             TimerTask task = taskPool.Get();
             task.SetData(idCreator.NextID, intervalInSec, totalInSec, intervalCallback, endCallback, callbackData);
 
-            TimerTaskHandle taskInfo = new TimerTaskHandle();
+            TimerTaskHandler taskInfo = new TimerTaskHandler();
             taskInfo.taskID = task.ID;
 
             if(AddTimerTask(task,taskInfo))
@@ -58,7 +58,7 @@ namespace DotEngine.Timer
             throw new Exception($"HierarchicalTimerWheel::AddTimerTask->Add Failed");
         }
 
-        private bool AddTimerTask(TimerTask task, TimerTaskHandle taskInfo)
+        private bool AddTimerTask(TimerTask task, TimerTaskHandler taskInfo)
         {
             for (int i = 0; i < wheelArr.Length; i++)
             {
@@ -74,7 +74,7 @@ namespace DotEngine.Timer
             return false;
         }
 
-        internal bool RemoveTimerTask(TimerTaskHandle taskInfo)
+        internal bool RemoveTimerTask(TimerTaskHandler taskInfo)
         {
             if(taskInfo == null|| !taskInfo.IsValid())
             {
@@ -140,7 +140,7 @@ namespace DotEngine.Timer
                 {
                     continue;
                 }
-                if (!taskInfoDic.TryGetValue(task.ID, out TimerTaskHandle taskInfo))
+                if (!taskInfoDic.TryGetValue(task.ID, out TimerTaskHandler taskInfo))
                 {
                     continue;
                 }

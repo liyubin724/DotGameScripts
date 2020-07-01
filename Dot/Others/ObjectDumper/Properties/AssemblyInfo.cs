@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("DotDispatch")]
+[assembly: AssemblyTitle("ObjectDumper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DotDispatch")]
+[assembly: AssemblyProduct("ObjectDumper")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("309c6243-2a4d-476f-8ec7-03aba3410717")]
+[assembly: Guid("efe3ad4b-a5b5-42d0-8de6-c4e083f47bbf")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

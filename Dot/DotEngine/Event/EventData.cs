@@ -1,7 +1,7 @@
-﻿using Dot.Core.Pool;
+﻿using DotEngine.Pool;
 using SystemObject = System.Object;
 
-namespace Dot.Dispatch
+namespace DotEngine.EventDispatch
 {
     public class EventData : IObjectPoolItem
     {
