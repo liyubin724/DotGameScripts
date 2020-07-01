@@ -103,17 +103,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\DotEditor\DotEditor.csproj">
-      <Project>{620120c0-a2bb-4ee9-83ea-374195187574}</Project>
-      <Name>DotEditor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DotEngine.NativeDrawer\DotEngine.NativeDrawer.csproj">
       <Project>{53e3b1da-4bce-41fd-90f5-384d36c8f829}</Project>
       <Name>DotEngine.NativeDrawer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\DotEngine\DotEngine.csproj">
-      <Project>{fb66a876-d598-498c-8dbd-bec7cc13c40d}</Project>
-      <Name>DotEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

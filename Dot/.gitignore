@@ -1,0 +1,9 @@
+.vs
+*.bak
+*.temp
+*.log
+!DotEngine.Log
+bin/
+obj/
+temp/
+Logs/

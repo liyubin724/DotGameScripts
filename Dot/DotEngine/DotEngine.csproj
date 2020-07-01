@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E5179EEC-4A25-482F-B2EE-7662F1184687}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DotEngine</RootNamespace>
+    <AssemblyName>DotEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\libs\Editor\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\libs\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AI\FSM\StateBase.cs" />
+    <Compile Include="AI\FSM\StateEventArgs.cs" />
+    <Compile Include="AI\FSM\StateMachine.cs" />
+    <Compile Include="AI\FSM\Token.cs" />
+    <Compile Include="Asset\AssetBridge.cs" />
+    <Compile Include="Asset\AssetConst.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetLoader.cs" />
+    <Compile Include="Asset\AssetLoader\AAssetNode.cs" />
+    <Compile Include="Asset\AssetLoader\AAsyncOperation.cs" />
+    <Compile Include="Asset\AssetLoader\AssetHandler.cs" />
+    <Compile Include="Asset\AssetLoader\AssetLoaderData.cs" />
+    <Compile Include="Asset\AssetManager.cs" />
+    <Compile Include="Asset\AssetManager_Clean.cs" />
+    <Compile Include="Asset\AssetManager_Scene.cs" />
+    <Compile Include="Asset\AssetService.cs" />
+    <Compile Include="Asset\AssetUtil.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAssetNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleAsyncOperation.cs" />
+    <Compile Include="Asset\BundleLoader\BundleLoader.cs" />
+    <Compile Include="Asset\BundleLoader\BundleNode.cs" />
+    <Compile Include="Asset\BundleLoader\BundleSceneLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAssetNode.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseAsyncOperation.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseLoader.cs" />
+    <Compile Include="Asset\DatabaseLoader\DatabaseSceneLoader.cs" />
+    <Compile Include="Asset\Datas\AssetAddressConfig.cs" />
+    <Compile Include="Asset\Datas\AssetBundleConfig.cs" />
+    <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
+    <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
+    <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
+    <Compile Include="Config\IniConfigService.cs" />
+    <Compile Include="Config\Ini\IniConfig.cs" />
+    <Compile Include="Config\NDBService.cs" />
+    <Compile Include="Config\Ndb\NDBConst.cs" />
+    <Compile Include="Config\Ndb\NDBField.cs" />
+    <Compile Include="Config\Ndb\NDBHeader.cs" />
+    <Compile Include="Config\Ndb\NDBSheet.cs" />
+    <Compile Include="Crypto\AESCrypto.cs" />
+    <Compile Include="Crypto\CryptoHelper.cs" />
+    <Compile Include="Crypto\DESCrypto.cs" />
+    <Compile Include="Crypto\MD5Crypto.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartData.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartInstance.cs" />
+    <Compile Include="Entity\Avatar\AvatarPartType.cs" />
+    <Compile Include="Entity\Avatar\AvatarUtil.cs" />
+    <Compile Include="Entity\Node\NodeBehaviour.cs" />
+    <Compile Include="Entity\Node\NodeData.cs" />
+    <Compile Include="Entity\Node\NodeType.cs" />
+    <Compile Include="FileSystem\FileChunk.cs" />
+    <Compile Include="FileSystem\FileContent.cs" />
+    <Compile Include="FileSystem\FileFragment.cs" />
+    <Compile Include="FileSystem\FileSystem.cs" />
+    <Compile Include="Generic\ListDictionary.cs" />
+    <Compile Include="Generic\UniqueID.cs" />
+    <Compile Include="Generic\UniqueIntID.cs" />
+    <Compile Include="GOPool\GameObjectPool.cs" />
+    <Compile Include="GOPool\GameObjectPoolConst.cs" />
+    <Compile Include="GOPool\GameObjectPoolGroup.cs" />
+    <Compile Include="GOPool\GameObjectPoolItem.cs" />
+    <Compile Include="GOPool\GameObjectPoolService.cs" />
+    <Compile Include="NativeDrawer\Decorator\BoxedHeaderAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\ButtonAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\DecoratorAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\HelpAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SeparatorLineAttribute.cs" />
+    <Compile Include="NativeDrawer\Decorator\SpaceLineAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginGroupAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginHorizontalAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\BeginIndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndGroupAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndHorizontalAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\EndIndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Layout\LayoutAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\ListenerAttribute.cs" />
+    <Compile Include="NativeDrawer\Listener\OnValueChangedAttribute.cs" />
+    <Compile Include="NativeDrawer\NativeConditionDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\NativeDrawerAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Control\IndentAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Control\ReadonlyAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\EnumButtonAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\FloatSliderAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Label\HideLabelAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\Label\NewLabelAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFilePathAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\OpenFolderPathAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\PropertyAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\StringPopupAttribute.cs" />
+    <Compile Include="NativeDrawer\Verification\NotNullAttribute.cs" />
+    <Compile Include="NativeDrawer\Verification\VerificationAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\HideAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\HideIfAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\ShowAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\ShowIfAttribute.cs" />
+    <Compile Include="NativeDrawer\Visible\VisibleAtrribute.cs" />
+    <Compile Include="Net\Client\ClientNet.cs" />
+    <Compile Include="Net\Client\ClientNetSession.cs" />
+    <Compile Include="Net\Client\ClientNet_Json.cs" />
+    <Compile Include="Net\Client\ClientNet_PB.cs" />
+    <Compile Include="Net\Message\IMessageParser.cs" />
+    <Compile Include="Net\Message\MessageConst.cs" />
+    <Compile Include="Net\Message\MessageReader.cs" />
+    <Compile Include="Net\Message\MessageWriter.cs" />
+    <Compile Include="Net\NetConst.cs" />
+    <Compile Include="Net\NetManager.cs" />
+    <Compile Include="Net\NetManager_Client.cs" />
+    <Compile Include="Net\NetManager_Server.cs" />
+    <Compile Include="Net\Server\ServerNet.cs" />
+    <Compile Include="Net\Server\ServerNetListener.cs" />
+    <Compile Include="Net\Server\ServerNetListener_Json.cs" />
+    <Compile Include="Net\Server\ServerNetListener_PB.cs" />
+    <Compile Include="Net\Server\ServerNetSession.cs" />
+    <Compile Include="Net\Services\ClientNetService.cs" />
+    <Compile Include="Net\Services\NetNotification.cs" />
+    <Compile Include="Net\Services\ServerNetService.cs" />
+    <Compile Include="Net\Stream\BufferStream.cs" />
+    <Compile Include="Net\Stream\MemoryStreamEx.cs" />
+    <Compile Include="Pool\ObjectPool.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="SingletonBehaviour.cs" />
+    <Compile Include="Timeline\Data\Action\ActionData.cs" />
+    <Compile Include="Timeline\Data\Action\DurationActionData.cs" />
+    <Compile Include="Timeline\Data\Action\EventActionData.cs" />
+    <Compile Include="Timeline\Data\Attr\ActionDataAttributes.cs" />
+    <Compile Include="Timeline\Data\GroupData.cs" />
+    <Compile Include="Timeline\Data\IO\GroupHelper.cs" />
+    <Compile Include="Timeline\Data\TrackData.cs" />
+    <Compile Include="Timeline\Item\Action\ActionItem.cs" />
+    <Compile Include="Timeline\Item\Action\DurationActionItem.cs" />
+    <Compile Include="Timeline\Item\Action\EventActionItem.cs" />
+    <Compile Include="Timeline\Item\Factory\ActionItemFactory.cs" />
+    <Compile Include="Timeline\Item\Factory\IActionItemFactory.cs" />
+    <Compile Include="Timeline\Item\Factory\IActionItemPool.cs" />
+    <Compile Include="Timeline\Item\Group.cs" />
+    <Compile Include="Timeline\Item\Track.cs" />
+    <Compile Include="Timeline\TimelineConst.cs" />
+    <Compile Include="Timeline\TimelineContext.cs" />
+    <Compile Include="Timeline\TimelineException.cs" />
+    <Compile Include="Timer\HierarchicalTimerWheel.cs" />
+    <Compile Include="Timer\TimerService.cs" />
+    <Compile Include="Timer\TimerTask.cs" />
+    <Compile Include="Timer\TimerTaskHandle.cs" />
+    <Compile Include="Timer\TimerWheel.cs" />
+    <Compile Include="Utilities\ArrayUtility.cs" />
+    <Compile Include="Utilities\AssemblyUtility.cs" />
+    <Compile Include="Utilities\BitUtility.cs" />
+    <Compile Include="Utilities\DontDestoryBehaviour.cs" />
+    <Compile Include="Utilities\DontDestroyHandler.cs" />
+    <Compile Include="Utilities\MathUtil.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
+    <Compile Include="Utilities\StringUtility.cs" />
+    <Compile Include="Utilities\StructUtility.cs" />
+    <Compile Include="Utilities\TransformUtility.cs" />
+    <Compile Include="Utilities\TypeUtility.cs" />
+    <Compile Include="Utilities\UnityObjectUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Context\DotEngine.Context\DotEngine.Context.csproj">
+      <Project>{973ba58f-3fd4-4a7d-aeee-c9e0f135b12a}</Project>
+      <Name>DotEngine.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Framework\DotEngine.Framework\DotEngine.Framework.csproj">
+      <Project>{a5d87cc3-4ac3-4d9f-ae97-92f81de8afe8}</Project>
+      <Name>DotEngine.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Log\DotEngine.Log\DotEngine.Log.csproj">
+      <Project>{66aa6b81-b885-44b8-b471-4f104ff97a03}</Project>
+      <Name>DotEngine.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Others\PriorityQueue\PriorityQueue.csproj">
+      <Project>{ecbdfa0f-fed1-40ab-883d-f4a28245e418}</Project>
+      <Name>PriorityQueue</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Net\Depends\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
