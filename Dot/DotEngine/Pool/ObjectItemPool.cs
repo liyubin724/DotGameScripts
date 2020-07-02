@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DotEngine.Pool
 {
-    public delegate T CreateItem<T>() where T : class;
-    public delegate void GetItemFromPool<T>(T data) where T : class;
-    public delegate void ReleaseItemToPool<T>(T data) where T : class;
-
-    public class ObjectItemPool<T> where T : class
+    public class ObjectItemPool
     {
-        private Stack<T> m_Stack = new Stack<T>();
+        private Stack<object> m_Stack = new Stack<object>();
 
-        private CreateItem<T> createItem;
-        private GetItemFromPool<T> getItem;
-        private ReleaseItemToPool<T> releaseItem;
+        private Func<object> createItem;
+        private Action<object> getItem;
+        private Action<object> releaseItem;
 
-        public ObjectItemPool(CreateItem<T> create,GetItemFromPool<T> get,ReleaseItemToPool<T> release,int preloadCount = 0)
+        public ObjectItemPool(Func<object> create, Action<object> get, Action<object> release,int preloadCount = 0)
         {
             createItem = create;
             getItem = get;
@@ -24,15 +21,15 @@ namespace DotEngine.Pool
             {
                 for(int i =0;i<preloadCount;++i)
                 {
-                    T element = createItem();
+                    object element = createItem();
                     m_Stack.Push(element);
                 }
             }
         }
 
-        public T GetItem()
+        public object GetItem()
         {
-            T element = null;
+            object element = null;
             if(m_Stack.Count == 0)
             {
                 element = createItem();
@@ -46,7 +43,7 @@ namespace DotEngine.Pool
             return element;
         }
 
-        public void ReleaseItem(T element)
+        public void ReleaseItem(object element)
         {
             if(element!=null)
             {
@@ -61,12 +58,6 @@ namespace DotEngine.Pool
             createItem = null;
             getItem = null;
             releaseItem = null;
-        }
-
-        private T CreateElement()
-        {
-            T element = createItem.Invoke();
-            return element;
         }
     }
 }

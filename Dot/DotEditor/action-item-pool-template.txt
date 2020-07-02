@@ -1,0 +1,28 @@
+/*
+This file was create by tool.
+Please don't change it by your self.
+*/
+
+using DotEngine.Pool;
+using DotEngine.Timeline.Item;
+<%+using System;%>
+<%+using System.Collections.Generic;%>
+<%string spaceName = context.Get<string>("spaceName");%>
+<%Dictionary<Type, Type> dataToItemTypeDic = context.Get<Dictionary<Type, Type>>("dataToItemTypeDic");%>
+namespace <%=spaceName%>
+{
+    public static class ActionItemPoolRegister
+    {
+        public static void Register()
+        {
+            ActionItemFactory itemFactory = ActionItemFactory.GetInstance();
+<%foreach(var kvp in dataToItemTypeDic){%>
+            itemFactory.RegisterItemPool(typeof(<%=kvp.Key.FullName%>),new ObjectItemPool(()=>{
+                return new <%=kvp.Value.FullName%>();
+            },null,(actionItem)=>{
+                ((ActionItem)actionItem).DoReset();
+            },0));
+<%}%>
+        }
+    }
+}

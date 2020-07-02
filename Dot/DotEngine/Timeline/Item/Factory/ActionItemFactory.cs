@@ -1,12 +1,15 @@
 ﻿using DotEngine.Pool;
+using DotEngine.Timeline.Item.Attr;
+using DotEngine.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace DotEngine.Timeline.Item
 {
     public class ActionItemFactory
     {
-        private Dictionary<Type, ObjectItemPool<ActionItem>> itemPoolDic = new Dictionary<Type, ObjectItemPool<ActionItem>>();
+        private Dictionary<Type, ObjectItemPool> itemPoolDic = new Dictionary<Type, ObjectItemPool>();
 
         private static ActionItemFactory itemFactory = null;
 
@@ -21,7 +24,7 @@ namespace DotEngine.Timeline.Item
             return itemFactory;
         }
 
-        public void RegisterItemPool(Type dataType,ObjectItemPool<ActionItem> itemPool)
+        public void RegisterItemPool(Type dataType,ObjectItemPool itemPool)
         {
             if(!itemPoolDic.ContainsKey(dataType))
             {
@@ -31,9 +34,9 @@ namespace DotEngine.Timeline.Item
 
         public ActionItem RetainItem(Type dataType)
         {
-            if(itemPoolDic.TryGetValue(dataType,out ObjectItemPool<ActionItem> itemPool))
+            if(itemPoolDic.TryGetValue(dataType,out ObjectItemPool itemPool))
             {
-                return itemPool.GetItem();
+                return (ActionItem)itemPool.GetItem();
             }
             return null;
         }
@@ -41,7 +44,7 @@ namespace DotEngine.Timeline.Item
         public void ReleaseItem(ActionItem item)
         {
             Type dataType = item.Data.GetType();
-            if (itemPoolDic.TryGetValue(dataType, out ObjectItemPool<ActionItem> itemPool))
+            if (itemPoolDic.TryGetValue(dataType, out ObjectItemPool itemPool))
             {
                 itemPool.ReleaseItem(item);
             }
@@ -61,6 +64,40 @@ namespace DotEngine.Timeline.Item
             DoClear();
 
             itemFactory = null;
+        }
+
+        public void RegisterItemPoolByReflection()
+        {
+            Type[] itemTypes = AssemblyUtility.GetDerivedTypes(typeof(ActionItem));
+            if (itemTypes == null || itemTypes.Length == 0)
+            {
+                return;
+            }
+
+            Dictionary<Type, Type> dataToItemTypeDic = new Dictionary<Type, Type>();
+            foreach (var itemType in itemTypes)
+            {
+                ActionItemBindDataAttribute attr = itemType.GetCustomAttribute<ActionItemBindDataAttribute>();
+                if (attr == null)
+                {
+                    continue;
+                }
+
+                dataToItemTypeDic.Add(attr.DataType, itemType);
+            }
+
+            foreach(var kvp in dataToItemTypeDic)
+            {
+                ObjectItemPool itemPool = new ObjectItemPool(() =>
+                {
+                    return Activator.CreateInstance(kvp.Value);
+                }, null, (actionItem) =>
+                {
+                    ((ActionItem)actionItem).DoReset();
+                }, 0);
+
+                RegisterItemPool(kvp.Key, itemPool);
+            }
         }
     }
 }

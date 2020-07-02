@@ -70,7 +70,6 @@
     <Compile Include="Asset\AssetPacker\BundleBuildConfig.cs" />
     <Compile Include="Asset\AssetPacker\BundleBuildPipeline.cs" />
     <Compile Include="Asset\AssetPacker\IAssetBundlePacker.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Config\Ini\CreateIniDataContent.cs" />
     <Compile Include="Config\Ini\CreateIniGroupContent.cs" />
     <Compile Include="Config\Ini\IniConfigUtil.cs" />
@@ -159,6 +158,7 @@
     <Compile Include="NativeDrawer\Visible\ShowIfDrawer.cs" />
     <Compile Include="NativeDrawer\Visible\VisibleDrawer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Timeline\ActionItemPoolCreator.cs" />
     <Compile Include="TreeGUI\TreeElement.cs" />
     <Compile Include="TreeGUI\TreeElementUtility.cs" />
     <Compile Include="TreeGUI\TreeModel.cs" />
@@ -177,13 +177,19 @@
     <Compile Include="Utilities\UnityObjectUtility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Context\DotEngine.Context\DotEngine.Context.csproj">
+      <Project>{973BA58F-3FD4-4A7D-AEEE-C9E0F135B12A}</Project>
+      <Name>DotEngine.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotEngine\DotEngine.csproj">
       <Project>{e5179eec-4a25-482f-b2ee-7662f1184687}</Project>
       <Name>DotEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tools\DotTool.ScriptGenerate\DotTool.ScriptGenerate.csproj">
+      <Project>{F710F578-3D80-475E-BB1B-1CBB966C7C13}</Project>
+      <Name>DotTool.ScriptGenerate</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Timeline\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
