@@ -4,9 +4,10 @@ namespace DotEngine.Timeline.Item
 {
     public abstract class ActionItem
     {
-        public TimelineContext Context { get; private set; }
         public ActionData Data { get; private set; }
         public float FireTime { get; private set; }
+
+        protected TimelineContext Context { get; private set; }
 
         protected ActionItem()
         {
@@ -19,6 +20,12 @@ namespace DotEngine.Timeline.Item
             FireTime = actionData.FireTime * timeScale;
         }
 
+        public virtual void DoReset()
+        {
+            Data = null;
+            FireTime = 0.0f;
+            Context = null;
+        }
 
         public T GetData<T>() where T:ActionData
         {

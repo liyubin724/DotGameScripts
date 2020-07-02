@@ -21,5 +21,12 @@ namespace DotEngine.Timeline.Item
         public abstract void DoUpdate(float deltaTime);
         public virtual void DoPause() { }
         public virtual void DoResume() { }
+
+        public override void DoReset()
+        {
+            DurationTime = 0.0f;
+
+            base.DoReset();
+        }
     }
 }

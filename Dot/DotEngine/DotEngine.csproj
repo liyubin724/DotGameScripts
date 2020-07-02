@@ -176,6 +176,7 @@
     <Compile Include="Net\Services\ServerNetService.cs" />
     <Compile Include="Net\Stream\BufferStream.cs" />
     <Compile Include="Net\Stream\MemoryStreamEx.cs" />
+    <Compile Include="Pool\ObjectItemPool.cs" />
     <Compile Include="Pool\ObjectPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialize\BinarySerializeConvert.cs" />
@@ -185,16 +186,16 @@
     <Compile Include="Timeline\Data\Action\ActionData.cs" />
     <Compile Include="Timeline\Data\Action\DurationActionData.cs" />
     <Compile Include="Timeline\Data\Action\EventActionData.cs" />
-    <Compile Include="Timeline\Data\Attr\ActionDataAttributes.cs" />
+    <Compile Include="Timeline\Data\Attr\ActionMenuAttribute.cs" />
+    <Compile Include="Timeline\Data\Attr\ActionNameAttribute.cs" />
     <Compile Include="Timeline\Data\GroupData.cs" />
     <Compile Include="Timeline\Data\IO\GroupHelper.cs" />
     <Compile Include="Timeline\Data\TrackData.cs" />
     <Compile Include="Timeline\Item\Action\ActionItem.cs" />
     <Compile Include="Timeline\Item\Action\DurationActionItem.cs" />
     <Compile Include="Timeline\Item\Action\EventActionItem.cs" />
+    <Compile Include="Timeline\Item\Attr\ActionItemBindDataAttribute.cs" />
     <Compile Include="Timeline\Item\Factory\ActionItemFactory.cs" />
-    <Compile Include="Timeline\Item\Factory\IActionItemFactory.cs" />
-    <Compile Include="Timeline\Item\Factory\IActionItemPool.cs" />
     <Compile Include="Timeline\Item\Group.cs" />
     <Compile Include="Timeline\Item\Track.cs" />
     <Compile Include="Timeline\TimelineConst.cs" />

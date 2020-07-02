@@ -1,4 +1,5 @@
-﻿using DotEngine.Timeline.Data;
+﻿using DotEngine.Log;
+using DotEngine.Timeline.Data;
 using System.Collections.Generic;
 
 namespace DotEngine.Timeline.Item
@@ -10,7 +11,7 @@ namespace DotEngine.Timeline.Item
 
         private float elapsedTime = 0.0f;
         private TimelineContext context = null;
-        private IActionItemFactory itemFactory = null;
+        private ActionItemFactory itemFactory = null;
 
         public Track(TimelineContext context)
         {
@@ -19,22 +20,25 @@ namespace DotEngine.Timeline.Item
 
         public void SetData(TrackData trackData, float timeScale = 1.0f)
         {
-            itemFactory = context.Get<IActionItemFactory>();
+            itemFactory = context.Get<ActionItemFactory>();
 
             for (int i = 0; i < trackData.Actions.Count; ++i)
             {
                 ActionData actionData = trackData.Actions[i];
-                if (actionData.Platform == ActionPlatform.All || actionData.Platform == ActionPlatform.Client)
+                if(actionData.Platform == ActionPlatform.Server)
                 {
-                    ActionItem actionItem = itemFactory.RetainItem(actionData);
-                    if (actionItem == null)
-                    {
-                        continue;
-                    }
-                    actionItem.SetData(context, actionData, timeScale);
-
-                    actionItems.Add(actionItem);
+                    continue;
                 }
+
+                ActionItem actionItem = itemFactory.RetainItem(actionData.GetType());
+                if (actionItem == null)
+                {
+                    LogUtil.LogError(TimelineConst.LOGGER_NAME, $"Track::SetData->Item is not found.dataType = {actionData.GetType().FullName}");
+                    continue;
+                }
+                actionItem.SetData(context, actionData, timeScale);
+
+                actionItems.Add(actionItem);
             }
         }
 
