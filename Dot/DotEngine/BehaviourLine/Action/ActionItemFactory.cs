@@ -1,11 +1,10 @@
 ﻿using DotEngine.Pool;
-using DotEngine.Timeline.Item.Attr;
 using DotEngine.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace DotEngine.Timeline.Item
+namespace DotEngine.BehaviourLine.Action
 {
     public class ActionItemFactory
     {
@@ -24,9 +23,9 @@ namespace DotEngine.Timeline.Item
             return itemFactory;
         }
 
-        public void RegisterItemPool(Type dataType,ObjectItemPool itemPool)
+        public void RegisterItemPool(Type dataType, ObjectItemPool itemPool)
         {
-            if(!itemPoolDic.ContainsKey(dataType))
+            if (!itemPoolDic.ContainsKey(dataType))
             {
                 itemPoolDic.Add(dataType, itemPool);
             }
@@ -34,7 +33,7 @@ namespace DotEngine.Timeline.Item
 
         public ActionItem RetainItem(Type dataType)
         {
-            if(itemPoolDic.TryGetValue(dataType,out ObjectItemPool itemPool))
+            if (itemPoolDic.TryGetValue(dataType, out ObjectItemPool itemPool))
             {
                 return (ActionItem)itemPool.GetItem();
             }
@@ -52,7 +51,7 @@ namespace DotEngine.Timeline.Item
 
         public void DoClear()
         {
-            foreach(var kvp in itemPoolDic)
+            foreach (var kvp in itemPoolDic)
             {
                 kvp.Value.Clear();
             }
@@ -86,7 +85,7 @@ namespace DotEngine.Timeline.Item
                 dataToItemTypeDic.Add(attr.DataType, itemType);
             }
 
-            foreach(var kvp in dataToItemTypeDic)
+            foreach (var kvp in dataToItemTypeDic)
             {
                 ObjectItemPool itemPool = new ObjectItemPool(() =>
                 {

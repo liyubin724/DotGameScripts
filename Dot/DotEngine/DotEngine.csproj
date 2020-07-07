@@ -86,6 +86,24 @@
     <Compile Include="Asset\SceneLoader\ASceneLoader.cs" />
     <Compile Include="Asset\SceneLoader\SceneHandler.cs" />
     <Compile Include="Asset\SceneLoader\SceneLoaderData.cs" />
+    <Compile Include="BehaviourLine\Action\ActionItemFactory.cs" />
+    <Compile Include="BehaviourLine\Action\ActionPlatform.cs" />
+    <Compile Include="BehaviourLine\Action\Attr\ActionItemBindDataAttribute.cs" />
+    <Compile Include="BehaviourLine\Action\Attr\ActionMenuAttribute.cs" />
+    <Compile Include="BehaviourLine\Action\Attr\ActionNameAttribute.cs" />
+    <Compile Include="BehaviourLine\Action\Data\ActionData.cs" />
+    <Compile Include="BehaviourLine\Action\Data\DurationActionData.cs" />
+    <Compile Include="BehaviourLine\Action\Data\EventActionData.cs" />
+    <Compile Include="BehaviourLine\Action\Item\ActionItem.cs" />
+    <Compile Include="BehaviourLine\Action\Item\DurationActionItem.cs" />
+    <Compile Include="BehaviourLine\Action\Item\EventActionItem.cs" />
+    <Compile Include="BehaviourLine\Condition\ConditionData.cs" />
+    <Compile Include="BehaviourLine\LineConst.cs" />
+    <Compile Include="BehaviourLine\LineContext.cs" />
+    <Compile Include="BehaviourLine\Line\Timeline.cs" />
+    <Compile Include="BehaviourLine\Line\TimelineData.cs" />
+    <Compile Include="BehaviourLine\Track\Trackline.cs" />
+    <Compile Include="BehaviourLine\Track\TracklineData.cs" />
     <Compile Include="Config\IniConfigService.cs" />
     <Compile Include="Config\Ini\IniConfig.cs" />
     <Compile Include="Config\NDBService.cs" />
@@ -183,25 +201,6 @@
     <Compile Include="Serialize\LuaSerializeWriter.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
-    <Compile Include="Timeline\Data\Action\ActionData.cs" />
-    <Compile Include="Timeline\Data\Action\ActionPlatform.cs" />
-    <Compile Include="Timeline\Data\Action\ActionUtil.cs" />
-    <Compile Include="Timeline\Data\Action\DurationActionData.cs" />
-    <Compile Include="Timeline\Data\Action\EventActionData.cs" />
-    <Compile Include="Timeline\Data\Attr\ActionMenuAttribute.cs" />
-    <Compile Include="Timeline\Data\Attr\ActionNameAttribute.cs" />
-    <Compile Include="Timeline\Data\GroupData.cs" />
-    <Compile Include="Timeline\Data\TrackData.cs" />
-    <Compile Include="Timeline\Item\Action\ActionItem.cs" />
-    <Compile Include="Timeline\Item\Action\DurationActionItem.cs" />
-    <Compile Include="Timeline\Item\Action\EventActionItem.cs" />
-    <Compile Include="Timeline\Item\Attr\ActionItemBindDataAttribute.cs" />
-    <Compile Include="Timeline\Item\Factory\ActionItemFactory.cs" />
-    <Compile Include="Timeline\Item\Group.cs" />
-    <Compile Include="Timeline\Item\Track.cs" />
-    <Compile Include="Timeline\TimelineConst.cs" />
-    <Compile Include="Timeline\TimelineContext.cs" />
-    <Compile Include="Timeline\TimelineException.cs" />
     <Compile Include="Timer\HierarchicalTimerWheel.cs" />
     <Compile Include="Timer\TimerManager.cs" />
     <Compile Include="Timer\TimerService.cs" />
@@ -240,7 +239,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BehaviourLine\" />
     <Folder Include="Net\Depends\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

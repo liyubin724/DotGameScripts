@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DotEngine.Timeline.Item.Attr
+namespace DotEngine.BehaviourLine.Action
 {
-    [AttributeUsage(AttributeTargets.Class,AllowMultiple =false,Inherited =false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ActionItemBindDataAttribute : Attribute
     {
         public Type DataType { get; set; }

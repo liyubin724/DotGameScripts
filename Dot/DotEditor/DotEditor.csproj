@@ -158,11 +158,7 @@
     <Compile Include="NativeDrawer\Visible\ShowIfDrawer.cs" />
     <Compile Include="NativeDrawer\Visible\VisibleDrawer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timeline\ActionDataDrawer.cs" />
-    <Compile Include="Timeline\ActionItemPoolCreator.cs" />
-    <Compile Include="Timeline\DrawerConfig.cs" />
-    <Compile Include="Timeline\GroupDrawer.cs" />
-    <Compile Include="Timeline\TrackDrawer.cs" />
+    <Compile Include="BehaviourLine\ActionItemPoolCreator.cs" />
     <Compile Include="TreeGUI\TreeElement.cs" />
     <Compile Include="TreeGUI\TreeElementUtility.cs" />
     <Compile Include="TreeGUI\TreeModel.cs" />

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEditor.Timeline
+namespace DotEngine.BehaviourLine.Condition
 {
-    public class TrackDrawer
+    public class ConditionData
     {
     }
+
 }

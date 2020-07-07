@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotEngine.Timeline.Data
+namespace DotEngine.BehaviourLine.Action
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ActionMenuAttribute : Attribute

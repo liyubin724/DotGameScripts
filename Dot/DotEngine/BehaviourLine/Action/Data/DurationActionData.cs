@@ -1,4 +1,4 @@
-﻿namespace DotEngine.Timeline.Data
+﻿namespace DotEngine.BehaviourLine.Action
 {
     public abstract class DurationActionData : ActionData
     {

@@ -1,6 +1,5 @@
-﻿using DotEngine.Context;
-using DotEngine.Timeline.Item;
-using DotEngine.Timeline.Item.Attr;
+﻿using DotEngine.BehaviourLine.Action;
+using DotEngine.Context;
 using DotEngine.Utilities;
 using DotTool.ScriptGenerate;
 using System;
@@ -10,11 +9,11 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.Timeline
+namespace DotEditor.BehaviourLine
 {
     public class ActionItemPoolCreator
     {
-        [MenuItem("Game/Timeline/Create Item Pool")]
+        [MenuItem("Game/Behaviour Line/Create Item Pool")]
         public static void Create()
         {
             string spaceName = "Game.Timeline";

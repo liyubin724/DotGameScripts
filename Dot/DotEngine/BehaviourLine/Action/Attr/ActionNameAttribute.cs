@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotEngine.Timeline.Data
+namespace DotEngine.BehaviourLine.Action
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ActionNameAttribute : Attribute
@@ -8,6 +8,9 @@ namespace DotEngine.Timeline.Data
         public string BriefName { get; set; } = string.Empty;
         public string DetailName { get; set; } = string.Empty;
 
-        public ActionNameAttribute() { }
+        public ActionNameAttribute()
+        {
+
+        }
     }
 }

@@ -1,43 +1,45 @@
-﻿using DotEngine.Log;
-using DotEngine.Timeline.Data;
+﻿using DotEngine.BehaviourLine.Action;
 using System.Collections.Generic;
 
-namespace DotEngine.Timeline.Item
+namespace DotEngine.BehaviourLine.Track
 {
-    public class Track
+    public class Trackline
     {
         private List<ActionItem> actionItems = new List<ActionItem>();
         private List<DurationActionItem> runningItems = new List<DurationActionItem>();
 
         private float elapsedTime = 0.0f;
-        private TimelineContext context = null;
+
+        private LineContext context = null;
+        private TracklineData data = null;
         private ActionItemFactory itemFactory = null;
 
-        public Track(TimelineContext context)
+        public Trackline()
         {
-            this.context = context;
         }
 
-        public void SetData(TrackData trackData, float timeScale = 1.0f)
+        public void SetData(LineContext context,TracklineData data,float timeScale)
         {
+            this.context = context;
+            this.data = data;
+
             itemFactory = context.Get<ActionItemFactory>();
 
-            for (int i = 0; i < trackData.Actions.Count; ++i)
+            for(int i =0;i<data.Actions.Count;++i)
             {
-                ActionData actionData = trackData.Actions[i];
-                if(actionData.Platform == ActionPlatform.Server)
+                ActionData actionData = data.Actions[i];
+                if( actionData == null || actionData.Platform == ActionPlatform.Server)
                 {
                     continue;
                 }
 
                 ActionItem actionItem = itemFactory.RetainItem(actionData.GetType());
-                if (actionItem == null)
+                if(actionItem == null)
                 {
-                    LogUtil.LogError(TimelineConst.LOGGER_NAME, $"Track::SetData->Item is not found.dataType = {actionData.GetType().FullName}");
                     continue;
                 }
-                actionItem.SetData(context, actionData, timeScale);
 
+                actionItem.SetData(context, actionData, timeScale);
                 actionItems.Add(actionItem);
             }
         }
@@ -54,19 +56,21 @@ namespace DotEngine.Timeline.Item
             while (actionItems.Count > 0)
             {
                 ActionItem actionItem = actionItems[0];
-                if (actionItem.FireTime <= elapsedTime)
+                if (actionItem.RealFireTime <= elapsedTime)
                 {
                     if (actionItem is DurationActionItem durationActionItem)
                     {
                         durationActionItem.DoEnter();
                         runningItems.Add(durationActionItem);
-                    } else if (actionItem is EventActionItem eventActionItem)
+                    }
+                    else if (actionItem is EventActionItem eventActionItem)
                     {
-                        eventActionItem.Trigger();
+                        eventActionItem.DoTrigger();
                         itemFactory.ReleaseItem(eventActionItem);
                     }
                     actionItems.RemoveAt(0);
-                } else
+                }
+                else
                 {
                     break;
                 }
@@ -79,7 +83,7 @@ namespace DotEngine.Timeline.Item
                     DurationActionItem durationActionItem = runningItems[i];
                     durationActionItem.DoUpdate(deltaTime);
 
-                    if (durationActionItem.EndTime <= elapsedTime)
+                    if (durationActionItem.RealEndTime <= elapsedTime)
                     {
                         durationActionItem.DoExit();
 
@@ -94,30 +98,6 @@ namespace DotEngine.Timeline.Item
             }
         }
 
-        public void DoDestroy()
-        {
-            for(int i = runningItems.Count-1;i>=0;--i)
-            {
-                var item = runningItems[0];
-                item.DoExit();
-
-                itemFactory.ReleaseItem(item);
-            }
-            runningItems.Clear();
-
-            for(int i = actionItems.Count-1;i>=0;--i)
-            {
-                var item = actionItems[i];
-
-                itemFactory.ReleaseItem(item);
-            }
-            actionItems.Clear();
-
-            elapsedTime = 0.0f;
-            itemFactory = null;
-            context = null;
-        }
-
         public void DoPause()
         {
             foreach (var item in runningItems)
@@ -128,11 +108,35 @@ namespace DotEngine.Timeline.Item
 
         public void DoResume()
         {
-            foreach(var item in runningItems)
+            foreach (var item in runningItems)
             {
                 item.DoResume();
             }
         }
 
+        public void DoDestroy()
+        {
+            for (int i = runningItems.Count - 1; i >= 0; --i)
+            {
+                var item = runningItems[0];
+                item.DoExit();
+
+                itemFactory.ReleaseItem(item);
+            }
+            runningItems.Clear();
+
+            for (int i = actionItems.Count - 1; i >= 0; --i)
+            {
+                var item = actionItems[i];
+
+                itemFactory.ReleaseItem(item);
+            }
+            actionItems.Clear();
+
+            context = null;
+            data = null;
+            elapsedTime = 0.0f;
+            itemFactory = null;
+        }
     }
 }

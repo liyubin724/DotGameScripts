@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotEditor.Timeline
+namespace DotEngine.BehaviourLine
 {
-    public class GroupDrawer
+    public static class LineConst
     {
+        public const string LOGGER_NAME = "BehaviourLine";
     }
 }
