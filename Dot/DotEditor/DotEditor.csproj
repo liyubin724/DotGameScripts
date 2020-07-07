@@ -70,6 +70,12 @@
     <Compile Include="Asset\AssetPacker\BundleBuildConfig.cs" />
     <Compile Include="Asset\AssetPacker\BundleBuildPipeline.cs" />
     <Compile Include="Asset\AssetPacker\IAssetBundlePacker.cs" />
+    <Compile Include="BehaviourLine\ActionDrawer.cs" />
+    <Compile Include="BehaviourLine\ActionMenu.cs" />
+    <Compile Include="BehaviourLine\LineSetting.cs" />
+    <Compile Include="BehaviourLine\LineSettingWindow.cs" />
+    <Compile Include="BehaviourLine\TimelineDrawer.cs" />
+    <Compile Include="BehaviourLine\TracklineDrawer.cs" />
     <Compile Include="Config\Ini\CreateIniDataContent.cs" />
     <Compile Include="Config\Ini\CreateIniGroupContent.cs" />
     <Compile Include="Config\Ini\IniConfigUtil.cs" />

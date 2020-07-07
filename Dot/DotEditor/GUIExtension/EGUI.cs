@@ -41,9 +41,11 @@ namespace DotEditor.GUIExtension
             DrawVerticalLine(rect, EGUIResources.gray);
         }
 
-        public static void DrawVerticalLine(Rect rect, Color color, float thickness = 0.75f, float padding = 6.0f )
+        public static void DrawVerticalLine(Rect rect, Color color, float thickness = 0.75f)
         {
-            rect.x += padding * 0.5f;
+            float padding = (rect.width - thickness) * 0.5f;
+            padding = Mathf.Max(padding, 0.0f);
+            rect.x += padding;
             rect.width = thickness;
             EditorGUI.DrawRect(rect, color);
         }

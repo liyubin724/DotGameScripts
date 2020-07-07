@@ -29,7 +29,7 @@ namespace DotEditor.GUIExtension
         public static void DrawVerticalLine(Color color,float thickness = 0.75f, float padding = 6.0f )
         {
             Rect rect = EditorGUILayout.GetControlRect(UnityEngine.GUILayout.Width(padding + thickness), UnityEngine.GUILayout.ExpandHeight(true));
-            EGUI.DrawVerticalLine(rect, color,thickness, padding);
+            EGUI.DrawVerticalLine(rect, color,thickness);
         }
 
         #endregion
