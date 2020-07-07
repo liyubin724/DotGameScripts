@@ -184,12 +184,13 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="SingletonBehaviour.cs" />
     <Compile Include="Timeline\Data\Action\ActionData.cs" />
+    <Compile Include="Timeline\Data\Action\ActionPlatform.cs" />
+    <Compile Include="Timeline\Data\Action\ActionUtil.cs" />
     <Compile Include="Timeline\Data\Action\DurationActionData.cs" />
     <Compile Include="Timeline\Data\Action\EventActionData.cs" />
     <Compile Include="Timeline\Data\Attr\ActionMenuAttribute.cs" />
     <Compile Include="Timeline\Data\Attr\ActionNameAttribute.cs" />
     <Compile Include="Timeline\Data\GroupData.cs" />
-    <Compile Include="Timeline\Data\IO\GroupHelper.cs" />
     <Compile Include="Timeline\Data\TrackData.cs" />
     <Compile Include="Timeline\Item\Action\ActionItem.cs" />
     <Compile Include="Timeline\Item\Action\DurationActionItem.cs" />
@@ -239,6 +240,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BehaviourLine\" />
     <Folder Include="Net\Depends\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

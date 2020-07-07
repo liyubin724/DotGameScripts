@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotEngine.Timeline.Data.Attr
+namespace DotEngine.Timeline.Data
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ActionNameAttribute : Attribute

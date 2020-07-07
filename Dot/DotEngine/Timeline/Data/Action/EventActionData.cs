@@ -1,6 +1,6 @@
 ﻿namespace DotEngine.Timeline.Data
 {
-    public class EventActionData : ActionData
+    public abstract class EventActionData : ActionData
     {
     }
 }

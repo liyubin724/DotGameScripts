@@ -8,7 +8,6 @@ namespace DotEngine.Timeline.Item
         public float FireTime { get; private set; }
 
         protected TimelineContext Context { get; private set; }
-
         protected ActionItem()
         {
         }
