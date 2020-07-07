@@ -179,6 +179,9 @@ namespace DotEditor.BehaviourLine
         private void DrawTrackDrag(Rect dragRect)
         {
             EGUI.DrawVerticalLine(dragRect, Color.grey, 2.0f);
+
+            EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
+
             if (Event.current!=null)
             {
                 if(Event.current.type == EventType.MouseDown && Event.current.button == 0 && dragRect.Contains(Event.current.mousePosition))
@@ -346,6 +349,9 @@ namespace DotEditor.BehaviourLine
         private void DrawPropertyDrag(Rect dragRect)
         {
             EGUI.DrawVerticalLine(dragRect,Color.grey,2.0f);
+
+            EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
+
             if (Event.current != null)
             {
                 if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && dragRect.Contains(Event.current.mousePosition))
