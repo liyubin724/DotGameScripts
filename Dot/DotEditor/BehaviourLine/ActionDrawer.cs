@@ -113,6 +113,9 @@ namespace DotEditor.BehaviourLine
             {
                 EGUI.DrawAreaLine(leftRect, Color.yellow);
                 EGUI.DrawAreaLine(rightRect, Color.yellow);
+
+                EditorGUIUtility.AddCursorRect(leftRect, MouseCursor.ResizeHorizontal);
+                EditorGUIUtility.AddCursorRect(rightRect, MouseCursor.ResizeHorizontal);
             }
 
             int eventBtn = Event.current.button;
