@@ -223,18 +223,14 @@ namespace DotEditor.BehaviourLine
 
         public void OnDrawProperty(Rect rect)
         {
-            GUILayout.BeginArea(rect);
+            if (!string.IsNullOrEmpty(DetailName))
             {
-                if(!string.IsNullOrEmpty(DetailName))
-                {
-                    EditorGUILayout.LabelField(DetailName, EditorStyles.wordWrappedLabel);
-                }
-                Type actionType = Data.GetType();
-                EditorGUILayout.LabelField(actionType.Name);
-
-                dataDrawerObject.OnGUILayout();
+                EditorGUILayout.LabelField(DetailName, EditorStyles.wordWrappedLabel);
             }
-            GUILayout.EndArea();
+            Type actionType = Data.GetType();
+            EditorGUILayout.LabelField(actionType.Name);
+
+            dataDrawerObject.OnGUILayout();
         }
 
     }

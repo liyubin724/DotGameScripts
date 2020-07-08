@@ -1,6 +1,7 @@
 ﻿using DotEngine.BehaviourLine.Action;
 using DotEngine.BehaviourLine.Track;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.BehaviourLine
@@ -100,7 +101,14 @@ namespace DotEditor.BehaviourLine
 
         public void OnDrawProperty(Rect rect)
         {
+            Data.Name = EditorGUILayout.TextField("Name", Data.Name);
 
+            EditorGUILayout.Space();
+
+            if(selectedActionIndex>=0)
+            {
+                actionDrawers[selectedActionIndex].OnDrawProperty(rect);
+            }
         }
 
         internal void OnActionDelete(ActionDrawer actionDrawer)

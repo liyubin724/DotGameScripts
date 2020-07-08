@@ -95,6 +95,11 @@ namespace DotEditor.BehaviourLine
             {
                 DrawLine(lineRect);
             }
+
+            if(GUI.changed)
+            {
+                Window.Repaint();
+            }
         }
 
         private void DrawToolbar(Rect toolbarRect)
@@ -384,11 +389,19 @@ namespace DotEditor.BehaviourLine
             Rect titleRect = new Rect(propertyRect.x, propertyRect.y, propertyRect.width, TRACK_TITLE_HEIGHT);
             EditorGUI.LabelField(titleRect, "Property", EditorStyles.toolbar);
 
-            Rect clipRect = new Rect(propertyRect.x, propertyRect.y + TRACK_TITLE_HEIGHT, propertyRect.width, propertyRect.height - TRACK_TITLE_HEIGHT);
-            using (new GUI.ClipScope(clipRect))
+            Rect contentRect = new Rect(propertyRect.x, propertyRect.y + TRACK_TITLE_HEIGHT, propertyRect.width, propertyRect.height - TRACK_TITLE_HEIGHT);
+            GUILayout.BeginArea(contentRect);
             {
+                Data.TimeLength = EditorGUILayout.FloatField("Time Length", Data.TimeLength);
 
+                EditorGUILayout.Space();
+
+                if(selectedTrackIndex >= 0)
+                {
+                    trackDrawers[selectedTrackIndex].OnDrawProperty(contentRect);
+                }
             }
+            GUILayout.EndArea();
         }
 
         internal void OnTrackSelected(TracklineDrawer tracklineDrawer)
