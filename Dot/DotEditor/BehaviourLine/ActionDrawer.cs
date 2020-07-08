@@ -108,39 +108,43 @@ namespace DotEditor.BehaviourLine
             }
             GUI.Label(itemRect, BriefName, IsSelected ? "flow node 6" : "flow node 5");
 
+            int eventBtn = Event.current.button;
+            EventType eventType = Event.current.type;
+            bool isContains = itemRect.Contains(Event.current.mousePosition);
+
             Rect leftRect = new Rect(itemRect.x, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
             Rect rightRect = new Rect(itemRect.x + itemRect.width - MIN_ACTION_WIDTH * 0.5f, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
-            if(durationActionData != null)
+
+            bool isInLeftRect = false;
+            bool isInRightRect = false;
+
+            if (durationActionData != null && !durationActionData.IsFixedDurationTime)
             {
                 EGUI.DrawAreaLine(leftRect, Color.yellow);
                 EGUI.DrawAreaLine(rightRect, Color.yellow);
 
                 EditorGUIUtility.AddCursorRect(leftRect, MouseCursor.ResizeHorizontal);
                 EditorGUIUtility.AddCursorRect(rightRect, MouseCursor.ResizeHorizontal);
+
+                isInLeftRect = leftRect.Contains(Event.current.mousePosition);
+                isInRightRect = rightRect.Contains(Event.current.mousePosition);
             }
 
-            int eventBtn = Event.current.button;
-            EventType eventType = Event.current.type;
-            bool isContains = itemRect.Contains(Event.current.mousePosition);
-
-            if(eventBtn == 0)
+            if (eventBtn == 0)
             {
                 if(eventType == EventType.MouseDown && isContains)
                 {
                     if(durationActionData != null)
                     {
-                        if(leftRect.Contains(Event.current.mousePosition))
+                        if(isInLeftRect)
                         {
                             dragType = ActionDragType.ItemLeft;
+                        }else if(isInRightRect)
+                        {
+                            dragType = ActionDragType.ItemRight;
                         }else
                         {
-                            if(rightRect.Contains(Event.current.mousePosition))
-                            {
-                                dragType = ActionDragType.ItemRight;
-                            }else
-                            {
-                                dragType = ActionDragType.Item;
-                            }
+                            dragType = ActionDragType.Item;
                         }
                     }else
                     {
