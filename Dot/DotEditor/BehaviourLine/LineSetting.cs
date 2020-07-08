@@ -76,6 +76,8 @@ namespace DotEditor.BehaviourLine
         public float ScrollPosX { get => ScrollPos.x; }
         public float ScrollPosY { get => ScrollPos.y; }
 
+        public string CopiedActionData = string.Empty;
+
         public int MaxActionIndex = 0;
         public int GetActionIndex()
         {

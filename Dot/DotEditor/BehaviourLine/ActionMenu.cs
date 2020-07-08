@@ -1,6 +1,8 @@
 ﻿using DotEngine.BehaviourLine.Action;
 using DotEngine.Utilities;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -9,47 +11,54 @@ namespace DotEditor.BehaviourLine
 {
     public class ActionMenu
     {
-        private GenericMenu menu = null;
-        private Action<ActionData> createdCallback = null;
-        
-        public ActionMenu()
+        private static Dictionary<string, Type> actionTypeDic = null;
+        public static void ShowMenu(Action<ActionData> callback)
         {
-        }
-
-        public void ShowMenu(Action<ActionData> callback)
-        {
-            createdCallback = callback;
-
-            if(menu == null)
+            if(actionTypeDic == null)
             {
-                menu = new GenericMenu();
-                CreateMenuItem();
+                actionTypeDic = new Dictionary<string, Type>();
+
+                Type[] dataTypes = AssemblyUtility.GetDerivedTypes(typeof(ActionData));
+                if(dataTypes!=null && dataTypes.Length>0)
+                {
+                    foreach(var type in dataTypes)
+                    {
+                        ActionMenuAttribute attr = type.GetCustomAttribute<ActionMenuAttribute>();
+                        if (attr == null)
+                        {
+                            continue;
+                        }
+                        actionTypeDic.Add($"{attr.Prefix}/{attr.Name}", type);
+                    }
+                }
             }
-
-            menu.ShowAsContext();
-        }
-
-        private void CreateMenuItem()
-        {
-            Type[] dataTypes = AssemblyUtility.GetDerivedTypes(typeof(ActionData));
-            if(dataTypes == null || dataTypes.Length == 0)
+            if(actionTypeDic.Count == 0)
             {
                 return;
             }
 
-            foreach(var dataType in dataTypes)
+            GenericMenu menu = new GenericMenu();
+            if(!string.IsNullOrEmpty(LineSetting.Setting.CopiedActionData))
             {
-                ActionMenuAttribute attr = dataType.GetCustomAttribute<ActionMenuAttribute>();
-                if(attr == null)
+                ActionData data = (ActionData)JsonConvert.DeserializeObject(LineSetting.Setting.CopiedActionData, new JsonSerializerSettings()
                 {
-                    continue;
-                }
-                menu.AddItem(new GUIContent($"{attr.Prefix}/{attr.Name}"),false,()=>
+                    TypeNameHandling = TypeNameHandling.All,
+                });
+                menu.AddItem(new GUIContent($"Paste({data.GetType().Name})"), false, () =>
                 {
-                    createdCallback?.Invoke((ActionData)Activator.CreateInstance(dataType));
+                    callback.Invoke(data);
+                });
+                menu.AddSeparator("");
+            }
+
+            foreach(var kvp in actionTypeDic)
+            {
+                menu.AddItem(new GUIContent(kvp.Key), false, () =>
+                {
+                    callback.Invoke((ActionData)Activator.CreateInstance(kvp.Value));
                 });
             }
+            menu.ShowAsContext();
         }
-
     }
 }

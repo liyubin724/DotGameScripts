@@ -32,6 +32,10 @@ namespace DotEditor.BehaviourLine
                 EditorGUILayout.FloatField("Time Step Width", setting.TimeStepWidth);
                 EditorGUILayout.Vector2Field("Scroll Pos", setting.ScrollPos);
                 EditorGUILayout.IntField("Max Action Index", setting.MaxActionIndex);
+                if(!string.IsNullOrEmpty(setting.CopiedActionData))
+                {
+                    EditorGUILayout.TextField("Copied Action", setting.CopiedActionData, EditorStyles.wordWrappedLabel, GUILayout.Height(60));
+                }
             }
             EditorGUI.EndDisabledGroup();
 

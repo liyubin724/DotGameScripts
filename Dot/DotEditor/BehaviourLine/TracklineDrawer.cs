@@ -13,7 +13,6 @@ namespace DotEditor.BehaviourLine
 
         private int index = 0;
         private List<ActionDrawer> actionDrawers = new List<ActionDrawer>();
-        private ActionMenu actionMenu = null;
 
         private int selectedActionIndex = -1;
         private bool isSelected = false;
@@ -46,7 +45,6 @@ namespace DotEditor.BehaviourLine
         public TracklineDrawer(TimelineDrawer drawer)
         {
             ParentDrawer = drawer;
-            actionMenu = new ActionMenu();
         }
 
         public void SetData(int index,TracklineData data)
@@ -85,7 +83,7 @@ namespace DotEditor.BehaviourLine
                 }else if (eventBtn == 1)
                 {
                     LineSetting setting = LineSetting.Setting;
-                    actionMenu.ShowMenu((actionData) =>
+                    ActionMenu.ShowMenu((actionData) =>
                     {
                         float fireTime = (mPos.x + setting.ScrollPosX) / setting.WidthForSecond;
                         actionData.Index = setting.GetActionIndex();

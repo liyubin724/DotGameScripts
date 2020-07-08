@@ -1,8 +1,10 @@
 ﻿using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer;
 using DotEngine.BehaviourLine.Action;
+using Newtonsoft.Json;
 using System;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters;
 using UnityEditor;
 using UnityEngine;
 
@@ -206,9 +208,11 @@ namespace DotEditor.BehaviourLine
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Copy"), false, () =>
                 {
-                    ActionData data = Data.Copy();
-                    data.Index = setting.GetActionIndex();
-                    ParentDrawer.OnActionAdded(data);
+                    string actionJson = JsonConvert.SerializeObject(Data, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.All,
+                    });
+                    setting.CopiedActionData = actionJson;
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Delete"), false, () =>
