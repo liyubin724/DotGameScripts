@@ -1,10 +1,13 @@
 ﻿using DotEngine.BehaviourLine.Action;
+using DotEngine.BehaviourLine.Line;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Reflection;
 
 namespace DotEditor.BehaviourLine
 {
-    public static class ActionUtil
+    public static class LineUtil
     {
         public static ActionData Copy(this ActionData fromAction)
         {
@@ -24,6 +27,18 @@ namespace DotEditor.BehaviourLine
             }
 
             return data;
+        }
+
+        public static void SaveToJsonFile(TimelineData data,string filePath)
+        {
+            string jsonStr = JsonConvert.SerializeObject(data, Formatting.Indented);
+            File.WriteAllText(filePath, jsonStr);
+        }
+
+        public static TimelineData ReadFromJsonFile(string filePath)
+        {
+            string jsonStr = File.ReadAllText(filePath);
+            return (TimelineData)JsonConvert.DeserializeObject(jsonStr);
         }
     }
 }

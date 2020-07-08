@@ -1,6 +1,8 @@
 ﻿using DotEditor.GUIExtension;
 using DotEngine.BehaviourLine.Line;
+using ReflectionMagic;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +38,7 @@ namespace DotEditor.BehaviourLine
         private bool isPropertyDragging = false;
 
         private int selectedTrackIndex = -1;
+        private string dataFilePath = null;
 
         public TimelineDrawer(EditorWindow win,string titleName = null)
         {
@@ -63,6 +66,9 @@ namespace DotEditor.BehaviourLine
                 }
             }
             setting.MaxActionIndex = maxActionIndex;
+
+            trackDrawers.Clear();
+            selectedTrackIndex = -1;
 
             for(int i =0;i<data.Tracks.Count;++i)
             {
@@ -106,6 +112,41 @@ namespace DotEditor.BehaviourLine
         {
             EditorGUI.LabelField(toolbarRect, GUIContent.none, EditorStyles.toolbar);
             EditorGUI.LabelField(toolbarRect, titleName, Styles.titleStyle);
+
+            Rect createRect = new Rect(toolbarRect.x, toolbarRect.y, 60, toolbarRect.height);
+            if(GUI.Button(createRect,Contents.createContent,EditorStyles.toolbarButton))
+            {
+                dataFilePath = null;
+                SetData(new TimelineData());
+                
+                Window.Repaint();
+            }
+            Rect saveRect = createRect;
+            saveRect.x += createRect.width;
+            if (GUI.Button(saveRect, Contents.saveContent, EditorStyles.toolbarButton))
+            {
+                if(string.IsNullOrEmpty(dataFilePath))
+                {
+                    EditorUtility.DisplayDialog("Warning", "The Config is new ,plz use saveto.", "OK");
+                }else
+                {
+                    LineUtil.SaveToJsonFile(Data, dataFilePath);
+                }
+            }
+
+            Rect saveToRect = saveRect;
+            saveToRect.x += saveRect.width;
+            if(GUI.Button(saveToRect,Contents.saveToContent,EditorStyles.toolbarButton))
+            {
+                string dir = string.IsNullOrEmpty(dataFilePath) ? "" : Path.GetDirectoryName(dataFilePath);
+                string fileName = string.IsNullOrEmpty(dataFilePath) ? "timelinedata" : Path.GetFileNameWithoutExtension(dataFilePath);
+                string filePath = EditorUtility.SaveFilePanel("Save to", dir, fileName, ".json");
+                if(!string.IsNullOrEmpty(filePath))
+                {
+                    LineUtil.SaveToJsonFile(Data, dataFilePath);
+                }
+            }
+
 
             Rect helpBtnRect = new Rect(toolbarRect.x + toolbarRect.width - 30, toolbarRect.y, 30, toolbarRect.height);
             if(GUI.Button(helpBtnRect,Contents.helpContent,EditorStyles.toolbarButton))
@@ -421,6 +462,10 @@ namespace DotEditor.BehaviourLine
 
         class Contents
         {
+            public static GUIContent createContent = new GUIContent("Create","Create New");
+            public static GUIContent saveContent = new GUIContent("Save", "Save");
+            public static GUIContent saveToContent = new GUIContent("Save To", "Save To");
+
             public static GUIContent helpContent = new GUIContent("?","Show help");
             public static GUIContent settingContent = new GUIContent("S", "Open Setting Window");
             public static GUIContent zoomInContent = new GUIContent("+", "Zoom in");
