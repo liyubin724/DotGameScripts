@@ -1,10 +1,6 @@
 ﻿using DotEngine.BehaviourLine.Action;
 using DotEngine.BehaviourLine.Track;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace DotEditor.BehaviourLine
@@ -18,6 +14,7 @@ namespace DotEditor.BehaviourLine
         private List<ActionDrawer> actionDrawers = new List<ActionDrawer>();
         private ActionMenu actionMenu = null;
 
+        private int selectedActionIndex = -1;
         private bool isSelected = false;
         public bool IsSelected
         {
@@ -32,10 +29,14 @@ namespace DotEditor.BehaviourLine
                     isSelected = value;
                     if(isSelected)
                     {
-
+                        ParentDrawer.OnTrackSelected(this);
                     }else
                     {
-
+                        if(selectedActionIndex>=0 && selectedActionIndex<actionDrawers.Count)
+                        {
+                            actionDrawers[selectedActionIndex].IsSelected = false;
+                        }
+                        selectedActionIndex = -1;
                     }
                 }
             }
@@ -89,12 +90,9 @@ namespace DotEditor.BehaviourLine
                         actionData.Index = setting.GetActionIndex();
                         actionData.FireTime = fireTime;
 
-                        Data.Actions.Add(actionData);
-                        ActionDrawer itemDrawer = new ActionDrawer(this);
-                        itemDrawer.SetData(actionData);
-
-                        actionDrawers.Add(itemDrawer);
+                        OnActionAdded(actionData);
                     });
+                    IsSelected = true;
                     Event.current.Use();
                 }
             }
@@ -103,6 +101,44 @@ namespace DotEditor.BehaviourLine
         public void OnDrawProperty(Rect rect)
         {
 
+        }
+
+        internal void OnActionDelete(ActionDrawer actionDrawer)
+        {
+            selectedActionIndex = -1;
+            Data.Actions.Remove(actionDrawer.Data);
+            actionDrawers.Remove(actionDrawer);
+
+            ParentDrawer.Window.Repaint();
+        }
+
+        internal void OnActionAdded(ActionData actionData)
+        {
+            Data.Actions.Add(actionData);
+
+            ActionDrawer itemDrawer = new ActionDrawer(this);
+            itemDrawer.SetData(actionData);
+            actionDrawers.Add(itemDrawer);
+
+            ParentDrawer.Window.Repaint();
+        }
+
+        internal void OnActionSelected(ActionDrawer actionDrawer)
+        {
+            int newSelectedIndex = actionDrawers.IndexOf(actionDrawer);
+            if(newSelectedIndex!=selectedActionIndex)
+            {
+                if(selectedActionIndex>=0 && selectedActionIndex<actionDrawers.Count)
+                {
+                    actionDrawers[selectedActionIndex].IsSelected = false;
+                }
+                selectedActionIndex = newSelectedIndex;
+            }
+
+            if(!IsSelected)
+            {
+                IsSelected = true;
+            }
         }
     }
 }

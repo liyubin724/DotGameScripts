@@ -23,7 +23,7 @@ namespace DotEditor.BehaviourLine
 
         public TimelineData Data { get; private set; }
 
-        private EditorWindow window;
+        public EditorWindow Window { get; private set; }
 
         private LineSetting setting;
         private string titleName = string.Empty;
@@ -35,35 +35,12 @@ namespace DotEditor.BehaviourLine
         private bool isTrackDragging = false;
         private bool isPropertyDragging = false;
 
-        private int m_SelectTrackIndex = -1;
-        public int SelectTrackIndex
-        {
-            get { return m_SelectTrackIndex; }
-            set
-            {
-                if (m_SelectTrackIndex != value)
-                {
-                    if (m_SelectTrackIndex >= 0 && m_SelectTrackIndex < trackDrawers.Count)
-                    {
-                        //trackDrawers[m_SelectTrackIndex].IsSelected = false;
-                    }
-                    m_SelectTrackIndex = value;
-                    if (m_SelectTrackIndex < 0 || m_SelectTrackIndex >= trackDrawers.Count)
-                    {
-                        m_SelectTrackIndex = -1;
-                    }
-                    else
-                    {
-                        //trackDrawers[m_SelectTrackIndex].IsSelected = true;
-                    }
-                }
-            }
-        }
+        private int selectedTrackIndex = -1;
 
         public TimelineDrawer(EditorWindow win,string titleName = null)
         {
-            window = win;
-            window.wantsMouseMove = true;
+            Window = win;
+            Window.wantsMouseMove = true;
 
             this.titleName = titleName??"Timeline";
             setting = new LineSetting();
@@ -178,10 +155,10 @@ namespace DotEditor.BehaviourLine
                     }
 
                     Rect indexRect = new Rect(0, y, trackWidth, setting.TracklineHeight);
-                    GUI.Label(indexRect, $"{(Data.Tracks[i].Name ?? "")} ({i.ToString()})", SelectTrackIndex == i ? "flow node 1" : "flow node 0");
+                    GUI.Label(indexRect, $"{(Data.Tracks[i].Name ?? "")} ({i.ToString()})", selectedTrackIndex == i ? "flow node 1" : "flow node 0");
                     if (indexRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp && Event.current.button == 0)
                     {
-                        SelectTrackIndex = i;
+                        OnTrackSelected(trackDrawers[i]);
                         Event.current.Use();
                     }
                 }
@@ -201,7 +178,7 @@ namespace DotEditor.BehaviourLine
                     isTrackDragging = true;
 
                     Event.current.Use();
-                    window.Repaint();
+                    Window.Repaint();
                 }else if(isTrackDragging && Event.current.type == EventType.MouseDrag)
                 {
                     trackWidth += Event.current.delta.x;
@@ -212,13 +189,13 @@ namespace DotEditor.BehaviourLine
                     {
                         trackWidth = MAX_TRACK_WIDTH;
                     }
-                    window.Repaint();
+                    Window.Repaint();
                 }
                 else if(isTrackDragging && Event.current.type == EventType.MouseUp)
                 {
                     isTrackDragging = false;
                     Event.current.Use();
-                    window.Repaint();
+                    Window.Repaint();
                 }
             }
         }
@@ -348,10 +325,10 @@ namespace DotEditor.BehaviourLine
 
                     Rect tRect = new Rect(0, y, lineRect.width, setting.TracklineHeight);
                     tRect.width = Mathf.Min(lineRect.width, maxWidth - setting.ScrollPosX);
-                    //if (SelectTrackIndex == i)
-                    //{
-                    //    EGUI.DrawAreaLine(trackRect, Color.green);
-                    //}
+                    if (selectedTrackIndex == i)
+                    {
+                        EGUI.DrawAreaLine(tRect, Color.green);
+                    }
 
                     trackDrawers[i].OnDrawGUI(tRect);
                 }
@@ -371,7 +348,7 @@ namespace DotEditor.BehaviourLine
                     isPropertyDragging = true;
 
                     Event.current.Use();
-                    window.Repaint();
+                    Window.Repaint();
                 }
                 else if (isPropertyDragging && Event.current.type == EventType.MouseDrag)
                 {
@@ -384,13 +361,13 @@ namespace DotEditor.BehaviourLine
                     {
                         propertyWidth = MAX_PROPERTY_WIDTH;
                     }
-                    window.Repaint();
+                    Window.Repaint();
                 }
                 else if (isPropertyDragging && Event.current.type == EventType.MouseUp)
                 {
                     isPropertyDragging = false;
                     Event.current.Use();
-                    window.Repaint();
+                    Window.Repaint();
                 }
             }
         }
@@ -409,6 +386,21 @@ namespace DotEditor.BehaviourLine
             {
 
             }
+        }
+
+        internal void OnTrackSelected(TracklineDrawer tracklineDrawer)
+        {
+            int newSelectedTrackIndex = trackDrawers.IndexOf(tracklineDrawer);
+            if(newSelectedTrackIndex != selectedTrackIndex)
+            {
+                if(selectedTrackIndex>=0 && selectedTrackIndex<trackDrawers.Count)
+                {
+                    trackDrawers[selectedTrackIndex].IsSelected = false;
+                }
+                selectedTrackIndex = newSelectedTrackIndex;
+            }
+
+            Window.Repaint();
         }
 
         class Contents

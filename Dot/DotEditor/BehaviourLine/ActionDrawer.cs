@@ -62,7 +62,7 @@ namespace DotEditor.BehaviourLine
                     isSelected = value;
                     if(isSelected)
                     {
-
+                        ParentDrawer.OnActionSelected(this);
                     }
                 }
             }
@@ -206,10 +206,14 @@ namespace DotEditor.BehaviourLine
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Copy"), false, () =>
                 {
+                    ActionData data = Data.Copy();
+                    data.Index = setting.GetActionIndex();
+                    ParentDrawer.OnActionAdded(data);
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Delete"), false, () =>
                 {
+                    ParentDrawer.OnActionDelete(this);
                 });
                 menu.ShowAsContext();
 
