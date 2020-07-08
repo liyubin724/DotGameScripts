@@ -119,14 +119,17 @@ namespace DotEditor.BehaviourLine
             zoomOutBtnRect.x -= 33;
             if (GUI.Button(zoomOutBtnRect, Contents.zoomOutContent, EditorStyles.toolbarButton))
             {
+                setting.TimeStep -= setting.ZoomTimeStep;
 
+                Window.Repaint();
             }
 
             Rect zoomInBtnRect = zoomOutBtnRect;
             zoomInBtnRect.x -= 30;
             if (GUI.Button(zoomInBtnRect, Contents.zoomInContent, EditorStyles.toolbarButton))
             {
-
+                setting.TimeStep += setting.ZoomTimeStep;
+                Window.Repaint();
             }
         }
 
