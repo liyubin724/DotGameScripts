@@ -1,6 +1,7 @@
 ﻿using DotEditor.GUIExtension;
 using DotEditor.NativeDrawer;
 using DotEngine.BehaviourLine.Action;
+using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -158,8 +159,11 @@ namespace DotEditor.BehaviourLine
                     float deltaTime = deltaPos.x / setting.WidthForSecond;
                     if(dragType == ActionDragType.ItemLeft)
                     {
-                        Data.FireTime += deltaTime;
-                        durationActionData.DurationTime -= deltaTime;
+                        if (Data.FireTime < durationActionData.DurationTime + Data.FireTime || deltaTime<0)
+                        {
+                            Data.FireTime += deltaTime;
+                            durationActionData.DurationTime -= deltaTime;
+                        }
                     }
                     else if(dragType == ActionDragType.ItemRight)
                     {
@@ -211,7 +215,18 @@ namespace DotEditor.BehaviourLine
 
         public void OnDrawProperty(Rect rect)
         {
+            GUILayout.BeginArea(rect);
+            {
+                if(!string.IsNullOrEmpty(DetailName))
+                {
+                    EditorGUILayout.LabelField(DetailName, EditorStyles.wordWrappedLabel);
+                }
+                Type actionType = Data.GetType();
+                EditorGUILayout.LabelField(actionType.Name);
 
+                dataDrawerObject.OnGUILayout();
+            }
+            GUILayout.EndArea();
         }
 
     }
