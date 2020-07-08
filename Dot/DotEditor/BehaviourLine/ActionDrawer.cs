@@ -1,11 +1,23 @@
-﻿using DotEngine.BehaviourLine.Action;
+﻿using DotEditor.NativeDrawer;
+using DotEngine.BehaviourLine.Action;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace DotEditor.BehaviourLine
 {
+    public enum ActionDragType
+    {
+        None = 0,
+        Item,
+        ItemLeft,
+        ItemRight,
+    }
+
     public class ActionDrawer
     {
+        private const float MIN_ACTION_WIDTH = 6;
+
         public ActionData Data { get; private set; }
         public TracklineDrawer ParentDrawer { get; private set; }
         public string BriefName
@@ -37,8 +49,24 @@ namespace DotEditor.BehaviourLine
         private bool isSelected = false;
         public bool IsSelected
         {
-            get;set;
+            get
+            {
+                return isSelected;
+            }
+            set
+            {
+                if(isSelected != value)
+                {
+                    isSelected = value;
+                    if(isSelected)
+                    {
+
+                    }
+                }
+            }
         }
+
+        private NativeDrawerObject dataDrawerObject = null;
 
         public ActionDrawer(TracklineDrawer drawer)
         {
@@ -49,27 +77,126 @@ namespace DotEditor.BehaviourLine
         {
             Data = data;
 
+            if(Data!=null)
+            {
+                dataDrawerObject = new NativeDrawerObject(Data);
+            }
         }
 
+        private ActionDragType dragType = ActionDragType.None;
         public void OnDrawGUI(Rect rect)
         {
-            LineSetting config = LineSetting.Setting;
+            LineSetting setting = LineSetting.Setting;
 
             Rect itemRect = Rect.zero;
-            itemRect.x = Data.FireTime * config.WidthForSecond - config.ScrollPosX;
+            itemRect.x = Data.FireTime * setting.WidthForSecond - setting.ScrollPosX;
             itemRect.y = rect.y;
-            itemRect.height = config.TracklineHeight;
-            itemRect.width = config.TimeStepWidth;
+            itemRect.height = setting.TracklineHeight;
+            itemRect.width = MIN_ACTION_WIDTH;
 
-            if(Data is DurationActionData durationActionData)
+            DurationActionData durationActionData = null;
+            if (Data is DurationActionData)
             {
-                itemRect.width = Mathf.Max(config.TimeStepWidth, durationActionData.DurationTime * config.WidthForSecond);
+                durationActionData = (DurationActionData)Data;
+
+                itemRect.width = Mathf.Max(itemRect.width, durationActionData.DurationTime * setting.WidthForSecond);
+            }else
+            {
+                itemRect.x -= itemRect.width * 0.5f;
             }
             GUI.Label(itemRect, BriefName, IsSelected ? "flow node 6" : "flow node 5");
 
             int eventBtn = Event.current.button;
             EventType eventType = Event.current.type;
             bool isContains = itemRect.Contains(Event.current.mousePosition);
+
+            if(eventBtn == 0)
+            {
+                if(eventType == EventType.MouseDown && isContains)
+                {
+                    if(durationActionData != null)
+                    {
+                        Rect leftRect = new Rect(itemRect.x, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
+                        if(leftRect.Contains(Event.current.mousePosition))
+                        {
+                            dragType = ActionDragType.ItemLeft;
+                        }else
+                        {
+                            Rect rightRect = new Rect(itemRect.x + itemRect.width - MIN_ACTION_WIDTH * 0.5f,itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
+                            if(rightRect.Contains(Event.current.mousePosition))
+                            {
+                                dragType = ActionDragType.ItemRight;
+                            }else
+                            {
+                                dragType = ActionDragType.Item;
+                            }
+                        }
+                    }else
+                    {
+                        dragType = ActionDragType.Item;
+                    }
+
+                    IsSelected = true;
+                    Event.current.Use();
+                }else if(dragType != ActionDragType.None && eventType == EventType.MouseUp)
+                {
+                    dragType = ActionDragType.None;
+                    Event.current.Use();
+                }else if(dragType != ActionDragType.None && IsSelected && eventType == EventType.MouseDrag)
+                {
+                    Vector2 deltaPos = Event.current.delta;
+                    float deltaTime = deltaPos.x / setting.WidthForSecond;
+                    if(dragType == ActionDragType.ItemLeft)
+                    {
+                        Data.FireTime += deltaTime;
+                        durationActionData.DurationTime -= deltaTime;
+                    }
+                    else if(dragType == ActionDragType.ItemRight)
+                    {
+                        durationActionData.DurationTime += deltaTime;
+                    }else if(dragType == ActionDragType.Item)
+                    {
+                        Data.FireTime += deltaTime;
+                    }
+
+                    float timeLength = ParentDrawer.ParentDrawer.Data.TimeLength;
+                    if(Data.FireTime <0)
+                    {
+                        Data.FireTime = 0;
+                    }else if(Data.FireTime> timeLength)
+                    {
+                        Data.FireTime = timeLength;
+                    }
+
+                    if(durationActionData!=null)
+                    {
+                        durationActionData.DurationTime = Mathf.Max(0.0f, durationActionData.DurationTime);
+
+                        float endTime = durationActionData.FireTime + durationActionData.DurationTime;
+                        if(endTime> timeLength)
+                        {
+                            durationActionData.DurationTime = Mathf.Min(durationActionData.DurationTime, timeLength - durationActionData.FireTime);
+                        }
+                    }
+
+                    Event.current.Use();
+                }
+            }else if(eventBtn == 1 && isContains && eventType == EventType.MouseUp)
+            {
+                IsSelected = true;
+
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Copy"), false, () =>
+                {
+                });
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Delete"), false, () =>
+                {
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
 
         }
 

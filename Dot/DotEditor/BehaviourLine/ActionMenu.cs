@@ -12,13 +12,14 @@ namespace DotEditor.BehaviourLine
         private GenericMenu menu = null;
         private Action<ActionData> createdCallback = null;
         
-        public ActionMenu(Action<ActionData> callback)
+        public ActionMenu()
         {
-            createdCallback = callback;
         }
 
-        public void ShowMenu()
+        public void ShowMenu(Action<ActionData> callback)
         {
+            createdCallback = callback;
+
             if(menu == null)
             {
                 menu = new GenericMenu();

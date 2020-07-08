@@ -25,7 +25,7 @@ namespace DotEditor.BehaviourLine
 
         private EditorWindow window;
 
-        private LineSetting config;
+        private LineSetting setting;
         private string titleName = string.Empty;
         private List<TracklineDrawer> trackDrawers = new List<TracklineDrawer>();
 
@@ -66,15 +66,27 @@ namespace DotEditor.BehaviourLine
             window.wantsMouseMove = true;
 
             this.titleName = titleName??"Timeline";
-            config = new LineSetting();
-            LineSetting.Setting = config;
+            setting = new LineSetting();
+            LineSetting.Setting = setting;
         }
 
         public void SetData(TimelineData data)
         {
             Data = data;
 
-            config.TimeLength = data.TimeLength;
+            int maxActionIndex = 0;
+            foreach(var track in data.Tracks)
+            {
+                foreach(var action in track.Actions)
+                {
+                    if(action.Index>maxActionIndex)
+                    {
+                        maxActionIndex = action.Index;
+                    }
+                }
+            }
+            setting.MaxActionIndex = maxActionIndex;
+
             for(int i =0;i<data.Tracks.Count;++i)
             {
                 TracklineDrawer tracklineDrawer = new TracklineDrawer(this);

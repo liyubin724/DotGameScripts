@@ -16,5 +16,11 @@ namespace DotEditor.BehaviourLine
         public Vector2 ScrollPos = Vector2.zero;
         public float ScrollPosX { get => ScrollPos.x; }
         public float ScrollPosY { get => ScrollPos.y; }
+
+        public int MaxActionIndex = 0;
+        public int GetActionIndex()
+        {
+            return ++MaxActionIndex;
+        }
     }
 }

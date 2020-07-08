@@ -98,6 +98,10 @@
     <Compile Include="BehaviourLine\Action\Item\DurationActionItem.cs" />
     <Compile Include="BehaviourLine\Action\Item\EventActionItem.cs" />
     <Compile Include="BehaviourLine\Condition\ConditionData.cs" />
+    <Compile Include="BehaviourLine\Demo\PlaySoundData.cs" />
+    <Compile Include="BehaviourLine\Demo\PlaySoundItem.cs" />
+    <Compile Include="BehaviourLine\Demo\SetActiveData.cs" />
+    <Compile Include="BehaviourLine\Demo\SetActiveItem.cs" />
     <Compile Include="BehaviourLine\LineConst.cs" />
     <Compile Include="BehaviourLine\LineContext.cs" />
     <Compile Include="BehaviourLine\Line\Timeline.cs" />
