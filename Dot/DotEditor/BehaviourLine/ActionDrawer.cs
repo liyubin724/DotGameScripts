@@ -1,4 +1,5 @@
-﻿using DotEditor.NativeDrawer;
+﻿using DotEditor.GUIExtension;
+using DotEditor.NativeDrawer;
 using DotEngine.BehaviourLine.Action;
 using System.Reflection;
 using UnityEditor;
@@ -106,6 +107,14 @@ namespace DotEditor.BehaviourLine
             }
             GUI.Label(itemRect, BriefName, IsSelected ? "flow node 6" : "flow node 5");
 
+            Rect leftRect = new Rect(itemRect.x, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
+            Rect rightRect = new Rect(itemRect.x + itemRect.width - MIN_ACTION_WIDTH * 0.5f, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
+            if(durationActionData != null)
+            {
+                EGUI.DrawAreaLine(leftRect, Color.yellow);
+                EGUI.DrawAreaLine(rightRect, Color.yellow);
+            }
+
             int eventBtn = Event.current.button;
             EventType eventType = Event.current.type;
             bool isContains = itemRect.Contains(Event.current.mousePosition);
@@ -116,13 +125,11 @@ namespace DotEditor.BehaviourLine
                 {
                     if(durationActionData != null)
                     {
-                        Rect leftRect = new Rect(itemRect.x, itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
                         if(leftRect.Contains(Event.current.mousePosition))
                         {
                             dragType = ActionDragType.ItemLeft;
                         }else
                         {
-                            Rect rightRect = new Rect(itemRect.x + itemRect.width - MIN_ACTION_WIDTH * 0.5f,itemRect.y, MIN_ACTION_WIDTH * 0.5f, itemRect.height);
                             if(rightRect.Contains(Event.current.mousePosition))
                             {
                                 dragType = ActionDragType.ItemRight;
@@ -197,7 +204,6 @@ namespace DotEditor.BehaviourLine
 
                 Event.current.Use();
             }
-
         }
 
         public void OnDrawProperty(Rect rect)
