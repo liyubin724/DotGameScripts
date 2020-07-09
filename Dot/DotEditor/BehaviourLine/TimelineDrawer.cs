@@ -1,6 +1,6 @@
 ﻿using DotEditor.GUIExtension;
 using DotEngine.BehaviourLine.Line;
-using ReflectionMagic;
+using DotEngine.BehaviourLine.Track;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -40,12 +40,12 @@ namespace DotEditor.BehaviourLine
         private int selectedTrackIndex = -1;
         private string dataFilePath = null;
 
-        public TimelineDrawer(EditorWindow win,string titleName = null)
+        public TimelineDrawer(EditorWindow win, string titleName = null)
         {
             Window = win;
             Window.wantsMouseMove = true;
 
-            this.titleName = titleName??"Timeline";
+            this.titleName = titleName ?? "Timeline";
             setting = new LineSetting();
             LineSetting.Setting = setting;
         }
@@ -55,11 +55,11 @@ namespace DotEditor.BehaviourLine
             Data = data;
 
             int maxActionIndex = 0;
-            foreach(var track in data.Tracks)
+            foreach (var track in data.Tracks)
             {
-                foreach(var action in track.Actions)
+                foreach (var action in track.Actions)
                 {
-                    if(action.Index>maxActionIndex)
+                    if (action.Index > maxActionIndex)
                     {
                         maxActionIndex = action.Index;
                     }
@@ -70,10 +70,10 @@ namespace DotEditor.BehaviourLine
             trackDrawers.Clear();
             selectedTrackIndex = -1;
 
-            for(int i =0;i<data.Tracks.Count;++i)
+            for (int i = 0; i < data.Tracks.Count; ++i)
             {
                 TracklineDrawer tracklineDrawer = new TracklineDrawer(this);
-                tracklineDrawer.SetData(i, data.Tracks[i]);
+                tracklineDrawer.SetData(data.Tracks[i]);
 
                 trackDrawers.Add(tracklineDrawer);
             }
@@ -97,12 +97,12 @@ namespace DotEditor.BehaviourLine
             DrawPropertyDrag(propertyDragRect);
 
             Rect lineRect = new Rect(trackDragRect.x + trackDragRect.width, trackRect.y, rect.width - trackRect.width - trackDragRect.width - propertyRect.width - propertyDragRect.width, trackRect.height);
-            if(lineRect.width>0)
+            if (lineRect.width > 0)
             {
                 DrawLine(lineRect);
             }
 
-            if(GUI.changed)
+            if (GUI.changed)
             {
                 Window.Repaint();
             }
@@ -114,21 +114,55 @@ namespace DotEditor.BehaviourLine
             EditorGUI.LabelField(toolbarRect, titleName, Styles.titleStyle);
 
             Rect createRect = new Rect(toolbarRect.x, toolbarRect.y, 60, toolbarRect.height);
-            if(GUI.Button(createRect,Contents.createContent,EditorStyles.toolbarButton))
+            if (GUI.Button(createRect, Contents.createContent, EditorStyles.toolbarButton))
             {
                 dataFilePath = null;
-                SetData(new TimelineData());
-                
+                SetData(new TimelineData()
+                {
+                    TimeLength = 1.0f,
+                    Tracks = new List<TracklineData>()
+                    {
+                        new TracklineData()
+                        {
+                            Name = "Track 0",
+                        },
+                        new TracklineData()
+                        {
+                            Name = "Track 1",
+                        },
+                        new TracklineData()
+                        {
+                            Name = "Track 2",
+                        },
+                    },
+                }) ;
+
                 Window.Repaint();
             }
-            Rect saveRect = createRect;
+
+            Rect openRect = createRect;
+            openRect.x += createRect.width;
+            if (GUI.Button(openRect, Contents.openContent, EditorStyles.toolbarButton))
+            {
+                string dir = string.IsNullOrEmpty(dataFilePath) ? "" : Path.GetDirectoryName(dataFilePath);
+                string path = EditorUtility.OpenFilePanel("Open", dir, "*.json");
+                if(!string.IsNullOrEmpty(path))
+                {
+                    dataFilePath = path;
+                    SetData(LineUtil.ReadFromJsonFile(dataFilePath));
+                    Window.Repaint();
+                }
+            }
+
+            Rect saveRect = openRect;
             saveRect.x += createRect.width;
             if (GUI.Button(saveRect, Contents.saveContent, EditorStyles.toolbarButton))
             {
-                if(string.IsNullOrEmpty(dataFilePath))
+                if (string.IsNullOrEmpty(dataFilePath))
                 {
                     EditorUtility.DisplayDialog("Warning", "The Config is new ,plz use saveto.", "OK");
-                }else
+                }
+                else
                 {
                     LineUtil.SaveToJsonFile(Data, dataFilePath);
                 }
@@ -136,27 +170,29 @@ namespace DotEditor.BehaviourLine
 
             Rect saveToRect = saveRect;
             saveToRect.x += saveRect.width;
-            if(GUI.Button(saveToRect,Contents.saveToContent,EditorStyles.toolbarButton))
+            if (GUI.Button(saveToRect, Contents.saveToContent, EditorStyles.toolbarButton))
             {
                 string dir = string.IsNullOrEmpty(dataFilePath) ? "" : Path.GetDirectoryName(dataFilePath);
                 string fileName = string.IsNullOrEmpty(dataFilePath) ? "timelinedata" : Path.GetFileNameWithoutExtension(dataFilePath);
                 string filePath = EditorUtility.SaveFilePanel("Save to", dir, fileName, ".json");
-                if(!string.IsNullOrEmpty(filePath))
+                if (!string.IsNullOrEmpty(filePath))
                 {
+                    dataFilePath = filePath;
+
                     LineUtil.SaveToJsonFile(Data, dataFilePath);
                 }
             }
 
 
             Rect helpBtnRect = new Rect(toolbarRect.x + toolbarRect.width - 30, toolbarRect.y, 30, toolbarRect.height);
-            if(GUI.Button(helpBtnRect,Contents.helpContent,EditorStyles.toolbarButton))
+            if (GUI.Button(helpBtnRect, Contents.helpContent, EditorStyles.toolbarButton))
             {
 
             }
 
             Rect settingBtnRect = helpBtnRect;
             settingBtnRect.x -= 30;
-            if(GUI.Button(settingBtnRect,Contents.settingContent,EditorStyles.toolbarButton))
+            if (GUI.Button(settingBtnRect, Contents.settingContent, EditorStyles.toolbarButton))
             {
                 LineSettingWindow.ShowWin();
             }
@@ -186,14 +222,15 @@ namespace DotEditor.BehaviourLine
             LineSetting setting = LineSetting.Setting;
 
             Rect titleRect = new Rect(trackRect.x, trackRect.y, trackRect.width, TRACK_TITLE_HEIGHT);
-            EditorGUI.LabelField(titleRect, "Tracks",EditorStyles.toolbar);
+            EditorGUI.LabelField(titleRect, "Tracks", EditorStyles.toolbar);
 
-            Rect rect = new Rect(trackRect.x, trackRect.y + TRACK_TITLE_HEIGHT, trackRect.width, trackRect.height - TRACK_TITLE_HEIGHT);
-            using (new GUI.ClipScope(new Rect(rect.x, rect.y, rect.width, rect.height)))
+            Rect clipRect = new Rect(trackRect.x, trackRect.y + TRACK_TITLE_HEIGHT, trackRect.width, trackRect.height - TRACK_TITLE_HEIGHT);
+            using (new GUI.ClipScope(clipRect))
             {
                 int start = Mathf.FloorToInt(setting.ScrollPosY / setting.TracklineHeight);
-                int end = Mathf.CeilToInt((setting.ScrollPosY + rect.height) / setting.TracklineHeight);
+                int end = Mathf.CeilToInt((setting.ScrollPosY + clipRect.height) / setting.TracklineHeight);
 
+                Dictionary<Rect, int> rectIndexDic = new Dictionary<Rect, int>();
                 for (int i = start; i < end; ++i)
                 {
                     float y = setting.TracklineHeight * i - setting.ScrollPos.y;
@@ -204,12 +241,49 @@ namespace DotEditor.BehaviourLine
                     }
 
                     Rect indexRect = new Rect(0, y, trackWidth, setting.TracklineHeight);
+
+                    rectIndexDic.Add(indexRect, i);
+
                     GUI.Label(indexRect, $"{(Data.Tracks[i].Name ?? "")} ({i.ToString()})", selectedTrackIndex == i ? "flow node 1" : "flow node 0");
-                    if (indexRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp && Event.current.button == 0)
+                }
+
+                if (Event.current.type == EventType.MouseUp)
+                {
+                    int index = -1;
+                    foreach (var kvp in rectIndexDic)
                     {
-                        OnTrackSelected(trackDrawers[i]);
-                        Event.current.Use();
+                        if (kvp.Key.Contains(Event.current.mousePosition))
+                        {
+                            index = kvp.Value;
+                            break;
+                        }
                     }
+
+                    if (Event.current.button == 1)
+                    {
+                        GenericMenu menu = new GenericMenu();
+                        menu.AddItem(new GUIContent(index >= 0 ? "Insert New" : "Add New"), false, () =>
+                        {
+                            OnTrackAdded(new TracklineData(), index);
+                        });
+
+                        if (index >= 0)
+                        {
+                            menu.AddItem(new GUIContent("Delete"), false, () =>
+                            {
+                                OnTrackDeleted(index);
+                            });
+                        }
+
+                        menu.ShowAsContext();
+                    }
+
+                    if (index >= 0)
+                    {
+                        OnTrackSelected(trackDrawers[index]);
+                    }
+                    Window.Repaint();
+                    Event.current.Use();
                 }
             }
         }
@@ -220,27 +294,29 @@ namespace DotEditor.BehaviourLine
 
             EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
 
-            if (Event.current!=null)
+            if (Event.current != null)
             {
-                if(Event.current.type == EventType.MouseDown && Event.current.button == 0 && dragRect.Contains(Event.current.mousePosition))
+                if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && dragRect.Contains(Event.current.mousePosition))
                 {
                     isTrackDragging = true;
 
                     Event.current.Use();
                     Window.Repaint();
-                }else if(isTrackDragging && Event.current.type == EventType.MouseDrag)
+                }
+                else if (isTrackDragging && Event.current.type == EventType.MouseDrag)
                 {
                     trackWidth += Event.current.delta.x;
-                    if(trackWidth < MIN_TRACK_WIDTH)
+                    if (trackWidth < MIN_TRACK_WIDTH)
                     {
                         trackWidth = MIN_TRACK_WIDTH;
-                    }else if(trackWidth>MAX_TRACK_WIDTH)
+                    }
+                    else if (trackWidth > MAX_TRACK_WIDTH)
                     {
                         trackWidth = MAX_TRACK_WIDTH;
                     }
                     Window.Repaint();
                 }
-                else if(isTrackDragging && Event.current.type == EventType.MouseUp)
+                else if (isTrackDragging && Event.current.type == EventType.MouseUp)
                 {
                     isTrackDragging = false;
                     Event.current.Use();
@@ -386,7 +462,7 @@ namespace DotEditor.BehaviourLine
 
         private void DrawPropertyDrag(Rect dragRect)
         {
-            EGUI.DrawVerticalLine(dragRect,Color.grey,2.0f);
+            EGUI.DrawVerticalLine(dragRect, Color.grey, 2.0f);
 
             EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
 
@@ -437,7 +513,7 @@ namespace DotEditor.BehaviourLine
 
                 EditorGUILayout.Space();
 
-                if(selectedTrackIndex >= 0)
+                if (selectedTrackIndex >= 0)
                 {
                     trackDrawers[selectedTrackIndex].OnDrawProperty(contentRect);
                 }
@@ -447,26 +523,78 @@ namespace DotEditor.BehaviourLine
 
         internal void OnTrackSelected(TracklineDrawer tracklineDrawer)
         {
-            int newSelectedTrackIndex = trackDrawers.IndexOf(tracklineDrawer);
-            if(newSelectedTrackIndex != selectedTrackIndex)
+            if (tracklineDrawer == null)
             {
-                if(selectedTrackIndex>=0 && selectedTrackIndex<trackDrawers.Count)
+                selectedTrackIndex = -1;
+            }
+            else
+            {
+                int newSelectedTrackIndex = trackDrawers.IndexOf(tracklineDrawer);
+                if (newSelectedTrackIndex != selectedTrackIndex)
                 {
-                    trackDrawers[selectedTrackIndex].IsSelected = false;
+                    if (selectedTrackIndex >= 0 && selectedTrackIndex < trackDrawers.Count)
+                    {
+                        trackDrawers[selectedTrackIndex].IsSelected = false;
+                    }
+                    selectedTrackIndex = newSelectedTrackIndex;
                 }
-                selectedTrackIndex = newSelectedTrackIndex;
             }
 
             Window.Repaint();
         }
 
+        internal void OnTrackAdded(TracklineData tracklineData, int insertIndex = -1)
+        {
+            if (insertIndex < 0)
+            {
+                insertIndex = trackDrawers.Count;
+            }
+
+            TracklineDrawer tracklineDrawer = new TracklineDrawer(this);
+            tracklineDrawer.SetData(tracklineData);
+
+            Data.Tracks.Insert(insertIndex, tracklineData);
+            trackDrawers.Insert(insertIndex, tracklineDrawer);
+        }
+
+        internal void OnTrackDeleted(int deleteIndex)
+        {
+            if (deleteIndex >= 0 && deleteIndex < trackDrawers.Count)
+            {
+                if (deleteIndex == selectedTrackIndex)
+                {
+                    OnTrackSelected(null);
+                    selectedTrackIndex = -1;
+                }
+                else if (selectedTrackIndex > deleteIndex)
+                {
+                    selectedTrackIndex--;
+                }
+                trackDrawers.RemoveAt(deleteIndex);
+                Data.Tracks.RemoveAt(deleteIndex);
+
+                Window.Repaint();
+            }
+        }
+
+        internal void OnTrackMoveup(int moveIndex)
+        {
+
+        }
+
+        internal void OnTrackMovedown(int moveIndex)
+        {
+
+        }
+
         class Contents
         {
-            public static GUIContent createContent = new GUIContent("Create","Create New");
+            public static GUIContent createContent = new GUIContent("Create", "Create New");
+            public static GUIContent openContent = new GUIContent("Open", "Open");
             public static GUIContent saveContent = new GUIContent("Save", "Save");
             public static GUIContent saveToContent = new GUIContent("Save To", "Save To");
 
-            public static GUIContent helpContent = new GUIContent("?","Show help");
+            public static GUIContent helpContent = new GUIContent("?", "Show help");
             public static GUIContent settingContent = new GUIContent("S", "Open Setting Window");
             public static GUIContent zoomInContent = new GUIContent("+", "Zoom in");
             public static GUIContent zoomOutContent = new GUIContent("-", "Zoom out");

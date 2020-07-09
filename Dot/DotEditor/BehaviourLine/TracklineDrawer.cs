@@ -11,7 +11,6 @@ namespace DotEditor.BehaviourLine
         public TimelineDrawer ParentDrawer { get; private set; }
         public TracklineData Data { get; private set; }
 
-        private int index = 0;
         private List<ActionDrawer> actionDrawers = new List<ActionDrawer>();
 
         private int selectedActionIndex = -1;
@@ -47,9 +46,8 @@ namespace DotEditor.BehaviourLine
             ParentDrawer = drawer;
         }
 
-        public void SetData(int index,TracklineData data)
+        public void SetData(TracklineData data)
         {
-            this.index = index;
             Data = data;
 
             actionDrawers.Clear();

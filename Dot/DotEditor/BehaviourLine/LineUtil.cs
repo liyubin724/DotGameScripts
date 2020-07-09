@@ -31,14 +31,28 @@ namespace DotEditor.BehaviourLine
 
         public static void SaveToJsonFile(TimelineData data,string filePath)
         {
-            string jsonStr = JsonConvert.SerializeObject(data, Formatting.Indented);
+            data.Tracks.ForEach((track) =>
+            {
+                track.Actions.Sort((action1, action2) =>
+                {
+                    return action1.FireTime.CompareTo(action2.FireTime);
+                });
+            });
+
+            string jsonStr = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All,
+            });
             File.WriteAllText(filePath, jsonStr);
         }
 
         public static TimelineData ReadFromJsonFile(string filePath)
         {
             string jsonStr = File.ReadAllText(filePath);
-            return (TimelineData)JsonConvert.DeserializeObject(jsonStr);
+            return JsonConvert.DeserializeObject<TimelineData>(jsonStr, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All,
+            });
         }
     }
 }
