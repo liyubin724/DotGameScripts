@@ -83,6 +83,8 @@
     <Compile Include="Config\Ini\IniConfigUtil.cs" />
     <Compile Include="Config\Ini\IniConfigWindow.cs" />
     <Compile Include="Config\Ndb\NDBViewer.cs" />
+    <Compile Include="EditorStyleViewer\BuiltInResourcesWindow.cs" />
+    <Compile Include="EditorStyleViewer\EditorStyleViewer.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorData.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorDataEditor.cs" />
     <Compile Include="Entity\Avatar\AvatarCreatorUtil.cs" />
