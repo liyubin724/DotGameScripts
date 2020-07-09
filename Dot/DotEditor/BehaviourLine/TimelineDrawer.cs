@@ -224,6 +224,11 @@ namespace DotEditor.BehaviourLine
             Rect titleRect = new Rect(trackRect.x, trackRect.y, trackRect.width, TRACK_TITLE_HEIGHT);
             EditorGUI.LabelField(titleRect, "Tracks", EditorStyles.toolbar);
 
+            if(Data == null)
+            {
+                return;
+            }
+
             Rect clipRect = new Rect(trackRect.x, trackRect.y + TRACK_TITLE_HEIGHT, trackRect.width, trackRect.height - TRACK_TITLE_HEIGHT);
             using (new GUI.ClipScope(clipRect))
             {
@@ -336,21 +341,25 @@ namespace DotEditor.BehaviourLine
             Rect gridRect = new Rect(lineRect.x, lineRect.y + LINE_RULER_HEIGHT, lineRect.width, lineRect.height - LINE_RULER_HEIGHT);
             DrawLineGrid(gridRect);
 
-            DrawTrackline(gridRect);
-
-            LineSetting setting = LineSetting.Setting;
-            using (new GUILayout.AreaScope(gridRect))
+            if(Data!=null)
             {
-                using (var scop = new UnityEditor.EditorGUILayout.ScrollViewScope(setting.ScrollPos))
+                DrawTrackline(gridRect);
+
+                LineSetting setting = LineSetting.Setting;
+                using (new GUILayout.AreaScope(gridRect))
                 {
-                    float scrollWith = Mathf.Max(Data.TimeLength * setting.WidthForSecond, gridRect.width);
-                    float scrollHeight = Mathf.Max(Data.Tracks.Count * setting.TracklineHeight, gridRect.height);
+                    using (var scop = new UnityEditor.EditorGUILayout.ScrollViewScope(setting.ScrollPos))
+                    {
+                        float scrollWith = Mathf.Max(Data.TimeLength * setting.WidthForSecond, gridRect.width);
+                        float scrollHeight = Mathf.Max(Data.Tracks.Count * setting.TracklineHeight, gridRect.height);
 
-                    GUILayout.Label("", GUILayout.Width(scrollWith), GUILayout.Height(scrollHeight - 20));
+                        GUILayout.Label("", GUILayout.Width(scrollWith), GUILayout.Height(scrollHeight - 20));
 
-                    setting.ScrollPos = scop.scrollPosition;
+                        setting.ScrollPos = scop.scrollPosition;
+                    }
                 }
             }
+            
         }
 
         private void DrawLineRuler(Rect rulerRect)
@@ -414,9 +423,12 @@ namespace DotEditor.BehaviourLine
                     Handles.DrawLine(new Vector3(x, 0, 0), new Vector3(x, gridRect.height, 0));
                 }
 
-                float stopLineX = Data.TimeLength * setting.WidthForSecond - setting.ScrollPosX;
-                Handles.color = Color.red;
-                Handles.DrawLine(new Vector3(stopLineX, 0, 0), new Vector3(stopLineX, gridRect.height, 0));
+                if(Data!=null)
+                {
+                    float stopLineX = Data.TimeLength * setting.WidthForSecond - setting.ScrollPosX;
+                    Handles.color = Color.red;
+                    Handles.DrawLine(new Vector3(stopLineX, 0, 0), new Vector3(stopLineX, gridRect.height, 0));
+                }
 
                 int startY = Mathf.FloorToInt(setting.ScrollPosY / setting.TracklineHeight);
                 int endY = Mathf.CeilToInt((setting.ScrollPosY + gridRect.height) / setting.TracklineHeight);
@@ -506,6 +518,11 @@ namespace DotEditor.BehaviourLine
             Rect titleRect = new Rect(propertyRect.x, propertyRect.y, propertyRect.width, TRACK_TITLE_HEIGHT);
             EditorGUI.LabelField(titleRect, "Property", EditorStyles.toolbar);
 
+            if (Data == null)
+            {
+                return;
+            }
+
             Rect contentRect = new Rect(propertyRect.x, propertyRect.y + TRACK_TITLE_HEIGHT, propertyRect.width, propertyRect.height - TRACK_TITLE_HEIGHT);
             GUILayout.BeginArea(contentRect);
             {
@@ -519,6 +536,7 @@ namespace DotEditor.BehaviourLine
                 }
             }
             GUILayout.EndArea();
+
         }
 
         internal void OnTrackSelected(TracklineDrawer tracklineDrawer)

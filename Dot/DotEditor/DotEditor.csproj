@@ -72,6 +72,7 @@
     <Compile Include="Asset\AssetPacker\IAssetBundlePacker.cs" />
     <Compile Include="BehaviourLine\ActionDrawer.cs" />
     <Compile Include="BehaviourLine\ActionMenu.cs" />
+    <Compile Include="BehaviourLine\BehaviourLineWindow.cs" />
     <Compile Include="BehaviourLine\LineUtil.cs" />
     <Compile Include="BehaviourLine\LineSetting.cs" />
     <Compile Include="BehaviourLine\LineSettingWindow.cs" />
