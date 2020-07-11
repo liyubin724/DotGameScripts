@@ -78,6 +78,10 @@
     <Compile Include="BehaviourLine\LineSettingWindow.cs" />
     <Compile Include="BehaviourLine\TimelineDrawer.cs" />
     <Compile Include="BehaviourLine\TracklineDrawer.cs" />
+    <Compile Include="BMFont\BMFontDataEditor.cs" />
+    <Compile Include="BMFont\BMFontMaker.cs" />
+    <Compile Include="BMFont\BMFontMakerData.cs" />
+    <Compile Include="BMFont\BMFontTextEditor.cs" />
     <Compile Include="Config\Ini\CreateIniDataContent.cs" />
     <Compile Include="Config\Ini\CreateIniGroupContent.cs" />
     <Compile Include="Config\Ini\IniConfigUtil.cs" />
