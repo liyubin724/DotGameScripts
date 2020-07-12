@@ -99,6 +99,7 @@
     <Compile Include="Entity\Avatar\AvatarPreviewer.cs" />
     <Compile Include="Entity\Node\NodeBehaviourEditor.cs" />
     <Compile Include="Entity\Node\NodeBehaviourUtil.cs" />
+    <Compile Include="Fonts\BitmapFontTextMeshEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfig.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderConfigEditor.cs" />
     <Compile Include="GUIExtension\ColorfullFolders\FavouriteFolderMenu.cs" />

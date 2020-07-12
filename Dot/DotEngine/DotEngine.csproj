@@ -108,8 +108,9 @@
     <Compile Include="BehaviourLine\Line\TimelineData.cs" />
     <Compile Include="BehaviourLine\Track\Trackline.cs" />
     <Compile Include="BehaviourLine\Track\TracklineData.cs" />
-    <Compile Include="BMFont\BitmapFont.cs" />
-    <Compile Include="BMFont\BitmapFontText.cs" />
+    <Compile Include="Fonts\BitmapFont.cs" />
+    <Compile Include="Fonts\BitmapFontText.cs" />
+    <Compile Include="Fonts\BitmapFontTextMesh.cs" />
     <Compile Include="Config\IniConfigService.cs" />
     <Compile Include="Config\Ini\IniConfig.cs" />
     <Compile Include="Config\NDBService.cs" />
