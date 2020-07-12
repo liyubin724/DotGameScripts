@@ -2,6 +2,7 @@
 using DotEngine.BMFont;
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 
 namespace DotEditor.BMFont
@@ -70,7 +71,7 @@ namespace DotEditor.BMFont
             BMFontData fontData = (BMFontData)fontDataProperty.objectReferenceValue;
             if(fontData!=null)
             {
-                string[] names = fontData.fontNames;
+                string[] names = (from charMap in fontData.charMaps select charMap.name).ToArray();
                 int selectedIndex = Array.IndexOf(names, fontNameProperty.stringValue);
                 int newSelectedIndex = EditorGUILayout.Popup("Font Name", selectedIndex,names);
                 if(newSelectedIndex!=selectedIndex)

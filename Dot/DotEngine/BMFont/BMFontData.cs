@@ -8,12 +8,11 @@ namespace DotEngine.BMFont
     public class BMFontData : ScriptableObject
     {
         public Font bmFont = null;
+        public FontCharMap[] charMaps = new FontCharMap[0];
 
-        public string[] fontNames = new string[0];
-        public CharMap[] chars = new CharMap[0];
+        private Dictionary<string, FontCharMap> charMapDic = null;
+        private StringBuilder textSB = new StringBuilder();
 
-        private Dictionary<string, Dictionary<char, char>> fontCharMapDic = null;
-        private StringBuilder mappedSB = new StringBuilder();
         public string GetText(string fontName,string text)
         {
             if(string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(text))
@@ -21,45 +20,51 @@ namespace DotEngine.BMFont
                 return string.Empty;
             }
 
-            if(fontCharMapDic == null)
+            if(charMapDic == null)
             {
-                fontCharMapDic = new Dictionary<string, Dictionary<char, char>>();
-                for(int i =0;i<fontNames.Length;++i)
+                charMapDic = new Dictionary<string, FontCharMap>();
+                for(int i =0;i<charMaps.Length;++i)
                 {
-                    Dictionary<char, char> dic = new Dictionary<char, char>();
-                    fontCharMapDic.Add(fontNames[i], dic);
-
-                    CharMap cmData = chars[i];
-                    for(int j = 0;j<cmData.orgChar.Length;++j)
-                    {
-                        dic.Add(cmData.orgChar[j], cmData.mapChar[j]);
-                    }
+                    charMapDic.Add(charMaps[i].name, charMaps[i]);
                 }
             }
 
-            if(!fontCharMapDic.TryGetValue(fontName,out Dictionary<char, char> charMapDic))
+            if(!charMapDic.TryGetValue(fontName,out FontCharMap charMap))
             {
                 return string.Empty;
             }
-            mappedSB.Clear();
-            for(int i = 0;i<text.Length;++i)
+            textSB.Clear();
+            for(int i =0;i<text.Length;++i)
             {
-                if(charMapDic.TryGetValue(text[i],out char value))
-                {
-                    mappedSB.Append(value);
-                }else
-                {
-                    mappedSB.Append(' ');
-                }
+                textSB.Append(charMap.GetChar(text[i]));
             }
-            return mappedSB.ToString();
+            return textSB.ToString();
         }
 
         [Serializable]
-        public class CharMap
+        public class FontCharMap
         {
-            public char[] orgChar = new char[0];
-            public char[] mapChar = new char[0];
+            public string name = string.Empty;
+            public char[] orgChars = new char[0];
+            public char[] mapChars = new char[0];
+
+            private Dictionary<char, char> charDic = null;
+            public char GetChar(char c)
+            {
+                if(charDic == null)
+                {
+                    charDic = new Dictionary<char, char>();
+                    for(int i =0;i<orgChars.Length;++i)
+                    {
+                        charDic.Add(orgChars[i], mapChars[i]);
+                    }
+                }
+                if (charDic.TryGetValue(c, out char result))
+                {
+                    return result;
+                }
+                return ' ';
+            }
         }
     }
 }

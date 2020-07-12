@@ -72,7 +72,7 @@ namespace DotEditor.Utilities
             string[] assetPaths = FindAssets<T>();
             if (assetPaths == null || assetPaths.Length == 0)
             {
-                return null;
+                return new T[0];
             }
             T[] result = new T[assetPaths.Length];
             for (int i = 0; i < assetPaths.Length; ++i)
@@ -148,7 +148,7 @@ namespace DotEditor.Utilities
         {
             if (guids == null)
             {
-                return null;
+                return new string[0];
             }
 
             string[] paths = new string[guids.Length];

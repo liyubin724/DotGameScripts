@@ -83,6 +83,12 @@ namespace DotEditor.GUIExtension.ListView
             return default;
         }
 
+        public void Clear()
+        {
+            itemDatas.Clear();
+            Reload();
+        }
+
         public void SetSelection(int index)
         {
             listTreeView.SetSelection(new int[] { index }, TreeViewSelectionOptions.FireSelectionChanged);

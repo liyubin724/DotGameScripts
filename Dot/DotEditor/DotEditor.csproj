@@ -80,7 +80,7 @@
     <Compile Include="BehaviourLine\TracklineDrawer.cs" />
     <Compile Include="BMFont\BMFontDataEditor.cs" />
     <Compile Include="BMFont\BMFontMaker.cs" />
-    <Compile Include="BMFont\BMFontMakerData.cs" />
+    <Compile Include="BMFont\BMFontConfig.cs" />
     <Compile Include="BMFont\BMFontTextEditor.cs" />
     <Compile Include="Config\Ini\CreateIniDataContent.cs" />
     <Compile Include="Config\Ini\CreateIniGroupContent.cs" />
