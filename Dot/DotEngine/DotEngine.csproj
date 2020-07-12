@@ -108,8 +108,8 @@
     <Compile Include="BehaviourLine\Line\TimelineData.cs" />
     <Compile Include="BehaviourLine\Track\Trackline.cs" />
     <Compile Include="BehaviourLine\Track\TracklineData.cs" />
-    <Compile Include="BMFont\BMFontData.cs" />
-    <Compile Include="BMFont\BMFontText.cs" />
+    <Compile Include="BMFont\BitmapFont.cs" />
+    <Compile Include="BMFont\BitmapFontText.cs" />
     <Compile Include="Config\IniConfigService.cs" />
     <Compile Include="Config\Ini\IniConfig.cs" />
     <Compile Include="Config\NDBService.cs" />
@@ -164,6 +164,8 @@
     <Compile Include="NativeDrawer\Property\Control\ReadonlyAttribute.cs" />
     <Compile Include="NativeDrawer\Property\EnumButtonAttribute.cs" />
     <Compile Include="NativeDrawer\Property\FloatSliderAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\IntPopupAttribute.cs" />
+    <Compile Include="NativeDrawer\Property\IntSliderAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelAttribute.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextAttribute.cs" />

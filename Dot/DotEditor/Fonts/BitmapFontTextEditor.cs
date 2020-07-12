@@ -1,19 +1,19 @@
 ﻿using DotEditor.Utilities;
-using DotEngine.BMFont;
+using DotEngine.Fonts;
 using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 
-namespace DotEditor.BMFont
+namespace DotEditor.Fonts
 {
-    public class BMFontTextEditor : Editor
+    public class BitmapFontTextEditor : Editor
     {
         SerializedProperty fontDataProperty;
         SerializedProperty fontNameProperty;
         SerializedProperty textProperty;
 
-        private BMFontData[] fontDatas = null;
+        private BitmapFont[] fontDatas = null;
         private string[] fontDataNames = null;
         protected virtual void Awake()
         {
@@ -21,16 +21,16 @@ namespace DotEditor.BMFont
             fontNameProperty = serializedObject.FindProperty("m_FontName");
             textProperty = serializedObject.FindProperty("m_Text");
 
-            string[] fontPaths = AssetDatabaseUtility.FindAssets<BMFontData>();
+            string[] fontPaths = AssetDatabaseUtility.FindAssets<BitmapFont>();
             fontDataNames = new string[fontPaths.Length + 1];
             fontDataNames[0] = "--None--";
-            fontDatas = new BMFontData[fontPaths.Length + 1];
+            fontDatas = new BitmapFont[fontPaths.Length + 1];
             fontDatas[0] = null;
 
             for(int i =0;i<fontPaths.Length;++i)
             {
                 fontDataNames[i + 1] = Path.GetFileNameWithoutExtension(fontPaths[i]);
-                fontDatas[i + 1] = AssetDatabase.LoadAssetAtPath<BMFontData>(fontPaths[i]);
+                fontDatas[i + 1] = AssetDatabase.LoadAssetAtPath<BitmapFont>(fontPaths[i]);
             }
         }
 
@@ -48,7 +48,7 @@ namespace DotEditor.BMFont
 
         protected void OnDrawFont()
         {
-            BMFontData fontData = (BMFontData)fontDataProperty.objectReferenceValue;
+            BitmapFont fontData = (BitmapFont)fontDataProperty.objectReferenceValue;
             int selectedIndex = Array.IndexOf(fontDatas, fontData);
             int newSelectedIndex = EditorGUILayout.Popup("Font Data",selectedIndex, fontDataNames);
             if(newSelectedIndex!=selectedIndex)
@@ -68,7 +68,7 @@ namespace DotEditor.BMFont
 
         protected void OnDrawFontNames()
         {
-            BMFontData fontData = (BMFontData)fontDataProperty.objectReferenceValue;
+            BitmapFont fontData = (BitmapFont)fontDataProperty.objectReferenceValue;
             if(fontData!=null)
             {
                 string[] names = (from charMap in fontData.charMaps select charMap.name).ToArray();

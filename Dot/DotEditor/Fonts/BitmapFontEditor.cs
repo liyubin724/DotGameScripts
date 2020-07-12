@@ -1,11 +1,11 @@
-﻿using DotEngine.BMFont;
+﻿using DotEngine.Fonts;
 using UnityEditor;
 using UnityEngine;
 
-namespace DotEditor.BMFont
+namespace DotEditor.Fonts
 {
-    [CustomEditor(typeof(BMFontData))]
-    public class BMFontDataEditor : Editor
+    [CustomEditor(typeof(BitmapFont))]
+    public class BitmapFontEditor : Editor
     {
         public override void OnInspectorGUI()
         {

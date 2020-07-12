@@ -1,4 +1,5 @@
 ﻿using DotEditor.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -171,6 +172,15 @@ namespace DotEditor.GUIExtension
             EditorGUI.indentLevel--;
         }
         #endregion
+
+        public static T DrawPopup<T>(Rect rect, string label, string[] contents, T[] values, T selectedValue)
+        {
+            int index = Array.IndexOf(values, selectedValue);
+            if (index < 0) index = 0;
+            int newIndex = EditorGUI.Popup(rect, label, index, contents);
+
+            return values[newIndex];
+        }
 
         public static string DrawAssetFolderSelection(Rect rect, string label, string assetFolder, bool isReadonly = true)
         {

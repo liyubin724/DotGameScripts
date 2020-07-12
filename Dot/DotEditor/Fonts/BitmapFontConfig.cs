@@ -1,45 +1,57 @@
-﻿using System;
+﻿using DotEngine.NativeDrawer.Property;
+using DotEngine.NativeDrawer.Visible;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace DotEditor.BMFont
+namespace DotEditor.Fonts
 {
-    public class BMFontConfig : ScriptableObject
+    public class BitmapFontConfig : ScriptableObject
     {
-        public string fontOutputDir = string.Empty;
+        [OpenFolderPath]
+        public string outputAssetDir = string.Empty;
+        [IntSlider(LeftValue =2,RightValue =10)]
         public int padding = 2;
+        [IntPopup(Values =new int[] { 64,128,256,512,1024,2048},Contents = new string[] { "64 x 64", "128 x 128", "256 x 256", "512 x 512", "1024 x 1024", "2048 x 2048" })]
         public int maxSize = 1024;
-        public List<BMFontChar> fonts = new List<BMFontChar>();
+
+        public List<BitmapFontChar> fontChars = new List<BitmapFontChar>();
 
         public string GetFontPath()
         {
-            return $"{fontOutputDir}/{name}_bmf_font.asset";
+            return $"{outputAssetDir}/{name}_bmf_font.asset";
         }
 
         public string GetFontDataPath()
         {
-            return $"{fontOutputDir}/{name}_bmf_data.asset";
+            return $"{outputAssetDir}/{name}_bmf_data.asset";
         }
 
         public string GetFontTexturePath()
         {
-            return $"{fontOutputDir}/{name}_bmf_tex.png";
+            return $"{outputAssetDir}/{name}_bmf_tex.png";
         }
 
         public bool IsValid()
         {
-            if(string.IsNullOrEmpty(fontOutputDir) || !fontOutputDir.StartsWith("Assets"))
+            if(string.IsNullOrEmpty(outputAssetDir) || !outputAssetDir.StartsWith("Assets"))
             {
                 return false;
             }
 
-            if(fonts == null ||fonts.Count ==0)
+            if(fontChars == null ||fontChars.Count ==0)
             {
                 return false;
             }
 
-            foreach(var fontChar in fonts)
+            bool isRepeat = fontChars.GroupBy((fc) => fc.fontName).Where((g) => g.Count() > 1).Count() > 0;
+            if (isRepeat)
+            {
+                return false;
+            }
+
+            foreach (var fontChar in fontChars)
             {
                 if(!fontChar.IsValid())
                 {
@@ -55,7 +67,7 @@ namespace DotEditor.BMFont
         }
 
         [Serializable]
-        public class BMFontChar
+        public class BitmapFontChar
         {
             public string fontName = string.Empty;
             public int charSpace = 0;
@@ -64,9 +76,12 @@ namespace DotEditor.BMFont
             public List<Texture2D> textures = new List<Texture2D>();
 
             [NonSerialized]
-            public int[] charIndexes = null;
+            [Hide]
+            public int[] charIndexes = new int[0];
+
             [NonSerialized]
-            public Rect[] charRects = null;
+            [Hide]
+            public Rect[] charRects = new Rect[0];
 
             public bool IsValid()
             {

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-namespace DotEngine.BMFont
+namespace DotEngine.Fonts
 {
-    public class BMFontText : MonoBehaviour
+    public class BitmapFontText : MonoBehaviour
     {
         [SerializeField]
-        private BMFontData m_FontData = null;
-        public BMFontData FontData
+        private BitmapFont m_FontData = null;
+        public BitmapFont FontData
         {
             get
             {

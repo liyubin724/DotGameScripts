@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace DotEngine.BMFont
+namespace DotEngine.Fonts
 {
-    public class BMFontData : ScriptableObject
+    public class BitmapFont : ScriptableObject
     {
         public Font bmFont = null;
-        public FontCharMap[] charMaps = new FontCharMap[0];
+        public BitmapFontCharMap[] charMaps = new BitmapFontCharMap[0];
 
-        private Dictionary<string, FontCharMap> charMapDic = null;
-        private StringBuilder textSB = new StringBuilder();
+        private Dictionary<string, BitmapFontCharMap> charMapDic = null;
+        private StringBuilder textBuilder = new StringBuilder();
 
         public string GetText(string fontName,string text)
         {
@@ -22,27 +22,27 @@ namespace DotEngine.BMFont
 
             if(charMapDic == null)
             {
-                charMapDic = new Dictionary<string, FontCharMap>();
+                charMapDic = new Dictionary<string, BitmapFontCharMap>();
                 for(int i =0;i<charMaps.Length;++i)
                 {
                     charMapDic.Add(charMaps[i].name, charMaps[i]);
                 }
             }
 
-            if(!charMapDic.TryGetValue(fontName,out FontCharMap charMap))
+            if(!charMapDic.TryGetValue(fontName,out BitmapFontCharMap charMap))
             {
                 return string.Empty;
             }
-            textSB.Clear();
+            textBuilder.Clear();
             for(int i =0;i<text.Length;++i)
             {
-                textSB.Append(charMap.GetChar(text[i]));
+                textBuilder.Append(charMap.GetChar(text[i]));
             }
-            return textSB.ToString();
+            return textBuilder.ToString();
         }
 
         [Serializable]
-        public class FontCharMap
+        public class BitmapFontCharMap
         {
             public string name = string.Empty;
             public char[] orgChars = new char[0];
@@ -54,7 +54,7 @@ namespace DotEngine.BMFont
                 if(charDic == null)
                 {
                     charDic = new Dictionary<char, char>();
-                    for(int i =0;i<orgChars.Length;++i)
+                    for (int i = 0; i < orgChars.Length; ++i)
                     {
                         charDic.Add(orgChars[i], mapChars[i]);
                     }

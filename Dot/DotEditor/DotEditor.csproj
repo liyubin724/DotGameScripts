@@ -78,10 +78,11 @@
     <Compile Include="BehaviourLine\LineSettingWindow.cs" />
     <Compile Include="BehaviourLine\TimelineDrawer.cs" />
     <Compile Include="BehaviourLine\TracklineDrawer.cs" />
-    <Compile Include="BMFont\BMFontDataEditor.cs" />
-    <Compile Include="BMFont\BMFontMaker.cs" />
-    <Compile Include="BMFont\BMFontConfig.cs" />
-    <Compile Include="BMFont\BMFontTextEditor.cs" />
+    <Compile Include="Fonts\BitmapFontCharDrawer.cs" />
+    <Compile Include="Fonts\BitmapFontEditor.cs" />
+    <Compile Include="Fonts\BitmapFontMaker.cs" />
+    <Compile Include="Fonts\BitmapFontConfig.cs" />
+    <Compile Include="Fonts\BitmapFontTextEditor.cs" />
     <Compile Include="Config\Ini\CreateIniDataContent.cs" />
     <Compile Include="Config\Ini\CreateIniGroupContent.cs" />
     <Compile Include="Config\Ini\IniConfigUtil.cs" />
@@ -157,6 +158,8 @@
     <Compile Include="NativeDrawer\Property\Control\ReadonlyDrawer.cs" />
     <Compile Include="NativeDrawer\Property\EnumButtonDrawer.cs" />
     <Compile Include="NativeDrawer\Property\FloatSliderDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\IntPopupDrawer.cs" />
+    <Compile Include="NativeDrawer\Property\IntSliderDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\HideLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\Label\NewLabelDrawer.cs" />
     <Compile Include="NativeDrawer\Property\MultilineTextDrawer.cs" />

@@ -1,23 +1,19 @@
 ﻿using DotEditor.GUIExtension;
 using DotEditor.GUIExtension.ListView;
+using DotEditor.NativeDrawer;
 using DotEditor.Utilities;
-using DotEngine.BMFont;
-using System;
+using DotEngine.Fonts;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using static DotEditor.BMFont.BMFontConfig;
-using static DotEngine.BMFont.BMFontData;
-using UnityObject = UnityEngine.Object;
+using static DotEditor.Fonts.BitmapFontConfig;
+using static DotEngine.Fonts.BitmapFont;
 
-namespace DotEditor.BMFont
+namespace DotEditor.Fonts
 {
-    public class BMFontMaker : EditorWindow
+    public class BitmapFontMaker : EditorWindow
     {
         private static string MATERIAL_SHADER = "Unlit/Transparent";
 
@@ -27,39 +23,81 @@ namespace DotEditor.BMFont
         private static float MIN_LISTVIEW_WIDTH = 100;
         private static float MAX_LISTVIEW_WIDTH = 300;
 
-        [MenuItem("Game/BM Font/Font Maker")]
+        [MenuItem("Game/Bitmap Font Maker")]
         public static void ShowWin()
         {
-            var win = GetWindow<BMFontMaker>();
+            var win = GetWindow<BitmapFontMaker>();
             win.titleContent = Contents.titleContent;
             win.minSize = new Vector2(400, 300);
             win.Show();
         }
 
-        private List<BMFontConfig> makerDatas = new List<BMFontConfig>();
-        private SimpleListView<BMFontConfig> makerDataListView = null;
+        private int[] maxSizeValues = new int[]
+        {
+            64,
+            128,
+            256,
+            512,
+            1024,
+            2048,
+        };
+        private string[] maxSizeContents = new string[]
+        {
+            "64 x 64",
+            "128 x 128",
+            "256 x 256",
+            "512 x 512",
+            "1024 x 1024",
+            "2048 x 2048",
+        };
+
+        private List<BitmapFontConfig> fontConfigs = new List<BitmapFontConfig>();
+        private SimpleListView<BitmapFontConfig> fontConfigListView = null;
 
         private float listViewWidth = 120;
         private int charIDStart = 19968;
         
         void Awake()
         {
-            BMFontConfig[] datas = AssetDatabaseUtility.FindInstances<BMFontConfig>();
-            foreach (var data in datas)
+            BitmapFontConfig[] datas = AssetDatabaseUtility.FindInstances<BitmapFontConfig>();
+            if(datas!=null && datas.Length >0)
             {
-                makerDatas.Add(data);
+                fontConfigs.AddRange(datas);
+            }
+        }
+
+        private int selectedIndex = -1;
+        private NativeDrawerObject drawerObject = null;
+        private void SelectedChanged(int index)
+        {
+            if(selectedIndex != index)
+            {
+                selectedIndex = index;
+
+                fontConfigListView.SetSelection(selectedIndex);
+                if(selectedIndex>=0)
+                {
+                    drawerObject = new NativeDrawerObject(fontConfigs[selectedIndex])
+                    {
+                        IsShowScroll = true,
+                    };
+                }
+                else
+                {
+                    drawerObject = null;
+                }
             }
         }
 
         void OnGUI()
         {
-            if(makerDataListView == null)
+            if(fontConfigListView == null)
             {
-                makerDataListView = new SimpleListView<BMFontConfig>();
-                makerDataListView.AddItems(makerDatas.ToArray());
-                makerDataListView.OnSelectedChange = (index) =>
+                fontConfigListView = new SimpleListView<BitmapFontConfig>();
+                fontConfigListView.AddItems(fontConfigs.ToArray());
+                fontConfigListView.OnSelectedChange = (index) =>
                 {
-
+                    SelectedChanged(index);
                 };
             }
 
@@ -90,54 +128,68 @@ namespace DotEditor.BMFont
             createRect.width = Styles.toolbarWidth;
             if(GUI.Button(createRect,Contents.creatContent, EditorStyles.toolbarButton))
             {
-                string filePath = EditorUtility.SaveFilePanel("Create MakerData", Application.dataPath, "maker_data", ".asset");
+                string filePath = EditorUtility.SaveFilePanel("Create Font Config", Application.dataPath, "bitmap_font_config", "asset");
                 if(!string.IsNullOrEmpty(filePath))
                 {
-                    BMFontConfig makerData = ScriptableObject.CreateInstance<BMFontConfig>();
-                    makerData.name = Path.GetFileNameWithoutExtension(filePath);
+                    BitmapFontConfig config = ScriptableObject.CreateInstance<BitmapFontConfig>();
+                    config.name = Path.GetFileNameWithoutExtension(filePath);
 
                     string fileAssetPath = PathUtility.GetAssetPath(filePath);
-                    AssetDatabase.CreateAsset(makerData, fileAssetPath);
+                    AssetDatabase.CreateAsset(config, fileAssetPath);
                     AssetDatabase.ImportAsset(fileAssetPath);
                     
-                    makerDatas.Add(makerData);
-                    makerDataListView.AddItem(makerData);
-                    
+                    fontConfigs.Add(config);
+                    fontConfigListView.AddItem(config);
+                    SelectedChanged(fontConfigs.Count - 1);
                 }
             }
 
             Rect deleteRect = createRect;
             deleteRect.x += createRect.width;
-            if(GUI.Button(deleteRect,Contents.deleteContent, EditorStyles.toolbarButton))
+            EditorGUI.BeginDisabledGroup(selectedIndex < 0);
             {
-
+                if(GUI.Button(deleteRect,Contents.deleteContent, EditorStyles.toolbarButton))
+                {
+                    if(selectedIndex>0)
+                    {
+                        SelectedChanged(-1);
+                    }
+                }
             }
+            EditorGUI.EndDisabledGroup();
 
             Rect exportRect = deleteRect;
             exportRect.x += deleteRect.width;
-            if(GUI.Button(exportRect,Contents.exportContent, EditorStyles.toolbarButton))
+            EditorGUI.BeginDisabledGroup(selectedIndex < 0);
             {
-
+                if (GUI.Button(exportRect,Contents.exportContent, EditorStyles.toolbarButton))
+                {
+                    ExportFont(fontConfigs[selectedIndex]);
+                }
             }
+            EditorGUI.EndDisabledGroup();
 
             Rect exportAllRect = rect;
             exportAllRect.x += rect.width - Styles.toolbarWidth;
             exportAllRect.width = Styles.toolbarWidth;
             if(GUI.Button(exportAllRect,Contents.exportAllContent, EditorStyles.toolbarButton))
             {
-
+                foreach(var config in fontConfigs)
+                {
+                    ExportFont(config);
+                }
             }
         }
 
         private void DrawListView(Rect rect)
         {
-            if(makerDataListView == null)
+            if(fontConfigListView == null)
             {
-                makerDataListView = new SimpleListView<BMFontConfig>();
-                makerDataListView.AddItems(makerDatas.ToArray());
+                fontConfigListView = new SimpleListView<BitmapFontConfig>();
+                fontConfigListView.AddItems(fontConfigs.ToArray());
             }
 
-            makerDataListView.OnGUI(rect);
+            fontConfigListView.OnGUI(rect);
         }
 
         private bool isListViewDragging = false;
@@ -179,10 +231,22 @@ namespace DotEditor.BMFont
 
         private void DrawContent(Rect rect)
         {
+            if(selectedIndex<0)
+            {
+                return;
+            }
 
+            if(drawerObject != null)
+            {
+                GUILayout.BeginArea(rect);
+                {
+                    drawerObject.OnGUILayout();
+                }
+                GUILayout.EndArea();
+            }
         }
 
-        private void ExportFont(BMFontConfig config)
+        private void ExportFont(BitmapFontConfig config)
         {
             if(!config.IsValid())
             {
@@ -192,9 +256,9 @@ namespace DotEditor.BMFont
 
             int charIndex = charIDStart;
             List<Texture2D> textures = new List<Texture2D>();
-            for(int i =0;i<config.fonts.Count;++i)
+            for(int i =0;i<config.fontChars.Count;++i)
             {
-                BMFontChar fontChar = config.fonts[i];
+                BitmapFontChar fontChar = config.fontChars[i];
                 fontChar.charIndexes = new int[fontChar.chars.Count];
                 for(int j = 0;j<fontChar.chars.Count;++j)
                 {
@@ -213,9 +277,9 @@ namespace DotEditor.BMFont
                 return;
             }
             int rectIndex = 0;
-            for (int i = 0; i < config.fonts.Count; ++i)
+            for (int i = 0; i < config.fontChars.Count; ++i)
             {
-                BMFontChar fontChar = config.fonts[i];
+                BitmapFontChar fontChar = config.fontChars[i];
                 fontChar.charRects = new Rect[fontChar.chars.Count];
                 for (int j = 0; j < fontChar.chars.Count; ++j)
                 {
@@ -224,9 +288,9 @@ namespace DotEditor.BMFont
                 }
             }
 
-            Font font = CreateFont(config, atlas, out FontCharMap[] charMaps);
+            Font font = CreateFont(config, atlas, out BitmapFontCharMap[] charMaps);
 
-            BMFontData fontData = ScriptableObject.CreateInstance<BMFontData>();
+            BitmapFont fontData = ScriptableObject.CreateInstance<BitmapFont>();
             fontData.bmFont = font;
             fontData.charMaps = charMaps;
             AssetDatabase.CreateAsset(fontData, config.GetFontDataPath());
@@ -235,10 +299,10 @@ namespace DotEditor.BMFont
 
         }
 
-        private Font CreateFont(BMFontConfig config, Texture2D atlas,out FontCharMap[] charMap)
+        private Font CreateFont(BitmapFontConfig config, Texture2D atlas,out BitmapFontCharMap[] charMap)
         {
             string fontAssetPath = config.GetFontPath();
-            charMap = new FontCharMap[config.fonts.Count];
+            charMap = new BitmapFontCharMap[config.fontChars.Count];
 
             Font font = AssetDatabase.LoadMainAssetAtPath(fontAssetPath) as Font;
             if(font == null)
@@ -260,11 +324,13 @@ namespace DotEditor.BMFont
             fontMat.name = "Font Material";
             fontMat.mainTexture = atlas;
 
+            font.material = fontMat;
+
             List<CharacterInfo> charInfos = new List<CharacterInfo>();
-            for (int i = 0; i < config.fonts.Count; ++i)
+            for (int i = 0; i < config.fontChars.Count; ++i)
             {
-                BMFontChar fontChar = config.fonts[i];
-                charMap[i] = new FontCharMap()
+                BitmapFontChar fontChar = config.fontChars[i];
+                charMap[i] = new BitmapFontCharMap()
                 {
                     name = fontChar.fontName,
                     orgChars = fontChar.chars.ToArray(),
@@ -381,7 +447,7 @@ namespace DotEditor.BMFont
 
         class Contents
         {
-            public static GUIContent titleContent = new GUIContent("Font Maker");
+            public static GUIContent titleContent = new GUIContent("Bitmap Font Maker");
             public static GUIContent creatContent = new GUIContent("Create", "create a new data");
             public static GUIContent deleteContent = new GUIContent("Delete", "delete the data which be selected");
             public static GUIContent exportContent = new GUIContent("Export", "export the data");
@@ -391,6 +457,9 @@ namespace DotEditor.BMFont
         class Styles
         {
             public static float toolbarWidth = 60;
+            public static float singleLineHeight = EditorGUIUtility.singleLineHeight;
+            public static float singleTitleLineHeight = 20;
+
         }
     }
 }
