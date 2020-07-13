@@ -32,25 +32,6 @@ namespace DotEditor.Fonts
             win.Show();
         }
 
-        private int[] maxSizeValues = new int[]
-        {
-            64,
-            128,
-            256,
-            512,
-            1024,
-            2048,
-        };
-        private string[] maxSizeContents = new string[]
-        {
-            "64 x 64",
-            "128 x 128",
-            "256 x 256",
-            "512 x 512",
-            "1024 x 1024",
-            "2048 x 2048",
-        };
-
         private List<BitmapFontConfig> fontConfigs = new List<BitmapFontConfig>();
         private SimpleListView<BitmapFontConfig> fontConfigListView = null;
 
@@ -152,6 +133,16 @@ namespace DotEditor.Fonts
                 {
                     if(selectedIndex>0)
                     {
+                        BitmapFontConfig font = fontConfigs[selectedIndex];
+                        AssetDatabase.DeleteAsset(font.GetFontDataPath());
+                        AssetDatabase.DeleteAsset(font.GetFontPath());
+                        AssetDatabase.DeleteAsset(font.GetFontTexturePath());
+
+                        fontConfigs.RemoveAt(selectedIndex);
+                        fontConfigListView.RemoveAt(selectedIndex);
+
+                        AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(font));
+
                         SelectedChanged(-1);
                     }
                 }
@@ -296,7 +287,6 @@ namespace DotEditor.Fonts
             AssetDatabase.CreateAsset(fontData, config.GetFontDataPath());
             AssetDatabase.WriteImportSettingsIfDirty(config.GetFontDataPath());
             AssetDatabase.ImportAsset(config.GetFontDataPath());
-
         }
 
         private Font CreateFont(BitmapFontConfig config, Texture2D atlas,out BitmapFontCharMap[] charMap)

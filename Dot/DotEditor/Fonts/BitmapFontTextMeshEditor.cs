@@ -9,7 +9,7 @@ namespace DotEditor.Fonts
     {
         SerializedProperty textMeshProperty;
 
-        protected override void Awake()
+        protected override void OnEnable()
         {
             textMeshProperty = serializedObject.FindProperty("textMesh");
             if(textMeshProperty.objectReferenceValue == null)
@@ -17,7 +17,7 @@ namespace DotEditor.Fonts
                 textMeshProperty.objectReferenceValue = (target as BitmapFontTextMesh).GetComponent<TextMesh>();
             }
 
-            base.Awake();
+            base.OnEnable();
         }
 
         public override void OnInspectorGUI()

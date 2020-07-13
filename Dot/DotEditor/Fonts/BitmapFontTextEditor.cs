@@ -15,7 +15,7 @@ namespace DotEditor.Fonts
 
         private BitmapFont[] fontDatas = null;
         private string[] fontDataNames = null;
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             fontDataProperty = serializedObject.FindProperty("m_FontData");
             fontNameProperty = serializedObject.FindProperty("m_FontName");

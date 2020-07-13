@@ -1,31 +1,37 @@
-﻿using DotEngine.Fonts;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DotEngine.Fonts
 {
     [RequireComponent(typeof(TextMesh))]
+    [ExecuteInEditMode]
     public class BitmapFontTextMesh : BitmapFontText
     {
         public TextMesh textMesh = null;
-        protected override void Awake()
+        public MeshRenderer meshRenderer = null;
+
+        protected override void OnTextChanged(string mappedText)
         {
             if(textMesh == null)
             {
                 textMesh = GetComponent<TextMesh>();
             }
-            if(textMesh == null)
+            if(meshRenderer == null)
             {
-                enabled = false;
+                meshRenderer = GetComponent<MeshRenderer>();
             }
-            else
+            if(textMesh!=null)
             {
-                textMesh.font = FontData.bmFont;
-            }
-        }
+                if (textMesh.font != FontData.bmFont)
+                {
+                    textMesh.font = FontData.bmFont;
+                    if(meshRenderer!=null)
+                    {
+                        meshRenderer.material = FontData.bmFont.material;
+                    }
+                }
 
-        protected override void OnTextChanged(string mappedText)
-        {
-            textMesh.text = mappedText;
+                textMesh.text = mappedText;
+            }
         }
     }
 }

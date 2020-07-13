@@ -65,12 +65,9 @@ namespace DotEngine.Fonts
 
         private void TextChanged()
         {
-            if(FontData!=null && !string.IsNullOrEmpty(FontName) && !string.IsNullOrEmpty(Text))
+            if (FontData != null && !string.IsNullOrEmpty(FontName) && !string.IsNullOrEmpty(Text))
             {
                 OnTextChanged(FontData.GetText(FontName, Text));
-            }else
-            {
-                OnTextChanged(string.Empty);
             }
         }
 
