@@ -11,27 +11,56 @@ namespace DotEngine.Fonts
 
         protected override void OnTextChanged(string mappedText)
         {
-            if(textMesh == null)
+            if(textMesh == null || meshRenderer == null)
             {
-                textMesh = GetComponent<TextMesh>();
+                Debug.LogError("BitmapFontTextMesh::OnTextChanged->the field(textMesh/meshRenderer) is empty!");
             }
-            if(meshRenderer == null)
+            else
             {
-                meshRenderer = GetComponent<MeshRenderer>();
-            }
-            if(textMesh!=null)
-            {
-                if (textMesh.font != FontData.bmFont)
+                if (FontData.bmFont != null && textMesh.font != FontData.bmFont)
                 {
                     textMesh.font = FontData.bmFont;
-                    if(meshRenderer!=null)
+                    meshRenderer.material = FontData.bmFont.material;
+                }
+                textMesh.text = mappedText;
+            }
+        }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            if (textMesh != null)
+            {
+                if (FontData != null && FontData.bmFont != null)
+                {
+                    if(textMesh.font!=FontData.bmFont)
+                    {
+                        textMesh.font = FontData.bmFont;
+                    }
+                }
+                else
+                {
+                    textMesh.font = null;
+                }
+            }
+
+            if(meshRenderer!=null)
+            {
+                if (FontData != null && FontData.bmFont != null && FontData.bmFont.material!=null)
+                {
+                    if(FontData.bmFont.material != meshRenderer.material)
                     {
                         meshRenderer.material = FontData.bmFont.material;
                     }
                 }
-
-                textMesh.text = mappedText;
+                else
+                {
+                    meshRenderer.material = null;
+                }
             }
+
+            base.OnValidate();
         }
+#endif
     }
 }

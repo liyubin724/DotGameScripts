@@ -39,22 +39,22 @@ namespace DotEditor.Fonts
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+            {
+                OnDrawFont();
+                OnDrawFontNames();
 
-            OnDrawFont();
-            OnDrawFontNames();
-
-            EditorGUILayout.PropertyField(textProperty);
-
+                EditorGUILayout.PropertyField(textProperty);
+            }
             serializedObject.ApplyModifiedProperties();
+
             if(GUI.changed)
             {
                 EditorUtility.SetDirty(target);
             }
         }
 
-        protected void OnDrawFont()
+        private void OnDrawFont()
         {
-            //EditorGUILayout.PropertyField(fontDataProperty);
             BitmapFont fontData = (BitmapFont)fontDataProperty.objectReferenceValue;
             int selectedIndex = Array.IndexOf(fontDatas, fontData);
             int newSelectedIndex = EditorGUILayout.Popup("Font Data", selectedIndex, fontDataNames);
@@ -73,22 +73,20 @@ namespace DotEditor.Fonts
             }
         }
 
-        protected void OnDrawFontNames()
+        private void OnDrawFontNames()
         {
             BitmapFont fontData = (BitmapFont)fontDataProperty.objectReferenceValue;
             if(fontData!=null)
             {
                 string[] names = (from charMap in fontData.charMaps select charMap.name).ToArray();
                 int selectedIndex = Array.IndexOf(names, fontNameProperty.stringValue);
+                
                 int newSelectedIndex = EditorGUILayout.Popup("Font Name", selectedIndex,names);
                 if(newSelectedIndex!=selectedIndex)
                 {
                     selectedIndex = newSelectedIndex;
                     fontNameProperty.stringValue = names[selectedIndex];
                 }
-            }else  if(!string.IsNullOrEmpty(fontNameProperty.stringValue))
-            {
-                fontNameProperty.stringValue = null;
             }
         }
     }

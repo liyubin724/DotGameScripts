@@ -77,7 +77,7 @@ namespace DotEngine.Fonts
         }
 
 #if UNITY_EDITOR
-        private void OnValidate()
+        protected virtual void OnValidate()
         {
             TextChanged();
         }
