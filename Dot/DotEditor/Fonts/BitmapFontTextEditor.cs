@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 namespace DotEditor.Fonts
 {
@@ -23,8 +24,9 @@ namespace DotEditor.Fonts
 
             string[] fontPaths = AssetDatabaseUtility.FindAssets<BitmapFont>();
             fontDataNames = new string[fontPaths.Length + 1];
-            fontDataNames[0] = "--None--";
             fontDatas = new BitmapFont[fontPaths.Length + 1];
+            
+            fontDataNames[0] = "--None--";
             fontDatas[0] = null;
 
             for(int i =0;i<fontPaths.Length;++i)
@@ -44,19 +46,24 @@ namespace DotEditor.Fonts
             EditorGUILayout.PropertyField(textProperty);
 
             serializedObject.ApplyModifiedProperties();
+            if(GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         protected void OnDrawFont()
         {
+            //EditorGUILayout.PropertyField(fontDataProperty);
             BitmapFont fontData = (BitmapFont)fontDataProperty.objectReferenceValue;
             int selectedIndex = Array.IndexOf(fontDatas, fontData);
-            int newSelectedIndex = EditorGUILayout.Popup("Font Data",selectedIndex, fontDataNames);
-            if(newSelectedIndex!=selectedIndex)
+            int newSelectedIndex = EditorGUILayout.Popup("Font Data", selectedIndex, fontDataNames);
+            if (newSelectedIndex != selectedIndex)
             {
                 selectedIndex = newSelectedIndex;
                 fontDataProperty.objectReferenceValue = fontDatas[selectedIndex];
             }
-            if(fontData!=null)
+            if (fontData != null)
             {
                 EditorGUI.BeginDisabledGroup(true);
                 {

@@ -26,10 +26,6 @@ namespace DotEditor.Fonts
             {
                 value.fontName = EditorGUILayout.TextField("Font Name", value.fontName);
                 value.charSpace = EditorGUILayout.IntField("Char Space", value.charSpace);
-                if(value.charSpace<0)
-                {
-                    value.charSpace = 0;
-                }
                 EditorGUILayout.BeginVertical(EGUIStyles.BoxStyle);
                 {
                     EditorGUILayout.LabelField(GUIContent.none, EditorStyles.toolbar, GUILayout.ExpandWidth(true));

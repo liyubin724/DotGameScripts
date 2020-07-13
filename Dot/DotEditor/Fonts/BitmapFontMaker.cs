@@ -156,6 +156,7 @@ namespace DotEditor.Fonts
                 if (GUI.Button(exportRect,Contents.exportContent, EditorStyles.toolbarButton))
                 {
                     ExportFont(fontConfigs[selectedIndex]);
+                    AssetDatabase.SaveAssets();
                 }
             }
             EditorGUI.EndDisabledGroup();
@@ -169,6 +170,7 @@ namespace DotEditor.Fonts
                 {
                     ExportFont(config);
                 }
+                AssetDatabase.SaveAssets();
             }
         }
 
@@ -232,6 +234,11 @@ namespace DotEditor.Fonts
                 GUILayout.BeginArea(rect);
                 {
                     drawerObject.OnGUILayout();
+
+                    if (GUI.changed)
+                    {
+                        EditorUtility.SetDirty(fontConfigs[selectedIndex]);
+                    }
                 }
                 GUILayout.EndArea();
             }
@@ -281,12 +288,19 @@ namespace DotEditor.Fonts
 
             Font font = CreateFont(config, atlas, out BitmapFontCharMap[] charMaps);
 
-            BitmapFont fontData = ScriptableObject.CreateInstance<BitmapFont>();
+            string fontDataPath = config.GetFontDataPath();
+            BitmapFont fontData = AssetDatabase.LoadAssetAtPath<BitmapFont>(fontDataPath);
+            if(fontData == null)
+            {
+                fontData = ScriptableObject.CreateInstance<BitmapFont>();
+                AssetDatabase.CreateAsset(fontData, fontDataPath);
+                AssetDatabase.ImportAsset(fontDataPath);
+            }
+
             fontData.bmFont = font;
             fontData.charMaps = charMaps;
-            AssetDatabase.CreateAsset(fontData, config.GetFontDataPath());
-            AssetDatabase.WriteImportSettingsIfDirty(config.GetFontDataPath());
-            AssetDatabase.ImportAsset(config.GetFontDataPath());
+
+            EditorUtility.SetDirty(fontData);
         }
 
         private Font CreateFont(BitmapFontConfig config, Texture2D atlas,out BitmapFontCharMap[] charMap)
@@ -299,7 +313,6 @@ namespace DotEditor.Fonts
             {
                 font = new Font();
                 AssetDatabase.CreateAsset(font, fontAssetPath);
-                AssetDatabase.WriteImportSettingsIfDirty(fontAssetPath);
                 AssetDatabase.ImportAsset(fontAssetPath);
             }
             Shader matShader = Shader.Find(MATERIAL_SHADER);
@@ -308,13 +321,13 @@ namespace DotEditor.Fonts
             if(fontMat == null)
             {
                 fontMat = new Material(matShader);
+                fontMat.name = "Font Material";
                 AssetDatabase.AddObjectToAsset(fontMat, fontAssetPath);
+                
+                font.material = fontMat;
             }
 
-            fontMat.name = "Font Material";
             fontMat.mainTexture = atlas;
-
-            font.material = fontMat;
 
             List<CharacterInfo> charInfos = new List<CharacterInfo>();
             for (int i = 0; i < config.fontChars.Count; ++i)
@@ -359,8 +372,6 @@ namespace DotEditor.Fonts
             font.characterInfo = charInfos.ToArray();
 
             EditorUtility.SetDirty(font);
-            AssetDatabase.SaveAssets();
-
             return font;
         }
 
@@ -424,10 +435,10 @@ namespace DotEditor.Fonts
             ps.format = TextureImporterFormat.ETC2_RGBA8;
             ti.SetPlatformTextureSettings(ps);
 
-            ps = ti.GetPlatformTextureSettings("iPhone");
-            ps.overridden = true;
-            ps.format = TextureImporterFormat.ASTC_RGBA_4x4;
-            ti.SetPlatformTextureSettings(ps);
+            //ps = ti.GetPlatformTextureSettings("iPhone");
+            //ps.overridden = true;
+            //ps.format = TextureImporterFormat.ASTC_RGBA_4x4;
+            //ti.SetPlatformTextureSettings(ps);
 
             AssetDatabase.WriteImportSettingsIfDirty(atlasAssetPath);
 
