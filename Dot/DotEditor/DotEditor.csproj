@@ -122,7 +122,7 @@
     <Compile Include="GUIExtension\Windows\ComponentSelector.cs" />
     <Compile Include="GUIExtension\Windows\PopupWindow.cs" />
     <Compile Include="UI\SpriteDrawUtility.cs" />
-    <Compile Include="UI\SpriteSelector.cs" />
+    <Compile Include="UI\AtlasSpriteSelector.cs" />
     <Compile Include="NativeDrawer\AttrNativeDrawer.cs" />
     <Compile Include="NativeDrawer\CustomAttributeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />
