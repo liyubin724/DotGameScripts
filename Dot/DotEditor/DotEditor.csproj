@@ -119,7 +119,10 @@
     <Compile Include="GUIExtension\Search\ToolbarSearchField.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarExtend.cs" />
     <Compile Include="GUIExtension\Toolbar\EditorToolbarItem.cs" />
+    <Compile Include="GUIExtension\Windows\ComponentSelector.cs" />
     <Compile Include="GUIExtension\Windows\PopupWindow.cs" />
+    <Compile Include="UI\SpriteDrawUtility.cs" />
+    <Compile Include="UI\SpriteSelector.cs" />
     <Compile Include="NativeDrawer\AttrNativeDrawer.cs" />
     <Compile Include="NativeDrawer\CustomAttributeDrawerAttribute.cs" />
     <Compile Include="NativeDrawer\CustomTypeDrawerAttribute.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="TreeGUI\TreeElementUtility.cs" />
     <Compile Include="TreeGUI\TreeModel.cs" />
     <Compile Include="TreeGUI\TreeViewWithTreeModel.cs" />
+    <Compile Include="UI\UISetting.cs" />
     <Compile Include="Utilities\AssetDatabaseUtility.cs" />
     <Compile Include="Utilities\DirectoryUtility.cs" />
     <Compile Include="Utilities\ExplorerUtility.cs" />

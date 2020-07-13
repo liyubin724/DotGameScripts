@@ -36,5 +36,13 @@ namespace DotEditor.GUIExtension
             }
         }
 
+        static public string GetTypeName<T>()
+        {
+            string s = typeof(T).ToString();
+            if (s.StartsWith("UI")) s = s.Substring(2);
+            else if (s.StartsWith("UnityEngine.")) s = s.Substring(12);
+            return s;
+        }
+
     }
 }
