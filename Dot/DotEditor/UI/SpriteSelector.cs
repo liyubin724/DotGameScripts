@@ -120,7 +120,7 @@ namespace DotEditor.UI
 
                 Sprite[] sprites = new Sprite[atlas.spriteCount];
                 atlas.GetSprites(sprites);
-                float size = 80f;
+                float size = 100f;
                 float padded = size + 10f;
                 int columns = Mathf.FloorToInt(position.width / padded);
                 if (columns < 1) columns = 1;
