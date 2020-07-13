@@ -12,11 +12,6 @@ namespace DotEditor.Fonts
         protected override void OnEnable()
         {
             textMeshProperty = serializedObject.FindProperty("textMesh");
-            if(textMeshProperty.objectReferenceValue == null)
-            {
-                textMeshProperty.objectReferenceValue = (target as BitmapFontTextMesh).GetComponent<TextMesh>();
-            }
-
             base.OnEnable();
         }
 
