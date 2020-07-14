@@ -20,7 +20,7 @@ namespace DotEngine.Fonts
                 if (FontData.bmFont != null && textMesh.font != FontData.bmFont)
                 {
                     textMesh.font = FontData.bmFont;
-                    meshRenderer.material = FontData.bmFont.material;
+                    meshRenderer.sharedMaterial= FontData.bmFont.material;
                 }
                 textMesh.text = mappedText;
             }
@@ -48,9 +48,9 @@ namespace DotEngine.Fonts
             {
                 if (FontData != null && FontData.bmFont != null && FontData.bmFont.material!=null)
                 {
-                    if(FontData.bmFont.material != meshRenderer.material)
+                    if(FontData.bmFont.material != meshRenderer.sharedMaterial)
                     {
-                        meshRenderer.material = FontData.bmFont.material;
+                        meshRenderer.sharedMaterial = FontData.bmFont.material;
                     }
                 }
                 else
