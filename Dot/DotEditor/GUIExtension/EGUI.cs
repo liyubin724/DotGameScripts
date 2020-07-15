@@ -26,9 +26,11 @@ namespace DotEditor.GUIExtension
         /// <param name="thickness">线宽</param>
         /// <param name="padding">与上方的间距</param>
         /// <param name="color">绘制使用的颜色</param>
-        public static void DrawHorizontalLine(Rect rect , Color color , float thickness = 0.75f,float padding = 6.0f)
+        public static void DrawHorizontalLine(Rect rect , Color color , float thickness = 0.75f)
         {
-            rect.y += padding * 0.5f;
+            float padding = (rect.height - thickness) * 0.5f;
+            padding = Mathf.Max(padding, 0.0f);
+            rect.y += padding;
             rect.height = thickness;
             EditorGUI.DrawRect(rect, color);
         }
