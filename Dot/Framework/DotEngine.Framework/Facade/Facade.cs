@@ -14,10 +14,6 @@ namespace DotEngine.Framework
 
         public static IFacade GetInstance()
         {
-            if(instance == null)
-            {
-                instance = new Facade();
-            }
             return instance;
         }
 

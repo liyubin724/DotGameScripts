@@ -8,7 +8,11 @@ namespace DotEngine.Config
         public const string NAME = "IniConfigService";
 
         private IniConfig config = null;
-        public IniConfigService(string configText)
+        public IniConfigService()
+        {
+        }
+
+        public void SetConfigText(string configText)
         {
             config = new IniConfig();
             config.ParseText(configText);
