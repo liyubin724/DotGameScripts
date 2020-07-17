@@ -22,6 +22,12 @@
         {
             LogUtil.logger = logger;
         }
+
+        public static void DisposeLogger()
+        {
+            logger?.Close();
+            logger = null;
+        }
         
         public static void LogDebug(string tag,string message)
         {

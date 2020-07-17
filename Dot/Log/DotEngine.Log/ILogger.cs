@@ -18,5 +18,7 @@
         void LogWarning(string tag, string message);
         void LogError(string tag, string message);
         void LogFatal(string tag, string message);
+
+        void Close();
     }
 }

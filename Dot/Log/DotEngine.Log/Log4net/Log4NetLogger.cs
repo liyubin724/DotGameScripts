@@ -42,6 +42,12 @@ namespace DotEngine.Log
         {
         }
 
+        public void Close()
+        {
+            log4net.LogManager.Shutdown();
+            isInited = false;
+        }
+
         private ILog4NetLog GetLogger(string loggerName)
         {
             if (string.IsNullOrEmpty(loggerName))

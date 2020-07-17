@@ -55,5 +55,10 @@ namespace DotEngine.Log
         {
             Debug.LogError($"[{tag}]:{message}");
         }
+
+        public void Close()
+        {
+            
+        }
     }
 }
