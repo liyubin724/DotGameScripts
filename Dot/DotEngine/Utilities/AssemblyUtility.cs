@@ -53,6 +53,7 @@ namespace DotEngine.Utilities
                 if(t == null)
                 {
                     LogUtil.LogError(typeof(AssemblyUtility).Name, $"AssemblyUtil::GetGenericType->Param Type Not Found.Type = {paramTypeFullNames[i]}");
+                    return null;
                 }
                 types[i] = t;
             }
