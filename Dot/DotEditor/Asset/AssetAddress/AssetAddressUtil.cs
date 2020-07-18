@@ -11,17 +11,21 @@ namespace DotEditor.Asset.AssetAddress
 {
     public static class AssetAddressUtil
     {
-        [MenuItem("Game/Asset/Create Address Group",priority =0)]
+        [MenuItem("Game/Asset/Create Address Group", priority = 0)]
         public static void CreateGroupAsset()
         {
             string[] dirs = SelectionUtility.GetSelectionDirs();
-            if(dirs!=null && dirs.Length>0)
+            if (dirs != null && dirs.Length > 0)
             {
                 string filePath = $"{dirs[0]}/asset_address_group.asset";
                 filePath = AssetDatabase.GenerateUniqueAssetPath(filePath);
                 var config = ScriptableObject.CreateInstance<AssetAddressGroup>();
                 AssetDatabase.CreateAsset(config, filePath);
                 AssetDatabase.ImportAsset(filePath);
+            }
+            else
+            {
+                Debug.LogError("AssetAddressUtil::CreateGroupAsset->Dir not found");
             }
         }
 

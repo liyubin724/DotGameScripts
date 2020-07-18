@@ -18,7 +18,7 @@ namespace DotEditor.GUIExtension
         public static void DrawHorizontalLine(Color color,float thickness = 0.75f, float padding = 6.0f)
         {
             Rect rect = EditorGUILayout.GetControlRect(UnityEngine.GUILayout.Height(padding + thickness), UnityEngine.GUILayout.ExpandWidth(true));
-            EGUI.DrawHorizontalLine(rect, color,thickness, padding);
+            EGUI.DrawHorizontalLine(rect, color,thickness);
         }
 
         public static void DrawVerticalLine()
