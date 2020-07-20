@@ -2,7 +2,7 @@
 
 namespace DotEngine.Framework
 {
-    public class Facade : IFacade
+    public class FFacade : IFacade
     {
         protected static IFacade instance;
 
@@ -14,10 +14,14 @@ namespace DotEngine.Framework
 
         public static IFacade GetInstance()
         {
+            if(instance == null)
+            {
+                instance = new FFacade();
+            }
             return instance;
         }
 
-        protected Facade()
+        protected FFacade()
         {
             instance = this;
             InitializeFacade();

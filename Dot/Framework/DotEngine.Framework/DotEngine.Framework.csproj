@@ -46,7 +46,7 @@
     <Compile Include="Command\ICommandCenter.cs" />
     <Compile Include="Command\MacroCommand.cs" />
     <Compile Include="Command\SimpleCommand.cs" />
-    <Compile Include="Facade\Facade.cs" />
+    <Compile Include="Facade\FFacade.cs" />
     <Compile Include="Facade\IFacade.cs" />
     <Compile Include="Model\IModelCenter.cs" />
     <Compile Include="Model\ModelCenter .cs" />
@@ -64,9 +64,8 @@
     <Compile Include="Service\Service.cs" />
     <Compile Include="Service\ServiceCenter.cs" />
     <Compile Include="Update\IUpdate.cs" />
-    <Compile Include="View\Controller\ComplexViewController.cs" />
     <Compile Include="View\Controller\IViewController.cs" />
-    <Compile Include="View\Controller\SingleViewController.cs" />
+    <Compile Include="View\Controller\ViewController.cs" />
     <Compile Include="View\IViewControllerCenter.cs" />
     <Compile Include="View\ViewControllerCenter .cs" />
   </ItemGroup>

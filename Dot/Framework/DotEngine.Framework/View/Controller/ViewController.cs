@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace DotEngine.Framework
 {
-    public abstract class ComplexViewController : Notifier, IViewController
+    public class ViewController : Notifier, IViewController
     {
-        protected Dictionary<string, IViewController> subControllerDic = null;
+        protected Dictionary<string, IViewController> subControllerDic = new Dictionary<string, IViewController>();
 
-        public ComplexViewController()
+        public ViewController()
         {
-            subControllerDic = new Dictionary<string, IViewController>();
         }
 
         public virtual void AddSubViewController(IViewController viewController)
@@ -17,13 +16,13 @@ namespace DotEngine.Framework
             AddSubViewController(Guid.NewGuid().ToString(), viewController);
         }
 
-        public virtual void AddSubViewController(string name,IViewController viewController)
+        public virtual void AddSubViewController(string name, IViewController viewController)
         {
-            if(string.IsNullOrEmpty(name) || viewController == null)
+            if (string.IsNullOrEmpty(name) || viewController == null)
             {
                 throw new ArgumentNullException("The viewController or the name of viewController is empty");
             }
-            if(subControllerDic.ContainsKey(name))
+            if (subControllerDic.ContainsKey(name))
             {
                 throw new Exception($"The name of viewController has been added.name = {name}.");
             }
@@ -34,9 +33,9 @@ namespace DotEngine.Framework
 
         public virtual void RemoveSubViewController(IViewController viewController)
         {
-            foreach(var kvp in subControllerDic)
+            foreach (var kvp in subControllerDic)
             {
-                if(kvp.Value == viewController)
+                if (kvp.Value == viewController)
                 {
                     RemoveSubViewController(kvp.Key);
                     break;
@@ -46,7 +45,7 @@ namespace DotEngine.Framework
 
         public virtual void RemoveSubViewController(string name)
         {
-            if(subControllerDic.ContainsKey(name))
+            if (subControllerDic.ContainsKey(name))
             {
                 Facade.RemoveViewController(name);
                 subControllerDic.Remove(name);
@@ -55,7 +54,7 @@ namespace DotEngine.Framework
 
         public virtual void HandleNotification(INotification notification)
         {
-            
+
         }
 
         public virtual string[] ListNotificationInterests()
@@ -65,12 +64,12 @@ namespace DotEngine.Framework
 
         public virtual void OnRegister()
         {
-            
+
         }
 
         public virtual void OnRemove()
         {
-            foreach(var kvp in subControllerDic)
+            foreach (var kvp in subControllerDic)
             {
                 Facade.RemoveViewController(kvp.Key);
             }

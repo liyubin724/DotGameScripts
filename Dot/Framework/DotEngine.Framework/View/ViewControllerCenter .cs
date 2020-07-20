@@ -11,7 +11,7 @@ namespace DotEngine.Framework
         {
             get
             {
-                return Framework.Facade.GetInstance();
+                return FFacade.GetInstance();
             }
         }
 

@@ -11,7 +11,7 @@
         {
             get
             {
-                return Framework.Facade.GetInstance();
+                return FFacade.GetInstance();
             }
         }
     }

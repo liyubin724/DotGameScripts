@@ -21,7 +21,7 @@ namespace DotEngine.Asset
         private AssetService assetService = null;
         public AssetBridge() : this(AssetLoaderPriority.Default)
         {
-            assetService = Facade.GetInstance().RetrieveService<AssetService>(AssetService.NAME);
+            assetService = FFacade.GetInstance().RetrieveService<AssetService>(AssetService.NAME);
         }
 
         public AssetBridge(AssetLoaderPriority priority)

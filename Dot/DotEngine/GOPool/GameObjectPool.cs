@@ -93,7 +93,7 @@ namespace DotEngine.GOPool
                 instanceOrPrefabTemplate.SetActive(false);
                 instanceOrPrefabTemplate.transform.SetParent(pool.GroupTransform, false);
             }
-            TimerService timerService = Facade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
+            TimerService timerService = FFacade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
             preloadTimerTask = timerService.AddIntervalTimer(0.05f, OnPreloadTimerUpdate);
         }
 
@@ -134,7 +134,7 @@ namespace DotEngine.GOPool
         {
             if (preloadTimerTask != null)
             {
-                TimerService timerService = Facade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
+                TimerService timerService = FFacade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
                 timerService.RemoveTimer(preloadTimerTask);
                 preloadTimerTask = null;
             }
@@ -343,7 +343,7 @@ namespace DotEngine.GOPool
             PreloadCompleteCallback = null;
             if (preloadTimerTask != null)
             {
-                TimerService timerService = Facade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
+                TimerService timerService = FFacade.GetInstance().RetrieveService<TimerService>(TimerService.NAME);
                 timerService.RemoveTimer(preloadTimerTask);
                 preloadTimerTask = null;
             }
