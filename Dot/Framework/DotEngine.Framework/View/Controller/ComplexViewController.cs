@@ -38,8 +38,7 @@ namespace DotEngine.Framework
             {
                 if(kvp.Value == viewController)
                 {
-                    Facade.RemoveViewController(kvp.Key);
-                    subControllerDic.Remove(kvp.Key);
+                    RemoveSubViewController(kvp.Key);
                     break;
                 }
             }
