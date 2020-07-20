@@ -12,12 +12,12 @@ namespace DotEngine.Framework
             subControllerDic = new Dictionary<string, IViewController>();
         }
 
-        public void AddSubViewController(IViewController viewController)
+        public virtual void AddSubViewController(IViewController viewController)
         {
             AddSubViewController(Guid.NewGuid().ToString(), viewController);
         }
 
-        public void AddSubViewController(string name,IViewController viewController)
+        public virtual void AddSubViewController(string name,IViewController viewController)
         {
             if(string.IsNullOrEmpty(name) || viewController == null)
             {
@@ -32,7 +32,7 @@ namespace DotEngine.Framework
             Facade.RegisterViewController(name, viewController);
         }
 
-        public void RemoveSubViewController(IViewController viewController)
+        public virtual void RemoveSubViewController(IViewController viewController)
         {
             foreach(var kvp in subControllerDic)
             {
@@ -45,7 +45,7 @@ namespace DotEngine.Framework
             }
         }
 
-        public void RemoveSubViewController(string name)
+        public virtual void RemoveSubViewController(string name)
         {
             if(subControllerDic.ContainsKey(name))
             {
@@ -71,7 +71,11 @@ namespace DotEngine.Framework
 
         public virtual void OnRemove()
         {
-            
+            foreach(var kvp in subControllerDic)
+            {
+                Facade.RemoveViewController(kvp.Key);
+            }
+            subControllerDic.Clear();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DotEngine.Framework
+﻿namespace DotEngine.Framework
 {
     public abstract class SingleViewController : Notifier, IViewController
     {
